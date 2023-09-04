@@ -15,12 +15,14 @@ export default function Home() {
         justifyContent="center"
         direction="column"
       >
-        <h1>Using Material UI with Next.js 13</h1>
-        <Stack direction="row" columnGap={1}>
-          <Button variant="text">Text</Button>
-          <Button variant="contained">Contained</Button>
-          <Button variant="outlined">Outlined</Button>
-        </Stack>
+        <h1 className="text-4xl mb-4">
+          Mantén el control en la renta de equipo.
+        </h1>
+        <p>Bicicletas</p>
+        <p>Patines</p>
+        <p>Motos</p>
+        <p>Autos</p>
+        <p>lo que sea ...</p>
       </Grid>
     </main>
   )
