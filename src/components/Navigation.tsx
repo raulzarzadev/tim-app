@@ -17,6 +17,7 @@ import Link from 'next/link'
 import useUser from '@/hooks/useUser'
 import { Skeleton } from '@mui/material'
 import { Login } from '@mui/icons-material'
+import LoginButton from './LoginButton'
 
 const pages = [
   {
