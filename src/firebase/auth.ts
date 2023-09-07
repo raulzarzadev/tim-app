@@ -66,7 +66,7 @@ export async function googleLogin() {
       const errorCode = error.code
       const errorMessage = error.message
       // The email of the user's account used.
-      const email = error.customData.email
+      const email = error?.customData?.email
       // The AuthCredential type that was used.
       const credential = GoogleAuthProvider.credentialFromError(error)
       console.error({ error })
@@ -76,4 +76,8 @@ export async function googleLogin() {
 
 export async function logout() {
   return await signOut(auth)
+}
+
+export async function getCurrentUser() {
+  return auth.currentUser
 }

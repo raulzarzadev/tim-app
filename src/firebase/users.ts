@@ -1,8 +1,7 @@
-import { NewClient, UserType } from '@/types/user'
+import { UserType } from '@/types/user'
 import { usersCRUD } from './auth'
 import { where } from 'firebase/firestore'
 import { BaseType } from '@/types/base'
-import { USER_ROL } from '@/CONST/user'
 
 export const setUser = async (
   userId: BaseType['id'],
@@ -13,10 +12,8 @@ export const createUser = async (
   newUser: Pick<UserType, 'email' | 'name' | 'image' | 'rol'>
 ) => await usersCRUD.createItem({ ...newUser })
 
-export const updateUser = async (
-  userId: string,
-  updates: Partial<UserType> | Partial<NewClient>
-) => await usersCRUD.updateItem(userId, updates)
+export const updateUser = async (userId: string, updates: Partial<UserType>) =>
+  await usersCRUD.updateItem(userId, updates)
 
 export const deleteUser = async (userId: BaseType['id']) =>
   await usersCRUD.deleteItem(userId)
@@ -29,18 +26,18 @@ export const listenUser = async (
   cb: CallableFunction
 ) => await usersCRUD.listenItem(userId, cb)
 
-export const listenCollaborators = async (cb: CallableFunction) =>
-  await usersCRUD.listenItems(
-    [
-      where('rol', 'in', [
-        USER_ROL.COLLABORATOR,
-        USER_ROL.COORDINATOR,
-        USER_ROL.ADMIN,
-        USER_ROL.CLIENT
-      ])
-    ],
-    cb
-  )
+// export const listenCollaborators = async (cb: CallableFunction) =>
+//   await usersCRUD.listenItems(
+//     [
+//       where('rol', 'in', [
+//         USER_ROL.COLLABORATOR,
+//         USER_ROL.COORDINATOR,
+//         USER_ROL.ADMIN,
+//         USER_ROL.CLIENT
+//       ])
+//     ],
+//     cb
+//   )
 
 export async function findUserByEmail({ email }: { email: string }) {
   const formatFoundUser = (

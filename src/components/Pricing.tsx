@@ -87,24 +87,18 @@ export default function Pricing() {
         component="main"
         sx={{ pt: 8, pb: 6 }}
       >
-        <Typography
-          component="h1"
-          variant="h2"
-          align="center"
-          color="text.primary"
-          gutterBottom
-        >
-          Pricing
+        <Typography component="h1" variant="h2" align="center" gutterBottom>
+          Precios
         </Typography>
         <Typography
           variant="h5"
           align="center"
-          color="text.secondary"
           component="p"
+          className="whitespace-pre-line"
         >
-          Quickly build an effective pricing table for your potential customers
-          with this layout. It&apos;s built with default MUI components with
-          little customization.
+          {`Facilitamos la renta de equipo. Gestiona reservas, disponibilidad, reparaciones y mucho más.
+           Todo por un precio fijo.
+          `}
         </Typography>
       </Container>
       {/* End hero unit */}

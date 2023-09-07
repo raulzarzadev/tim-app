@@ -14,10 +14,11 @@ import Tooltip from '@mui/material/Tooltip'
 import MenuItem from '@mui/material/MenuItem'
 import AdbIcon from '@mui/icons-material/Adb'
 import Link from 'next/link'
-import useUser from '@/hooks/useUser'
 import { Skeleton } from '@mui/material'
 import { Login } from '@mui/icons-material'
 import LoginButton from './LoginButton'
+import { AuthContext } from '@/context/authContext'
+import { logout } from '@/firebase/auth'
 
 const pages = [
   {
@@ -37,7 +38,6 @@ const pages = [
     route: '/faqs'
   }
 ]
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout']
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
@@ -50,7 +50,7 @@ function ResponsiveAppBar() {
     setAnchorElNav(null)
   }
 
-  const user = useUser()
+  const { user } = React.useContext(AuthContext)
 
   return (
     <AppBar position="static">
@@ -60,7 +60,7 @@ function ResponsiveAppBar() {
           <Typography
             variant="h6"
             noWrap
-            component="a"
+            component={Link}
             href="/"
             sx={{
               mr: 2,
@@ -117,7 +117,7 @@ function ResponsiveAppBar() {
           <Typography
             variant="h5"
             noWrap
-            component="a"
+            component={Link}
             href="/"
             sx={{
               mr: 2,
@@ -150,40 +150,30 @@ function ResponsiveAppBar() {
           )}
           {user === null && <LoginButton />}
           {user && <UserNavMenu />}
-          {/* <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right'
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right'
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box> */}
         </Toolbar>
       </Container>
     </AppBar>
   )
 }
+const settings: { label: string; route?: string; action?: () => void }[] = [
+  {
+    label: 'Perfil',
+    route: '/profile'
+  },
+  // {
+  //   label: 'Cuenta',
+  //   route: '/account'
+  // },
+  {
+    label: 'Dashboard',
+    route: '/dashboard'
+  },
+  {
+    label: 'Salir',
+
+    action: () => logout()
+  }
+]
 
 const UserNavMenu = () => {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
@@ -219,8 +209,16 @@ const UserNavMenu = () => {
         onClose={handleCloseUserMenu}
       >
         {settings.map((setting) => (
-          <MenuItem key={setting} onClick={handleCloseUserMenu}>
-            <Typography textAlign="center">{setting}</Typography>
+          <MenuItem key={setting.label} onClick={handleCloseUserMenu}>
+            {setting.action ? (
+              <Button onClick={setting.action}>
+                <Typography textAlign="center">{setting.label}</Typography>
+              </Button>
+            ) : (
+              <Link href={setting.route || '/'}>
+                <Typography textAlign="center">{setting.label}</Typography>
+              </Link>
+            )}
           </MenuItem>
         ))}
       </Menu>
