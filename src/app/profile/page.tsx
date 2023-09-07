@@ -1,5 +1,11 @@
+import UserCard from '@/components/UserCard'
+
 const Page = () => {
-  return <div>profile</div>
+  return (
+    <div>
+      <UserCard />
+    </div>
+  )
 }
 
 export default Page

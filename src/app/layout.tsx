@@ -1,4 +1,5 @@
 'use client'
+import BottomNavigation from '@/components/BottomNavigation'
 import './globals.css'
 import Navigation from '@/components/Navigation'
 import { AuthContextProvider, useAuthContext } from '@/context/authContext'
@@ -28,6 +29,7 @@ export default async function RootLayout({
         <body>
           <Navigation />
           {children}
+          <BottomNavigation />
         </body>
       </AuthContextProvider>
     </html>

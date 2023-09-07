@@ -1,5 +1,6 @@
 import { Box, Typography } from '@mui/material'
 import MUIModal, { ModalProps as MUIModalProps } from '@mui/material/Modal'
+import { ReactNode } from 'react'
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -10,13 +11,14 @@ const style = {
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
-  p: 4
+  p: 2
 }
 export type ModalProps = Pick<MUIModalProps, 'open' | 'onClose' | 'title'> & {
-  description: string
+  description?: string
+  children: ReactNode
 }
 
-const Modal = ({ open, onClose, title, description }: ModalProps) => {
+const Modal = ({ open, onClose, title, description, children }: ModalProps) => {
   return (
     <MUIModal
       open={open}
@@ -31,6 +33,7 @@ const Modal = ({ open, onClose, title, description }: ModalProps) => {
         <Typography id={`modal-modal-description-${title}`} sx={{ mt: 2 }}>
           {description}
         </Typography>
+        <main>{children}</main>
       </Box>
     </MUIModal>
   )

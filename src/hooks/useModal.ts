@@ -1,12 +1,10 @@
 import { useState } from 'react'
 
-const useModal = ({
-  title = '',
-  description
-}: {
+export type ModalType = {
   title?: string
-  description?: ''
-}) => {
+  description?: string
+}
+const useModal = (props?: ModalType) => {
   const [open, setOpen] = useState(false)
   const onClose = () => {
     setOpen(false)
@@ -15,8 +13,8 @@ const useModal = ({
     setOpen(true)
   }
   return {
-    title,
-    description,
+    title: props?.title,
+    description: props?.description,
     open,
     onClose,
     onOpen
