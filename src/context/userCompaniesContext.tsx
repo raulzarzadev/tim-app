@@ -2,6 +2,7 @@
 
 import { getUserCompanies } from '@/firebase/companies'
 import { CompanyType } from '@/types/company'
+import { useRouter } from 'next/navigation'
 import { createContext, useContext, useEffect, useState } from 'react'
 
 export type UserCompaniesContextType = {
@@ -22,6 +23,7 @@ export function UserCompaniesProvider({
 }: {
   children: React.ReactNode
 }) {
+  const router = useRouter()
   const [companies, setCompanies] = useState<CompanyType[]>([])
   const [selected, setSelected] = useState<CompanyType['id']>('')
   useEffect(() => {
@@ -32,6 +34,10 @@ export function UserCompaniesProvider({
       })
       .catch(console.error)
   }, [])
+
+  useEffect(() => {
+    router.push('?company=' + selected)
+  }, [router, selected])
 
   return (
     <UserCompaniesContext.Provider
