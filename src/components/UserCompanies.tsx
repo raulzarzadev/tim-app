@@ -13,6 +13,11 @@ const UserCompanies = () => {
   }
   return (
     <div className="py-4">
+      <div className="flex w-full justify-end my-2">
+        <Button LinkComponent={Link} href="/new-company">
+          Nueva empresa
+        </Button>
+      </div>
       <Select
         selected={selected}
         label="Empresas"
@@ -22,11 +27,6 @@ const UserCompanies = () => {
           label: company?.name
         }))}
       />
-      <div className="flex w-full justify-center">
-        <Button LinkComponent={Link} href="/new-company">
-          Crear empresa
-        </Button>
-      </div>
     </div>
   )
 }
