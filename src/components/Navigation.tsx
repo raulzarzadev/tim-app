@@ -18,6 +18,7 @@ import { Skeleton } from '@mui/material'
 import LoginButton from './LoginButton'
 import { AuthContext, useAuthContext } from '@/context/authContext'
 import { logout } from '@/firebase/auth'
+import { useUserCompaniesContext } from '@/context/userCompaniesContext'
 
 const pages = [
   {
@@ -40,6 +41,7 @@ const pages = [
 
 function ResponsiveAppBar() {
   useAuthContext()
+  useUserCompaniesContext()
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
 

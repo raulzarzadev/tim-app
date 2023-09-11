@@ -2,6 +2,7 @@ import BottomNavigation from '@/components/BottomNavigation'
 import './globals.css'
 import Navigation from '@/components/Navigation'
 import { AuthContextProvider } from '@/context/authContext'
+import { UserCompaniesProvider } from '@/context/userCompaniesContext'
 
 export const metadata = {
   title: 'baja-rent app',
@@ -20,9 +21,11 @@ export default async function RootLayout({
       </head>
       <body>
         <AuthContextProvider>
-          <Navigation />
-          {children}
-          <BottomNavigation />
+          <UserCompaniesProvider>
+            <Navigation />
+            {children}
+            <BottomNavigation />
+          </UserCompaniesProvider>
         </AuthContextProvider>
       </body>
     </html>

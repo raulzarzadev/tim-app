@@ -59,18 +59,20 @@ const CompanyForm = () => {
           />
         )}
       /> */}
-      <Button
-        onClick={(e) => {
-          e.preventDefault()
-          router.back()
-        }}
-      >
-        Atras
-      </Button>
-      <ModalConfirm handleConfirm={handleSubmit(onSubmit)} disabled={done}>
-        <Typography>Se creara la siguiente compañia: </Typography>
-        <Typography>{formValues.name}</Typography>
-      </ModalConfirm>
+      <div className="flex w-full justify-evenly my-4">
+        <Button
+          onClick={(e) => {
+            e.preventDefault()
+            router.back()
+          }}
+        >
+          Atras
+        </Button>
+        <ModalConfirm handleConfirm={handleSubmit(onSubmit)} disabled={done}>
+          <Typography>Se creara la siguiente compañia: </Typography>
+          <Typography>{formValues.name}</Typography>
+        </ModalConfirm>
+      </div>
     </form>
   )
 }

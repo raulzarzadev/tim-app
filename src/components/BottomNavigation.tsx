@@ -3,16 +3,18 @@ import * as React from 'react'
 import Box from '@mui/material/Box'
 import MUIBottomNavigation from '@mui/material/BottomNavigation'
 import BottomNavigationAction from '@mui/material/BottomNavigationAction'
-import RestoreIcon from '@mui/icons-material/Restore'
-import FavoriteIcon from '@mui/icons-material/Favorite'
-import ArchiveIcon from '@mui/icons-material/Archive'
 import Paper from '@mui/material/Paper'
 import AppIcon from './AppIcon'
+import { useAuthContext } from '@/context/authContext'
+import Link from 'next/link'
+import { useUserCompaniesContext } from '@/context/userCompaniesContext'
 
 export default function BottomNavigation() {
   const [value, setValue] = React.useState(0)
   const ref = React.useRef<HTMLDivElement>(null)
-
+  const { user } = useAuthContext()
+  const { companies } = useUserCompaniesContext()
+  const isOwner = companies.length > 0
   return (
     <Box sx={{ pb: 7 }} ref={ref}>
       <Paper
@@ -28,16 +30,30 @@ export default function BottomNavigation() {
           }}
         >
           <BottomNavigationAction
-            label="Recents"
-            icon={<AppIcon icon="restore" />}
+            LinkComponent={Link}
+            href="/"
+            label="Buscar"
+            icon={<AppIcon icon="search" />}
           />
           <BottomNavigationAction
-            label="Favorites"
-            icon={<AppIcon icon="favorite" />}
+            LinkComponent={Link}
+            href="/my-rentals"
+            label="Rentas"
+            icon={<AppIcon icon="bike" />}
           />
+          {isOwner && (
+            <BottomNavigationAction
+              LinkComponent={Link}
+              href="/dashboard"
+              label="Empresas"
+              icon={<AppIcon icon="store" />}
+            />
+          )}
           <BottomNavigationAction
-            label="Archive"
-            icon={<AppIcon icon="archive" />}
+            LinkComponent={Link}
+            href="/profile"
+            label="Perfil"
+            icon={<AppIcon icon="person" />}
           />
         </MUIBottomNavigation>
       </Paper>
