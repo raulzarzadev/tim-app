@@ -15,9 +15,8 @@ import MenuItem from '@mui/material/MenuItem'
 import AdbIcon from '@mui/icons-material/Adb'
 import Link from 'next/link'
 import { Skeleton } from '@mui/material'
-import { Login } from '@mui/icons-material'
 import LoginButton from './LoginButton'
-import { AuthContext } from '@/context/authContext'
+import { AuthContext, useAuthContext } from '@/context/authContext'
 import { logout } from '@/firebase/auth'
 
 const pages = [
@@ -40,6 +39,8 @@ const pages = [
 ]
 
 function ResponsiveAppBar() {
+  useAuthContext()
+
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {

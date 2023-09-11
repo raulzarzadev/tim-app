@@ -1,6 +1,6 @@
 'use client'
 
-import { authStateChanged, getCurrentUser } from '@/firebase/auth'
+import { authStateChanged } from '@/firebase/auth'
 import { UserType } from '@/types/user'
 import {
   ReactNode,

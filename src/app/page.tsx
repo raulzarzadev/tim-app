@@ -25,6 +25,7 @@ export default function Home() {
         <p>Patines</p>
         <p>Motos</p>
         <p>Autos</p>
+        <p>Lavadoras</p>
         <p>lo que sea ...</p>
         {!user && (
           <div className="my-4">

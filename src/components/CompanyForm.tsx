@@ -1,9 +1,11 @@
 'use client'
 import { useForm, SubmitHandler } from 'react-hook-form'
-import { Input, TextField, Typography } from '@mui/material'
+import { Button, Input, TextField, Typography } from '@mui/material'
 import ModalConfirm from './ModalConfirm'
 import { createCompany } from '@/firebase/companies'
 import { useAuthContext } from '@/context/authContext'
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 interface IFormInput {
   name: string
@@ -11,6 +13,7 @@ interface IFormInput {
 
 const CompanyForm = () => {
   const { user } = useAuthContext()
+  const router = useRouter()
   const { handleSubmit, register, watch } = useForm({
     defaultValues: {
       name: ''
@@ -18,7 +21,7 @@ const CompanyForm = () => {
   })
 
   const formValues = watch()
-
+  const [done, setDone] = useState(false)
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     console.log(data)
     try {
@@ -26,6 +29,7 @@ const CompanyForm = () => {
         name: data?.name,
         userId: user?.id || ''
       })
+      setDone(true)
       console.log({ res })
     } catch (error) {
       console.error(error)
@@ -55,7 +59,15 @@ const CompanyForm = () => {
           />
         )}
       /> */}
-      <ModalConfirm handleConfirm={handleSubmit(onSubmit)}>
+      <Button
+        onClick={(e) => {
+          e.preventDefault()
+          router.back()
+        }}
+      >
+        Atras
+      </Button>
+      <ModalConfirm handleConfirm={handleSubmit(onSubmit)} disabled={done}>
         <Typography>Se creara la siguiente compañia: </Typography>
         <Typography>{formValues.name}</Typography>
       </ModalConfirm>

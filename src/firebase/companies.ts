@@ -40,3 +40,7 @@ export const listenCompany = async (
   itemId: BaseType['id'],
   cb: CallableFunction
 ) => await itemCRUD.listenItem(itemId, cb)
+
+export const getUserCompanies = async () => {
+  return await itemCRUD.getUserItems([])
+}
