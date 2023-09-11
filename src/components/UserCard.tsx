@@ -6,6 +6,7 @@ import { Button, Typography } from '@mui/material'
 import Link from 'next/link'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext'
 import LoginButton from './LoginButton'
+import { updateUser } from '@/firebase/users'
 
 const UserCard = () => {
   const { user } = useAuthContext()
@@ -21,9 +22,15 @@ const UserCard = () => {
         </div>
       </div>
     )
+
+  const handleSetUser = async (user) => {
+    return await updateUser(user?.id, user)
+      .then((res) => console.log(res))
+      .catch((err) => console.error(err))
+  }
   return (
     <div>
-      <UserForm user={user} />
+      <UserForm user={user} setUser={handleSetUser} />
       {companies.length === 0 && (
         <div className="flex w-full justify-center">
           <Button LinkComponent={Link} href="/new-company">
