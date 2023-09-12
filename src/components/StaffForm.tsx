@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext'
 import { StaffType } from '@/types/staff'
 import StaffPermissionsForm from './StaffPermissionsForm'
-import { addStaff, updateStaff } from '@/firebase/staff'
+import { addStaff, removeStaff, updateStaff } from '@/firebase/staff'
 
 interface IFormInput extends StaffType {}
 
@@ -40,6 +40,14 @@ const StaffForm = ({ staff }: { staff?: StaffType }) => {
       })
       .catch(console.error)
       .finally(() => setDone(true))
+  }
+  const handleRemove = async () => {
+    return await removeStaff(currentCompany?.id || '', staff?.id || '')
+      .then((res) => {
+        setUserCompanies()
+        // router.back()
+      })
+      .catch(console.error)
   }
 
   return (
@@ -82,6 +90,10 @@ const StaffForm = ({ staff }: { staff?: StaffType }) => {
           <Typography>con los permisos:</Typography>
         </ModalConfirm>
       </div>
+      <ModalConfirm label="Eliminar" handleConfirm={handleRemove} color="error">
+        <Typography>¿Deseas eliminar empleado? </Typography>
+        <Typography>{formValues.name}</Typography>
+      </ModalConfirm>
     </form>
   )
 }
