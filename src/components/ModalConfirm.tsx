@@ -1,5 +1,5 @@
 import useModal from '@/hooks/useModal'
-import { Box, Button, Typography } from '@mui/material'
+import { Box, Button, ButtonProps, Typography } from '@mui/material'
 import { ReactNode, useState } from 'react'
 import Modal from './Modal'
 import ButtonLoading from './ButtonLoading'
@@ -7,11 +7,15 @@ import ButtonLoading from './ButtonLoading'
 const ModalConfirm = ({
   handleConfirm,
   children,
-  disabled
+  disabled,
+  label = 'Guardar',
+  color = 'primary'
 }: {
   handleConfirm: () => void | Promise<any>
   children?: ReactNode
   disabled?: boolean
+  label?: string
+  color?: ButtonProps['color']
 }) => {
   const modal = useModal()
   const [loading, setLoading] = useState(false)
@@ -26,23 +30,25 @@ const ModalConfirm = ({
         disabled={disabled}
         aria-label="button-modal-save"
         variant="outlined"
+        color={color}
       >
-        Guardar
+        {label}
       </Button>
       <Modal {...modal} title="Confirmar">
         {children}
-
-        <ButtonLoading
-          disabled={done}
-          onClick={async () => {
-            setLoading(true)
-            await handleConfirm()
-            setLoading(false)
-            setDone(true)
-          }}
-          loading={loading}
-          label={done ? 'Hecho' : 'Aceptar'}
-        />
+        <Box className="flex w-full justify-center my-4">
+          <ButtonLoading
+            disabled={done}
+            onClick={async () => {
+              setLoading(true)
+              await handleConfirm()
+              setLoading(false)
+              setDone(true)
+            }}
+            loading={loading}
+            label={done ? 'Hecho' : 'Aceptar'}
+          />
+        </Box>
       </Modal>
     </>
   )

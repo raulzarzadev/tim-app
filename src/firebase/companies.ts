@@ -1,4 +1,4 @@
-import { arrayUnion, where } from 'firebase/firestore'
+import { arrayRemove, arrayUnion, where } from 'firebase/firestore'
 import { storage } from './auth'
 import { FirebaseCRUD } from './firebase.CRUD'
 import { db } from './main'
@@ -44,13 +44,4 @@ export const listenCompany = async (
 
 export const getUserCompanies = async () => {
   return await itemCRUD.getUserItems([])
-}
-
-export const addCategory = async (
-  companyId: string,
-  category: Partial<CategoryType>
-) => {
-  return await updateCompany(companyId, {
-    categories: arrayUnion(category)
-  })
 }

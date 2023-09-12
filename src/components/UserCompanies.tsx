@@ -1,13 +1,14 @@
 'use client'
 
 import Select from './Select'
-import { Button } from '@mui/material'
+import { Button, Typography } from '@mui/material'
 import Link from 'next/link'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext'
 import AppIcon from './AppIcon'
 
 const UserCompanies = () => {
-  const { companies, selected, setSelected } = useUserCompaniesContext()
+  const { companies, selected, setSelected, currentCompany } =
+    useUserCompaniesContext()
 
   if (companies.length === 0) {
     return <p>Aun no tienes una empresa.</p>
@@ -30,10 +31,14 @@ const UserCompanies = () => {
             label: company?.name
           }))}
         />
+
         <Button LinkComponent={Link} href={`/new-company/${selected}`}>
           <AppIcon icon="edit" />
         </Button>
       </div>
+      <Typography className="text-center my-4" component={'p'}>
+        {currentCompany?.description}
+      </Typography>
     </div>
   )
 }

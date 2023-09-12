@@ -11,13 +11,15 @@ export type UserCompaniesContextType = {
   selected: CompanyType['id']
   setSelected: (id: CompanyType['id']) => void
   currentCompany: CompanyType | undefined
+  setUserCompanies: () => void
 }
 export const UserCompaniesContext = createContext<UserCompaniesContextType>({
   companies: [],
   setCompanies: (companies: CompanyType[]) => {},
   selected: '',
   setSelected: (id: CompanyType['id']) => {},
-  currentCompany: undefined
+  currentCompany: undefined,
+  setUserCompanies: () => {}
 })
 
 export function UserCompaniesProvider({
@@ -25,25 +27,35 @@ export function UserCompaniesProvider({
 }: {
   children: React.ReactNode
 }) {
-  const router = useRouter()
   const [companies, setCompanies] = useState<CompanyType[]>([])
   const [selected, setSelected] = useState<CompanyType['id']>('')
   useEffect(() => {
+    setUserCompanies()
+  }, [])
+  const setUserCompanies = () => {
     getUserCompanies()
       .then((res) => {
         setCompanies(res || [])
         setSelected(res?.[0]?.id)
       })
       .catch(console.error)
-  }, [])
+  }
 
+  const currentCompany = companies.find((company) => company?.id === selected)
   // useEffect(() => {
   //   router.push('?company=' + selected)
   // }, [router, selected])
-  const currentCompany = companies.find((company) => company?.id === selected)
+
   return (
     <UserCompaniesContext.Provider
-      value={{ setCompanies, setSelected, selected, companies, currentCompany }}
+      value={{
+        setCompanies,
+        setSelected,
+        selected,
+        companies,
+        currentCompany,
+        setUserCompanies
+      }}
     >
       {children}
     </UserCompaniesContext.Provider>
@@ -52,4 +64,36 @@ export function UserCompaniesProvider({
 
 export function useUserCompaniesContext() {
   return useContext(UserCompaniesContext)
+}
+
+type UseArticleProps = { articleId?: string }
+
+export function useArticle(props: UseArticleProps) {
+  const { currentCompany } = useUserCompaniesContext()
+
+  const article = props.articleId
+    ? currentCompany?.articles?.find((a) => a.id === props.articleId)
+    : undefined
+  return article
+}
+type UseArticlesProps = { categoryName?: string }
+
+export function useCategoryArticles(props: UseArticlesProps) {
+  const { currentCompany } = useUserCompaniesContext()
+
+  const articles = props.categoryName
+    ? currentCompany?.articles?.filter((a) => a.category === props.categoryName)
+    : undefined
+  return articles
+}
+
+type UseCategoryProps = { categoryName?: string }
+
+export function useCategory(props: UseCategoryProps) {
+  const { currentCompany } = useUserCompaniesContext()
+
+  const article = props.categoryName
+    ? currentCompany?.categories?.find((a) => a.name === props.categoryName)
+    : undefined
+  return article
 }
