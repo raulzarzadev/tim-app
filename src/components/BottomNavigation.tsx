@@ -47,9 +47,11 @@ export default function BottomNavigation() {
       visible: isOwner
     }
   ]
-  const [value, setValue] = React.useState(
-    pages?.findIndex((p) => p.href === pathname) || 0
-  )
+  const [value, setValue] = React.useState(0)
+  React.useEffect(() => {
+    setValue(pages?.findIndex((p) => p.href === pathname))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname])
 
   return (
     <Box sx={{ pb: 7 }} ref={ref}>
