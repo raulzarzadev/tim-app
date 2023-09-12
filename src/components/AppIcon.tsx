@@ -12,6 +12,7 @@ import PersonIcon from '@mui/icons-material/Person'
 import SearchIcon from '@mui/icons-material/Search'
 import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike'
 import StoreIcon from '@mui/icons-material/Store'
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 // https://mui.com/material-ui/material-icons/
 
 const icons = {
@@ -28,7 +29,8 @@ const icons = {
   person: <PersonIcon />,
   search: <SearchIcon />,
   bike: <DirectionsBikeIcon />,
-  store: <StoreIcon />
+  store: <StoreIcon />,
+  trash: <DeleteForeverIcon />
 } as const
 export type IconName = keyof typeof icons
 const AppIcon = ({ icon }: { icon: IconName }) => {

@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext'
 import { CategoryType } from '@/types/category'
 import { addCategory, updateCategory } from '@/firebase/categories'
+import PricesForm from './PricesForm'
 
 interface IFormInput {
   name: string
@@ -15,7 +16,7 @@ interface IFormInput {
 const CategoryForm = ({ category }: { category?: CategoryType }) => {
   const router = useRouter()
   const { currentCompany, setUserCompanies } = useUserCompaniesContext()
-  const { handleSubmit, register, watch } = useForm({
+  const { handleSubmit, register, watch, setValue } = useForm({
     defaultValues: category || {
       name: ''
     }
@@ -64,6 +65,11 @@ const CategoryForm = ({ category }: { category?: CategoryType }) => {
         placeholder="Breve descrición de la categoria"
         rows={3}
         {...register('description')}
+      />
+
+      <PricesForm
+        prices={category?.prices}
+        setPrices={(prices) => setValue('prices', prices)}
       />
 
       <div className="flex w-full justify-evenly my-4">
