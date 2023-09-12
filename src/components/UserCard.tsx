@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext'
 import LoginButton from './LoginButton'
 import { updateUser } from '@/firebase/users'
+import { UserType } from '@/types/user'
 
 const UserCard = () => {
   const { user } = useAuthContext()
@@ -23,7 +24,8 @@ const UserCard = () => {
       </div>
     )
 
-  const handleSetUser = async (user) => {
+  const handleSetUser = async (user: Partial<UserType>) => {
+    if (!user.id) return console.error(' No user id')
     return await updateUser(user?.id, user)
       .then((res) => console.log(res))
       .catch((err) => console.error(err))
