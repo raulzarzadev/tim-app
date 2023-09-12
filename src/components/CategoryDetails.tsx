@@ -3,7 +3,7 @@ import {
   useUserCompaniesContext
 } from '@/context/userCompaniesContext'
 import { CategoryType } from '@/types/category'
-import { Box, IconButton, Typography } from '@mui/material'
+import { Box, Button, IconButton, Typography } from '@mui/material'
 import ArticleCard from './ArticleCard'
 import AppIcon from './AppIcon'
 import Link from 'next/link'
@@ -26,6 +26,12 @@ const CategoryDetails = ({ category }: { category?: CategoryType }) => {
           <AppIcon icon="edit"></AppIcon>
         </IconButton>
       </Typography>
+      <Button
+        LinkComponent={Link}
+        href={`/dashboard/${currentCompany?.id}/articles/new?category=${category?.name}`}
+      >
+        Agregar articulo <AppIcon icon="add" />
+      </Button>
       <PricesList prices={category?.prices || []} />
       <Typography>{category?.description}</Typography>
       <Box className="grid grid-cols-2 gap-4">

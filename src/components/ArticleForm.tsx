@@ -2,8 +2,8 @@
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { Button, TextField, Typography } from '@mui/material'
 import ModalConfirm from './ModalConfirm'
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext'
 import { ArticleType } from '@/types/article'
 import Select from './Select'
@@ -15,10 +15,13 @@ interface IFormInput {
 
 const ArticleForm = ({ article }: { article?: ArticleType | null }) => {
   const router = useRouter()
+  const params = useSearchParams()
+
   const { currentCompany, setUserCompanies } = useUserCompaniesContext()
   const { handleSubmit, register, watch, setValue } = useForm({
     defaultValues: article || {
-      name: ''
+      name: '',
+      category: params.get('category') || ''
     }
   })
 
@@ -54,7 +57,7 @@ const ArticleForm = ({ article }: { article?: ArticleType | null }) => {
             label: c.name
           })) || []
         }
-        selected={formValues.category}
+        selected={formValues.category || ''}
         onSelect={(value) => setValue('category', value)}
       />
       <TextField
