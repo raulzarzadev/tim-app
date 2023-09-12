@@ -8,13 +8,49 @@ import AppIcon from './AppIcon'
 import { useAuthContext } from '@/context/authContext'
 import Link from 'next/link'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext'
+import { usePathname } from 'next/navigation'
 
 export default function BottomNavigation() {
-  const [value, setValue] = React.useState(0)
+  const pathname = usePathname()
+
   const ref = React.useRef<HTMLDivElement>(null)
-  const { user } = useAuthContext()
   const { companies } = useUserCompaniesContext()
   const isOwner = companies.length > 0
+  const pages: {
+    href: string
+    label: string
+    icon: JSX.Element
+    visible: boolean
+  }[] = [
+    {
+      href: '/',
+      label: 'Buscar',
+      icon: <AppIcon icon="search" />,
+      visible: true
+    },
+    {
+      href: '/my-rentals',
+      label: 'Rentas',
+      icon: <AppIcon icon="bike" />,
+      visible: true
+    },
+    {
+      href: '/profile',
+      label: 'Perfil',
+      icon: <AppIcon icon="person" />,
+      visible: true
+    },
+    {
+      href: '/dashboard',
+      label: 'Empresas',
+      icon: <AppIcon icon="store" />,
+      visible: isOwner
+    }
+  ]
+  const [value, setValue] = React.useState(
+    pages?.findIndex((p) => p.href === pathname) || 0
+  )
+
   return (
     <Box sx={{ pb: 7 }} ref={ref}>
       <Paper
@@ -29,7 +65,18 @@ export default function BottomNavigation() {
             setValue(newValue)
           }}
         >
-          <BottomNavigationAction
+          {pages.map((page) =>
+            page.visible ? (
+              <BottomNavigationAction
+                key={page.href}
+                LinkComponent={Link}
+                href={page.href}
+                label={page.label}
+                icon={page.icon}
+              />
+            ) : null
+          )}
+          {/* <BottomNavigationAction
             LinkComponent={Link}
             href="/"
             label="Buscar"
@@ -54,7 +101,7 @@ export default function BottomNavigation() {
             href="/profile"
             label="Perfil"
             icon={<AppIcon icon="person" />}
-          />
+          /> */}
         </MUIBottomNavigation>
       </Paper>
     </Box>

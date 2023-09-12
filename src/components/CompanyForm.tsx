@@ -2,20 +2,23 @@
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { Button, Input, TextField, Typography } from '@mui/material'
 import ModalConfirm from './ModalConfirm'
-import { createCompany } from '@/firebase/companies'
+import { createCompany, updateCompany } from '@/firebase/companies'
 import { useAuthContext } from '@/context/authContext'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useUserCompaniesContext } from '@/context/userCompaniesContext'
+import { CompanyType } from '@/types/company'
 
 interface IFormInput {
   name: string
 }
 
-const CompanyForm = () => {
-  const { user } = useAuthContext()
+const CompanyForm = ({ company }: { company?: CompanyType }) => {
   const router = useRouter()
+  const { user } = useAuthContext()
+  console.log({ company })
   const { handleSubmit, register, watch } = useForm({
-    defaultValues: {
+    defaultValues: company || {
       name: ''
     }
   })
@@ -23,27 +26,46 @@ const CompanyForm = () => {
   const formValues = watch()
   const [done, setDone] = useState(false)
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-    console.log(data)
     try {
-      const res = await createCompany({
-        name: data?.name,
-        userId: user?.id || ''
-      })
+      if (company?.id) {
+        await updateCompany(company?.id, data)
+          .then((res) => {
+            console.log(res)
+          })
+          .catch((err) => console.error(err))
+      } else {
+        await createCompany({
+          name: data?.name,
+          userId: user?.id || ''
+        })
+          .then((res) => {
+            console.log(res)
+          })
+          .catch((err) => console.error(err))
+      }
       setDone(true)
-      console.log({ res })
     } catch (error) {
       console.error(error)
     }
   }
 
   return (
-    <form>
+    <form className="grid gap-4">
       <TextField
         id="outlined-basic"
         label="Nombre de la empresa"
         variant="outlined"
         fullWidth
         {...register('name')}
+      />
+      <TextField
+        id="outlined-basic"
+        label="Descripción"
+        fullWidth
+        multiline
+        placeholder="Describe brevemente los productos que tu empresa ofrece"
+        rows={3}
+        {...register('description')}
       />
       {/* <Controller
         name="iceCreamType"

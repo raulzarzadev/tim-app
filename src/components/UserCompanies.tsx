@@ -4,6 +4,7 @@ import Select from './Select'
 import { Button } from '@mui/material'
 import Link from 'next/link'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext'
+import AppIcon from './AppIcon'
 
 const UserCompanies = () => {
   const { companies, selected, setSelected } = useUserCompaniesContext()
@@ -18,15 +19,21 @@ const UserCompanies = () => {
           Nueva empresa
         </Button>
       </div>
-      <Select
-        selected={selected}
-        label="Empresas"
-        onSelect={(value) => setSelected(value)}
-        options={companies.map((company) => ({
-          value: company?.id,
-          label: company?.name
-        }))}
-      />
+      <div className="flex w-full  ">
+        <Select
+          fullWidth
+          selected={selected}
+          label="Empresas"
+          onSelect={(value) => setSelected(value)}
+          options={companies.map((company) => ({
+            value: company?.id,
+            label: company?.name
+          }))}
+        />
+        <Button LinkComponent={Link} href={`/new-company/${selected}`}>
+          <AppIcon icon="edit" />
+        </Button>
+      </div>
     </div>
   )
 }

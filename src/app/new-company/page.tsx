@@ -1,4 +1,5 @@
 import CompanyForm from '@/components/CompanyForm'
+
 import { Container, Typography } from '@mui/material'
 
 const Page = () => {
