@@ -1,6 +1,7 @@
 import { ArticleType } from './article'
 import { BaseType } from './base'
 import { CategoryType } from './category'
+import { StaffType } from './staff'
 import { UserType } from './user'
 
 export type CompanyBase = {
@@ -9,6 +10,7 @@ export type CompanyBase = {
   description: string
   categories?: CategoryType[]
   articles?: ArticleType[]
+  staff?: StaffType[]
 }
 
 export type CompanyType = BaseType & CompanyBase
