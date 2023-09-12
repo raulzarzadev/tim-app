@@ -10,12 +10,14 @@ export type UserCompaniesContextType = {
   setCompanies: (companies: CompanyType[]) => void
   selected: CompanyType['id']
   setSelected: (id: CompanyType['id']) => void
+  currentCompany: CompanyType | undefined
 }
 export const UserCompaniesContext = createContext<UserCompaniesContextType>({
   companies: [],
   setCompanies: (companies: CompanyType[]) => {},
   selected: '',
-  setSelected: (id: CompanyType['id']) => {}
+  setSelected: (id: CompanyType['id']) => {},
+  currentCompany: undefined
 })
 
 export function UserCompaniesProvider({
@@ -35,13 +37,13 @@ export function UserCompaniesProvider({
       .catch(console.error)
   }, [])
 
-  useEffect(() => {
-    router.push('?company=' + selected)
-  }, [router, selected])
-
+  // useEffect(() => {
+  //   router.push('?company=' + selected)
+  // }, [router, selected])
+  const currentCompany = companies.find((company) => company?.id === selected)
   return (
     <UserCompaniesContext.Provider
-      value={{ setCompanies, setSelected, selected, companies }}
+      value={{ setCompanies, setSelected, selected, companies, currentCompany }}
     >
       {children}
     </UserCompaniesContext.Provider>

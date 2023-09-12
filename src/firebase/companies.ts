@@ -1,9 +1,10 @@
-import { where } from 'firebase/firestore'
+import { arrayUnion, where } from 'firebase/firestore'
 import { storage } from './auth'
 import { FirebaseCRUD } from './firebase.CRUD'
 import { db } from './main'
 import { BaseType } from '@/types/base'
 import { CompanyType } from '@/types/company'
+import { CategoryType } from '@/types/category'
 
 /*
  * You should be able to copy all this file and just replace
@@ -43,4 +44,13 @@ export const listenCompany = async (
 
 export const getUserCompanies = async () => {
   return await itemCRUD.getUserItems([])
+}
+
+export const addCategory = async (
+  companyId: string,
+  category: Partial<CategoryType>
+) => {
+  return await updateCompany(companyId, {
+    categories: arrayUnion(category)
+  })
 }
