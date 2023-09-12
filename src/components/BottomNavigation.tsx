@@ -78,32 +78,6 @@ export default function BottomNavigation() {
               />
             ) : null
           )}
-          {/* <BottomNavigationAction
-            LinkComponent={Link}
-            href="/"
-            label="Buscar"
-            icon={<AppIcon icon="search" />}
-          />
-          <BottomNavigationAction
-            LinkComponent={Link}
-            href="/my-rentals"
-            label="Rentas"
-            icon={<AppIcon icon="bike" />}
-          />
-          {isOwner && (
-            <BottomNavigationAction
-              LinkComponent={Link}
-              href="/dashboard"
-              label="Empresas"
-              icon={<AppIcon icon="store" />}
-            />
-          )}
-          <BottomNavigationAction
-            LinkComponent={Link}
-            href="/profile"
-            label="Perfil"
-            icon={<AppIcon icon="person" />}
-          /> */}
         </MUIBottomNavigation>
       </Paper>
     </Box>
