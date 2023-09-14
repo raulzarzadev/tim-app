@@ -18,15 +18,31 @@ const ArticleDetails = ({ article }: { article: ArticleType }) => {
   }
   return (
     <Box className="my-4 text-center">
-      <Typography variant="h5" component="h2" className="font-bold">
-        {article.name}
-      </Typography>
-      <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-        {article.category}
-      </Typography>
-      <Typography sx={{ mb: 0.5 }} color="text.secondary">
-        {article.color}
-      </Typography>
+      {article.serialNumber && (
+        <Typography variant="h5" component="h2" className="font-bold">
+          {article.serialNumber}
+        </Typography>
+      )}
+      {article.name && (
+        <Typography
+          variant="h5"
+          component="h2"
+          className="font-bold"
+          color="text.secondary"
+        >
+          {article.name}
+        </Typography>
+      )}
+      {article.category && (
+        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+          {article.category}
+        </Typography>
+      )}
+      {article.color && (
+        <Typography sx={{ mb: 0.5 }} color="text.secondary">
+          {article.color}
+        </Typography>
+      )}
 
       <Button
         size="small"

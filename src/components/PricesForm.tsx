@@ -44,7 +44,10 @@ const PricesForm = ({
           type="number"
           onChange={(e) => handleChange('quantity', e.target.value)}
         /> */}
-        <ButtonNumber />
+        <ButtonNumber
+          name="quantity"
+          onChange={(value) => handleChange('quantity', value)}
+        />
         <Select
           selected={_formValues.unit}
           variant="outlined"

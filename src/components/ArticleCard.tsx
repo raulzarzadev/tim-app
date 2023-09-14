@@ -20,12 +20,15 @@ const ArticleCard = ({ article }: { article: ArticleType }) => {
           {article.category}
         </Typography>
         <Typography variant="h5" component="div">
-          {article.name}
+          {article.serialNumber}
+          <Typography component={'span'} color="text.secondary">
+            {' '}
+            {article.name}
+          </Typography>{' '}
         </Typography>
         <Typography sx={{ mb: 0.5 }} color="text.secondary">
           {article.color}
         </Typography>
-        {/* <Typography variant="body2">{article.color}</Typography> */}
       </CardContent>
       <CardActions>
         <Button

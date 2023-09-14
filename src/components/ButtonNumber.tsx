@@ -12,13 +12,20 @@ export default function ButtonNumber({
 }: {
   onChange?: (
     value: number,
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e?: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void
   name: string
   min?: number
   max?: number
 }) {
   const [value, setValue] = React.useState(0)
+  const _onChange = (
+    value: number,
+    e?: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setValue(value)
+    onChange?.(value, e)
+  }
   return (
     <>
       <Box
@@ -29,7 +36,7 @@ export default function ButtonNumber({
           color="info"
           sx={{ width: 40, height: '100%' }}
           onClick={() => {
-            setValue((prev) => prev - 1)
+            _onChange(value - 1)
           }}
         >
           <AppIcon icon="substr" />
@@ -37,8 +44,7 @@ export default function ButtonNumber({
         <TextField
           name={name}
           onChange={(e) => {
-            setValue(Number(e.target.value))
-            onChange?.(Number(e.target.value), e)
+            _onChange(Number(e.target.value), e)
           }}
           type="number"
           value={value}
@@ -55,7 +61,7 @@ export default function ButtonNumber({
           color="info"
           sx={{ width: 40, height: '100%' }}
           onClick={() => {
-            setValue((prev) => prev + 1)
+            _onChange(value + 1)
           }}
         >
           <AppIcon icon="add" />

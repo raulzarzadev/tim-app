@@ -55,8 +55,6 @@ const ArticleForm = ({ article }: { article?: ArticleType | null }) => {
       .finally(() => setDone(true))
   }
 
-  console.log({ formValues })
-
   return (
     <form className="grid gap-4">
       <Select
@@ -115,8 +113,14 @@ const ArticleForm = ({ article }: { article?: ArticleType | null }) => {
         </Button>
         <ModalConfirm handleConfirm={handleSubmit(onSubmit)} disabled={done}>
           <Typography>Se creara el siguiente articulo: </Typography>
+          {formValues.name && (
+            <Typography>
+              Nombre: <strong className="font-bold"> {formValues.name}</strong>
+            </Typography>
+          )}
           <Typography>
-            Nombre: <strong className="font-bold"> {formValues.name}</strong>
+            Serie:{' '}
+            <strong className="font-bold"> {formValues.serialNumber}</strong>
           </Typography>
           {formValues.category && (
             <Typography>
