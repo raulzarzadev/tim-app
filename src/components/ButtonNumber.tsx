@@ -6,16 +6,19 @@ import AppIcon from './AppIcon'
 
 export default function ButtonNumber({
   onChange,
-  name
+  name,
+  min,
+  max
 }: {
-  onChange: (
+  onChange?: (
     value: number,
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void
   name: string
+  min?: number
+  max?: number
 }) {
   const [value, setValue] = React.useState(0)
-
   return (
     <>
       <Box
@@ -35,12 +38,19 @@ export default function ButtonNumber({
           name={name}
           onChange={(e) => {
             setValue(Number(e.target.value))
-            onChange(Number(e.target.value), e)
+            onChange?.(Number(e.target.value), e)
           }}
           type="number"
           value={value}
-          inputProps={{ style: { textAlign: 'center' } }}
+          inputProps={{
+            style: { textAlign: 'center' },
+            inputMode: 'numeric',
+            pattern: '[0-9]*',
+            min,
+            max
+          }}
         />
+
         <Button
           color="info"
           sx={{ width: 40, height: '100%' }}
