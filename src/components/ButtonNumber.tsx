@@ -4,11 +4,13 @@ import { Box, TextField } from '@mui/material'
 import AppIcon from './AppIcon'
 
 export default function ButtonNumber({
+  defaultValue,
   onChange,
   name,
   min,
   max
 }: {
+  defaultValue?: number
   onChange?: (
     value: number,
     e?: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -17,7 +19,7 @@ export default function ButtonNumber({
   min?: number
   max?: number
 }) {
-  const [value, setValue] = React.useState(0)
+  const [value, setValue] = React.useState(defaultValue || 0)
   const _onChange = (
     value: number,
     e?: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>

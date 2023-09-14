@@ -103,6 +103,11 @@ export function useCategory(props: UseCategoryProps) {
   return article
 }
 
+export function useCompanyCategories() {
+  const { currentCompany } = useUserCompaniesContext()
+  return currentCompany?.categories
+}
+
 export function useUserPermissions({ area }: { area: StaffPermission }) {
   const { currentCompany } = useUserCompaniesContext()
   const { user } = useAuthContext()

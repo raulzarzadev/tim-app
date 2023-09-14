@@ -90,11 +90,11 @@ const ArticleForm = ({ article }: { article?: ArticleType | null }) => {
       />
       <Box>
         <FormControlLabel
-          {...register('categoryPrice')}
-          control={<Checkbox defaultChecked />}
-          label="Mostrar precios según categoria"
+          {...register('ownPrice')}
+          control={<Checkbox />}
+          label="Precio propio"
         />
-        {!formValues.categoryPrice && (
+        {formValues.ownPrice && (
           <PricesForm
             setPrices={(formValues) => setValue('prices', formValues)}
             prices={formValues.prices}

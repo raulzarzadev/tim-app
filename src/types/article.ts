@@ -8,6 +8,6 @@ export type ArticleType = {
   color: string
   status: 'active' | 'inactive'
   image?: string
-  categoryPrice?: boolean
+  ownPrice?: boolean
   prices: CategoryType['prices']
 }
