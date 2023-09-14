@@ -9,8 +9,8 @@ import {
   Typography
 } from '@mui/material'
 import ModalConfirm from './ModalConfirm'
-import { useEffect, useState } from 'react'
-import { useParams, useRouter, useSearchParams } from 'next/navigation'
+import { useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext'
 import { ArticleType } from '@/types/article'
 import Select from './Select'

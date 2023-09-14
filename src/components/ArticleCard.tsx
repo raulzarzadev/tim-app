@@ -8,8 +8,6 @@ import {
   Typography
 } from '@mui/material'
 import Link from 'next/link'
-import { removeArticle } from '@/firebase/articles'
-import { useRouter } from 'next/navigation'
 
 const ArticleCard = ({ article }: { article: ArticleType }) => {
   const { currentCompany } = useUserCompaniesContext()
@@ -22,7 +20,6 @@ const ArticleCard = ({ article }: { article: ArticleType }) => {
         <Typography variant="h5" component="div">
           {article.serialNumber}
           <Typography component={'span'} color="text.secondary">
-            {' '}
             {article.name}
           </Typography>{' '}
         </Typography>

@@ -2,7 +2,6 @@
 
 import { getUserCompanies } from '@/firebase/companies'
 import { CompanyType } from '@/types/company'
-import { useRouter } from 'next/navigation'
 import { createContext, useContext, useEffect, useState } from 'react'
 import { useAuthContext } from './authContext'
 import { StaffPermission } from '@/types/staff'

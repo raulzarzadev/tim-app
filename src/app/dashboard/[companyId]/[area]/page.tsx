@@ -5,11 +5,7 @@ import CompanyDelivery from '@/components/CompanyDelivery'
 import CompanyMaintenance from '@/components/CompanyMaintenance'
 import CompanyReception from '@/components/CompanyReception'
 import CompanyStore from '@/components/CompanyStore'
-import {
-  StaffPermission,
-  StaffPermissionLabels,
-  StaffPermissions
-} from '@/types/staff'
+import { StaffPermission, StaffPermissionLabels } from '@/types/staff'
 import { Container, Typography } from '@mui/material'
 const component: Record<
   StaffPermission,
