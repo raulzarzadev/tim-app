@@ -1,6 +1,13 @@
 'use client'
 import { useForm, SubmitHandler } from 'react-hook-form'
-import { Button, TextField, Typography } from '@mui/material'
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  TextField,
+  Typography
+} from '@mui/material'
 import ModalConfirm from './ModalConfirm'
 import { useEffect, useState } from 'react'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
@@ -8,6 +15,7 @@ import { useUserCompaniesContext } from '@/context/userCompaniesContext'
 import { ArticleType } from '@/types/article'
 import Select from './Select'
 import { addArticle, updateArticle } from '@/firebase/articles'
+import PricesForm from './PricesForm'
 
 interface IFormInput {
   name: string
@@ -47,6 +55,8 @@ const ArticleForm = ({ article }: { article?: ArticleType | null }) => {
       .finally(() => setDone(true))
   }
 
+  console.log({ formValues })
+
   return (
     <form className="grid gap-4">
       <Select
@@ -62,6 +72,13 @@ const ArticleForm = ({ article }: { article?: ArticleType | null }) => {
       />
       <TextField
         id="outlined-basic"
+        label="Serie:"
+        variant="outlined"
+        fullWidth
+        {...register('serialNumber')}
+      />
+      <TextField
+        id="outlined-basic"
         label="Nombre"
         variant="outlined"
         fullWidth
@@ -73,6 +90,19 @@ const ArticleForm = ({ article }: { article?: ArticleType | null }) => {
         fullWidth
         {...register('color')}
       />
+      <Box>
+        <FormControlLabel
+          {...register('categoryPrice')}
+          control={<Checkbox defaultChecked />}
+          label="Mostrar precios según categoria"
+        />
+        {!formValues.categoryPrice && (
+          <PricesForm
+            setPrices={(formValues) => setValue('prices', formValues)}
+            prices={formValues.prices}
+          />
+        )}
+      </Box>
 
       <div className="flex w-full justify-evenly my-4">
         <Button

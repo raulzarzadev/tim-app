@@ -13,7 +13,15 @@ import SearchIcon from '@mui/icons-material/Search'
 import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike'
 import StoreIcon from '@mui/icons-material/Store'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
+
+import LocalShippingIcon from '@mui/icons-material/LocalShipping'
+import BuildIcon from '@mui/icons-material/Build'
+import SettingsApplicationsIcon from '@mui/icons-material/SettingsApplications'
+
+import PointOfSaleIcon from '@mui/icons-material/PointOfSale'
+import RemoveIcon from '@mui/icons-material/Remove'
 // https://mui.com/material-ui/material-icons/
+import VisibilityIcon from '@mui/icons-material/Visibility'
 
 const icons = {
   add: <AddIcon />,
@@ -30,7 +38,14 @@ const icons = {
   search: <SearchIcon />,
   bike: <DirectionsBikeIcon />,
   store: <StoreIcon />,
-  trash: <DeleteForeverIcon />
+  trash: <DeleteForeverIcon />,
+  delivery: <LocalShippingIcon />,
+  fix: <BuildIcon />,
+  settings: <SettingsApplicationsIcon />,
+  sales: <AttachMoneyIcon />,
+  cashbox: <PointOfSaleIcon />,
+  substr: <RemoveIcon />,
+  eye: <VisibilityIcon />
 } as const
 export type IconName = keyof typeof icons
 const AppIcon = ({ icon }: { icon: IconName }) => {

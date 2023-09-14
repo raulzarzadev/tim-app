@@ -3,6 +3,7 @@ import Select from './Select'
 import AppIcon from './AppIcon'
 import { useState } from 'react'
 import PricesList from './PricesList'
+import ButtonNumber from './ButtonNumber'
 
 export type PriceType = { quantity: number; price: number; unit: string }
 const PricesForm = ({
@@ -37,12 +38,13 @@ const PricesForm = ({
       <div>Precios</div>
       <PricesList prices={_prices} handleRemove={handleRemovePrice} />
       <div className="grid grid-cols-4 gap-1">
-        <TextField
+        {/* <TextField
           value={_formValues.quantity}
           label="Cantidad"
           type="number"
           onChange={(e) => handleChange('quantity', e.target.value)}
-        />
+        /> */}
+        <ButtonNumber />
         <Select
           selected={_formValues.unit}
           variant="outlined"

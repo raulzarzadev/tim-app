@@ -6,8 +6,9 @@ export enum StaffPermissionLabels {
   ADMIN = 'Administrador',
   RECEPTION = 'Recepción'
 }
+export type StaffPermission = keyof typeof StaffPermissionLabels
 export type StaffPermissions = {
-  [key in keyof typeof StaffPermissionLabels]?: boolean
+  [key in StaffPermission]?: boolean
   // reception?: boolean
   // inventory?: boolean
   // accounting?: boolean

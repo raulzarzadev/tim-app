@@ -5,6 +5,7 @@ import { Button, Typography } from '@mui/material'
 import Link from 'next/link'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext'
 import AppIcon from './AppIcon'
+import { useAuthContext } from '@/context/authContext'
 
 const UserCompanies = () => {
   const { companies, selected, setSelected, currentCompany } =
@@ -39,6 +40,32 @@ const UserCompanies = () => {
       <Typography className="text-center my-4" component={'p'}>
         {currentCompany?.description}
       </Typography>
+      <CompanyAccess />
+    </div>
+  )
+}
+
+const CompanyAccess = () => {
+  const { currentCompany } = useUserCompaniesContext()
+  const { user } = useAuthContext()
+  const userPermissions =
+    currentCompany?.staff?.find((staff) => staff?.email === user?.email)
+      ?.permissions || {}
+
+  return (
+    <div>
+      <Typography>Permisos</Typography>
+      {Object.entries(userPermissions).map(([key, value]) =>
+        value ? (
+          <Button
+            key={key}
+            LinkComponent={Link}
+            href={`/dashboard/${currentCompany?.id}/${key}`}
+          >
+            {key}
+          </Button>
+        ) : null
+      )}
     </div>
   )
 }

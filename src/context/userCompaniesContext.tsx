@@ -4,6 +4,8 @@ import { getUserCompanies } from '@/firebase/companies'
 import { CompanyType } from '@/types/company'
 import { useRouter } from 'next/navigation'
 import { createContext, useContext, useEffect, useState } from 'react'
+import { useAuthContext } from './authContext'
+import { StaffPermission } from '@/types/staff'
 
 export type UserCompaniesContextType = {
   companies: CompanyType[]
@@ -67,7 +69,11 @@ export function useUserCompaniesContext() {
 }
 
 type UseArticleProps = { articleId?: string }
-
+export const useCompanyArticles = () => {
+  const { currentCompany } = useUserCompaniesContext()
+  const articles = currentCompany?.articles
+  return articles
+}
 export function useArticle(props: UseArticleProps) {
   const { currentCompany } = useUserCompaniesContext()
 
@@ -96,4 +102,15 @@ export function useCategory(props: UseCategoryProps) {
     ? currentCompany?.categories?.find((a) => a.name === props.categoryName)
     : undefined
   return article
+}
+
+export function useUserPermissions({ area }: { area: StaffPermission }) {
+  const { currentCompany } = useUserCompaniesContext()
+  const { user } = useAuthContext()
+
+  const userPermissions = currentCompany?.staff?.find(
+    (s) => s.email === user?.email
+  )?.permissions
+  if (userPermissions?.ADMIN) return true
+  return userPermissions?.[area]
 }
