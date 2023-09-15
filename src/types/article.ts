@@ -9,5 +9,5 @@ export type ArticleType = {
   status: 'active' | 'inactive'
   image?: string
   ownPrice?: boolean
-  prices: CategoryType['prices']
+  prices?: CategoryType['prices']
 }

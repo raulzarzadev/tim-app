@@ -1,10 +1,6 @@
 'use client'
 import validatePermissions from "@/HOC's/validatePermissions"
-import {
-  useCompanyArticles,
-  useCompanyCategories,
-  useUserCompaniesContext
-} from '@/context/userCompaniesContext'
+import { useUserCompaniesContext } from '@/context/userCompaniesContext'
 import { CategoryType } from '@/types/category'
 import {
   Box,
@@ -25,6 +21,7 @@ import useModal from '@/hooks/useModal'
 import Grid from '@mui/material/Unstable_Grid2/Grid2'
 import ButtonNumber from './ButtonNumber'
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2'
+import Checkout from './Checkout'
 
 export type CashboxContext = {
   articles?: ArticleType['id'][]
@@ -34,168 +31,176 @@ export const CashboxContext = createContext<CashboxContext>({})
 
 const CompanyCashbox = () => {
   const [articles, setArticles] = useState<ArticleType['id'][]>([])
+  const { currentCompany } = useUserCompaniesContext()
   return (
     <div className="">
       <CashboxContext.Provider value={{ articles, setArticles }}>
         <Categories />
-        <Checkout2 />
+        <Checkout
+          articlesSelected={articles}
+          companyArticles={currentCompany?.articles || []}
+          companyCategories={currentCompany?.categories || []}
+        />
       </CashboxContext.Provider>
     </div>
   )
 }
 
-const Checkout = () => {
-  const total = 0
-  const { articles } = useContext(CashboxContext)
+// const Checkout = () => {
+//   const total = 0
+//   const { articles } = useContext(CashboxContext)
 
-  return (
-    <div className="sticky bottom-12 bg-blue-300  w-full mt-4 p-1 ">
-      <Box className="grid grid-cols-3 items-center gap-2">
-        <TextField
-          variant="outlined"
-          fullWidth
-          label="Cantidad"
-          type="number"
-        />
-        <Select
-          variant="outlined"
-          fullWidth
-          label="Tiempo"
-          options={[
-            { label: 'Hora', value: 'hour' },
-            { label: 'Dia', value: 'day' }
-          ]}
-        />
-        <Box className="grid gap-2 text-center">
-          <Typography>
-            Articulos: {articles?.length || 0} <AppIcon icon="eye" />
-          </Typography>
-          <Typography>Total: ${total.toFixed(2)}</Typography>
-          <Button>Pagar</Button>
-        </Box>
-      </Box>
-    </div>
-  )
-}
+//   return (
+//     <div className="sticky bottom-12 bg-blue-300  w-full mt-4 p-1 ">
+//       <Box className="grid grid-cols-3 items-center gap-2">
+//         <TextField
+//           variant="outlined"
+//           fullWidth
+//           label="Cantidad"
+//           type="number"
+//         />
+//         <Select
+//           variant="outlined"
+//           fullWidth
+//           label="Tiempo"
+//           options={[
+//             { label: 'Hora', value: 'hour' },
+//             { label: 'Dia', value: 'day' }
+//           ]}
+//         />
+//         <Box className="grid gap-2 text-center">
+//           <Typography>
+//             Articulos: {articles?.length || 0} <AppIcon icon="eye" />
+//           </Typography>
+//           <Typography>Total: ${total.toFixed(2)}</Typography>
+//           <Button>Pagar</Button>
+//         </Box>
+//       </Box>
+//     </div>
+//   )
+// }
 
-const Checkout2 = () => {
-  const { articles } = useContext(CashboxContext)
-  const { currentCompany } = useUserCompaniesContext()
-  const companyArticles = currentCompany?.articles
-  const companyCategories = currentCompany?.categories
-  const [total, setTotal] = useState(0)
-  const modal = useModal({ title: 'Checkout' })
-  const [payment, setPayment] = useState({
-    qty: 0,
-    unit: 'hour'
-  })
+// export const Checkout2 = () => {
+//   const { articles } = useContext(CashboxContext)
+//   const { currentCompany } = useUserCompaniesContext()
+//   const companyArticles = currentCompany?.articles
+//   const companyCategories = currentCompany?.categories
+//   const [total, setTotal] = useState(0)
+//   const modal = useModal({ title: 'Checkout' })
+//   const [payment, setPayment] = useState({
+//     qty: 0,
+//     unit: 'hour'
+//   })
 
-  const itemsDetails =
-    articles?.map((articleId) => {
-      const fullArt = companyArticles?.find(
-        (article) => article.id === articleId
-      )
-      if (!fullArt) return null
-      if (fullArt?.ownPrice) return fullArt
-      const categoryPrice =
-        companyCategories?.find(
-          (category) => category.name === fullArt.category
-        )?.prices || []
-      return { ...fullArt, prices: categoryPrice }
-    }) || []
+//   const itemsDetails =
+//     articles?.map((articleId) => {
+//       const fullArt = companyArticles?.find(
+//         (article) => article.id === articleId
+//       )
+//       if (!fullArt) return null
+//       if (fullArt?.ownPrice) return fullArt
+//       const categoryPrice =
+//         companyCategories?.find(
+//           (category) => category.name === fullArt.category
+//         )?.prices || []
+//       return { ...fullArt, prices: categoryPrice }
+//     }) || []
 
-  if (articles?.length === 0) return null
+//   if (articles?.length === 0) return null
 
-  return (
-    <Box className="flex w-full justify-between sticky bottom-12 bg-blue-300 mt-4 p-1 ">
-      <Modal {...modal}>
-        <ItemsList items={itemsDetails} />
-        <Typography className="text-end">Total: ${total.toFixed(2)}</Typography>
-        <Grid2
-          className="my-4"
-          container
-          alignContent={'center'}
-          alignItems={'center'}
-          justifyItems={'center'}
-          justifyContent={'center'}
-          spacing={2}
-        >
-          <Grid2>
-            <ButtonNumber
-              name="cantidad"
-              min={0}
-              defaultValue={payment.qty}
-              onChange={(value) => setPayment({ ...payment, qty: value })}
-            />
-          </Grid2>
-          <Grid2>
-            <Select
-              variant="outlined"
-              label="Tiempo"
-              options={[
-                { label: 'Hora', value: 'hour' },
-                { label: 'Dia', value: 'day' },
-                { label: 'Semana', value: 'week' },
-                { label: 'Mes', value: 'month' }
-              ]}
-              selected={payment.unit}
-              onSelect={(value) => setPayment({ ...payment, unit: value })}
-            />
-          </Grid2>
-          <Grid2>
-            <Button size="large" variant="outlined" color="secondary">
-              Pagar
-            </Button>
-          </Grid2>
-        </Grid2>
-      </Modal>
+//   return (
+//     <Box className="flex w-full justify-between sticky bottom-12 bg-blue-300 mt-4 p-1 ">
+//       <Modal {...modal}>
+//         <ItemsList items={itemsDetails} />
+//         <Typography className="text-xl font-bold my-4 text-end">
+//           Total: ${total.toFixed(2)}
+//         </Typography>
+//         <Grid2
+//           className="my-4"
+//           container
+//           alignContent={'center'}
+//           alignItems={'center'}
+//           justifyItems={'center'}
+//           justifyContent={'center'}
+//           spacing={2}
+//         >
+//           <Grid2>
+//             <ButtonNumber
+//               name="cantidad"
+//               min={0}
+//               defaultValue={payment.qty}
+//               onChange={(value) => setPayment({ ...payment, qty: value })}
+//             />
+//           </Grid2>
+//           <Grid2>
+//             <Select
+//               variant="outlined"
+//               label="Tiempo"
+//               options={[
+//                 { label: 'Hora', value: 'hour' },
+//                 { label: 'Dia', value: 'day' },
+//                 { label: 'Semana', value: 'week' },
+//                 { label: 'Mes', value: 'month' }
+//               ]}
+//               selected={payment.unit}
+//               onSelect={(value) => setPayment({ ...payment, unit: value })}
+//             />
+//           </Grid2>
+//           <Grid2>
+//             <Button size="large" variant="outlined" color="secondary">
+//               Pagar
+//             </Button>
+//           </Grid2>
+//         </Grid2>
+//       </Modal>
 
-      <Typography>
-        Articulos: {articles?.length || 0} <AppIcon icon="eye" />
-      </Typography>
-      <Typography>Total: ${total.toFixed(2)}</Typography>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={() => modal.onOpen()}
-      >
-        Checkout
-      </Button>
-    </Box>
-  )
-}
-const ItemsList = ({ items }: { items: (ArticleType | null)[] }) => {
-  console.log({ items })
-  return (
-    <div>
-      <Box className={'grid grid-cols-3'}>
-        <Box>Categoria</Box>
-        <Box>No.Serie</Box>
-        <Box>Precio</Box>
-      </Box>
-      {items.map((item, i) =>
-        item ? (
-          <Box
-            key={item?.id}
-            className={'grid grid-cols-3 items-center place-content-center'}
-          >
-            <Typography>{item?.category}</Typography>
-            <Typography>{item?.serialNumber || item?.name}</Typography>
-            <Box>
-              {item.prices.map((p, i) => (
-                <Typography key={i}>{`${p.quantity}-${p?.unit}: $${
-                  Number(p?.price)?.toFixed(2) || 0
-                }`}</Typography>
-              ))}
-            </Box>
-          </Box>
-        ) : (
-          <Typography key={i}>{`Articulo no encontrado`}</Typography>
-        )
-      )}
-    </div>
-  )
-}
+//       <Typography>
+//         Articulos: {articles?.length || 0} <AppIcon icon="eye" />
+//       </Typography>
+//       <Typography className="text-xl font-bold my-4">
+//         Total: ${total.toFixed(2)}
+//       </Typography>
+//       <Button
+//         variant="contained"
+//         color="primary"
+//         onClick={() => modal.onOpen()}
+//       >
+//         Checkout
+//       </Button>
+//     </Box>
+//   )
+// }
+// const ItemsList = ({ items }: { items: (ArticleType | null)[] }) => {
+//   return (
+//     <div>
+//       <Box className={'grid grid-cols-3'}>
+//         <Box>Categoria</Box>
+//         <Box>No.Serie</Box>
+//         <Box>Precio</Box>
+//       </Box>
+//       {items.map((item, i) =>
+//         item ? (
+//           <Box
+//             key={item?.id}
+//             className={'grid grid-cols-3 items-center place-content-center'}
+//           >
+//             <Typography>{item?.category}</Typography>
+//             <Typography>{item?.serialNumber || item?.name}</Typography>
+//             <Box>
+//               {item.prices.map((p, i) => (
+//                 <Typography key={i}>{`${p.quantity}-${p?.unit}: $${
+//                   Number(p?.price)?.toFixed(2) || 0
+//                 }`}</Typography>
+//               ))}
+//             </Box>
+//           </Box>
+//         ) : (
+//           <Typography key={i}>{`Articulo no encontrado`}</Typography>
+//         )
+//       )}
+//     </div>
+//   )
+// }
 
 const Categories = () => {
   const { currentCompany } = useUserCompaniesContext()
