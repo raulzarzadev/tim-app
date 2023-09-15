@@ -86,7 +86,7 @@ const Checkout2 = () => {
   const [total, setTotal] = useState(0)
   const modal = useModal({ title: 'Checkout' })
   const [payment, setPayment] = useState({
-    qty: 1,
+    qty: 0,
     unit: 'hour'
   })
 
@@ -123,8 +123,7 @@ const Checkout2 = () => {
           <Grid2>
             <ButtonNumber
               name="cantidad"
-              min={1}
-              max={10}
+              min={0}
               defaultValue={payment.qty}
               onChange={(value) => setPayment({ ...payment, qty: value })}
             />
@@ -169,12 +168,26 @@ const ItemsList = ({ items }: { items: (ArticleType | null)[] }) => {
   console.log({ items })
   return (
     <div>
+      <Box className={'grid grid-cols-3'}>
+        <Box>Categoria</Box>
+        <Box>No.Serie</Box>
+        <Box>Precio</Box>
+      </Box>
       {items.map((item, i) =>
         item ? (
-          <Box key={item?.id} className={'grid grid-cols-3'}>
+          <Box
+            key={item?.id}
+            className={'grid grid-cols-3 items-center place-content-center'}
+          >
             <Typography>{item?.category}</Typography>
             <Typography>{item?.serialNumber || item?.name}</Typography>
-            <Box></Box>
+            <Box>
+              {item.prices.map((p, i) => (
+                <Typography key={i}>{`${p.quantity}-${p?.unit}: $${
+                  Number(p?.price)?.toFixed(2) || 0
+                }`}</Typography>
+              ))}
+            </Box>
           </Box>
         ) : (
           <Typography key={i}>{`Articulo no encontrado`}</Typography>

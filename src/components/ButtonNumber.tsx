@@ -27,17 +27,22 @@ export default function ButtonNumber({
     setValue(value)
     onChange?.(value, e)
   }
+  const handleChange = (value: number) => {
+    if (typeof min == 'number' && value < min) return
+    if (typeof max == 'number' && value > max) return
+    _onChange(value)
+  }
   return (
     <>
       <Box
         id="button-number"
-        className="grid grid-cols-3 w-36 items-center shadow-sm place-content-center justify-center place-items-center"
+        className="grid grid-cols-3 w-48 items-center shadow-sm place-content-center justify-center place-items-center"
       >
         <Button
           color="info"
           sx={{ width: 40, height: '100%' }}
           onClick={() => {
-            _onChange(value - 1)
+            handleChange(value - 1)
           }}
         >
           <AppIcon icon="substr" />
@@ -45,12 +50,12 @@ export default function ButtonNumber({
         <TextField
           name={name}
           onChange={(e) => {
-            _onChange(Number(e.target.value), e)
+            handleChange(Number(e.target.value), e)
           }}
           type="number"
           value={value}
           inputProps={{
-            style: { textAlign: 'center' },
+            style: { textAlign: 'center', width: 50 },
             inputMode: 'numeric',
             pattern: '[0-9]*',
             min,
@@ -62,7 +67,7 @@ export default function ButtonNumber({
           color="info"
           sx={{ width: 40, height: '100%' }}
           onClick={() => {
-            _onChange(value + 1)
+            handleChange(value + 1)
           }}
         >
           <AppIcon icon="add" />

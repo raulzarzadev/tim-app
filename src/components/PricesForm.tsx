@@ -47,6 +47,7 @@ const PricesForm = ({
         <ButtonNumber
           name="quantity"
           onChange={(value) => handleChange('quantity', value)}
+          min={0}
         />
         <Select
           selected={_formValues.unit}
