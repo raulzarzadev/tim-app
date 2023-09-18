@@ -19,7 +19,7 @@ import { createContext, useContext, useEffect, useState } from 'react'
 import Modal from './Modal'
 import useModal from '@/hooks/useModal'
 import Grid from '@mui/material/Unstable_Grid2/Grid2'
-import ButtonNumber from './ButtonNumber'
+import ButtonNumber from './NumberInput'
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2'
 import Checkout from './Checkout'
 

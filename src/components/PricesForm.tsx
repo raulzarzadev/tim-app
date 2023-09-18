@@ -3,7 +3,7 @@ import Select from './Select'
 import AppIcon from './AppIcon'
 import { useState } from 'react'
 import PricesList from './PricesList'
-import ButtonNumber from './ButtonNumber'
+import ButtonNumber from './NumberInput'
 
 export type PriceType = { quantity: number; price: number; unit: string }
 const PricesForm = ({
