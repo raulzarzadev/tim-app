@@ -27,7 +27,7 @@ const Modal = ({ open, onClose, title, description, children }: ModalProps) => {
       aria-labelledby={`modal-modal-${title}`}
       aria-describedby={`modal-modal-description-${title}`}
     >
-      <Box sx={style}>
+      <Box sx={style} className="overflow-y-auto border max-h-screen">
         <Typography id={`modal-modal-${title}`} variant="h6" component="h2">
           {title}
         </Typography>

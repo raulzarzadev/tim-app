@@ -1,9 +1,14 @@
 'use client'
-import Checkout from '@/components/Checkout'
-import { CashboxContext } from '@/components/CompanyCashbox'
+import Checkout from '@/components/Checkout2'
 import { ArticleType } from '@/types/article'
 import { CategoryType } from '@/types/category'
-import { useState } from 'react'
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams
+} from 'next/navigation'
+import { useCallback, useEffect } from 'react'
 
 const items: ArticleType[] = [
   {
@@ -39,12 +44,7 @@ const items: ArticleType[] = [
     color: 'Green',
     status: 'active',
     image: 'path/to/image3.jpg',
-    ownPrice: true,
-    prices: [
-      { quantity: 1, price: 100, unit: 'hour' },
-      { quantity: 1, price: 300, unit: 'day' },
-      { quantity: 1, price: 1000, unit: 'week' }
-    ]
+    ownPrice: false
   },
   {
     id: '4',
@@ -74,7 +74,7 @@ const categories: CategoryType[] = [
     image: 'path/to/image1.jpg',
     prices: [
       { quantity: 1, price: 90, unit: 'hour' },
-      { quantity: 3, price: 300, unit: 'day' },
+      { quantity: 3, price: 200, unit: 'hour' },
       { quantity: 1, price: 600, unit: 'day' }
     ]
   },
@@ -92,22 +92,31 @@ const categories: CategoryType[] = [
     description: 'Description 3',
     image: 'path/to/image3.jpg',
     prices: [
-      { quantity: 30, price: 20, unit: 'min' },
+      { quantity: 30, price: 30, unit: 'min' },
       { quantity: 1, price: 40, unit: 'hour' },
-      { quantity: 2, price: 80, unit: 'hour' }
+      { quantity: 1, price: 290, unit: 'day' }
     ]
   }
 ]
 function Page() {
+  const [searchParams, setSearchParams] = useSearchParams()
+  const pathname = usePathname()
+  const router = useRouter()
+  const selectedItems = [
+    { itemId: 1, qty: 1, unit: 'hour' },
+    { itemId: 2, qty: 1, unit: 'day' },
+    { itemId: 3, qty: 1, unit: 'week' }
+  ]
+
+  useEffect(() => {
+    const params = new URLSearchParams()
+    params.set('items', JSON.stringify(selectedItems))
+    router.push(pathname + '?' + params)
+  }, [])
+
   return (
     <div>
-      <div>
-        <Checkout
-          articlesSelected={['1', '2', '3', '4', '5']}
-          companyArticles={items}
-          companyCategories={categories}
-        />
-      </div>
+      <Checkout items={items} categories={categories} />
     </div>
   )
 }

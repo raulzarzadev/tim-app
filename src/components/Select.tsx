@@ -22,7 +22,9 @@ export default function Select({
 }) {
   const handleChange = (event: SelectChangeEvent) => {
     onSelect?.(event.target.value as string)
+    _seValue(event.target.value)
   }
+  const [_value, _seValue] = React.useState(String(selected))
 
   return (
     <FormControl fullWidth={fullWidth}>
@@ -31,7 +33,7 @@ export default function Select({
         variant={variant}
         labelId={`simple-select-${label}`}
         id={`select-${label}`}
-        value={String(selected)}
+        value={_value}
         label={label}
         onChange={handleChange}
       >

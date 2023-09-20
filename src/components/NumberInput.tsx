@@ -2,6 +2,7 @@ import * as React from 'react'
 import Button from '@mui/material/Button'
 import { Box, TextField } from '@mui/material'
 import AppIcon from './AppIcon'
+import asNumber from '@/lib/asNumber'
 
 export default function NumberInput({
   defaultValue,
@@ -19,7 +20,7 @@ export default function NumberInput({
   min?: number
   max?: number
 }) {
-  const [value, setValue] = React.useState(defaultValue || 0)
+  const [value, setValue] = React.useState(asNumber(defaultValue) || 0)
   const _onChange = (
     value: number,
     e?: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -36,7 +37,7 @@ export default function NumberInput({
     <>
       <Box
         id="button-number"
-        className="grid grid-cols-3 w-28 items-center shadow-sm place-content-center justify-center place-items-center"
+        className="grid grid-cols-3 w-full items-center shadow-sm place-content-center justify-center place-items-center"
       >
         <button
           onClick={() => {
