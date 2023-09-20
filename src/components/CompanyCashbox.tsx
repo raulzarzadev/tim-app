@@ -22,7 +22,12 @@ import {
 } from 'react'
 import Grid from '@mui/material/Unstable_Grid2/Grid2'
 import Checkout from './Checkout2'
-import { useParams, usePathname, useRouter } from 'next/navigation'
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams
+} from 'next/navigation'
 
 export type CashboxContext = {
   articles?: ArticleType['id'][]
@@ -34,14 +39,12 @@ export const CashboxContextProvider = ({
 }: {
   children: ReactNode
 }) => {
-  const router = useRouter()
-  const pathname = usePathname()
+  const searchParams = useSearchParams()
   const [articles, setArticles] = useState<ArticleType['id'][]>([])
-  // useEffect(() => {
-  //   const params = new URLSearchParams()
-  //   params.set('items', JSON.stringify(articles.map((a) => ({ itemId: a }))))
-  //   router.replace(pathname + '?' + params)
-  // }, [articles])
+  useEffect(() => {
+    const items = JSON.parse(searchParams.get('items') || '[]')
+    setArticles(items.map(({ itemId }) => itemId))
+  }, [])
   return (
     <CashboxContext.Provider value={{ articles, setArticles }}>
       {children}
@@ -160,11 +163,10 @@ const Category = ({
           gutterBottom
           className="truncate"
         >
-          {category.name}
           <span className="font-bold text-2xl ">
-            {' '}
-            x {categoryItemsSelected?.length}
+            {categoryItemsSelected?.length}x{' '}
           </span>
+          {category.name}
         </Typography>
 
         <Typography
