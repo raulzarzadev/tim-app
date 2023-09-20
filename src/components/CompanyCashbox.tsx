@@ -22,12 +22,7 @@ import {
 } from 'react'
 import Grid from '@mui/material/Unstable_Grid2/Grid2'
 import Checkout from './Checkout2'
-import {
-  useParams,
-  usePathname,
-  useRouter,
-  useSearchParams
-} from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 export type CashboxContext = {
   articles?: ArticleType['id'][]
@@ -43,7 +38,7 @@ export const CashboxContextProvider = ({
   const [articles, setArticles] = useState<ArticleType['id'][]>([])
   useEffect(() => {
     const items = JSON.parse(searchParams.get('items') || '[]')
-    setArticles(items.map(({ itemId }) => itemId))
+    setArticles(items.map(({ itemId }: { itemId: string }) => itemId))
   }, [])
   return (
     <CashboxContext.Provider value={{ articles, setArticles }}>

@@ -23,7 +23,6 @@ const Checkout = ({
   const modal = useModal({ title: 'Checkout' })
   const { get } = useSearchParams()
   const selectedItems = JSON.parse(get('items') || '[]')
-  console.log({ selectedItems })
   const fullItems = selectedItems?.map((searchItem: { itemId: string }) => {
     const fullItem = items?.find((item) => item?.id == searchItem.itemId)
     if (fullItem?.ownPrice) return fullItem
@@ -32,6 +31,7 @@ const Checkout = ({
     )?.prices
     return { ...fullItem, prices: categoryPrices }
   })
+  console.log({ selectedItems })
   const calculateFullTotal = (
     selectedItems: {
       itemId: ArticleType['id']
@@ -41,7 +41,6 @@ const Checkout = ({
     fullItems: ArticleType[]
   ) => {
     let total = 0
-    console.log({ selectedItems })
     selectedItems.forEach(({ qty, unit, itemId }) => {
       const pricesList = fullItems.find((item) => item.id == itemId)?.prices
       const { total: itemTotal, price } = calculateTotal(
@@ -150,9 +149,14 @@ export const ItemRow = ({ item }: { item: ArticleType }) => {
   const pathname = usePathname()
   const router = useRouter()
   const itemsFromParams = JSON.parse(searchParams.get('items') || '')
-
-  const [qty, setQty] = useState(item.prices?.[0].quantity || 1)
-  const [unit, setUnit] = useState(item.prices?.[0].unit)
+  console.log({ itemsFromParams })
+  const foundItem = itemsFromParams.find(
+    (i: { itemId: string }) => i.itemId == item.id
+  )
+  const [qty, setQty] = useState(
+    foundItem.qty || item.prices?.[0].quantity || 1
+  )
+  const [unit, setUnit] = useState(foundItem.unit || item.prices?.[0].unit)
   const [priceSelected, setPriceSelected] = useState<PriceType | undefined>(
     undefined
   )
@@ -198,8 +202,7 @@ export const ItemRow = ({ item }: { item: ArticleType }) => {
   }
   const handleRemoveItem = () => {
     // return handleRemoveArticle?.(item.id)
-    //* get items
-    const itemsFromParams = JSON.parse(searchParams.get('items') || '')
+
     //* remove item
     const newItems = itemsFromParams?.filter((i) => i.itemId != item.id)
     //* set items
@@ -207,7 +210,6 @@ export const ItemRow = ({ item }: { item: ArticleType }) => {
     params.set('items', JSON.stringify(newItems))
     router.replace(pathname + '?' + params)
   }
-  console.log({ item })
   return (
     <Box
       key={item?.id}
