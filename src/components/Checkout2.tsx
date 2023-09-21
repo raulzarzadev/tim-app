@@ -31,7 +31,6 @@ const Checkout = ({
     )?.prices
     return { ...fullItem, prices: categoryPrices }
   })
-  console.log({ selectedItems })
   const calculateFullTotal = (
     selectedItems: {
       itemId: ArticleType['id']
@@ -149,7 +148,6 @@ export const ItemRow = ({ item }: { item: ArticleType }) => {
   const pathname = usePathname()
   const router = useRouter()
   const itemsFromParams = JSON.parse(searchParams.get('items') || '')
-  console.log({ itemsFromParams })
   const foundItem = itemsFromParams.find(
     (i: { itemId: string }) => i.itemId == item.id
   )
