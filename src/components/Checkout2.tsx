@@ -95,6 +95,12 @@ const Checkout = ({
         <Typography className="text-xl font-bold my-4 text-end">
           Total: ${asNumber(total)?.toFixed(2)}
         </Typography>
+
+        <Box className="flex w-full justify-center">
+          <Button variant="outlined" size="large">
+            Pagar
+          </Button>
+        </Box>
       </Modal>
     </>
   )
