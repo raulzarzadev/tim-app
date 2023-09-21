@@ -170,6 +170,7 @@ export const ItemRow = ({ item }: { item: ArticleType }) => {
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const router = useRouter()
+  const { setArticles: setArticlesCtx } = useContext(CashboxContext)
   const itemsFromParams = JSON.parse(searchParams.get('items') || '')
   const foundItem = itemsFromParams.find(
     (i: { itemId: string }) => i.itemId == item.id
@@ -222,7 +223,7 @@ export const ItemRow = ({ item }: { item: ArticleType }) => {
 
     //* remove item
     const newItems = itemsFromParams?.filter((i) => i.itemId != item.id)
-    //* set items
+    //* set params items
     const params = new URLSearchParams()
     params.set('items', JSON.stringify(newItems))
     router.replace(pathname + '?' + params)

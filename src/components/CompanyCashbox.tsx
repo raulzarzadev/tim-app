@@ -39,7 +39,7 @@ export const CashboxContextProvider = ({
   useEffect(() => {
     const items = JSON.parse(searchParams.get('items') || '[]')
     setArticles(items.map(({ itemId }: { itemId: string }) => itemId))
-  }, [])
+  }, [searchParams])
   return (
     <CashboxContext.Provider value={{ articles, setArticles }}>
       {children}
@@ -100,7 +100,6 @@ const Category = ({
   const router = useRouter()
   const pathname = usePathname()
   const { articles: ctxArticles, setArticles } = useContext(CashboxContext)
-
   const handleSetArticles = (articles: string[]) => {
     setArticles?.(articles)
     const params = new URLSearchParams()

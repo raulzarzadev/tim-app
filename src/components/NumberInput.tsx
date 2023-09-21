@@ -35,7 +35,6 @@ export default function NumberInput({
     if (typeof max == 'number' && value > max) return
     _onChange(value)
   }
-  console.log({ value })
   return (
     <>
       <Box
