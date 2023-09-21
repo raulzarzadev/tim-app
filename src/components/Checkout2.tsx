@@ -58,7 +58,6 @@ const Checkout = ({
     return total
   }
   const total = calculateFullTotal(selectedItems, fullItems)
-  const ctx = useContext(CheckoutContext)
   const handleClearSearch = () => {
     router.replace(pathname)
     setArticles?.([])
@@ -193,8 +192,8 @@ export const ItemRow = ({ item }: { item: ArticleType }) => {
     setPriceSelected(price)
   }, [price])
 
-  //* update url with new item values {qty & unit}
   useEffect(() => {
+    //* update url with new item values {qty & unit}
     //* find oldItem
     const oldItem = itemsFromParams?.find((i) => i.itemId == item.id)
     //* update data
@@ -217,13 +216,9 @@ export const ItemRow = ({ item }: { item: ArticleType }) => {
   }))
 
   const modal = useModal({ title: 'Detalles de articulo' })
-  const isSelectedPrice = (p: PriceType) => {
-    return (
-      priceSelected?.unit === p.unit && priceSelected?.quantity === p.quantity
-    )
-  }
+
   const handleRemoveItem = () => {
-    // return handleRemoveArticle?.(item.id)
+    //* return handleRemoveArticle?.(item.id)
 
     //* remove item
     const newItems = itemsFromParams?.filter((i) => i.itemId != item.id)
@@ -231,6 +226,15 @@ export const ItemRow = ({ item }: { item: ArticleType }) => {
     const params = new URLSearchParams()
     params.set('items', JSON.stringify(newItems))
     router.replace(pathname + '?' + params)
+  }
+  const handleSelectPrice = (p: PriceType) => {
+    setUnit(p.unit)
+    setQty(p.quantity)
+  }
+  const isSelectedPrice = (p: PriceType) => {
+    return (
+      priceSelected?.unit === p.unit && priceSelected?.quantity === p.quantity
+    )
   }
   return (
     <Box
@@ -253,15 +257,17 @@ export const ItemRow = ({ item }: { item: ArticleType }) => {
             <Box className="grid gap-2 grid-flow-col">
               {item.prices?.map((p, i) => (
                 <Box
+                  component={Button}
+                  onClick={() => handleSelectPrice(p)}
                   key={i}
                   className={`${
                     isSelectedPrice(p) ? 'bg-blue-300' : ''
-                  } shadow-md rounded-md p-2 text-center`}
+                  } shadow-md rounded-md p-2 text-center flex flex-col justify-center`}
                 >
                   <p>
                     {p?.quantity} {p?.unit}
                   </p>
-                  ${asNumber(p.price).toFixed(2)}
+                  <p>${asNumber(p.price).toFixed(2)}</p>
                 </Box>
               ))}
             </Box>
@@ -292,6 +298,7 @@ export const ItemRow = ({ item }: { item: ArticleType }) => {
         name="qty"
         defaultValue={qty}
         onChange={(value) => setQty(value)}
+        value={qty}
       />
       <Select
         onSelect={(value) => setUnit(value)}

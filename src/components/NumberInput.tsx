@@ -9,23 +9,25 @@ export default function NumberInput({
   onChange,
   name,
   min,
-  max
+  max,
+  value
 }: {
   defaultValue?: number
   onChange?: (
     value: number,
     e?: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void
+  value?: number
   name: string
   min?: number
   max?: number
 }) {
-  const [value, setValue] = React.useState(asNumber(defaultValue) || 0)
+  const [_value, _setValue] = React.useState(asNumber(defaultValue) || 0)
   const _onChange = (
     value: number,
     e?: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setValue(value)
+    _setValue(value)
     onChange?.(value, e)
   }
   const handleChange = (value: number) => {
@@ -33,6 +35,7 @@ export default function NumberInput({
     if (typeof max == 'number' && value > max) return
     _onChange(value)
   }
+  console.log({ value })
   return (
     <>
       <Box
@@ -41,7 +44,7 @@ export default function NumberInput({
       >
         <button
           onClick={() => {
-            handleChange(value - 1)
+            handleChange(_value - 1)
           }}
         >
           <AppIcon icon="substr" />
@@ -52,7 +55,7 @@ export default function NumberInput({
             handleChange(Number(e.target.value), e)
           }}
           type="number"
-          value={value}
+          value={value ?? _value}
           style={{ textAlign: 'center', width: 30 }}
           inputMode="numeric"
           pattern="[0-9]*"
@@ -62,7 +65,7 @@ export default function NumberInput({
 
         <button
           onClick={() => {
-            handleChange(value + 1)
+            handleChange(_value + 1)
           }}
         >
           <AppIcon icon="add" />

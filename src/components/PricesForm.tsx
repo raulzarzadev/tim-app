@@ -38,12 +38,6 @@ const PricesForm = ({
       <div>Precios</div>
       <PricesList prices={_prices} handleRemove={handleRemovePrice} />
       <div className="grid grid-cols-4 gap-1">
-        {/* <TextField
-          value={_formValues.quantity}
-          label="Cantidad"
-          type="number"
-          onChange={(e) => handleChange('quantity', e.target.value)}
-        /> */}
         <ButtonNumber
           name="quantity"
           onChange={(value) => handleChange('quantity', value)}
@@ -55,6 +49,10 @@ const PricesForm = ({
           label="Unidad"
           onSelect={(value) => handleChange('unit', value)}
           options={[
+            {
+              label: 'Minutos',
+              value: 'minutes'
+            },
             {
               label: 'Hora',
               value: 'hour'

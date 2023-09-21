@@ -15,7 +15,7 @@ export default function Select({
 }: {
   options: { value: string | number; label: string }[]
   onSelect?: (value: string) => void
-  selected?: string | number
+  selected?: string
   label: string
   fullWidth?: boolean
   variant?: SelectProps['variant']
@@ -33,7 +33,7 @@ export default function Select({
         variant={variant}
         labelId={`simple-select-${label}`}
         id={`select-${label}`}
-        value={_value}
+        value={selected ?? _value}
         label={label}
         onChange={handleChange}
       >
