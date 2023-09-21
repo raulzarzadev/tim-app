@@ -3,12 +3,7 @@ import Checkout from '@/components/Checkout2'
 import ModalPayment from '@/components/ModalPayment2'
 import { ArticleType } from '@/types/article'
 import { CategoryType } from '@/types/category'
-import {
-  useParams,
-  usePathname,
-  useRouter,
-  useSearchParams
-} from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useEffect } from 'react'
 
 const items: ArticleType[] = [

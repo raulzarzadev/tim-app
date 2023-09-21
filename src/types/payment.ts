@@ -1,7 +1,6 @@
 import { Timestamp } from 'firebase/firestore'
 import { ArticleType } from './article'
 import { CompanyType } from './company'
-import { UserType } from './user'
 import { BaseType } from './base'
 import { PaymentMethods } from '@/CONSTS/paymentMethods'
 

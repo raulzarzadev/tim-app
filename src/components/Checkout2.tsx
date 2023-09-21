@@ -12,7 +12,6 @@ import ModalConfirm from './ModalConfirm'
 import { CategoryType } from '@/types/category'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import asNumber from '@/lib/asNumber'
-import { CheckoutContext } from './Checkout'
 import { CashboxContext } from './CompanyCashbox'
 import ModalPayment from './ModalPayment2'
 
