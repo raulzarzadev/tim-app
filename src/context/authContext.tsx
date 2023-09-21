@@ -4,6 +4,7 @@ import { authStateChanged } from '@/firebase/auth'
 import { UserType } from '@/types/user'
 import {
   ReactNode,
+  SetStateAction,
   createContext,
   useContext,
   useEffect,
@@ -24,7 +25,7 @@ export type AuthContextType = {
 export function AuthContextProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<UserType | null | undefined>(undefined)
   useEffect(() => {
-    authStateChanged((user) => {
+    authStateChanged((user: SetStateAction<UserType | null | undefined>) => {
       setUser(user)
     })
   }, [])

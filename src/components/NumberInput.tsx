@@ -30,7 +30,10 @@ export default function NumberInput({
     _setValue(value)
     onChange?.(value, e)
   }
-  const handleChange = (value: number) => {
+  const handleChange = (
+    value: number,
+    e?: React.ChangeEvent<HTMLInputElement>
+  ) => {
     if (typeof min == 'number' && value < min) return
     if (typeof max == 'number' && value > max) return
     _onChange(value)

@@ -1,4 +1,4 @@
-export default (value: unknown): number => {
+const asNumber = (value: unknown): number => {
   if (!value) return 0
   if (typeof value === 'object') return 0
   if (Array.isArray(value)) return 0
@@ -6,3 +6,5 @@ export default (value: unknown): number => {
   if (typeof validNumber === 'number') return validNumber
   return 0
 }
+
+export default asNumber

@@ -7,6 +7,7 @@ export const addCategory = async (
   category: Partial<CategoryType>
 ) => {
   return await updateCompany(companyId, {
+    // @ts-ignore FIXME: Type 'CategoryType' is not assignable to type 'CategoryType'.
     categories: arrayUnion(category)
   })
 }
@@ -20,6 +21,8 @@ export const removeCategory = async (
     (c: { name: string }) => c.name === categoryName
   )
   return await updateCompany(companyId, {
+    // @ts-ignore FIXME: Type 'CategoryType' is not assignable to type 'CategoryType'.
+
     categories: arrayRemove(category)
   })
 }
@@ -34,9 +37,13 @@ export const updateCategory = async (
     (c: { name: string }) => c.name === categoryName
   )
   await updateCompany(companyId, {
+    // @ts-ignore FIXME: Type 'CategoryType' is not assignable to type 'CategoryType'.
+
     categories: arrayRemove(category)
   })
   await updateCompany(companyId, {
+    // @ts-ignore FIXME: Type 'CategoryType' is not assignable to type 'CategoryType'.
+
     categories: arrayUnion(updates)
   })
 }

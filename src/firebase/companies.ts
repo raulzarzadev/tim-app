@@ -24,10 +24,8 @@ export const setCompany = async (itemId: ItemType['id'], newItem: NewItem) =>
 export const createCompany = async (newItem: CreateCompany_DTO) =>
   await itemCRUD.createItem({ ...newItem })
 
-export const updateCompany = async (
-  itemId: string,
-  updates: Partial<ItemType> | NewItem
-) => await itemCRUD.updateItem(itemId, updates)
+export const updateCompany = async (itemId: string, updates: NewItem) =>
+  await itemCRUD.updateItem(itemId, updates)
 
 export const deleteCompany = async (itemId: BaseType['id']) =>
   await itemCRUD.deleteItem(itemId)

@@ -20,7 +20,7 @@ const UserForm = ({
     defaultValues: user
   })
   const [loading, setLoading] = useState(false)
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: Partial<UserType>) => {
     try {
       setLoading(true)
       await setUser?.(data)

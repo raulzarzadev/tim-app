@@ -216,7 +216,7 @@ export const ItemRow = ({ item }: { item: ArticleType }) => {
   }
 
   const [qty, setQty] = useState(item.prices?.[0].quantity || 1)
-  const [unit, setUnit] = useState(item.prices?.[0].unit)
+  const [unit, setUnit] = useState(item.prices?.[0].unit || '')
   const [priceSelected, setPriceSelected] = useState<PriceType | undefined>(
     undefined
   )
@@ -229,6 +229,7 @@ export const ItemRow = ({ item }: { item: ArticleType }) => {
 
   useEffect(() => {
     setItemPayment?.(item.id, { qty, unit })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {

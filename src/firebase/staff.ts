@@ -5,6 +5,7 @@ import { StaffType } from '@/types/staff'
 
 export const addStaff = async (companyId: string, staff: StaffType) => {
   return await updateCompany(companyId, {
+    // @ts-ignore FIXME: Type 'StaffType' is not assignable to type 'StaffType'.
     staff: arrayUnion({ ...staff, id: uidGenerator() })
   })
 }
@@ -15,6 +16,8 @@ export const removeStaff = async (companyId: string, staffId: string) => {
     (c: { name: string; id: string }) => c.id === staffId
   )
   return await updateCompany(companyId, {
+    // @ts-ignore FIXME: Type 'StaffType' is not assignable to type 'StaffType'.
+
     staff: arrayRemove(staff)
   })
 }
@@ -29,9 +32,13 @@ export const updateStaff = async (
     (c: { name: string; id: string }) => c.id === staffId
   )
   await updateCompany(companyId, {
+    // @ts-ignore FIXME: Type 'StaffType' is not assignable to type 'StaffType'.
+
     staff: arrayRemove(staff)
   })
   await updateCompany(companyId, {
+    // @ts-ignore FIXME: Type 'StaffType' is not assignable to type 'StaffType'.
+
     staff: arrayUnion(updates)
   })
 }

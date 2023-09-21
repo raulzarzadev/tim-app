@@ -4,7 +4,7 @@ import ModalPayment from '@/components/ModalPayment2'
 import { ArticleType } from '@/types/article'
 import { CategoryType } from '@/types/category'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useCallback, useEffect } from 'react'
+import { useEffect } from 'react'
 
 const items: ArticleType[] = [
   {
@@ -108,6 +108,7 @@ function Page() {
     const params = new URLSearchParams()
     params.set('items', JSON.stringify(selectedItems))
     router.push(pathname + '?' + params)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

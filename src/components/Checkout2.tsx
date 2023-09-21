@@ -200,7 +200,9 @@ export const ItemRow = ({ item }: { item: ArticleType }) => {
   useEffect(() => {
     //* update url with new item values {qty & unit}
     //* find oldItem
-    const oldItem = itemsFromParams?.find((i) => i.itemId == item.id)
+    const oldItem = itemsFromParams?.find(
+      (i: { itemId: string }) => i.itemId == item.id
+    )
     //* update data
     const newItem = { ...oldItem, qty, unit }
     //* replace item in array
@@ -226,7 +228,9 @@ export const ItemRow = ({ item }: { item: ArticleType }) => {
     //* return handleRemoveArticle?.(item.id)
 
     //* remove item
-    const newItems = itemsFromParams?.filter((i) => i.itemId != item.id)
+    const newItems = itemsFromParams?.filter(
+      (i: { itemId: string }) => i.itemId != item.id
+    )
     //* set params items
     const params = new URLSearchParams()
     params.set('items', JSON.stringify(newItems))
