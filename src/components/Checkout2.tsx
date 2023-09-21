@@ -14,6 +14,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import asNumber from '@/lib/asNumber'
 import { CheckoutContext } from './Checkout'
 import { CashboxContext } from './CompanyCashbox'
+import ModalPayment from './ModalPayment2'
 
 const Checkout = ({
   items,
@@ -97,9 +98,7 @@ const Checkout = ({
         </Typography>
 
         <Box className="flex w-full justify-center">
-          <Button variant="outlined" size="large">
-            Pagar
-          </Button>
+          <ModalPayment amount={total} />
         </Box>
       </Modal>
     </>

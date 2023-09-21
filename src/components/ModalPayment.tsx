@@ -1,8 +1,5 @@
 'use client'
-import { PaymentMethods, paymentMethods } from '@/CONST/paymentMethods'
 import useModal from '@/hooks/useModal'
-import useUser from '@/hooks/useUser'
-import { Friend, NewClient } from '@/types/user'
 import {
   Box,
   Button,
@@ -17,7 +14,6 @@ import {
 } from '@mui/material'
 import { useState } from 'react'
 import Modal from './Modal'
-import CurrencySpan from './CurrencySpan'
 import {
   cancelClientPayment,
   deleteClient,
@@ -26,91 +22,74 @@ import {
 } from '@/firebase/clients'
 
 import ModalConfirm from './ModalConfirm'
+import { PaymentMethods, paymentMethods } from '@/CONSTS/paymentMethods'
+import CurrencySpan from './CurrencySpan'
+import asNumber from '@/lib/asNumber'
+import ButtonLoading from './ButtonLoading'
+import { Payment } from '@/types/payment'
+import addDiscount from '@/lib/addDiscount'
+import { dateFormat } from '@/lib/utils-date'
+import asDate from '@/lib/asDate'
 
-const activityRequireInsurance = async (activityId?: string) => {
-  if (activityId)
-    return await getActivity(activityId).then((activity) => {
-      return !!activity.requiresInsurance
-    })
-}
+const ModalPayment = ({ amount }: { amount: number }) => {
+  const USD_PRICE = 16
+  // const { user } = useUser()
+  // const { parkConfig } = useParkConfig()
+  // const subtotal = subtotalFromClient(client)
 
-const assignInsurancePolicy = async (
-  user: NewClient | Friend,
-  currentPolicyNumber: number
-) => {
-  const activityRequiresInsurance = await activityRequireInsurance(
-    user.activity?.id
-  )
-  return {
-    ...user,
-    insurancePolicyNumber: activityRequiresInsurance
-      ? currentPolicyNumber + 1
-      : 'n/a'
-  }
-}
+  // const parkUserCount = parkConfig?.usersCount || 0
+  // const handlePay = async () => {
+  //   if (!client?.id) return
+  //   try {
+  //     const clientId = client.id || ''
 
-const ModalPayment = ({ client }: { client: NewClient }) => {
-  const { user } = useUser()
-  const { parkConfig } = useParkConfig()
-  const USD_PRICE = asNumber(parkConfig?.dollarPrice)
-  const subtotal = subtotalFromClient(client)
+  //     //* update payment client
+  //     const payment: NewClient['payment'] = {
+  //       amount: subtotal,
+  //       date: new Date(),
+  //       method: paymentMethod,
+  //       discount,
+  //       created: {
+  //         by: user?.id,
+  //         at: new Date()
+  //       },
+  //       dollarPrice: USD_PRICE
+  //     }
+  //     const res = await updateClient(clientId, { payment })
 
-  const parkUserCount = parkConfig?.usersCount || 0
-  const handlePay = async () => {
-    if (!client?.id) return
-    try {
-      const clientId = client.id || ''
+  //     //* Update client userNumber and friends user number
+  //     const awaitingClient = await getClient(clientId)
+  //     const { friends } = awaitingClient
 
-      //* update payment client
-      const payment: NewClient['payment'] = {
-        amount: subtotal,
-        date: new Date(),
-        method: paymentMethod,
-        discount,
-        created: {
-          by: user?.id,
-          at: new Date()
-        },
-        dollarPrice: USD_PRICE
-      }
-      const res = await updateClient(clientId, { payment })
+  //     const newFriends = await Promise.all(
+  //       friends.map(async (friend: any) => {
+  //         //* Update park user count
+  //         if (parkConfig?.id) await incrementUsersCount(parkConfig?.id)
 
-      //* Update client userNumber and friends user number
-      const awaitingClient = await getClient(clientId)
-      const { friends } = awaitingClient
+  //         return { ...friend, userNumber: parkUserCount + 2 }
+  //       })
+  //     )
+  //     const countData = {
+  //       friends: newFriends,
+  //       userNumber: parkUserCount + 1
+  //     }
+  //     await updateClient(clientId, countData)
+  //     //* Update park user count
+  //     if (parkConfig?.id) await incrementUsersCount(parkConfig?.id)
+  //   } catch (error) {
+  //     console.error(error)
+  //   }
 
-      const newFriends = await Promise.all(
-        friends.map(async (friend: any) => {
-          //* Update park user count
-          if (parkConfig?.id) await incrementUsersCount(parkConfig?.id)
-
-          return { ...friend, userNumber: parkUserCount + 2 }
-        })
-      )
-      const countData = {
-        friends: newFriends,
-        userNumber: parkUserCount + 1
-      }
-      await updateClient(clientId, countData)
-      //* Update park user count
-      if (parkConfig?.id) await incrementUsersCount(parkConfig?.id)
-    } catch (error) {
-      console.error(error)
-    }
-
-    return
-  }
+  //   return
+  // }
 
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethods>('cash')
   const [discount, setDiscount] = useState<number>(0)
   const [amount, setAmount] = useState(0)
-  const modalDetails = useModal()
+  const modalDetails = useModal({ title: 'Detalle de cliente' })
+  const confirmPaymentModal = useModal({ title: 'Confirmar pago' })
   const total = subtotal - subtotal * (asNumber(discount) / 100)
-  const showDiscountInput = user?.isAdmin || user?.rol === USER_ROL.COORDINATOR
-  const showCortesia = user?.isAdmin || user?.rol === USER_ROL.COORDINATOR
-  const handleOpenEdit = () => {
-    modalDetails.handleOpen()
-  }
+
   const handleSetAmount = (amount: number) => {
     setAmount(amount)
   }
@@ -120,13 +99,12 @@ const ModalPayment = ({ client }: { client: NewClient }) => {
   const handleSetAsCortesia = (isFree: boolean) => {
     setDiscount(isFree ? 100 : 0)
   }
-  const confirmPaymentModal = useModal()
   return (
     <>
       <Button
         onClick={(e) => {
           e.preventDefault()
-          handleOpenEdit()
+          modalDetails.onOpen()
         }}
         size="small"
       >
@@ -153,7 +131,7 @@ const ModalPayment = ({ client }: { client: NewClient }) => {
                 dollarPrice={USD_PRICE}
               />
 
-              {showDiscountInput && (
+              {/* {showDiscountInput && (
                 <Box className="flex w-full justify-end items-baseline my-2">
                   <TextField
                     inputProps={{
@@ -174,24 +152,12 @@ const ModalPayment = ({ client }: { client: NewClient }) => {
                     }}
                   />
                 </Box>
-              )}
+              )} */}
               <Box>
                 <Typography variant="h5" className="text-center">
                   Total: <CurrencySpan quantity={total} />
                 </Typography>
               </Box>
-              {showCortesia && (
-                <Box className="justify-end flex w-full">
-                  <FormControlLabel
-                    onChange={(e) => {
-                      //@ts-ignore
-                      handleSetAsCortesia(e.target?.checked as boolean)
-                    }}
-                    label="Es cortesia"
-                    control={<Checkbox />}
-                  />
-                </Box>
-              )}
 
               <Box className="flex w-full justify-center">
                 <FormControl className="">
@@ -246,25 +212,23 @@ const ModalPayment = ({ client }: { client: NewClient }) => {
                       : `Sobran $${asNumber(amountInMXN - total).toFixed(2)}`
                   }
                 />
-                <LoadingButton
+                <ButtonLoading
                   disabled={amountInMXN < total}
-                  variant="contained"
-                  color="success"
+                  // variant="contained"
+                  // color="success"
                   onClick={() => {
                     // return handlePay()
-                    confirmPaymentModal.handleOpen()
+                    confirmPaymentModal.onOpen()
                   }}
                   label="Pagar"
-                  icon={'money'}
+                  //  icon={'money'}
                 />
                 <ModalConfirm
-                  buttonConfirmProps={{
-                    onClick: () => handlePay(),
-                    color: 'success',
-                    label: 'Pagar'
+                  handleConfirm={async () => {
+                    return handlePay()
                   }}
-                  {...confirmPaymentModal}
-                  title="Confirmar pago"
+                  color="success"
+                  label="Pagar"
                 >
                   <Box className="text-center">
                     <Typography className="text-center my-8" variant="h5">
@@ -273,7 +237,7 @@ const ModalPayment = ({ client }: { client: NewClient }) => {
                     <Typography>
                       Metodo:{' '}
                       {
-                        paymentMethods.find((m) => m.key === paymentMethod)
+                        paymentMethods.find((m) => m.type === paymentMethod)
                           ?.label
                       }
                     </Typography>
@@ -295,66 +259,6 @@ const ModalPayment = ({ client }: { client: NewClient }) => {
   )
 }
 
-const ModalDeletePayment = ({
-  clientId,
-  usersCount
-}: {
-  clientId: string
-  usersCount: number
-}) => {
-  const modal = useModal()
-  const { parkConfig } = useParkConfig()
-  const handleDeleteClient = async (clientId: string) => {
-    try {
-      await deleteClient(clientId)
-      //** You should not reduce the user count */
-      // await incrementUsersCount(parkConfig?.id || '', -usersCount)
-    } catch (error) {
-      console.error(error)
-    }
-  }
-  return (
-    <>
-      <Button
-        color="error"
-        variant="outlined"
-        onClick={(e) => {
-          modal.handleOpen()
-        }}
-      >
-        Eliminar cliente
-      </Button>
-      <ModalConfirm
-        {...modal}
-        title="Eliminar cliente"
-        buttonConfirmProps={{
-          onClick: () => handleDeleteClient(clientId),
-          label: 'Eliminar',
-          color: 'error'
-        }}
-      >
-        <Typography>
-          ¿Estas seguro de que desas eliminar este cliente?
-        </Typography>
-      </ModalConfirm>
-    </>
-  )
-}
-
-const PaymentClientTable = ({ client }: { client: NewClient }) => {
-  const users = [client, ...(client.friends || [])]
-  return (
-    <Box className="my-4">
-      <Typography className="text-end">
-        {client?.created?.at &&
-          dateFormat(client?.created?.at, 'dd/MMM HH:mm ')}{' '}
-      </Typography>
-      <UsersList users={users} />
-      <Box className="flex w-full justify-evenly text-center items-center my-4"></Box>
-    </Box>
-  )
-}
-
 const AmountInfo = ({
   subtotal = 0,
   discount = 0,
@@ -364,10 +268,9 @@ const AmountInfo = ({
   subtotal?: number
   discount?: number
   dollarPrice?: number
-  payment?: NewClient['payment']
+  payment?: Payment
 }) => {
   const total = addDiscount(subtotal, discount)
-  const { collaborators } = useCollaborators()
   return (
     <>
       {payment ? (
@@ -388,7 +291,7 @@ const AmountInfo = ({
           )}
           <span className="text-sm font-normal">
             Metodo de pago:{' '}
-            {paymentMethods.find((p) => p.key === payment.method)?.label}
+            {paymentMethods.find((p) => p.type === payment.method)?.label}
             {payment.method === 'usd' && ` ($${payment.dollarPrice})`}
           </span>
           <Typography>
@@ -397,11 +300,11 @@ const AmountInfo = ({
               'dd/MMM HH:mm'
             )}
           </Typography>
-          <Typography>
+          {/* <Typography>
             Cobrado por:{' '}
             {payment.created.by &&
               collaborators?.find((c) => c.id === payment.created.by)?.name}
-          </Typography>
+          </Typography> */}
         </Box>
       ) : (
         <Box className="text-end">
@@ -439,32 +342,18 @@ const AmountInfo = ({
 }
 
 const ModalCancelPayment = ({ clientId }: { clientId: string }) => {
-  const modal = useModal()
-  const handleCanclePayment = (clientId: string) => {
+  const modal = useModal({ title: 'Cancelar pago' })
+  const handleCancelPayment = (clientId: string) => {
     console.log('cancel', clientId)
     //updateClient(clientId,{payment})
     return cancelClientPayment({ clientId })
   }
   return (
     <Box>
-      <Button
-        fullWidth
-        variant="outlined"
-        onClick={(e) => {
-          e.preventDefault()
-          modal.handleOpen()
-        }}
-      >
-        Cancelar Pago
-      </Button>
       <ModalConfirm
-        {...modal}
-        title="Cancelar pago"
-        buttonConfirmProps={{
-          onClick: () => handleCanclePayment(clientId),
-          color: 'success',
-          label: 'Cancelar Pago'
-        }}
+        handleConfirm={() => handleCancelPayment(clientId)}
+        label="Cancelar pago"
+        color="success"
       >
         <Typography className="text-center my-6">
           ¿Estas seguro de que desas cancelar este pago?
@@ -474,11 +363,8 @@ const ModalCancelPayment = ({ clientId }: { clientId: string }) => {
   )
 }
 
-const ModalEditPayment = ({ payment }: { payment: NewClient['payment'] }) => {
-  const modalEdit = useModal()
-  const handleOpenEdit = () => {
-    modalEdit.handleOpen()
-  }
+const ModalEditPayment = ({ payment }: { payment: Payment }) => {
+  const modalEdit = useModal({ title: 'Editar pago' })
 
   return (
     <>
@@ -487,12 +373,12 @@ const ModalEditPayment = ({ payment }: { payment: NewClient['payment'] }) => {
         color="primary"
         onClick={(e) => {
           e.preventDefault()
-          handleOpenEdit()
+          modalEdit.onOpen()
         }}
       >
         Editar
       </Button>
-      <Modal {...modalEdit} title="Editar pago">
+      <Modal {...modalEdit}>
         <AmountInfo payment={payment} />
       </Modal>
     </>

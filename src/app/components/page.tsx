@@ -1,5 +1,6 @@
 'use client'
 import Checkout from '@/components/Checkout2'
+import ModalPayment from '@/components/ModalPayment2'
 import { ArticleType } from '@/types/article'
 import { CategoryType } from '@/types/category'
 import {
@@ -116,7 +117,12 @@ function Page() {
 
   return (
     <div>
-      <Checkout items={items} categories={categories} />
+      <div>
+        <Checkout items={items} categories={categories} />
+      </div>
+      <div>
+        <ModalPayment amount={200} />
+      </div>
     </div>
   )
 }

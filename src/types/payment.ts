@@ -2,15 +2,18 @@ import { Timestamp } from 'firebase/firestore'
 import { ArticleType } from './article'
 import { CompanyType } from './company'
 import { UserType } from './user'
+import { BaseType } from './base'
+import { PaymentMethods } from '@/CONSTS/paymentMethods'
 
 export type Payment = {
   companyId: CompanyType['id']
   items: PaymentItem[]
-  chargedBy: {
-    id: UserType['id']
-    at: Timestamp | Date
-  }
-}
+  amount: number
+  discount: number
+  dollarPrice: number
+  method: PaymentMethods
+  date: Timestamp | Date
+} & BaseType
 
 export type PaymentItem = {
   itemId: ArticleType['id']
