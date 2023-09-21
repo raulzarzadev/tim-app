@@ -99,13 +99,13 @@ const Category = ({
 }) => {
   const router = useRouter()
   const pathname = usePathname()
-  const price = category?.prices?.[0]
   const { articles: ctxArticles, setArticles } = useContext(CashboxContext)
+
   const handleSetArticles = (articles: string[]) => {
     setArticles?.(articles)
     const params = new URLSearchParams()
     params.set('items', JSON.stringify(articles.map((a) => ({ itemId: a }))))
-    router.replace(pathname + '?' + params)
+    router.replace(pathname + '?' + params, { scroll: false })
   }
   const categoryArticles = articles.filter((a) => a.category === category.name)
   const categoryItemsSelected =
@@ -140,6 +140,7 @@ const Category = ({
 
     handleSetArticles(ctxArticles?.filter((id) => id !== lastCatArticles) || [])
   }
+  const price = category?.prices?.[0]
 
   return (
     <Card className="flex flex-col justify-between h-full">

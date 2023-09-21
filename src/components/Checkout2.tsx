@@ -5,13 +5,15 @@ import Modal from './Modal'
 import Select from './Select'
 import AppIcon from './AppIcon'
 import useModal from '@/hooks/useModal'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import NumberInput from './NumberInput'
 import { PriceType } from './PricesForm'
 import ModalConfirm from './ModalConfirm'
 import { CategoryType } from '@/types/category'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import asNumber from '@/lib/asNumber'
+import { CheckoutContext } from './Checkout'
+import { CashboxContext } from './CompanyCashbox'
 
 const Checkout = ({
   items,
@@ -20,8 +22,12 @@ const Checkout = ({
   items?: (ArticleType | null)[]
   categories?: CategoryType[]
 }) => {
-  const modal = useModal({ title: 'Checkout' })
+  const { setArticles } = useContext(CashboxContext)
+
+  const modal = useModal({ title: 'Lista de articulos' })
   const { get } = useSearchParams()
+  const router = useRouter()
+  const pathname = usePathname()
   const selectedItems = JSON.parse(get('items') || '[]')
   const fullItems = selectedItems?.map((searchItem: { itemId: string }) => {
     const fullItem = items?.find((item) => item?.id == searchItem.itemId)
@@ -52,30 +58,46 @@ const Checkout = ({
     return total
   }
   const total = calculateFullTotal(selectedItems, fullItems)
+  const ctx = useContext(CheckoutContext)
+  const handleClearSearch = () => {
+    router.replace(pathname)
+    setArticles?.([])
+  }
 
   return (
-    <Box className="flex w-full justify-between sticky bottom-12 bg-blue-300 mt-4 p-1 ">
+    <>
+      <Box className="flex-col-reverse  sm:flex-row flex w-full justify-between sticky bottom-12 bg-blue-300 mt-4 p-2 items-center  rounded-md shadow-md rounded-b-none">
+        <Button
+          variant="outlined"
+          onClick={() => {
+            handleClearSearch()
+          }}
+        >
+          Limpiar
+        </Button>
+        <Box>
+          <Typography className="text-center">
+            Articulos: {fullItems?.length || 0} <AppIcon icon="eye" />
+          </Typography>
+          <Typography className="text-xl font-bold my-4">
+            Total: ${asNumber(total)?.toFixed(2) || 0}
+          </Typography>
+        </Box>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => modal.onOpen()}
+        >
+          Lista de Articulos
+        </Button>
+      </Box>
       <Modal {...modal}>
         <ItemsList items={fullItems} />
         <Typography className="text-xl font-bold my-4 text-end">
           Total: ${asNumber(total)?.toFixed(2)}
         </Typography>
       </Modal>
-
-      <Typography>
-        Articulos: {fullItems?.length || 0} <AppIcon icon="eye" />
-      </Typography>
-      <Typography className="text-xl font-bold my-4">
-        Total: ${asNumber(total)?.toFixed(2) || 0}
-      </Typography>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={() => modal.onOpen()}
-      >
-        Checkout
-      </Button>
-    </Box>
+    </>
   )
 }
 const ItemsList = ({ items }: { items: (ArticleType | null)[] }) => {
@@ -112,13 +134,15 @@ const calculateTotal = (
 ): { total: number; price?: PriceType } => {
   let total = 0
   let price = undefined
-  const defaultPrice = pricesList[0]
+  const defaultPrice = pricesList?.[0]
+
   if (!unit || !qty)
     return {
       total:
-        asNumber(defaultPrice.price) * asNumber(defaultPrice.quantity) || 0,
+        asNumber(defaultPrice?.price) * asNumber(defaultPrice?.quantity) || 0,
       price: defaultPrice
     }
+
   const fullMatch = pricesList?.find(
     (p) => p.unit === unit && p.quantity == qty
   )
@@ -248,11 +272,11 @@ export const ItemRow = ({ item }: { item: ArticleType }) => {
               </span>
             </Typography>
 
-            <Box>
+            <Box className="flex justify-center my-4">
               <ModalConfirm
                 handleConfirm={handleRemoveItem}
-                color="error"
-                label="Eliminar"
+                color="warning"
+                label="Descartar"
               >
                 <Typography className="text-center text-xl ">
                   Remover articulo de la lista
