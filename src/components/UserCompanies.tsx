@@ -55,17 +55,19 @@ const CompanyAccess = () => {
   return (
     <div>
       <Typography>Permisos</Typography>
-      {Object.entries(userPermissions).map(([key, value]) =>
-        value ? (
-          <Button
-            key={key}
-            LinkComponent={Link}
-            href={`/dashboard/${currentCompany?.id}/${key}`}
-          >
-            {key}
-          </Button>
-        ) : null
-      )}
+      {Object.entries(userPermissions)
+        .sort()
+        .map(([key, value]) =>
+          value ? (
+            <Button
+              key={key}
+              LinkComponent={Link}
+              href={`/dashboard/${currentCompany?.id}/${key}`}
+            >
+              {key}
+            </Button>
+          ) : null
+        )}
     </div>
   )
 }
