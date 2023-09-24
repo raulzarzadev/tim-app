@@ -4,7 +4,8 @@ import AppIcon from './AppIcon'
 import { ArticleType } from '@/types/article'
 import useModal from '@/hooks/useModal'
 import Modal from './Modal'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
+import { CashboxContext } from './CompanyCashbox'
 
 const Item = styled(Button)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -24,22 +25,31 @@ const ModalArticles = ({
   setArticlesSelected?: (articles: ArticleType['id'][]) => void
 }) => {
   const modal = useModal({ title: 'Unidades' })
+  const { addItem, removeItem, items } = useContext(CashboxContext)
   const handleClick = (articleId: ArticleType['id']) => {
-    if (_selected.includes(articleId)) {
-      const artRemoved = _selected.filter((a) => a !== articleId)
-      setArticlesSelected?.(artRemoved)
-      _setSelected(artRemoved)
+    if (_selected.find(({ itemId }) => itemId === articleId)) {
+      removeItem?.(articleId)
       return
     } else {
-      setArticlesSelected?.([..._selected, articleId])
-      _setSelected((prev) => [...prev, articleId])
+      addItem?.({ itemId: articleId })
     }
+    // if (_selected.includes(articleId)) {
+    //   const artRemoved = _selected.filter((a) => a !== articleId)
+    //  // setArticlesSelected?.(artRemoved)
+    //   _setSelected(artRemoved)
+    //   return
+    // } else {
+    //   //setArticlesSelected?.([..._selected, articleId])
+    //   _setSelected((prev) => [...prev, articleId])
+    // }
   }
 
-  const [_selected, _setSelected] = useState<string[]>([])
+  const [_selected, _setSelected] = useState<{ itemId: ArticleType['id'] }[]>(
+    []
+  )
   useEffect(() => {
-    _setSelected(articlesSelected || [])
-  }, [articlesSelected])
+    _setSelected(items || [])
+  }, [items])
 
   return (
     <div>
@@ -50,7 +60,11 @@ const ModalArticles = ({
         <Stack direction="row" flexWrap={'wrap'} className="justify-center">
           {articles.map((article) => (
             <Chip
-              color={_selected.includes(article.id) ? 'primary' : 'default'}
+              color={
+                _selected.find(({ itemId }) => article.id === itemId)
+                  ? 'primary'
+                  : 'default'
+              }
               className="p-1 m-1"
               key={article.id}
               label={article.serialNumber || article.name}

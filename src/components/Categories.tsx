@@ -14,6 +14,7 @@ import { useContext } from 'react'
 import { CashboxContext } from './CompanyCashbox'
 import AppIcon from './AppIcon'
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2'
+import ModalArticles from './ModalArticles'
 
 const Categories = () => {
   const { currentCompany } = useUserCompaniesContext()
@@ -89,11 +90,7 @@ const Category = ({
     <Card className="flex flex-col justify-between h-full">
       <Box className="flex w-full justify-between relative">
         <Typography>Disponibles: {itemsLeft.length}</Typography>
-        {/* <ModalArticles
-          articles={articles}
-          setArticlesSelected={handleSetArticles}
-          articlesSelected={ctxArticles}
-        /> */}
+        <ModalArticles articles={articles} />
       </Box>
       <CardContent>
         <Typography

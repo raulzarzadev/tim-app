@@ -90,7 +90,6 @@ const CompanyCashbox = () => {
         <Checkout
           items={currentCompany?.articles}
           categories={currentCompany?.categories}
-          // selected={articles}
         />
       </CashboxContextProvider>
     </div>
