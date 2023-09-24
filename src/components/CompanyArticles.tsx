@@ -11,7 +11,6 @@ import {
 } from '@mui/material'
 import AppIcon from './AppIcon'
 import Link from 'next/link'
-import { CategoryType } from '@/types/category'
 import { ArticleType } from '@/types/article'
 
 const CompanyArticles = () => {

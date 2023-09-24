@@ -1,28 +1,15 @@
 'use client'
 import validatePermissions from "@/HOC's/validatePermissions"
 import { useUserCompaniesContext } from '@/context/userCompaniesContext'
-import { CategoryType } from '@/types/category'
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Card,
-  CardContent,
-  Typography
-} from '@mui/material'
-import AppIcon from './AppIcon'
 import { ArticleType } from '@/types/article'
-import ModalArticles from './ModalArticles'
 import {
   Dispatch,
   ReactNode,
   SetStateAction,
   createContext,
-  useContext,
   useEffect,
   useState
 } from 'react'
-import Grid from '@mui/material/Unstable_Grid2/Grid2'
 import Checkout from './Checkout2'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { PriceType } from './PricesForm'
@@ -51,17 +38,30 @@ export const CashboxContextProvider = ({
   children: ReactNode
 }) => {
   const searchParams = useSearchParams()
+  const router = useRouter()
+  const pathname = usePathname()
   const [items, setItems] = useState<ItemSelected[]>([])
-  // useEffect(() => {
-  //   const items = JSON.parse(searchParams.get('items') || '[]')
-  //   setArticles(items.map(({ itemId }: { itemId: string }) => itemId))
-  // }, [searchParams])
+
+  useEffect(() => {
+    searchParams.get('items') &&
+      setItems(JSON.parse(searchParams.get('items') || '[]'))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
+    const params = new URLSearchParams()
+    params.set('items', JSON.stringify(items))
+    router.replace(pathname + '?' + params, { scroll: false })
+  }, [items, pathname, router])
+
   const removeItem = (articleId: ArticleType['id']) => {
     setItems((items) => items.filter((item) => item.itemId !== articleId))
   }
+
   const addItem = (item: ItemSelected) => {
     setItems((items) => [...items, item])
   }
+
   const updateItem = (
     itemId: ItemSelected['itemId'],
     { qty, unit }: { qty: number; unit: PriceType['unit'] }
@@ -72,6 +72,7 @@ export const CashboxContextProvider = ({
       )
     )
   }
+
   return (
     <CashboxContext.Provider
       value={{ items, setItems, removeItem, addItem, updateItem }}

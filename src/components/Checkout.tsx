@@ -108,23 +108,13 @@ export const CheckoutContextProvider = ({
     </CheckoutContext.Provider>
   )
 }
-const Checkout = ({}: // articlesSelected,
-// setArticlesSelected,
-// companyCategories,
-// companyArticles
-{
-  // articlesSelected: ArticleType['id'][]
-  // setArticlesSelected?: (articles: ArticleType['id'][]) => void
-  // companyCategories: CategoryType[]
-  // companyArticles: ArticleType[]
-}) => {
+const Checkout = () => {
   const modal = useModal({ title: 'Checkout' })
   const {
     articlesSelected,
     total,
     fullArticlesSelected: fullArticles
   } = useContext(CheckoutContext)
-  console.log({ fullArticles })
   if (articlesSelected?.length === 0) return null
 
   return (

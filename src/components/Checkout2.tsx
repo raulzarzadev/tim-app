@@ -44,7 +44,7 @@ const Checkout = ({
     selectedItems.forEach(({ qty, unit, itemId }) => {
       const pricesList = fullItems.find((item) => item.id == itemId)?.prices
       const defaultUnit = unit || pricesList?.[0].unit
-      const { total: itemTotal, price } = calculateTotal(
+      const { total: itemTotal } = calculateTotal(
         defaultUnit,
         asNumber(qty),
         pricesList || []
@@ -98,10 +98,10 @@ const Checkout = ({
     </>
   )
 }
-const ItemsList = ({ items }: { items: (ArticleType | null)[] }) => {
+const ItemsList = ({ items }: { items: (Partial<ArticleType> | null)[] }) => {
   const sortByCat = (
-    a: { category: string } | null,
-    b: { category: any } | null
+    a: { category?: string } | null,
+    b: { category?: any } | null
   ): number => a?.category?.localeCompare(b?.category || '') || 0
 
   return (
@@ -164,7 +164,7 @@ const calculateTotal = (
 
   return { total: asNumber(asNumber(total).toFixed(2)), price }
 }
-export const ItemRow = ({ item }: { item: ArticleType }) => {
+export const ItemRow = ({ item }: { item: Partial<ArticleType> }) => {
   const { items = [], removeItem, updateItem } = useContext(CashboxContext)
   const foundItem = items?.find((i: { itemId: string }) => i.itemId == item.id)
   const [qty, setQty] = useState(

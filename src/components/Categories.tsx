@@ -7,21 +7,20 @@ import {
   ButtonGroup,
   Card,
   CardContent,
-  Grid,
   Typography
 } from '@mui/material'
 import { usePathname, useRouter } from 'next/navigation'
 import { useContext } from 'react'
 import { CashboxContext } from './CompanyCashbox'
 import AppIcon from './AppIcon'
+import Grid2 from '@mui/material/Unstable_Grid2/Grid2'
 
 const Categories = () => {
   const { currentCompany } = useUserCompaniesContext()
   return (
-    <Grid container spacing={2}>
-      {/* className={'grid grid-cols-2 gap-4'} */}
+    <Grid2 container spacing={2}>
       {currentCompany?.categories?.map((category) => (
-        <Grid
+        <Grid2
           key={category.name}
           xs={6}
           sm={4}
@@ -37,9 +36,9 @@ const Categories = () => {
               ) || []
             }
           />
-        </Grid>
+        </Grid2>
       ))}
-    </Grid>
+    </Grid2>
   )
 }
 
