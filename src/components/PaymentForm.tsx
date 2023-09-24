@@ -16,10 +16,24 @@ import CurrencySpan from './CurrencySpan'
 
 const PaymentForm = ({
   amount = 0,
-  usdPrice = 1
+  usdPrice = 1,
+  onPay
 }: {
   amount: number
   usdPrice: number
+  onPay?: ({
+    amount,
+    paymentMethod,
+    charged,
+    rest,
+    usdPrice
+  }: {
+    amount: number
+    paymentMethod: string
+    charged: number
+    rest: number
+    usdPrice: number
+  }) => void | Promise<any>
 }) => {
   const USD_PRICE = usdPrice
   const { register, watch } = useForm({
@@ -30,13 +44,21 @@ const PaymentForm = ({
   })
   const formValues = watch()
   const handlePay = () => {
-    console.log('pay now')
+    onPay?.({
+      amount,
+      paymentMethod: formValues.paymentMethod,
+      charged: asNumber(formValues.amount),
+      usdPrice: USD_PRICE,
+      rest: amountInMXN - amount < 0 ? amountInMXN - amount : 0
+    })
   }
   const amountInMXN = asNumber(
     formValues.paymentMethod === 'usd'
       ? formValues.amount * USD_PRICE
       : formValues.amount
   )
+
+  console.log('pago')
 
   return (
     <div>

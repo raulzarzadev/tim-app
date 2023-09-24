@@ -35,9 +35,6 @@ dependencies:
   date-fns:
     specifier: ^2.30.0
     version: 2.30.0
-  encoding:
-    specifier: ^0.1.13
-    version: 0.1.13
   eslint:
     specifier: 8.38.0
     version: 8.38.0
@@ -82,6 +79,9 @@ devDependencies:
   cz-conventional-changelog:
     specifier: ^3.3.0
     version: 3.3.0
+  encoding:
+    specifier: ^0.1.13
+    version: 0.1.13
   standard:
     specifier: ^17.0.0
     version: 17.1.0(@typescript-eslint/parser@5.62.0)
@@ -2180,7 +2180,6 @@ packages:
     resolution: {integrity: sha512-ETBauow1T35Y/WZMkio9jiM0Z5xjHHmJ4XmjZOq1l/dXz3lr2sRn87nJy20RupqSh1F2m3HHPSp8ShIPQJrJ3A==}
     dependencies:
       iconv-lite: 0.6.3
-    dev: false
 
   /enhanced-resolve@5.15.0:
     resolution: {integrity: sha512-LXYT42KJ7lpIKECr2mAXIaMldcNCh/7E0KBKOu4KSfkHmP+mZmSs+8V5gBAqisWBy0OO4W5Oyys0GO1Y8KtdKg==}
@@ -3252,7 +3251,6 @@ packages:
     engines: {node: '>=0.10.0'}
     dependencies:
       safer-buffer: 2.1.2
-    dev: false
 
   /idb@7.0.1:
     resolution: {integrity: sha512-UUxlE7vGWK5RfB/fDwEGgRf84DY/ieqNha6msMV99UsEMQhJ1RwbCd8AYBj3QMgnE3VZnfQvm4oKVCJTYlqIgg==}

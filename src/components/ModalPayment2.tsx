@@ -29,7 +29,13 @@ const ModalPayment = ({ amount }: { amount: number }) => {
             (usd): <CurrencySpan quantity={amount / USD_PRICE} />
           </Typography>
         </Box>
-        <PaymentForm amount={amount} usdPrice={USD_PRICE} />
+        <PaymentForm
+          amount={amount}
+          usdPrice={USD_PRICE}
+          onPay={(props) => {
+            console.log({ props })
+          }}
+        />
       </Modal>
     </>
   )

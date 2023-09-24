@@ -12,7 +12,7 @@ import ModalConfirm from './ModalConfirm'
 import { CategoryType } from '@/types/category'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import asNumber from '@/lib/asNumber'
-import { CashboxContext } from './CompanyCashbox'
+import { CashboxContext, ItemSelected } from './CompanyCashbox'
 import ModalPayment from './ModalPayment2'
 
 const Checkout = ({
@@ -22,34 +22,30 @@ const Checkout = ({
   items?: (ArticleType | null)[]
   categories?: CategoryType[]
 }) => {
-  const { setArticles } = useContext(CashboxContext)
+  const { setItems, items: selectedItems = [] } = useContext(CashboxContext)
 
   const modal = useModal({ title: 'Lista de articulos' })
-  const { get } = useSearchParams()
-  const router = useRouter()
-  const pathname = usePathname()
-  const selectedItems = JSON.parse(get('items') || '[]')
-  const fullItems = selectedItems?.map((searchItem: { itemId: string }) => {
-    const fullItem = items?.find((item) => item?.id == searchItem.itemId)
-    if (fullItem?.ownPrice) return fullItem
-    const categoryPrices = categories?.find(
-      (c) => c.name === fullItem?.category
-    )?.prices
-    return { ...fullItem, prices: categoryPrices }
-  })
+
+  const fullItems: Partial<ArticleType>[] = selectedItems?.map(
+    (searchItem: { itemId: string }) => {
+      const fullItem = items?.find((item) => item?.id == searchItem.itemId)
+      if (fullItem?.ownPrice) return fullItem
+      const categoryPrices = categories?.find(
+        (c) => c.name === fullItem?.category
+      )?.prices
+      return { ...fullItem, prices: categoryPrices }
+    }
+  )
   const calculateFullTotal = (
-    selectedItems: {
-      itemId: ArticleType['id']
-      qty: number
-      unit: PriceType['unit']
-    }[],
-    fullItems: ArticleType[]
+    selectedItems: ItemSelected[],
+    fullItems: Partial<ArticleType>[]
   ) => {
     let total = 0
     selectedItems.forEach(({ qty, unit, itemId }) => {
       const pricesList = fullItems.find((item) => item.id == itemId)?.prices
+      const defaultUnit = unit || pricesList?.[0].unit
       const { total: itemTotal, price } = calculateTotal(
-        unit,
+        defaultUnit,
         asNumber(qty),
         pricesList || []
       )
@@ -57,10 +53,10 @@ const Checkout = ({
     })
     return total
   }
+
   const total = calculateFullTotal(selectedItems, fullItems)
   const handleClearSearch = () => {
-    router.replace(pathname)
-    setArticles?.([])
+    setItems?.([])
   }
 
   return (
@@ -95,7 +91,6 @@ const Checkout = ({
         <Typography className="text-xl font-bold my-4 text-end">
           Total: ${asNumber(total)?.toFixed(2)}
         </Typography>
-
         <Box className="flex w-full justify-center">
           <ModalPayment amount={total} />
         </Box>
@@ -138,7 +133,6 @@ const calculateTotal = (
   let total = 0
   let price = undefined
   const defaultPrice = pricesList?.[0]
-
   if (!unit || !qty)
     return {
       total:
@@ -147,7 +141,7 @@ const calculateTotal = (
     }
 
   const fullMatch = pricesList?.find(
-    (p) => p.unit === unit && p.quantity == qty
+    (p) => p.unit === unit && p.quantity == asNumber(qty)
   )
   if (fullMatch) {
     total = asNumber(fullMatch.price)
@@ -171,49 +165,45 @@ const calculateTotal = (
   return { total: asNumber(asNumber(total).toFixed(2)), price }
 }
 export const ItemRow = ({ item }: { item: ArticleType }) => {
-  const searchParams = useSearchParams()
-  const pathname = usePathname()
-  const router = useRouter()
-  const { setArticles: setArticlesCtx } = useContext(CashboxContext)
-  const itemsFromParams = JSON.parse(searchParams.get('items') || '')
-  const foundItem = itemsFromParams.find(
-    (i: { itemId: string }) => i.itemId == item.id
-  )
+  const { items = [], removeItem, updateItem } = useContext(CashboxContext)
+  const foundItem = items?.find((i: { itemId: string }) => i.itemId == item.id)
   const [qty, setQty] = useState(
-    foundItem.qty || item.prices?.[0].quantity || 1
+    foundItem?.qty || item.prices?.[0].quantity || 1
   )
-  const [unit, setUnit] = useState(foundItem.unit || item.prices?.[0].unit)
+  const [unit, setUnit] = useState<PriceType['unit']>(
+    foundItem?.unit || item.prices?.[0].unit || ''
+  )
   const [priceSelected, setPriceSelected] = useState<PriceType | undefined>(
     undefined
   )
-
   const { total: itemTotal, price } = calculateTotal(
     unit,
     qty,
     item.prices || []
   )
+  // console.log({ item: item.serialNumber, qty, unit, itemTotal })
 
-  useEffect(() => {
-    setPriceSelected(price)
-  }, [price])
+  // useEffect(() => {
+  //   setPriceSelected(price)
+  // }, [price])
 
-  useEffect(() => {
-    //* update url with new item values {qty & unit}
-    //* find oldItem
-    const oldItem = itemsFromParams?.find(
-      (i: { itemId: string }) => i.itemId == item.id
-    )
-    //* update data
-    const newItem = { ...oldItem, qty, unit }
-    //* replace item in array
-    const newItems = [...itemsFromParams].map((i) => {
-      return i.itemId == item.id ? newItem : i
-    })
-    //*set the new url
-    const params = new URLSearchParams()
-    params.set('items', JSON.stringify(newItems))
-    router.replace(pathname + '?' + params)
-  }, [item.id, itemsFromParams, pathname, qty, router, unit])
+  // useEffect(() => {
+  //   //* update url with new item values {qty & unit}
+  //   //* find oldItem
+  //   const oldItem = itemsFromParams?.find(
+  //     (i: { itemId: string }) => i.itemId == item.id
+  //   )
+  //   //* update data
+  //   const newItem = { ...oldItem, qty, unit }
+  //   //* replace item in array
+  //   const newItems = [...itemsFromParams].map((i) => {
+  //     return i.itemId == item.id ? newItem : i
+  //   })
+  //   //*set the new url
+  //   const params = new URLSearchParams()
+  //   params.set('items', JSON.stringify(newItems))
+  //   router.replace(pathname + '?' + params)
+  // }, [item.id, itemsFromParams, pathname, qty, router, unit])
 
   const uniquePrices = [
     ...new Set(item.prices?.map((price) => price.unit))
@@ -225,16 +215,7 @@ export const ItemRow = ({ item }: { item: ArticleType }) => {
   const modal = useModal({ title: 'Detalles de articulo' })
 
   const handleRemoveItem = () => {
-    //* return handleRemoveArticle?.(item.id)
-
-    //* remove item
-    const newItems = itemsFromParams?.filter(
-      (i: { itemId: string }) => i.itemId != item.id
-    )
-    //* set params items
-    const params = new URLSearchParams()
-    params.set('items', JSON.stringify(newItems))
-    router.replace(pathname + '?' + params)
+    removeItem?.(item.id)
   }
   const handleSelectPrice = (p: PriceType) => {
     setUnit(p.unit)
@@ -245,6 +226,11 @@ export const ItemRow = ({ item }: { item: ArticleType }) => {
       priceSelected?.unit === p.unit && priceSelected?.quantity === p.quantity
     )
   }
+
+  useEffect(() => {
+    updateItem?.(item.id, { qty, unit })
+  }, [qty, unit])
+
   return (
     <Box
       key={item?.id}

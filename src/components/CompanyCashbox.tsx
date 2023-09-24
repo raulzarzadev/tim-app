@@ -14,7 +14,9 @@ import AppIcon from './AppIcon'
 import { ArticleType } from '@/types/article'
 import ModalArticles from './ModalArticles'
 import {
+  Dispatch,
   ReactNode,
+  SetStateAction,
   createContext,
   useContext,
   useEffect,
@@ -23,25 +25,57 @@ import {
 import Grid from '@mui/material/Unstable_Grid2/Grid2'
 import Checkout from './Checkout2'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { PriceType } from './PricesForm'
+import Categories from './Categories'
 
 export type CashboxContext = {
-  articles?: ArticleType['id'][]
-  setArticles?: (articles: ArticleType['id'][]) => void
+  items?: ItemSelected[]
+  setItems?: Dispatch<SetStateAction<ItemSelected[]>>
+  addItem?: (item: ItemSelected) => void
+  removeItem?: (itemId: ArticleType['id']) => void
+  updateItem?: (
+    itemId: ItemSelected['itemId'],
+    { qty, unit }: { qty: number; unit: PriceType['unit'] }
+  ) => void
 }
 export const CashboxContext = createContext<CashboxContext>({})
+export type ItemSelected = {
+  itemId: ArticleType['id']
+  qty?: number
+  unit?: PriceType['unit']
+}
+
 export const CashboxContextProvider = ({
   children
 }: {
   children: ReactNode
 }) => {
   const searchParams = useSearchParams()
-  const [articles, setArticles] = useState<ArticleType['id'][]>([])
-  useEffect(() => {
-    const items = JSON.parse(searchParams.get('items') || '[]')
-    setArticles(items.map(({ itemId }: { itemId: string }) => itemId))
-  }, [searchParams])
+  const [items, setItems] = useState<ItemSelected[]>([])
+  // useEffect(() => {
+  //   const items = JSON.parse(searchParams.get('items') || '[]')
+  //   setArticles(items.map(({ itemId }: { itemId: string }) => itemId))
+  // }, [searchParams])
+  const removeItem = (articleId: ArticleType['id']) => {
+    setItems((items) => items.filter((item) => item.itemId !== articleId))
+  }
+  const addItem = (item: ItemSelected) => {
+    setItems((items) => [...items, item])
+  }
+  const updateItem = (
+    itemId: ItemSelected['itemId'],
+    { qty, unit }: { qty: number; unit: PriceType['unit'] }
+  ) => {
+    setItems((items) =>
+      items.map((item) =>
+        item.itemId === itemId ? { ...item, qty, unit } : item
+      )
+    )
+  }
   return (
-    <CashboxContext.Provider value={{ articles, setArticles }}>
+    <CashboxContext.Provider
+      value={{ items, setItems, removeItem, addItem, updateItem }}
+    >
       {children}
     </CashboxContext.Provider>
   )
@@ -59,141 +93,6 @@ const CompanyCashbox = () => {
         />
       </CashboxContextProvider>
     </div>
-  )
-}
-
-const Categories = () => {
-  const { currentCompany } = useUserCompaniesContext()
-  return (
-    <Grid container spacing={2}>
-      {/* className={'grid grid-cols-2 gap-4'} */}
-      {currentCompany?.categories?.map((category) => (
-        <Grid
-          key={category.name}
-          xs={6}
-          sm={4}
-          md={3}
-          lg={2}
-          alignSelf={'stretch'}
-        >
-          <Category
-            category={category}
-            articles={
-              currentCompany.articles?.filter(
-                (a) => a.category === category.name
-              ) || []
-            }
-          />
-        </Grid>
-      ))}
-    </Grid>
-  )
-}
-
-const Category = ({
-  category,
-  articles
-}: {
-  category: CategoryType
-  articles: ArticleType[]
-}) => {
-  const router = useRouter()
-  const pathname = usePathname()
-  const { articles: ctxArticles, setArticles } = useContext(CashboxContext)
-  const handleSetArticles = (articles: string[]) => {
-    setArticles?.(articles)
-    const params = new URLSearchParams()
-    params.set('items', JSON.stringify(articles.map((a) => ({ itemId: a }))))
-    router.replace(pathname + '?' + params, { scroll: false })
-  }
-  const categoryArticles = articles.filter((a) => a.category === category.name)
-  const categoryItemsSelected =
-    ctxArticles?.filter((itemId) =>
-      categoryArticles.find(({ id }) => id === itemId)
-    ) || []
-
-  const itemsLeft =
-    categoryArticles?.filter(
-      (article) =>
-        !categoryItemsSelected?.find((itemId) => article.id === itemId)
-    ) || []
-
-  const handleAddCategoryArticle = (name: string) => {
-    // Add a random / *disponible* article
-    const validArticles = categoryArticles
-      //* already are selected
-      .filter(({ id }) => !ctxArticles?.includes(id))
-    //.filter((a) => a.status === 'active')
-    const randomArticle =
-      validArticles[Math.floor(Math.random() * validArticles.length)]
-    handleSetArticles([...(ctxArticles || []), randomArticle.id])
-  }
-  const handleRemoveCategoryArticle = (name: string) => {
-    // Remove last category article added
-    const lastCatArticles = ctxArticles
-      ?.filter(
-        (articleId) =>
-          articles.find(({ id }) => id == articleId)?.category === name
-      )
-      .pop()
-
-    handleSetArticles(ctxArticles?.filter((id) => id !== lastCatArticles) || [])
-  }
-  const price = category?.prices?.[0]
-
-  return (
-    <Card className="flex flex-col justify-between h-full">
-      <Box className="flex w-full justify-between relative">
-        <Typography>Disponibles: {itemsLeft.length}</Typography>
-        <ModalArticles
-          articles={articles}
-          setArticlesSelected={handleSetArticles}
-          articlesSelected={ctxArticles}
-        />
-      </Box>
-      <CardContent>
-        <Typography
-          sx={{ fontSize: 20 }}
-          color="text.secondary"
-          gutterBottom
-          className="truncate"
-        >
-          <span className="font-bold text-2xl ">
-            {categoryItemsSelected?.length}x{' '}
-          </span>
-          {category.name}
-        </Typography>
-
-        <Typography
-          sx={{ fontSize: 14 }}
-          color="text.secondary"
-          gutterBottom
-          className="text-center"
-        >
-          {price ? `${price?.quantity} ${price?.unit} $${price?.price}` : ''}
-        </Typography>
-      </CardContent>
-      <Box>
-        <ButtonGroup variant="text" aria-label="text button group" fullWidth>
-          <Button
-            onClick={() => {
-              handleRemoveCategoryArticle(category.name)
-            }}
-            disabled={categoryItemsSelected?.length <= 0}
-          >
-            <AppIcon icon="substr" />
-          </Button>
-          <Button
-            onClick={() => {
-              handleAddCategoryArticle(category.name)
-            }}
-            disabled={itemsLeft.length <= 0}
-          >
-            <AppIcon icon="add" />
-          </Button>
-        </ButtonGroup>
-      </Box>
-    </Card>
   )
 }
 
