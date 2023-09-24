@@ -11,7 +11,7 @@ import { useUserCompaniesContext } from '@/context/userCompaniesContext'
 const ModalPayment = ({ amount }: { amount: number }) => {
   const USD_PRICE = 16
   const modalPayment = useModal({ title: 'Pagar ' })
-  const { handlePay, items } = useContext(CashboxContext)
+  const { handlePay, items, setItems } = useContext(CashboxContext)
   const { currentCompany } = useUserCompaniesContext()
   return (
     <>
@@ -36,13 +36,17 @@ const ModalPayment = ({ amount }: { amount: number }) => {
         <PaymentForm
           amount={amount}
           usdPrice={USD_PRICE}
-          onPay={(payment) => {
-            handlePay?.({
+          onPay={async (payment) => {
+            await handlePay?.({
               startAt: new Date(),
               companyId: currentCompany?.id || '',
               items: items || [],
               payment: { ...payment, date: new Date() }
             })
+
+            modalPayment.onClose()
+            setItems?.([])
+            return
           }}
         />
       </Modal>

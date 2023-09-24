@@ -57,6 +57,7 @@ const Checkout = ({
   const handleClearSearch = () => {
     setItems?.([])
   }
+  if (fullItems.length === 0) return <></>
 
   return (
     <>

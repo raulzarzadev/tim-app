@@ -14,7 +14,8 @@ import Checkout from './Checkout2'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { PriceType } from './PricesForm'
 import Categories from './Categories'
-import { CreatePayment, Payment } from '@/types/payment'
+import { CreatePayment } from '@/types/payment'
+import { createPayment } from '@/firebase/payments'
 
 export type CashboxContext = {
   items?: ItemSelected[]
@@ -76,8 +77,9 @@ export const CashboxContextProvider = ({
     )
   }
 
-  const handlePay = (payment: CreatePayment) => {
+  const handlePay = async (payment: CreatePayment) => {
     console.log('pagando', payment)
+    await createPayment(payment)
   }
 
   return (
