@@ -14,6 +14,7 @@ import Checkout from './Checkout2'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { PriceType } from './PricesForm'
 import Categories from './Categories'
+import { CreatePayment, Payment } from '@/types/payment'
 
 export type CashboxContext = {
   items?: ItemSelected[]
@@ -24,6 +25,8 @@ export type CashboxContext = {
     itemId: ItemSelected['itemId'],
     { qty, unit }: { qty: number; unit: PriceType['unit'] }
   ) => void
+
+  handlePay?: (payment: CreatePayment) => void | Promise<any>
 }
 export const CashboxContext = createContext<CashboxContext>({})
 export type ItemSelected = {
@@ -73,9 +76,13 @@ export const CashboxContextProvider = ({
     )
   }
 
+  const handlePay = (payment: CreatePayment) => {
+    console.log('pagando', payment)
+  }
+
   return (
     <CashboxContext.Provider
-      value={{ items, setItems, removeItem, addItem, updateItem }}
+      value={{ items, setItems, removeItem, addItem, updateItem, handlePay }}
     >
       {children}
     </CashboxContext.Provider>

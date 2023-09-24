@@ -3,18 +3,28 @@ import { ArticleType } from './article'
 import { CompanyType } from './company'
 import { BaseType } from './base'
 import { PaymentMethods } from '@/CONSTS/paymentMethods'
+import { ItemSelected } from '@/components/CompanyCashbox'
 
 export type Payment = {
   companyId: CompanyType['id']
+  startAt: Timestamp | Date
   items: PaymentItem[]
-  amount: number
-  discount: number
-  dollarPrice: number
-  method: PaymentMethods
-  date: Timestamp | Date
+  payment: PaymentData
 } & BaseType
 
-export type PaymentItem = {
-  itemId: ArticleType['id']
-  time: `${number}-mins`
+export type CreatePayment = Pick<
+  Payment,
+  'companyId' | 'startAt' | 'items' | 'payment'
+>
+
+export type PaymentData = {
+  date?: Timestamp | Date
+  amount: number
+  usdPrice: number
+  method: PaymentMethods
+  discount?: number
+  charged?: number
+  rest?: number
 }
+
+export type PaymentItem = ItemSelected
