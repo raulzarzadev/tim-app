@@ -13,6 +13,7 @@ import ModalConfirm from './ModalConfirm'
 import { useForm } from 'react-hook-form'
 import { paymentMethods } from '@/CONSTS/paymentMethods'
 import CurrencySpan from './CurrencySpan'
+import { Payment } from '@/types/payment'
 
 const PaymentForm = ({
   amount = 0,
@@ -29,16 +30,18 @@ const PaymentForm = ({
     usdPrice
   }: {
     amount: number
-    paymentMethod: string
+    paymentMethod: Payment['method']
     charged: number
     rest: number
     usdPrice: number
   }) => void | Promise<any>
 }) => {
   const USD_PRICE = usdPrice
-  const { register, watch } = useForm({
+  const { register, watch } = useForm<{
+    amount: number
+    paymentMethod: Payment['method']
+  }>({
     defaultValues: {
-      amount: 0,
       paymentMethod: 'mxn'
     }
   })
@@ -58,8 +61,6 @@ const PaymentForm = ({
       : formValues.amount
   )
 
-  console.log('pago')
-
   return (
     <div>
       <Box className="flex w-full justify-center">
@@ -76,6 +77,7 @@ const PaymentForm = ({
               <FormControlLabel
                 key={p.type}
                 value={p.type}
+                checked={formValues.paymentMethod === p.type}
                 control={<Radio />}
                 label={p.label}
                 {...register('paymentMethod')}
@@ -95,10 +97,6 @@ const PaymentForm = ({
           label="Recibido"
           type="number"
           {...register('amount')}
-          // value={asNumber(amount) || ''}
-          // onChange={(e) => {
-          //   handleSetAmount(asNumber(e.target.value))
-          // }}
           helperText={
             amountInMXN < amount
               ? `Faltan $${asNumber(amount - amountInMXN).toFixed(2)}`
