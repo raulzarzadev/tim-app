@@ -1,6 +1,6 @@
 import { usersCRUD } from './auth'
 
-export const uploadImage = (
+export const uploadFile = (
   image: Blob | Uint8Array | ArrayBuffer,
   fieldName: string,
   cb: ({

@@ -25,6 +25,12 @@ import {
 } from 'firebase/firestore'
 
 export class FirebaseCRUD {
+  static uploadFile(
+    files: FileList | null,
+    setURL: ((url: string) => void) | undefined
+  ) {
+    throw new Error('Method not implemented.')
+  }
   collectionName: string
   db: any
   storage: any

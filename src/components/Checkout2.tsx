@@ -14,6 +14,7 @@ import asNumber from '@/lib/asNumber'
 import { CashboxContext, ItemSelected } from './CompanyCashbox'
 import ModalPayment from './ModalPayment2'
 import ModalClientInfo from './ModalClientInfo'
+import PreviewImage from './PreviewImage'
 
 const Checkout = ({
   items,

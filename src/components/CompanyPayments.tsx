@@ -18,6 +18,7 @@ import { Timestamp } from 'firebase/firestore'
 import rentTime from '@/lib/rentTime'
 import { addMinutes } from 'date-fns'
 import asDate from '@/lib/asDate'
+import PreviewImage from './PreviewImage'
 
 const CompanyPayments = () => {
   const { currentCompany } = useUserCompaniesContext()
@@ -96,8 +97,26 @@ const Payment = ({ payment }: { payment: Payment }) => {
           <Typography className="font-bold mt-4">
             Información de Cliente
           </Typography>
-          <Typography>Nombre: {payment?.client?.name}</Typography>
-          <Typography>Telefono: {payment?.client?.phone}</Typography>
+          <Box className="flex items-center">
+            <Box>
+              <Typography>Nombre: {payment?.client?.name}</Typography>
+              <Typography>Telefono: {payment?.client?.phone}</Typography>
+            </Box>
+            <Box className="flex">
+              {payment?.client?.imageID && (
+                <PreviewImage
+                  src={payment?.client?.imageID}
+                  alt="Identificacion de usuario"
+                />
+              )}
+              {payment?.client?.signature && (
+                <PreviewImage
+                  src={payment?.client?.signature}
+                  alt="Firma de usuario"
+                />
+              )}
+            </Box>
+          </Box>
           <Typography className="font-bold mt-4">
             Información de pago
           </Typography>
