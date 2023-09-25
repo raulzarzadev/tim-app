@@ -34,6 +34,7 @@ export type ItemSelected = {
   itemId: ArticleType['id']
   qty?: number
   unit?: PriceType['unit']
+  inUse?: boolean
 }
 
 export const CashboxContextProvider = ({
@@ -63,7 +64,7 @@ export const CashboxContextProvider = ({
   }
 
   const addItem = (item: ItemSelected) => {
-    setItems((items) => [...items, item])
+    setItems((items) => [...items, { ...item, inUse: true }])
   }
 
   const updateItem = (

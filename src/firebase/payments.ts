@@ -3,6 +3,7 @@ import { storage } from './auth'
 import { FirebaseCRUD } from './firebase.CRUD'
 import { db } from './main'
 import { BaseType } from '@/types/base'
+import { where } from 'firebase/firestore'
 
 /*
  * You should be able to copy all this file and just replace
@@ -36,6 +37,10 @@ export const deletePayment = async (itemId: BaseType['id']) =>
 export const getPayment = async (itemId: BaseType['id']) =>
   await itemCRUD.getItem(itemId)
 
+export const listenCompanyActivePayments = async (
+  companyId: string,
+  cb: CallableFunction
+) => await itemCRUD.listenItems([where('companyId', '==', companyId)], cb)
 // export const listenPayment = async (
 //   itemId: BaseType['id'],
 //   cb: CallableFunction
