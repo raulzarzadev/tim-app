@@ -1,5 +1,9 @@
 import { Timestamp } from 'firebase/firestore'
-import { format as fnsFormat } from 'date-fns'
+import {
+  format as fnsFormat,
+  formatDistanceToNow,
+  formatDistanceToNowStrict
+} from 'date-fns'
 import { es } from 'date-fns/locale'
 
 export const weekDays = {
@@ -26,6 +30,17 @@ export const dateFormat = (
   const value = date instanceof Timestamp ? date.toDate() : date
   const res = fnsFormat(value, strFormat || 'dd/MMM/yy', {
     locale: es
+  })
+  return res
+}
+
+export const fromNow = (date?: number | Date | Timestamp | null) => {
+  if (!date) return '-'
+  const value = date instanceof Timestamp ? date.toDate() : date
+  const res = formatDistanceToNowStrict(value, {
+    locale: es,
+    addSuffix: true,
+    roundingMethod: 'ceil'
   })
   return res
 }

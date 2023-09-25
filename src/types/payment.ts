@@ -10,6 +10,7 @@ export type Payment = {
   startAt: Timestamp | Date
   items: PaymentItem[]
   payment: PaymentData
+  isCancelled?: boolean
 } & BaseType
 
 export type CreatePayment = Pick<

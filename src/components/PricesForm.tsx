@@ -5,7 +5,11 @@ import { useState } from 'react'
 import PricesList from './PricesList'
 import ButtonNumber from './NumberInput'
 
-export type PriceType = { quantity: number; price: number; unit: string }
+export type PriceType = {
+  quantity: number
+  price: number
+  unit: 'hour' | 'minutes' | 'day' | 'week' | 'month'
+}
 const PricesForm = ({
   prices = [],
   setPrices

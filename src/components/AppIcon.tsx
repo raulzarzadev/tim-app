@@ -22,6 +22,8 @@ import PointOfSaleIcon from '@mui/icons-material/PointOfSale'
 import RemoveIcon from '@mui/icons-material/Remove'
 // https://mui.com/material-ui/material-icons/
 import VisibilityIcon from '@mui/icons-material/Visibility'
+import InfoIcon from '@mui/icons-material/Info'
+import SettingsIcon from '@mui/icons-material/Settings'
 
 const icons = {
   add: <AddIcon />,
@@ -41,11 +43,12 @@ const icons = {
   trash: <DeleteForeverIcon />,
   delivery: <LocalShippingIcon />,
   fix: <BuildIcon />,
-  settings: <SettingsApplicationsIcon />,
+  settings: <SettingsIcon />,
   sales: <AttachMoneyIcon />,
   cashbox: <PointOfSaleIcon />,
   substr: <RemoveIcon />,
-  eye: <VisibilityIcon />
+  eye: <VisibilityIcon />,
+  info: <InfoIcon />
 } as const
 export type IconName = keyof typeof icons
 const AppIcon = ({ icon }: { icon: IconName }) => {
