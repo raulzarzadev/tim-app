@@ -1,4 +1,4 @@
-import { Payment } from '@/types/payment'
+import { CreatePayment, Payment } from '@/types/payment'
 import { storage } from './auth'
 import { FirebaseCRUD } from './firebase.CRUD'
 import { db } from './main'
@@ -16,16 +16,13 @@ import { orderBy, where } from 'firebase/firestore'
 const COLLECTION_NAME = 'payments'
 type ItemType = Payment
 type NewItem = Partial<ItemType>
-type CreatePayment_DTO = Pick<
-  ItemType,
-  'items' | 'companyId' | 'payment' | 'startAt'
->
+
 export const itemCRUD = new FirebaseCRUD(COLLECTION_NAME, db, storage)
 
 export const setPayment = async (itemId: ItemType['id'], newItem: NewItem) =>
   await itemCRUD.setItem(itemId || '', { ...newItem, id: itemId })
 
-export const createPayment = async (newItem: CreatePayment_DTO) =>
+export const createPayment = async (newItem: CreatePayment) =>
   await itemCRUD.createItem({ ...newItem })
 
 export const updatePayment = async (itemId: string, updates: NewItem) =>

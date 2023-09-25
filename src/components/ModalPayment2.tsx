@@ -8,7 +8,13 @@ import { useContext } from 'react'
 import { CashboxContext } from './CompanyCashbox'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext'
 
-const ModalPayment = ({ amount }: { amount: number }) => {
+const ModalPayment = ({
+  amount,
+  disabled
+}: {
+  amount: number
+  disabled?: boolean
+}) => {
   const USD_PRICE = 16
   const modalPayment = useModal({ title: 'Pagar ' })
   const { handlePay, items, setItems } = useContext(CashboxContext)
@@ -21,6 +27,7 @@ const ModalPayment = ({ amount }: { amount: number }) => {
           modalPayment.onOpen()
         }}
         size="small"
+        disabled={disabled}
       >
         {'Pagar'}
       </Button>

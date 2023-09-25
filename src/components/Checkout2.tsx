@@ -13,6 +13,7 @@ import { CategoryType } from '@/types/category'
 import asNumber from '@/lib/asNumber'
 import { CashboxContext, ItemSelected } from './CompanyCashbox'
 import ModalPayment from './ModalPayment2'
+import ModalClientInfo from './ModalClientInfo'
 
 const Checkout = ({
   items,
@@ -21,7 +22,11 @@ const Checkout = ({
   items?: (ArticleType | null)[]
   categories?: CategoryType[]
 }) => {
-  const { setItems, items: selectedItems = [] } = useContext(CashboxContext)
+  const {
+    setItems,
+    items: selectedItems = [],
+    client
+  } = useContext(CashboxContext)
 
   const modal = useModal({ title: 'Lista de articulos' })
 
@@ -91,8 +96,14 @@ const Checkout = ({
         <Typography className="text-xl font-bold my-4 text-end">
           Total: ${asNumber(total)?.toFixed(2)}
         </Typography>
+        <Box>
+          <ModalClientInfo />
+        </Box>
         <Box className="flex w-full justify-center">
-          <ModalPayment amount={total} />
+          <ModalPayment
+            amount={total}
+            disabled={!client?.phone || !client?.name}
+          />
         </Box>
       </Modal>
     </>

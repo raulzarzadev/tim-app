@@ -94,6 +94,11 @@ const Payment = ({ payment }: { payment: Payment }) => {
             ))}
           </Grid2>
           <Typography className="font-bold mt-4">
+            Información de Cliente
+          </Typography>
+          <Typography>Nombre: {payment?.client?.name}</Typography>
+          <Typography>Telefono: {payment?.client?.phone}</Typography>
+          <Typography className="font-bold mt-4">
             Información de pago
           </Typography>
           <Typography>

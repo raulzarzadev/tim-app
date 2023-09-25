@@ -16,6 +16,7 @@ import { PriceType } from './PricesForm'
 import Categories from './Categories'
 import { CreatePayment } from '@/types/payment'
 import { createPayment } from '@/firebase/payments'
+import { Client } from '@/types/client'
 
 export type CashboxContext = {
   items?: ItemSelected[]
@@ -28,6 +29,8 @@ export type CashboxContext = {
   ) => void
 
   handlePay?: (payment: CreatePayment) => void | Promise<any>
+  setClient?: (client: Partial<Client>) => void
+  client?: Partial<Client>
 }
 export const CashboxContext = createContext<CashboxContext>({})
 export type ItemSelected = {
@@ -46,6 +49,7 @@ export const CashboxContextProvider = ({
   const router = useRouter()
   const pathname = usePathname()
   const [items, setItems] = useState<ItemSelected[]>([])
+  const [client, setClient] = useState<Partial<Client>>({})
 
   useEffect(() => {
     searchParams.get('items') &&
@@ -79,13 +83,22 @@ export const CashboxContextProvider = ({
   }
 
   const handlePay = async (payment: CreatePayment) => {
-    console.log('pagando', payment)
-    await createPayment(payment)
+    //console.log('pagando', payment)
+    await createPayment({ ...payment, client })
   }
 
   return (
     <CashboxContext.Provider
-      value={{ items, setItems, removeItem, addItem, updateItem, handlePay }}
+      value={{
+        items,
+        setItems,
+        removeItem,
+        addItem,
+        updateItem,
+        handlePay,
+        client,
+        setClient
+      }}
     >
       {children}
     </CashboxContext.Provider>
