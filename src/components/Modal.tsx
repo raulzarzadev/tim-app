@@ -1,6 +1,7 @@
-import { Box, Container, Typography } from '@mui/material'
+import { Box, Container, IconButton, Typography } from '@mui/material'
 import MUIModal, { ModalProps as MUIModalProps } from '@mui/material/Modal'
 import { ReactNode } from 'react'
+import AppIcon from './AppIcon'
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -28,9 +29,14 @@ const Modal = ({ open, onClose, title, description, children }: ModalProps) => {
       aria-describedby={`modal-modal-description-${title}`}
     >
       <Box sx={style} className="overflow-y-auto border max-h-screen">
-        <Typography id={`modal-modal-${title}`} variant="h6" component="h2">
-          {title}
-        </Typography>
+        <Box className="w-full justify-between flex">
+          <Typography id={`modal-modal-${title}`} variant="h6" component="h2">
+            {title}
+          </Typography>
+          <IconButton onClick={(e) => onClose?.(e, 'escapeKeyDown')}>
+            <AppIcon icon="close" />
+          </IconButton>
+        </Box>
         <Typography id={`modal-modal-description-${title}`} sx={{ mt: 2 }}>
           {description}
         </Typography>
