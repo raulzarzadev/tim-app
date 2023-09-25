@@ -8,6 +8,7 @@ const rentTime = (
   unit: PriceType['unit'] = 'minutes',
   ops?: Ops
 ) => {
+  // @ts-ignore FIXME: t"El tipo 'string | undefined' no cumple la restricción 'string | number | symbol'. El tipo 'undefined' no se puede asignar al tipo 'string | number | symbol'"
   const factor: Record<PriceType['unit'], number> = {
     month: 30 * 24 * 60,
     week: 7 * 24 * 60,

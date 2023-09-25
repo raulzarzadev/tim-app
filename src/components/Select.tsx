@@ -13,7 +13,7 @@ export default function Select({
   fullWidth = false,
   variant = 'standard'
 }: {
-  options: { value: string | number; label: string }[]
+  options: { value?: string | number; label?: string }[]
   onSelect?: (value: string) => void
   selected?: string
   label: string

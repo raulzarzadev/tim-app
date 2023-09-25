@@ -8,7 +8,7 @@ import ButtonNumber from './NumberInput'
 export type PriceType = {
   quantity: number
   price: number
-  unit: 'hour' | 'minutes' | 'day' | 'week' | 'month'
+  unit?: 'hour' | 'minutes' | 'day' | 'week' | 'month'
 }
 const PricesForm = ({
   prices = [],
@@ -18,10 +18,9 @@ const PricesForm = ({
   setPrices?: (prices: PriceType[]) => void
 }) => {
   const [_prices, _setPrices] = useState<PriceType[]>(prices)
-  const [_formValues, _setFormValues] = useState({
+  const [_formValues, _setFormValues] = useState<PriceType>({
     quantity: 0,
-    price: 0,
-    unit: ''
+    price: 0
   })
   const handleChange = (name: string, value: unknown) => {
     _setFormValues((prev) => ({ ...prev, [name]: value }))

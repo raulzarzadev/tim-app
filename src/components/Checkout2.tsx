@@ -183,7 +183,7 @@ export const ItemRow = ({ item }: { item: Partial<ArticleType> }) => {
     foundItem?.qty || item.prices?.[0].quantity || 1
   )
   const [unit, setUnit] = useState<PriceType['unit']>(
-    foundItem?.unit || item.prices?.[0].unit || ''
+    foundItem?.unit || item.prices?.[0].unit
   )
   const [priceSelected, setPriceSelected] = useState<PriceType | undefined>(
     undefined
@@ -193,29 +193,6 @@ export const ItemRow = ({ item }: { item: Partial<ArticleType> }) => {
     qty,
     item.prices || []
   )
-  // console.log({ item: item.serialNumber, qty, unit, itemTotal })
-
-  // useEffect(() => {
-  //   setPriceSelected(price)
-  // }, [price])
-
-  // useEffect(() => {
-  //   //* update url with new item values {qty & unit}
-  //   //* find oldItem
-  //   const oldItem = itemsFromParams?.find(
-  //     (i: { itemId: string }) => i.itemId == item.id
-  //   )
-  //   //* update data
-  //   const newItem = { ...oldItem, qty, unit }
-  //   //* replace item in array
-  //   const newItems = [...itemsFromParams].map((i) => {
-  //     return i.itemId == item.id ? newItem : i
-  //   })
-  //   //*set the new url
-  //   const params = new URLSearchParams()
-  //   params.set('items', JSON.stringify(newItems))
-  //   router.replace(pathname + '?' + params)
-  // }, [item.id, itemsFromParams, pathname, qty, router, unit])
 
   const uniquePrices = [
     ...new Set(item.prices?.map((price) => price.unit))
@@ -227,7 +204,7 @@ export const ItemRow = ({ item }: { item: Partial<ArticleType> }) => {
   const modal = useModal({ title: 'Detalles de articulo' })
 
   const handleRemoveItem = () => {
-    removeItem?.(item.id)
+    item.id && removeItem?.(item.id)
   }
   const handleSelectPrice = (p: PriceType) => {
     setUnit(p.unit)
@@ -240,7 +217,8 @@ export const ItemRow = ({ item }: { item: Partial<ArticleType> }) => {
   }
 
   useEffect(() => {
-    updateItem?.(item.id, { qty, unit })
+    if (item.id) updateItem?.(item.id, { qty, unit })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [qty, unit])
 
   return (
@@ -308,7 +286,7 @@ export const ItemRow = ({ item }: { item: Partial<ArticleType> }) => {
         value={qty}
       />
       <Select
-        onSelect={(value) => setUnit(value)}
+        onSelect={(value) => setUnit(value as PriceType['unit'])}
         label="Unidad"
         selected={unit}
         options={uniquePrices}

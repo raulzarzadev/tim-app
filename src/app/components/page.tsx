@@ -88,7 +88,7 @@ const categories: CategoryType[] = [
     description: 'Description 3',
     image: 'path/to/image3.jpg',
     prices: [
-      { quantity: 30, price: 30, unit: 'min' },
+      { quantity: 30, price: 30, unit: 'minutes' },
       { quantity: 1, price: 40, unit: 'hour' },
       { quantity: 1, price: 290, unit: 'day' }
     ]
