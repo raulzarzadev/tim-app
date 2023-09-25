@@ -29,7 +29,7 @@ const PaymentForm = ({
     charged
   }: Pick<
     PaymentData,
-    'amount' | 'method' | 'usdPrice' | 'charged'
+    'amount' | 'method' | 'usdPrice' | 'charged' | 'rest'
   >) => void | Promise<any>
 }) => {
   const USD_PRICE = usdPrice
@@ -47,8 +47,8 @@ const PaymentForm = ({
       amount,
       method: formValues.paymentMethod,
       charged: asNumber(formValues.amount),
-      usdPrice: USD_PRICE
-      //  rest: amountInMXN - amount > 0 ? amountInMXN - amount : 0
+      usdPrice: USD_PRICE,
+      rest: amountInMXN - amount > 0 ? amountInMXN - amount : 0
     })
   }
   const amountInMXN = asNumber(

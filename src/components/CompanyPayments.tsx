@@ -15,7 +15,6 @@ import useItem from '@/hooks/useItem'
 import { ItemSelected } from './CompanyCashbox'
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2'
 import { Timestamp } from 'firebase/firestore'
-import { PriceType } from './PricesForm'
 import rentTime from '@/lib/rentTime'
 import { addMinutes } from 'date-fns'
 import asDate from '@/lib/asDate'
@@ -28,11 +27,14 @@ const CompanyPayments = () => {
     listenCompanyActivePayments(currentCompany?.id || '', setPayments)
   }, [currentCompany?.id])
 
-  console.log({ payments })
-
+  const sortByDate = (a: Payment, b: Payment) => {
+    return (
+      (asDate(b.startAt)?.getTime() || 0) - (asDate(a.startAt)?.getTime() || 0)
+    )
+  }
   return (
     <div>
-      {payments.map((payment) => (
+      {payments.sort(sortByDate).map((payment) => (
         <Payment key={payment.id} payment={payment} />
       ))}
     </div>
@@ -44,7 +46,12 @@ const Payment = ({ payment }: { payment: Payment }) => {
   const paymentData = payment.payment
   return (
     <Box key={payment.id} className="p-2 my-2 rounded-md shadow-md">
-      <Box className="flex w-full justify-end">
+      <Box className="flex w-full justify-between">
+        <Box>
+          {payment.isCancelled && (
+            <span className="border-2 border-red-500 p-1">Cancelado</span>
+          )}
+        </Box>
         <IconButton
           size="small"
           onClick={(e) => {
@@ -100,7 +107,7 @@ const Payment = ({ payment }: { payment: Payment }) => {
             Cambio: <CurrencySpan quantity={paymentData.rest} />
           </Typography>
           <Typography>
-            usdPrice: <CurrencySpan quantity={paymentData.usdPrice} />
+            Precio(usd): <CurrencySpan quantity={paymentData.usdPrice} />
           </Typography>
           <Typography>descuento: {paymentData.discount || 0}</Typography>
           <Box className="flex justify-evenly my-4">
@@ -124,7 +131,7 @@ const Payment = ({ payment }: { payment: Payment }) => {
 
       <Typography>Articulos : {payment.items.length}</Typography>
       <Typography>
-        Por entregar : {payment.items.filter((i) => !i.inUse).length}
+        Por entregar : {payment.items.filter((i) => i.inUse ?? true).length}
       </Typography>
     </Box>
   )
@@ -142,7 +149,6 @@ const OnRoadItem = ({
     // startAt +( qty * unit)
     const rentMinutes = rentTime(item.qty || 0, item.unit)
     const endsAt = addMinutes(asDate(startAt) as Date, rentMinutes)
-    console.log(fromNow(endsAt))
     return fromNow(endsAt)
   }
   return (

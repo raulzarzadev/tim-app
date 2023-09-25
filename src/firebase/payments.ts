@@ -3,7 +3,7 @@ import { storage } from './auth'
 import { FirebaseCRUD } from './firebase.CRUD'
 import { db } from './main'
 import { BaseType } from '@/types/base'
-import { where } from 'firebase/firestore'
+import { orderBy, where } from 'firebase/firestore'
 
 /*
  * You should be able to copy all this file and just replace
