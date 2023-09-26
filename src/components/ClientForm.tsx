@@ -19,11 +19,15 @@ const ClientForm = ({
   const onSubmit = (data: Partial<Client>) => {
     setClient?.(data)
   }
-  const imageId = watch('imageID')
-  const signature = watch('signature')
+  const formValues = watch()
+  const imageId = formValues.imageID
+  const signature = formValues.signature
+  const name = formValues.name
+  const phone = formValues.phone
+
   return (
     <div>
-      <form onSubmit={handleSubmit(onSubmit)} className="grid gap-2">
+      <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
         {/* client name */}
         <TextField {...register('name')} label="Nombre" />
         {/* client phone */}
@@ -32,12 +36,6 @@ const ClientForm = ({
         <TextField {...register('email')} type="email" label="Email" />
         {/* client address */}
         <TextField {...register('address')} label="Dirección" />
-        {/* client id
-        <TextField
-          {...register('imageID')}
-          type="file"
-          //label="Identificación"
-        /> */}
 
         {imageId && (
           <PreviewImage src={imageId} alt="Identificación de usuario" />
@@ -52,7 +50,9 @@ const ClientForm = ({
           setSignature={(signature) => setValue('signature', signature || '')}
         />
         {/* client signature */}
-        <Button type="submit">Guardar</Button>
+        <Button variant="outlined" type="submit" disabled={!name || !phone}>
+          Guardar
+        </Button>
       </form>
     </div>
   )

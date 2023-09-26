@@ -5,6 +5,11 @@ import { CompanyType } from '@/types/company'
 import { createContext, useContext, useEffect, useState } from 'react'
 import { useAuthContext } from './authContext'
 import { StaffPermission } from '@/types/staff'
+import { listenCompanyActivePayments } from '@/firebase/payments'
+import { Payment } from '@/types/payment'
+import { ArticleType } from '@/types/article'
+import { PriceType } from '@/components/PricesForm'
+import { Timestamp } from 'firebase/firestore'
 
 export type UserCompaniesContextType = {
   companies: CompanyType[]
@@ -13,6 +18,16 @@ export type UserCompaniesContextType = {
   setSelected: (id: CompanyType['id']) => void
   currentCompany: CompanyType | undefined
   setUserCompanies: () => void
+  itemsInUse: ItemInUse[]
+  items: ArticleType[]
+}
+
+export type ItemInUse = {
+  itemId: ArticleType['id']
+  inUse?: boolean
+  qty?: number
+  unit?: PriceType['unit']
+  startAt: Date | Timestamp
 }
 export const UserCompaniesContext = createContext<UserCompaniesContextType>({
   companies: [],
@@ -20,7 +35,9 @@ export const UserCompaniesContext = createContext<UserCompaniesContextType>({
   selected: '',
   setSelected: (id: CompanyType['id']) => {},
   currentCompany: undefined,
-  setUserCompanies: () => {}
+  setUserCompanies: () => {},
+  itemsInUse: [],
+  items: []
 })
 
 export function UserCompaniesProvider({
@@ -43,9 +60,23 @@ export function UserCompaniesProvider({
   }
 
   const currentCompany = companies.find((company) => company?.id === selected)
-  // useEffect(() => {
-  //   router.push('?company=' + selected)
-  // }, [router, selected])
+
+  const [payments, setPayments] = useState<Payment[]>([])
+
+  useEffect(() => {
+    listenCompanyActivePayments(currentCompany?.id || '', setPayments)
+  }, [currentCompany?.id])
+
+  const itemsInUse = (): ItemInUse[] => {
+    const itemsInUseFromPayments = payments.map((payment) => {
+      const items = payment.items.filter((item) => item.inUse ?? true)
+      return items.map((item) => ({
+        ...item,
+        startAt: payment.startAt
+      }))
+    })
+    return itemsInUseFromPayments.flat()
+  }
 
   return (
     <UserCompaniesContext.Provider
@@ -55,7 +86,9 @@ export function UserCompaniesProvider({
         selected,
         companies,
         currentCompany,
-        setUserCompanies
+        setUserCompanies,
+        itemsInUse: itemsInUse(),
+        items: currentCompany?.articles || []
       }}
     >
       {children}

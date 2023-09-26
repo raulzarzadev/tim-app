@@ -7,6 +7,7 @@ import PaymentForm from './PaymentForm'
 import { useContext } from 'react'
 import { CashboxContext } from './CompanyCashbox'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext'
+import AppIcon from './AppIcon'
 
 const ModalPayment = ({
   amount,
@@ -22,6 +23,7 @@ const ModalPayment = ({
   return (
     <>
       <Button
+        variant="outlined"
         onClick={(e) => {
           e.preventDefault()
           modalPayment.onOpen()
@@ -29,7 +31,7 @@ const ModalPayment = ({
         size="small"
         disabled={disabled}
       >
-        {'Pagar'}
+        {'Pagar'} <AppIcon icon="money" />
       </Button>
       <Modal {...modalPayment}>
         <Box>

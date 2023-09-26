@@ -78,7 +78,7 @@ const Checkout = ({
         </Button>
         <Box>
           <Typography className="text-center">
-            Articulos: {fullItems?.length || 0} <AppIcon icon="eye" />
+            Articulos: {fullItems?.length || 0}
           </Typography>
           <Typography className="text-xl font-bold my-4">
             Total: ${asNumber(total)?.toFixed(2) || 0}
@@ -97,7 +97,7 @@ const Checkout = ({
         <Typography className="text-xl font-bold my-4 text-end">
           Total: ${asNumber(total)?.toFixed(2)}
         </Typography>
-        <Box>
+        <Box className="my-4">
           <ModalClientInfo />
         </Box>
         <Box className="flex w-full justify-center">

@@ -94,8 +94,8 @@ const Payment = ({ payment }: { payment: Payment }) => {
               />
             ))}
           </Grid2>
-          <Typography className="font-bold mt-4">
-            Información de Cliente
+          <Typography className="font-bold mt-4 ">
+            Información de cliente
           </Typography>
           <Box className="flex items-center">
             <Box>

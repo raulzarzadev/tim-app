@@ -1,15 +1,18 @@
 'use client'
 import validatePermissions from "@/HOC's/validatePermissions"
-import { useUserCompaniesContext } from '@/context/userCompaniesContext'
-import { listenCompanyActivePayments } from '@/firebase/payments'
-import { useEffect, useState } from 'react'
 import CompanyPayments from './CompanyPayments'
+import BasicTabs from './BasicTabs'
+import ItemsInUse from './ItemsInUse'
 
 const CompanyAdmin = () => {
   return (
     <div>
-      Pagina de admin
-      <CompanyPayments />
+      <BasicTabs
+        tabs={[
+          { label: 'Clientes ', content: <CompanyPayments /> },
+          { label: 'En uso', content: <ItemsInUse /> }
+        ]}
+      />
     </div>
   )
 }

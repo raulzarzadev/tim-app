@@ -21,11 +21,16 @@ const ModalSignature = ({
   }
   return (
     <>
-      <Button onClick={(e) => modal.onOpen()} variant="outlined" fullWidth>
+      <Button
+        color="success"
+        onClick={(e) => modal.onOpen()}
+        variant="outlined"
+        fullWidth
+      >
         Firmar
       </Button>
       <Modal {...modal}>
-        <Box className="border shadow-inner p-1">
+        <Box className="border shadow-inner ">
           <SignatureCanvas
             onEnd={(e) => {
               const image = signatureRef.current
@@ -41,7 +46,7 @@ const ModalSignature = ({
             }}
           />
         </Box>
-        <Box className="flex w-full justify-around mb-2">
+        <Box className="flex w-full justify-around my-2 mt-4">
           <Button
             variant="outlined"
             size="small"

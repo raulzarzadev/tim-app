@@ -10,8 +10,10 @@ const ModalClientInfo = () => {
   const { setClient, client } = useContext(CashboxContext)
 
   return (
-    <div>
-      <Button onClick={modal.onOpen}>Información de cliente</Button>
+    <div className="flex justify-center">
+      <Button variant="outlined" onClick={modal.onOpen}>
+        Información de cliente
+      </Button>
       <Modal {...modal}>
         <ClientForm
           client={client}
