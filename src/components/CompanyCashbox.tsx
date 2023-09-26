@@ -88,10 +88,8 @@ export const CashboxContextProvider = ({
     )
   }
 
-  console.log({ items })
-
   const handlePay = async (payment: CreatePayment) => {
-    console.log('pagando', payment)
+    // console.log('pagando', payment)
     await createPayment({ ...payment, client })
   }
 
