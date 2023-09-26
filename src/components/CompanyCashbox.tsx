@@ -68,12 +68,18 @@ export const CashboxContextProvider = ({
   }
 
   const addItem = (item: ItemSelected) => {
-    setItems((items) => [...items, { ...item, inUse: true }])
+    const newItem = {
+      ...item,
+      qty: item.qty ?? 0,
+      unit: item.unit ?? null,
+      inUse: true
+    }
+    setItems((items) => [...items, newItem])
   }
 
   const updateItem = (
     itemId: ItemSelected['itemId'],
-    { qty, unit }: { qty: number; unit: PriceType['unit'] }
+    { qty, unit = null }: { qty: number; unit: PriceType['unit'] }
   ) => {
     setItems((items) =>
       items.map((item) =>
@@ -82,8 +88,10 @@ export const CashboxContextProvider = ({
     )
   }
 
+  console.log({ items })
+
   const handlePay = async (payment: CreatePayment) => {
-    //console.log('pagando', payment)
+    console.log('pagando', payment)
     await createPayment({ ...payment, client })
   }
 

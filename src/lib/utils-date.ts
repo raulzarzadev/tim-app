@@ -5,6 +5,7 @@ import {
   formatDistanceToNowStrict
 } from 'date-fns'
 import { es } from 'date-fns/locale'
+import asDate from './asDate'
 
 export const weekDays = {
   0: 'Domingo',
@@ -35,9 +36,9 @@ export const dateFormat = (
 }
 
 export const fromNow = (date?: number | Date | Timestamp | null) => {
-  if (!date) return '-'
-  const value = date instanceof Timestamp ? date.toDate() : date
-  const res = formatDistanceToNowStrict(value, {
+  const validDate = asDate(date)
+  if (!validDate) return '-'
+  const res = formatDistanceToNowStrict(validDate, {
     locale: es,
     addSuffix: true,
     roundingMethod: 'ceil'

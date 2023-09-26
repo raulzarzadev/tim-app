@@ -6,6 +6,7 @@ import useModal from '@/hooks/useModal'
 import Modal from './Modal'
 import { useContext, useEffect, useState } from 'react'
 import { CashboxContext } from './CompanyCashbox'
+import { useUserCompaniesContext } from '@/context/userCompaniesContext'
 
 const Item = styled(Button)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -26,6 +27,7 @@ const ModalArticles = ({
 }) => {
   const modal = useModal({ title: 'Unidades' })
   const { addItem, removeItem, items } = useContext(CashboxContext)
+  const { itemsInUse } = useUserCompaniesContext()
   const handleClick = (articleId: ArticleType['id']) => {
     if (_selected.find(({ itemId }) => itemId === articleId)) {
       removeItem?.(articleId)
@@ -33,15 +35,6 @@ const ModalArticles = ({
     } else {
       addItem?.({ itemId: articleId })
     }
-    // if (_selected.includes(articleId)) {
-    //   const artRemoved = _selected.filter((a) => a !== articleId)
-    //  // setArticlesSelected?.(artRemoved)
-    //   _setSelected(artRemoved)
-    //   return
-    // } else {
-    //   //setArticlesSelected?.([..._selected, articleId])
-    //   _setSelected((prev) => [...prev, articleId])
-    // }
   }
 
   const [_selected, _setSelected] = useState<{ itemId: ArticleType['id'] }[]>(
@@ -60,6 +53,9 @@ const ModalArticles = ({
         <Stack direction="row" flexWrap={'wrap'} className="justify-center">
           {articles.map((article) => (
             <Chip
+              disabled={
+                !!itemsInUse.find(({ itemId }) => itemId === article.id)
+              }
               color={
                 _selected.find(({ itemId }) => article.id === itemId)
                   ? 'primary'

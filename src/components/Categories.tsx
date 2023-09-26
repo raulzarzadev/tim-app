@@ -51,7 +51,7 @@ const Category = ({
   articles: ArticleType[]
 }) => {
   const { items, addItem, removeItem } = useContext(CashboxContext)
-
+  const { itemsInUse } = useUserCompaniesContext()
   const categoryArticles = articles.filter((a) => a.category === category.name)
   const categoryItemsSelected =
     items?.filter(({ itemId }) =>
@@ -59,15 +59,18 @@ const Category = ({
     ) || []
 
   const itemsLeft =
-    categoryArticles?.filter(
-      ({ id }) => !categoryItemsSelected?.find(({ itemId }) => id === itemId)
-    ) || []
+    categoryArticles
+      ?.filter(
+        ({ id }) => !categoryItemsSelected?.find(({ itemId }) => id === itemId)
+      )
+      .filter(({ id }) => !itemsInUse.find(({ itemId }) => itemId === id)) || []
 
   const handleAddCategoryArticle = (name: string) => {
     // Add a random / *disponible* article
     const validArticles = categoryArticles
       //* already are selected
       .filter(({ id }) => !items?.find((i) => i.itemId === id))
+      .filter(({ id }) => !itemsInUse.find((i) => i.itemId === id))
     const randomArticle =
       validArticles[Math.floor(Math.random() * validArticles.length)]
     const defaultUnit = randomArticle?.prices?.[0]?.unit

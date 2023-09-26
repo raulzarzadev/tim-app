@@ -61,7 +61,7 @@ const ItemsInUse = () => {
 export type ItemInUse = Partial<ArticleType> & {
   itemId: string
   qty?: number
-  unit?: string
+  unit?: PriceType['unit']
   startAt: Date | Timestamp
   rentFinishAt: Date
   rentTime: number

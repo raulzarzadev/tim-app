@@ -8,7 +8,7 @@ import ButtonNumber from './NumberInput'
 export type PriceType = {
   quantity: number
   price: number
-  unit?: 'hour' | 'minutes' | 'day' | 'week' | 'month'
+  unit?: 'hour' | 'minutes' | 'day' | 'week' | 'month' | null
 }
 const PricesForm = ({
   prices = [],
@@ -47,7 +47,7 @@ const PricesForm = ({
           min={0}
         />
         <Select
-          selected={_formValues.unit}
+          selected={_formValues.unit || ''}
           variant="outlined"
           label="Unidad"
           onSelect={(value) => handleChange('unit', value)}

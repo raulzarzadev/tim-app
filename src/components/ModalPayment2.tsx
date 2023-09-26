@@ -52,7 +52,6 @@ const ModalPayment = ({
               items: items || [],
               payment: { ...payment, date: new Date() }
             })
-
             modalPayment.onClose()
             setItems?.([])
             return

@@ -16,6 +16,9 @@ const rentTime = (
     hour: 60,
     minutes: 1
   }
+  if (unit === null) {
+    return 0
+  }
 
   const seconds = ops?.inSeconds ? 60 : 1
   return qty * factor[unit] * seconds
