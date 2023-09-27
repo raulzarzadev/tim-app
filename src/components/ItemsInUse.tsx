@@ -2,13 +2,18 @@ import { useUserCompaniesContext } from '@/context/userCompaniesContext'
 import { ItemSelected } from './CompanyCashbox'
 import { Timestamp } from 'firebase/firestore'
 import { ArticleType } from '@/types/article'
-import { Box, Container } from '@mui/material'
+import { Box, Button, Container, Typography } from '@mui/material'
 import rentTime from '@/lib/rentTime'
 import { fromNow } from '@/lib/utils-date'
 import { addMinutes } from 'date-fns'
 import asDate from '@/lib/asDate'
 import { PriceType } from './PricesForm'
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2'
+import Modal from './Modal'
+import useModal from '@/hooks/useModal'
+import { finishItemRent } from '@/firebase/payments'
+import { Payment } from '@/types/payment'
+import ModalConfirm from './ModalConfirm'
 
 const ItemsInUse = () => {
   const { itemsInUse, items } = useUserCompaniesContext()
@@ -36,7 +41,7 @@ const ItemsInUse = () => {
 
   return (
     <Container>
-      <Grid2 container spacing={2}>
+      <Grid2 container spacing={1}>
         <Grid2 xs={2} className="font-bold truncate">
           Serie
         </Grid2>
@@ -65,17 +70,51 @@ export type ItemInUse = Partial<ArticleType> & {
   startAt: Date | Timestamp
   rentFinishAt: Date
   rentTime: number
+  paymentId: Payment['id']
+  inUse?: boolean
 }
 const ItemRow = ({ item }: { item: ItemInUse }) => {
+  const modal = useModal({ title: 'Detalles de articulo' })
   return (
     <>
-      <Grid2 xs={2}>{item.serialNumber || item.name}</Grid2>
-      <Grid2 xs={3}>{item.category}</Grid2>
-      <Grid2 xs={3}>
-        {item.qty}x {item.unit}
+      <Modal {...modal}>
+        <ItemInUse item={item} />
+      </Modal>
+      <Grid2
+        container
+        xs={12}
+        className=" shadow-md rounded-md p-2 m-1 text-center"
+        alignItems={'center'}
+        onClick={() => {
+          modal.onOpen()
+        }}
+      >
+        <Grid2 xs={2}>{item.serialNumber || item.name}</Grid2>
+        <Grid2 xs={3}>{item.category}</Grid2>
+        <Grid2 xs={3}>
+          {item.qty}x {item.unit}
+        </Grid2>
+        <Grid2 xs={4}>{fromNow(item.rentFinishAt)}</Grid2>
       </Grid2>
-      <Grid2 xs={4}>{fromNow(item.rentFinishAt)}</Grid2>
     </>
+  )
+}
+
+const ItemInUse = ({ item }: { item: ItemInUse }) => {
+  const handleFinishRent = async (item: ItemInUse) => {
+    return await finishItemRent(item.paymentId, item?.id || '')
+  }
+  return (
+    <Box className="grid gap-6">
+      <ModalConfirm
+        label="Recibir unidad"
+        handleConfirm={() => handleFinishRent(item)}
+      >
+        <Typography>Otras unidades del mismo cliente...</Typography>
+        <Typography>Revisa que la unidad este en buen estado.</Typography>
+      </ModalConfirm>
+      <Button>Cambiar</Button>
+    </Box>
   )
 }
 

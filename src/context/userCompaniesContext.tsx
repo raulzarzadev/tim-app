@@ -10,6 +10,7 @@ import { Payment } from '@/types/payment'
 import { ArticleType } from '@/types/article'
 import { PriceType } from '@/components/PricesForm'
 import { Timestamp } from 'firebase/firestore'
+import { ItemInUse } from '@/components/ItemsInUse'
 
 export type UserCompaniesContextType = {
   companies: CompanyType[]
@@ -22,13 +23,14 @@ export type UserCompaniesContextType = {
   items: ArticleType[]
 }
 
-export type ItemInUse = {
-  itemId: ArticleType['id']
-  inUse?: boolean
-  qty?: number
-  unit?: PriceType['unit']
-  startAt: Date | Timestamp
-}
+// export type ItemInUse = {
+//   itemId: ArticleType['id']
+//   inUse?: boolean
+//   qty?: number
+//   unit?: PriceType['unit']
+//   startAt: Date | Timestamp
+//   paymentId: string
+// }
 export const UserCompaniesContext = createContext<UserCompaniesContextType>({
   companies: [],
   setCompanies: (companies: CompanyType[]) => {},
@@ -72,7 +74,8 @@ export function UserCompaniesProvider({
       const items = payment.items.filter((item) => item.inUse ?? true)
       return items.map((item) => ({
         ...item,
-        startAt: payment.startAt
+        startAt: payment.startAt,
+        paymentId: payment.id
       }))
     })
     return itemsInUseFromPayments.flat()

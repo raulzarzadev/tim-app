@@ -34,7 +34,7 @@ export type CashboxContext = {
 }
 export const CashboxContext = createContext<CashboxContext>({})
 export type ItemSelected = {
-  itemId: ArticleType['id']
+  itemId?: ArticleType['id']
   qty?: number
   unit?: PriceType['unit']
   inUse?: boolean

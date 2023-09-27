@@ -4,6 +4,7 @@ import { FirebaseCRUD } from './firebase.CRUD'
 import { db } from './main'
 import { BaseType } from '@/types/base'
 import { orderBy, where } from 'firebase/firestore'
+import { ArticleType } from '@/types/article'
 
 /*
  * You should be able to copy all this file and just replace
@@ -38,7 +39,16 @@ export const listenCompanyActivePayments = async (
   companyId: string,
   cb: CallableFunction
 ) => await itemCRUD.listenItems([where('companyId', '==', companyId)], cb)
-// export const listenPayment = async (
-//   itemId: BaseType['id'],
-//   cb: CallableFunction
-// ) => await itemCRUD.listenItem(itemId, cb)
+
+export const finishItemRent = async (
+  paymentId: Payment['id'],
+  itemId: ArticleType['id']
+) => {
+  const payment: Payment = await itemCRUD.getItem(paymentId)
+  const items = payment?.items
+  const oldItem = items.find((item) => item.itemId === itemId)
+  const removedItem = items.filter((item) => item.itemId !== itemId)
+  return await updatePayment(paymentId, {
+    items: [...removedItem, { ...oldItem, inUse: false }]
+  })
+}
