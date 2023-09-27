@@ -14,6 +14,8 @@ import useModal from '@/hooks/useModal'
 import { finishItemRent } from '@/firebase/payments'
 import { Payment } from '@/types/payment'
 import ModalConfirm from './ModalConfirm'
+import ModalArticles from './ModalArticles'
+import ChangeItem from './ChangeItem'
 
 const ItemsInUse = () => {
   const { itemsInUse, items } = useUserCompaniesContext()
@@ -74,11 +76,13 @@ export type ItemInUse = Partial<ArticleType> & {
   inUse?: boolean
 }
 const ItemRow = ({ item }: { item: ItemInUse }) => {
-  const modal = useModal({ title: 'Detalles de articulo' })
+  const modal = useModal({
+    title: `Detalles de articulo: ${item.serialNumber || item.name}`
+  })
   return (
     <>
       <Modal {...modal}>
-        <ItemInUse item={item} />
+        <ItemInUse item={item} onCloseParent={() => modal.onClose()} />
       </Modal>
       <Grid2
         container
@@ -100,10 +104,18 @@ const ItemRow = ({ item }: { item: ItemInUse }) => {
   )
 }
 
-const ItemInUse = ({ item }: { item: ItemInUse }) => {
+const ItemInUse = ({
+  item,
+  onCloseParent
+}: {
+  item: ItemInUse
+  onCloseParent?: () => void
+}) => {
   const handleFinishRent = async (item: ItemInUse) => {
+    onCloseParent?.()
     return await finishItemRent(item.paymentId, item?.id || '')
   }
+  const modal = useModal({ title: `Cambiar articulo` })
   return (
     <Box className="grid gap-6">
       <ModalConfirm
@@ -113,7 +125,18 @@ const ItemInUse = ({ item }: { item: ItemInUse }) => {
         <Typography>Otras unidades del mismo cliente...</Typography>
         <Typography>Revisa que la unidad este en buen estado.</Typography>
       </ModalConfirm>
-      <Button>Cambiar</Button>
+
+      <Button
+        onClick={(e) => {
+          e.preventDefault()
+          modal.onOpen()
+        }}
+      >
+        Cambiar
+      </Button>
+      <Modal {...modal}>
+        <ChangeItem item={item} />
+      </Modal>
     </Box>
   )
 }

@@ -17,13 +17,11 @@ const Item = styled(Button)(({ theme }) => ({
 }))
 
 const ModalArticles = ({
-  articles,
-  articlesSelected,
-  setArticlesSelected
+  articles
 }: {
   articles: ArticleType[]
-  articlesSelected?: ArticleType['id'][]
-  setArticlesSelected?: (articles: ArticleType['id'][]) => void
+  // articlesSelected?: ArticleType['id'][]
+  // setArticlesSelected?: (articles: ArticleType['id'][]) => void
 }) => {
   const modal = useModal({ title: 'Unidades' })
   const { addItem, removeItem, items } = useContext(CashboxContext)
@@ -51,7 +49,7 @@ const ModalArticles = ({
       </IconButton>
       <Modal {...modal}>
         <Stack direction="row" flexWrap={'wrap'} className="justify-center">
-          {articles.map((article) => (
+          {articles?.map((article) => (
             <Chip
               disabled={
                 !!itemsInUse.find(({ itemId }) => itemId === article.id)

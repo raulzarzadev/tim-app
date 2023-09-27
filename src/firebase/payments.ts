@@ -52,3 +52,5 @@ export const finishItemRent = async (
     items: [...removedItem, { ...oldItem, inUse: false }]
   })
 }
+
+export const changeItem = (paymentId, oldItem, newItem) => {}

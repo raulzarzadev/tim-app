@@ -137,7 +137,7 @@ const ItemsList = ({ items }: { items: (Partial<ArticleType> | null)[] }) => {
     </Box>
   )
 }
-const calculateTotal = (
+export const calculateTotal = (
   unit: PriceType['unit'] | undefined,
   qty: PriceType['quantity'],
   pricesList: PriceType[]
@@ -171,8 +171,8 @@ const calculateTotal = (
     return { total, price }
   }
 
-  total = asNumber(pricesList[0]?.price)
-  price = pricesList[0]
+  total = asNumber(pricesList?.[0]?.price)
+  price = pricesList?.[0] || 0
 
   return { total: asNumber(asNumber(total).toFixed(2)), price }
 }

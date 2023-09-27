@@ -45,7 +45,9 @@ export default function NumberInput({
         className="grid grid-cols-3 w-full items-center shadow-sm place-content-center justify-center place-items-center"
       >
         <button
-          onClick={() => {
+          onClick={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
             handleChange(_value - 1)
           }}
         >
@@ -66,7 +68,9 @@ export default function NumberInput({
         />
 
         <button
-          onClick={() => {
+          onClick={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
             handleChange(_value + 1)
           }}
         >
