@@ -9,6 +9,8 @@ import Select from './Select'
 import { ItemInUse } from './ItemsInUse'
 import { calculateTotal } from './Checkout2'
 import CurrencySpan from './CurrencySpan'
+import asNumber from '@/lib/asNumber'
+import { PriceType } from './PricesForm'
 
 const ChangeItem = ({ item }: { item: ItemInUse }) => {
   const { itemsInUse, currentCompany } = useUserCompaniesContext()
@@ -32,12 +34,11 @@ const ChangeItem = ({ item }: { item: ItemInUse }) => {
       value: category.name
     })) || []
 
-  const differences = () => {
+  const differences = (): { amount: number; newPrice: unknown } => {
     const oldItem = calculateItemPrice(item.id, item.qty, item.unit)
     const newItem = calculateItemPrice(_selected, item.qty, item.unit)
-    console.log({ oldItem, newItem })
     return {
-      amount: (newItem.total - oldItem.total).toFixed(2) || 0,
+      amount: asNumber((newItem.total - oldItem.total).toFixed(2) || 0),
       newPrice: newItem.price
     }
   }
@@ -49,7 +50,6 @@ const ChangeItem = ({ item }: { item: ItemInUse }) => {
 
   const calculateItemPrice = (itemId, qty, unit) => {
     const item = currentCompany?.articles?.find((item) => item.id === itemId)
-    console.log({ item })
     const categoryPrices = currentCompany?.categories?.find(
       (c: { name: string }) => c.name === item?.category
     )?.prices
@@ -57,6 +57,13 @@ const ChangeItem = ({ item }: { item: ItemInUse }) => {
     const itemPrice = calculateTotal(unit, qty, itemPrices || [])
     return itemPrice
   }
+
+  const [diff, setDiff] = useState<{ amount: number; newPrice?: PriceType }>({
+    amount: 0
+  })
+  useEffect(() => {
+    setDiff(differences())
+  }, [_selected])
 
   return (
     <Box>
@@ -74,7 +81,16 @@ const ChangeItem = ({ item }: { item: ItemInUse }) => {
         fullWidth
         variant="outlined"
       />
-      <Stack direction="row" flexWrap={'wrap'} className="justify-center mt-8">
+      <div className="mt-8" />
+      {!!diff.newPrice && (
+        <Typography className="text-center my-4 ">
+          Cambiar por:{' '}
+          <span className="font-bold">
+            {diff.newPrice?.quantity}x {diff.newPrice?.unit}
+          </span>
+        </Typography>
+      )}
+      <Stack direction="row" flexWrap={'wrap'} className="justify-center ">
         {_items?.map((item) => (
           <Chip
             disabled={!!itemsInUse?.find(({ itemId }) => itemId === item.id)}
@@ -89,7 +105,9 @@ const ChangeItem = ({ item }: { item: ItemInUse }) => {
       {_selected && (
         <>
           <Typography className="text-center my-4 ">
-            Diferencia: <CurrencySpan quantity={differences().amount} />
+            {diff?.amount < 0 ? 'Devolver' : 'Cobrar'}
+            {': '}
+            <CurrencySpan quantity={diff?.amount} />
           </Typography>
           <div className="flex justify-center mt-8">
             <Button

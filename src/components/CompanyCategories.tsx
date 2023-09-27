@@ -53,7 +53,7 @@ const Category = ({ category }: { category: CategoryType }) => {
         <Button
           size="small"
           LinkComponent={Link}
-          href={`dashboard/${currentCompany?.id}/categories/${category.name}`}
+          href={`/dashboard/${currentCompany?.id}/categories/${category.name}`}
         >
           Ver más
         </Button>

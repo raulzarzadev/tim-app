@@ -9,7 +9,6 @@ import {
   CardContent,
   Typography
 } from '@mui/material'
-import { usePathname, useRouter } from 'next/navigation'
 import { useContext } from 'react'
 import { CashboxContext } from './CompanyCashbox'
 import AppIcon from './AppIcon'

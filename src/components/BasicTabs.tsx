@@ -4,6 +4,7 @@ import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 interface TabPanelProps {
   children?: React.ReactNode
@@ -43,7 +44,22 @@ function BasicTabs({
 }: {
   tabs: { label: string; content: React.ReactNode }[]
 }) {
+  const searchParams = useSearchParams()
+  const router = useRouter()
+  const pathname = usePathname()
   const [value, setValue] = React.useState(0)
+  React.useEffect(() => {
+    searchParams.get('tab') &&
+      setValue(JSON.parse(searchParams.get('tab') || '0'))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  React.useEffect(() => {
+    const params = new URLSearchParams()
+    params.set('tab', JSON.stringify(value))
+    router.replace(pathname + '?' + params, { scroll: false })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value])
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue)
