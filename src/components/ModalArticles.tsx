@@ -35,7 +35,7 @@ const ModalArticles = ({
     }
   }
 
-  const [_selected, _setSelected] = useState<{ itemId: ArticleType['id'] }[]>(
+  const [_selected, _setSelected] = useState<{ itemId?: ArticleType['id'] }[]>(
     []
   )
   useEffect(() => {

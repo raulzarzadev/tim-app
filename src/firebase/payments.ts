@@ -41,9 +41,10 @@ export const listenCompanyActivePayments = async (
 ) => await itemCRUD.listenItems([where('companyId', '==', companyId)], cb)
 
 export const finishItemRent = async (
-  paymentId: Payment['id'],
-  itemId: ArticleType['id']
+  paymentId?: Payment['id'],
+  itemId?: ArticleType['id']
 ) => {
+  if (!paymentId || !itemId) return
   const payment: Payment = await itemCRUD.getItem(paymentId)
   const items = payment?.items
   const oldItem = items.find((item) => item.itemId === itemId)
@@ -53,4 +54,4 @@ export const finishItemRent = async (
   })
 }
 
-export const changeItem = (paymentId, oldItem, newItem) => {}
+//export const changeItem = (paymentId, oldItem, newItem) => {}

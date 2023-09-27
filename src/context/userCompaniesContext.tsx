@@ -8,8 +8,7 @@ import { StaffPermission } from '@/types/staff'
 import { listenCompanyActivePayments } from '@/firebase/payments'
 import { Payment } from '@/types/payment'
 import { ArticleType } from '@/types/article'
-import { PriceType } from '@/components/PricesForm'
-import { Timestamp } from 'firebase/firestore'
+
 import { ItemInUse } from '@/components/ItemsInUse'
 
 export type UserCompaniesContextType = {
@@ -19,18 +18,10 @@ export type UserCompaniesContextType = {
   setSelected: (id: CompanyType['id']) => void
   currentCompany: CompanyType | undefined
   setUserCompanies: () => void
-  itemsInUse: ItemInUse[]
+  itemsInUse: Partial<ItemInUse>[]
   items: ArticleType[]
 }
 
-// export type ItemInUse = {
-//   itemId: ArticleType['id']
-//   inUse?: boolean
-//   qty?: number
-//   unit?: PriceType['unit']
-//   startAt: Date | Timestamp
-//   paymentId: string
-// }
 export const UserCompaniesContext = createContext<UserCompaniesContextType>({
   companies: [],
   setCompanies: (companies: CompanyType[]) => {},
@@ -69,15 +60,17 @@ export function UserCompaniesProvider({
     listenCompanyActivePayments(currentCompany?.id || '', setPayments)
   }, [currentCompany?.id])
 
-  const itemsInUse = (): ItemInUse[] => {
-    const itemsInUseFromPayments = payments.map((payment) => {
-      const items = payment.items.filter((item) => item.inUse ?? true)
-      return items.map((item) => ({
-        ...item,
-        startAt: payment.startAt,
-        paymentId: payment.id
-      }))
-    })
+  const itemsInUse = (): Partial<ItemInUse>[] => {
+    const itemsInUseFromPayments = payments
+      .map((payment) => {
+        const items = payment.items.filter((item) => item.inUse ?? true)
+        return items.map((item) => ({
+          ...item,
+          startAt: payment.startAt,
+          paymentId: payment.id
+        }))
+      })
+      .flat()
     return itemsInUseFromPayments.flat()
   }
 

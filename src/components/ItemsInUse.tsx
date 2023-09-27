@@ -22,19 +22,21 @@ const ItemsInUse = () => {
   const rentFinishAt = (
     qty: number,
     unit: PriceType['unit'],
-    startAt: Date | Timestamp
+    startAt?: Date | Timestamp
   ) => {
+    if (!startAt) return null
     const rentMinutes = rentTime(qty, unit)
     return addMinutes(asDate(startAt) as Date, rentMinutes)
   }
-  const fullItems: ItemInUse[] = itemsInUse.map((item) => ({
+  const fullItems: Partial<ItemInUse>[] = itemsInUse.map((item) => ({
     ...items.find(({ id }) => id === item.itemId),
     ...item,
     rentFinishAt: rentFinishAt(item.qty || 0, item.unit, item.startAt),
     rentTime: rentTime(item.qty, item.unit)
   }))
 
-  const sortByFinishRent = (a: ItemInUse, b: ItemInUse) => {
+  const sortByFinishRent = (a: Partial<ItemInUse>, b: Partial<ItemInUse>) => {
+    if (!a.rentFinishAt && !b.rentFinishAt) return 0
     return (
       (asDate(a.rentFinishAt)?.getTime() || 0) -
       (asDate(b.rentFinishAt)?.getTime() || 0)
@@ -70,12 +72,12 @@ export type ItemInUse = Partial<ArticleType> & {
   qty?: number
   unit?: PriceType['unit']
   startAt: Date | Timestamp
-  rentFinishAt: Date
-  rentTime: number
+  rentFinishAt?: Date | null
+  rentTime?: number
   paymentId: Payment['id']
   inUse?: boolean
 }
-const ItemRow = ({ item }: { item: ItemInUse }) => {
+const ItemRow = ({ item }: { item: Partial<ItemInUse> }) => {
   const modal = useModal({
     title: `Detalles de articulo: ${item.serialNumber || item.name}`
   })
@@ -108,10 +110,10 @@ const ItemInUse = ({
   item,
   onCloseParent
 }: {
-  item: ItemInUse
+  item: Partial<ItemInUse>
   onCloseParent?: () => void
 }) => {
-  const handleFinishRent = async (item: ItemInUse) => {
+  const handleFinishRent = async (item: Partial<ItemInUse>) => {
     onCloseParent?.()
     return await finishItemRent(item.paymentId, item?.id || '')
   }

@@ -13,7 +13,7 @@ import asNumber from '@/lib/asNumber'
 import { PriceType } from './PricesForm'
 import { updatePayment } from '@/firebase/payments'
 
-const ChangeItem = ({ item }: { item: ItemInUse }) => {
+const ChangeItem = ({ item }: { item: Partial<ItemInUse> }) => {
   const { itemsInUse, currentCompany } = useUserCompaniesContext()
 
   const [_categoryName, _setCategoryName] = useState(item.category)
@@ -44,7 +44,11 @@ const ChangeItem = ({ item }: { item: ItemInUse }) => {
     }
   }
 
-  const calculateItemPrice = (itemId, qty, unit) => {
+  const calculateItemPrice = (
+    itemId?: string,
+    qty?: number,
+    unit?: PriceType['unit']
+  ) => {
     const item = currentCompany?.articles?.find((item) => item.id === itemId)
     const categoryPrices = currentCompany?.categories?.find(
       (c: { name: string }) => c.name === item?.category

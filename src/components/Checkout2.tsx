@@ -32,7 +32,7 @@ const Checkout = ({
   const modal = useModal({ title: 'Lista de articulos' })
 
   const fullItems: Partial<ArticleType>[] = selectedItems?.map(
-    (searchItem: { itemId: string }) => {
+    (searchItem: { itemId?: string }) => {
       const fullItem = items?.find((item) => item?.id == searchItem.itemId)
       if (fullItem?.ownPrice) return fullItem
       const categoryPrices = categories?.find(
@@ -139,8 +139,8 @@ const ItemsList = ({ items }: { items: (Partial<ArticleType> | null)[] }) => {
 }
 export const calculateTotal = (
   unit: PriceType['unit'] | undefined,
-  qty: PriceType['quantity'],
-  pricesList: PriceType[]
+  qty?: PriceType['quantity'],
+  pricesList?: PriceType[]
 ): { total: number; price?: PriceType } => {
   let total = 0
   let price = undefined
@@ -172,13 +172,13 @@ export const calculateTotal = (
   }
 
   total = asNumber(pricesList?.[0]?.price)
-  price = pricesList?.[0] || 0
+  price = pricesList?.[0]
 
   return { total: asNumber(asNumber(total).toFixed(2)), price }
 }
 export const ItemRow = ({ item }: { item: Partial<ArticleType> }) => {
   const { items = [], removeItem, updateItem } = useContext(CashboxContext)
-  const foundItem = items?.find((i: { itemId: string }) => i.itemId == item.id)
+  const foundItem = items?.find((i: { itemId?: string }) => i.itemId == item.id)
   const [qty, setQty] = useState(
     foundItem?.qty || item.prices?.[0].quantity || 1
   )
@@ -197,8 +197,8 @@ export const ItemRow = ({ item }: { item: Partial<ArticleType> }) => {
   const uniquePrices = [
     ...new Set(item.prices?.map((price) => price.unit))
   ].map((unit) => ({
-    label: unit,
-    value: unit
+    label: unit || '',
+    value: unit || ''
   }))
 
   const modal = useModal({ title: 'Detalles de articulo' })
@@ -288,7 +288,7 @@ export const ItemRow = ({ item }: { item: Partial<ArticleType> }) => {
       <Select
         onSelect={(value) => setUnit(value as PriceType['unit'])}
         label="Unidad"
-        selected={unit}
+        selected={unit || ''}
         options={uniquePrices}
       />
       <Box>
