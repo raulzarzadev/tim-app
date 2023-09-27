@@ -7,6 +7,7 @@ import CompanyReception from '@/components/CompanyReception'
 import CompanyStore from '@/components/CompanyStore'
 import { StaffPermission, StaffPermissionLabels } from '@/types/staff'
 import { Container, Typography } from '@mui/material'
+
 const component: Record<
   StaffPermission,
   { label?: string; icon: IconName; component: React.ReactNode }

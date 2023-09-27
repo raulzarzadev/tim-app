@@ -1,3 +1,5 @@
+import { IconName } from '@/components/AppIcon'
+
 export enum StaffPermissionLabels {
   CASHBOX = 'Caja',
   SALES = 'Ventas',
@@ -5,6 +7,14 @@ export enum StaffPermissionLabels {
   DELIVERY = 'Reparto',
   ADMIN = 'Administrador',
   RECEPTION = 'Recepción'
+}
+export const areaIcon: Record<StaffPermission, IconName> = {
+  CASHBOX: 'cashbox',
+  SALES: 'sales',
+  MAINTENANCE: 'fix',
+  DELIVERY: 'delivery',
+  ADMIN: 'person',
+  RECEPTION: 'store'
 }
 export type StaffPermission = keyof typeof StaffPermissionLabels
 export type StaffPermissions = {
