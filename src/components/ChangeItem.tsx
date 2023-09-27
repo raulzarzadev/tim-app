@@ -11,6 +11,7 @@ import { calculateTotal } from './Checkout2'
 import CurrencySpan from './CurrencySpan'
 import asNumber from '@/lib/asNumber'
 import { PriceType } from './PricesForm'
+import { updatePayment } from '@/firebase/payments'
 
 const ChangeItem = ({ item }: { item: ItemInUse }) => {
   const { itemsInUse, currentCompany } = useUserCompaniesContext()
@@ -34,18 +35,13 @@ const ChangeItem = ({ item }: { item: ItemInUse }) => {
       value: category.name
     })) || []
 
-  const differences = (): { amount: number; newPrice: unknown } => {
+  const differences = (): { amount: number; newPrice?: PriceType } => {
     const oldItem = calculateItemPrice(item.id, item.qty, item.unit)
     const newItem = calculateItemPrice(_selected, item.qty, item.unit)
     return {
       amount: asNumber((newItem.total - oldItem.total).toFixed(2) || 0),
       newPrice: newItem.price
     }
-  }
-
-  const handleChange = () => {
-    const { amount, newPrice } = differences()
-    console.log('cambiar item', { item, amount, newPrice })
   }
 
   const calculateItemPrice = (itemId, qty, unit) => {
@@ -61,9 +57,24 @@ const ChangeItem = ({ item }: { item: ItemInUse }) => {
   const [diff, setDiff] = useState<{ amount: number; newPrice?: PriceType }>({
     amount: 0
   })
+
   useEffect(() => {
     setDiff(differences())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [_selected])
+
+  const handleChange = () => {
+    const { amount: amountDiff, newPrice } = diff
+    console.log('cambiar item', {
+      paymentId: item.paymentId,
+      newChange: {
+        amount: amountDiff,
+        newPrice,
+        newItemID: _selected,
+        oldItemId: item.id
+      }
+    })
+  }
 
   return (
     <Box>
