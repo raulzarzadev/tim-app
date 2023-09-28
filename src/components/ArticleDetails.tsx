@@ -18,26 +18,19 @@ const ArticleDetails = ({ article }: { article: ArticleType }) => {
   }
   return (
     <Box className="my-4 text-center">
-      {article.serialNumber && (
-        <Typography variant="h5" component="h2" className="font-bold">
-          {article.serialNumber}
-        </Typography>
-      )}
-      {article.name && (
-        <Typography
-          variant="h5"
-          component="h2"
-          className="font-bold"
-          color="text.secondary"
-        >
-          {article.name}
-        </Typography>
-      )}
       {article.category && (
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
           {article.category}
         </Typography>
       )}
+
+      <Typography variant="h5" component="h2" className="font-bold">
+        {article.serialNumber}
+        {article.name && (
+          <span className="font-bold opacity-50 text-sm">{article.name}</span>
+        )}
+      </Typography>
+
       {article.color && (
         <Typography sx={{ mb: 0.5 }} color="text.secondary">
           {article.color}

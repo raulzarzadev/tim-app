@@ -15,6 +15,7 @@ import { finishItemRent, getPayment } from '@/firebase/payments'
 import { Payment } from '@/types/payment'
 import ModalConfirm from './ModalConfirm'
 import ChangeItem from './ChangeItem'
+import AppIcon from './AppIcon'
 
 const ItemsInUse = () => {
   const { itemsInUse, items } = useUserCompaniesContext()
@@ -122,6 +123,16 @@ const ItemInUse = ({
 
   return (
     <Box className="grid gap-6">
+      <Button
+        onClick={(e) => {
+          e.preventDefault()
+          modal.onOpen()
+        }}
+        variant="outlined"
+        color="info"
+      >
+        Cambiar <AppIcon icon="switch" />
+      </Button>
       {!!moreItemsInUse?.length && (
         <Box>
           <Typography>Otras unidades del mismo cliente...</Typography>
@@ -145,7 +156,8 @@ const ItemInUse = ({
           e.preventDefault()
           handleFinishRent(item)
         }}
-        variant="outlined"
+        variant="contained"
+        color="success"
       >
         {`Recibir ${item.category} ${item.serialNumber || item.name}`}
       </Button>
@@ -160,14 +172,7 @@ const ItemInUse = ({
           Revisa que la unidad este en buen estado.
         </Typography>
       </ModalConfirm> */}
-      <Button
-        onClick={(e) => {
-          e.preventDefault()
-          modal.onOpen()
-        }}
-      >
-        Cambiar
-      </Button>
+
       <Modal {...modal}>
         <ChangeItem item={item} />
       </Modal>

@@ -19,6 +19,7 @@ import rentTime from '@/lib/rentTime'
 import { addMinutes } from 'date-fns'
 import asDate from '@/lib/asDate'
 import PreviewImage from './PreviewImage'
+import ItemDetails from './ModalItemDetails'
 
 const CompanyPayments = () => {
   const { payments } = useUserCompaniesContext()
@@ -89,6 +90,19 @@ const Payment = ({ payment }: { payment: Payment }) => {
               />
             ))}
           </Grid2>
+          {!!payment?.changes?.length && (
+            <Box>
+              <Typography className="font-bold mt-4 ">Cambios</Typography>
+              {payment?.changes?.map((change, i) => (
+                <Box key={i}>
+                  <ItemDetails itemId={change.oldItemId} />
+                  {' -> '}
+                  <ItemDetails itemId={change.newItemId} />{' '}
+                  <CurrencySpan quantity={change.amount} />
+                </Box>
+              ))}
+            </Box>
+          )}
           <Typography className="font-bold mt-4 ">
             Información de cliente
           </Typography>
@@ -149,6 +163,9 @@ const Payment = ({ payment }: { payment: Payment }) => {
       </Typography>
 
       <Typography>Articulos : {payment.items.length}</Typography>
+      {!!payment?.changes?.length && (
+        <Typography>Cambios : {payment?.changes?.length}</Typography>
+      )}
       <Typography>
         Por entregar : {payment.items.filter((i) => i.inUse ?? true).length}
       </Typography>

@@ -25,6 +25,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility'
 import InfoIcon from '@mui/icons-material/Info'
 import SettingsIcon from '@mui/icons-material/Settings'
 
+import LoopIcon from '@mui/icons-material/Loop'
 const icons = {
   add: <AddIcon />,
   edit: <EditIcon />,
@@ -48,7 +49,8 @@ const icons = {
   cashbox: <PointOfSaleIcon />,
   substr: <RemoveIcon />,
   eye: <VisibilityIcon />,
-  info: <InfoIcon />
+  info: <InfoIcon />,
+  switch: <LoopIcon />
 } as const
 export type IconName = keyof typeof icons
 const AppIcon = ({ icon }: { icon: IconName }) => {

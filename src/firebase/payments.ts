@@ -72,6 +72,7 @@ export const changeItem = async (
   }
   return await updatePayment(paymentId, {
     items: [...removedItem, newItem],
+    // @ts-ignore FIXME: Typescript error with arrayUnion
     changes: arrayUnion(newChange)
   })
 }

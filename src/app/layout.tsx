@@ -1,5 +1,5 @@
-import BottomNavigation from '@/components/BottomNavigation'
 import './globals.css'
+import BottomNavigation from '@/components/BottomNavigation'
 import Navigation from '@/components/Navigation'
 import { AuthContextProvider } from '@/context/authContext'
 import { UserCompaniesProvider } from '@/context/userCompaniesContext'

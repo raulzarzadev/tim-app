@@ -14,7 +14,7 @@ export type Payment = {
   payment: PaymentData
   isCancelled?: boolean
   client?: Partial<Client>
-  changes: PaymentChange[] | FieldValue
+  changes: PaymentChange[]
 } & BaseType
 
 export type CreatePayment = Pick<
