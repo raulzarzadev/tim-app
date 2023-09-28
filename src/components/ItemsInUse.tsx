@@ -5,35 +5,19 @@ import { ArticleType } from '@/types/article'
 import { Box, Button, Container, Typography } from '@mui/material'
 import rentTime from '@/lib/rentTime'
 import { fromNow } from '@/lib/utils-date'
-import { addMinutes } from 'date-fns'
+import { addMinutes, isAfter } from 'date-fns'
 import asDate from '@/lib/asDate'
 import { PriceType } from './PricesForm'
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2'
 import Modal from './Modal'
 import useModal from '@/hooks/useModal'
-import { finishItemRent } from '@/firebase/payments'
+import { finishItemRent, getPayment } from '@/firebase/payments'
 import { Payment } from '@/types/payment'
 import ModalConfirm from './ModalConfirm'
-import ModalArticles from './ModalArticles'
 import ChangeItem from './ChangeItem'
 
 const ItemsInUse = () => {
   const { itemsInUse, items } = useUserCompaniesContext()
-  const rentFinishAt = (
-    qty: number,
-    unit: PriceType['unit'],
-    startAt?: Date | Timestamp
-  ) => {
-    if (!startAt) return null
-    const rentMinutes = rentTime(qty, unit)
-    return addMinutes(asDate(startAt) as Date, rentMinutes)
-  }
-  const fullItems: Partial<ItemInUse>[] = itemsInUse.map((item) => ({
-    ...items.find(({ id }) => id === item.itemId),
-    ...item,
-    rentFinishAt: rentFinishAt(item.qty || 0, item.unit, item.startAt),
-    rentTime: rentTime(item.qty, item.unit)
-  }))
 
   const sortByFinishRent = (a: Partial<ItemInUse>, b: Partial<ItemInUse>) => {
     if (!a.rentFinishAt && !b.rentFinishAt) return 0
@@ -52,14 +36,16 @@ const ItemsInUse = () => {
         <Grid2 xs={3} className="font-bold truncate">
           Categoria
         </Grid2>
-        <Grid2 xs={3} className="font-bold truncate">
+        <Grid2 xs={2} className="font-bold truncate">
           Tiempo
         </Grid2>
-        <Grid2 xs={4} className="font-bold truncate">
+        <Grid2 xs={3} className="font-bold truncate">
           Entrega
         </Grid2>
-
-        {fullItems.sort(sortByFinishRent).map((item, i) => (
+        <Grid2 xs={2} className="font-bold truncate">
+          Status
+        </Grid2>
+        {itemsInUse.sort(sortByFinishRent).map((item, i) => (
           <ItemRow key={i} item={item} />
         ))}
       </Grid2>
@@ -79,8 +65,11 @@ export type ItemInUse = Partial<ArticleType> & {
 }
 const ItemRow = ({ item }: { item: Partial<ItemInUse> }) => {
   const modal = useModal({
-    title: `Detalles de articulo: ${item.serialNumber || item.name}`
+    title: `Detalles de articulo: ${item.category} ${
+      item.serialNumber || item.name
+    }`
   })
+  const onTime = item.rentFinishAt && isAfter(item.rentFinishAt, new Date())
   return (
     <>
       <Modal {...modal}>
@@ -97,10 +86,17 @@ const ItemRow = ({ item }: { item: Partial<ItemInUse> }) => {
       >
         <Grid2 xs={2}>{item.serialNumber || item.name}</Grid2>
         <Grid2 xs={3}>{item.category}</Grid2>
-        <Grid2 xs={3}>
+        <Grid2 xs={2}>
           {item.qty}x {item.unit}
         </Grid2>
-        <Grid2 xs={4}>{fromNow(item.rentFinishAt)}</Grid2>
+        <Grid2 xs={3}>{fromNow(item.rentFinishAt)}</Grid2>
+        <Grid2 xs={2}>
+          {onTime ? (
+            <div className="bg-green-400 rounded-md p-2">En tiempo</div>
+          ) : (
+            <div className="bg-red-400 rounded-md p-2">Retraso</div>
+          )}
+        </Grid2>
       </Grid2>
     </>
   )
@@ -113,21 +109,57 @@ const ItemInUse = ({
   item: Partial<ItemInUse>
   onCloseParent?: () => void
 }) => {
+  const { itemsInUse } = useUserCompaniesContext()
   const handleFinishRent = async (item: Partial<ItemInUse>) => {
     onCloseParent?.()
     return await finishItemRent(item.paymentId, item?.id || '')
   }
   const modal = useModal({ title: `Cambiar articulo` })
+  const moreItemsInUse = itemsInUse.filter(
+    (i) => i.paymentId === item.paymentId && i.id !== item.itemId
+  )
+  const onTime = item.rentFinishAt && isAfter(item.rentFinishAt, new Date())
+
   return (
     <Box className="grid gap-6">
-      <ModalConfirm
+      {!!moreItemsInUse?.length && (
+        <Box>
+          <Typography>Otras unidades del mismo cliente...</Typography>
+          <Box>
+            {moreItemsInUse.map((item, i) => (
+              <ItemRow key={i} item={item} />
+            ))}
+          </Box>
+        </Box>
+      )}
+      {!onTime && (
+        <Typography className="text-center my-4">
+          Unidad fuera de tiempo.
+        </Typography>
+      )}
+      <Typography className="text-center my-4">
+        Revisa que la unidad este en buen estado.
+      </Typography>
+      <Button
+        onClick={(e) => {
+          e.preventDefault()
+          handleFinishRent(item)
+        }}
+        variant="outlined"
+      >
+        {`Recibir ${item.category} ${item.serialNumber || item.name}`}
+      </Button>
+      {/* <ModalConfirm
         label="Recibir unidad"
         handleConfirm={() => handleFinishRent(item)}
+        acceptLabel={`Recibir ${item.category} ${
+          item.serialNumber || item.name
+        }`}
       >
-        <Typography>Otras unidades del mismo cliente...</Typography>
-        <Typography>Revisa que la unidad este en buen estado.</Typography>
-      </ModalConfirm>
-
+        <Typography className="text-center my-4">
+          Revisa que la unidad este en buen estado.
+        </Typography>
+      </ModalConfirm> */}
       <Button
         onClick={(e) => {
           e.preventDefault()

@@ -10,6 +10,11 @@ import { Payment } from '@/types/payment'
 import { ArticleType } from '@/types/article'
 
 import { ItemInUse } from '@/components/ItemsInUse'
+import { PriceType } from '@/components/PricesForm'
+import { Timestamp } from 'firebase/firestore'
+import rentTime from '@/lib/rentTime'
+import { addMinutes } from 'date-fns'
+import asDate from '@/lib/asDate'
 
 export type UserCompaniesContextType = {
   companies: CompanyType[]
@@ -20,6 +25,7 @@ export type UserCompaniesContextType = {
   setUserCompanies: () => void
   itemsInUse: Partial<ItemInUse>[]
   items: ArticleType[]
+  payments?: Payment[]
 }
 
 export const UserCompaniesContext = createContext<UserCompaniesContextType>({
@@ -30,7 +36,8 @@ export const UserCompaniesContext = createContext<UserCompaniesContextType>({
   currentCompany: undefined,
   setUserCompanies: () => {},
   itemsInUse: [],
-  items: []
+  items: [],
+  payments: []
 })
 
 export function UserCompaniesProvider({
@@ -40,6 +47,7 @@ export function UserCompaniesProvider({
 }) {
   const [companies, setCompanies] = useState<CompanyType[]>([])
   const [selected, setSelected] = useState<CompanyType['id']>('')
+
   useEffect(() => {
     setUserCompanies()
   }, [])
@@ -60,14 +68,19 @@ export function UserCompaniesProvider({
     listenCompanyActivePayments(currentCompany?.id || '', setPayments)
   }, [currentCompany?.id])
 
+  const items = currentCompany?.articles || []
+
   const itemsInUse = (): Partial<ItemInUse>[] => {
     const itemsInUseFromPayments = payments
       .map((payment) => {
-        const items = payment.items.filter((item) => item.inUse ?? true)
-        return items.map((item) => ({
+        const inUseItems = payment.items.filter((item) => item.inUse ?? true)
+        return inUseItems.map((item) => ({
+          ...items?.find(({ id }) => id === item.itemId),
           ...item,
           startAt: payment.startAt,
-          paymentId: payment.id
+          paymentId: payment.id,
+          rentFinishAt: rentFinishAt(item.qty || 0, item.unit, payment.startAt),
+          rentTime: rentTime(item.qty, item.unit)
         }))
       })
       .flat()
@@ -84,12 +97,23 @@ export function UserCompaniesProvider({
         currentCompany,
         setUserCompanies,
         itemsInUse: itemsInUse(),
-        items: currentCompany?.articles || []
+        items,
+        payments
       }}
     >
       {children}
     </UserCompaniesContext.Provider>
   )
+}
+
+const rentFinishAt = (
+  qty: number,
+  unit: PriceType['unit'],
+  startAt?: Date | Timestamp
+) => {
+  if (!startAt) return null
+  const rentMinutes = rentTime(qty, unit)
+  return addMinutes(asDate(startAt) as Date, rentMinutes)
 }
 
 export function useUserCompaniesContext() {

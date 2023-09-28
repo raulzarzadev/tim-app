@@ -11,14 +11,16 @@ import AppIcon from './AppIcon'
 
 const ModalPayment = ({
   amount,
-  disabled
+  disabled,
+  onCloseParent
 }: {
   amount: number
   disabled?: boolean
+  onCloseParent?: () => void
 }) => {
   const USD_PRICE = 16
   const modalPayment = useModal({ title: 'Pagar ' })
-  const { handlePay, items, setItems } = useContext(CashboxContext)
+  const { handlePay, items, setItems, setClient } = useContext(CashboxContext)
   const { currentCompany } = useUserCompaniesContext()
   return (
     <>
@@ -54,6 +56,8 @@ const ModalPayment = ({
             })
             modalPayment.onClose()
             setItems?.([])
+            setClient?.({})
+            onCloseParent?.()
             return
           }}
         />

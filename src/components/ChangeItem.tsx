@@ -11,7 +11,8 @@ import { calculateTotal } from './Checkout2'
 import CurrencySpan from './CurrencySpan'
 import asNumber from '@/lib/asNumber'
 import { PriceType } from './PricesForm'
-import { updatePayment } from '@/firebase/payments'
+import { changeItem, updatePayment } from '@/firebase/payments'
+import ButtonLoadingAsync from './ButtonLoadingAsync'
 
 const ChangeItem = ({ item }: { item: Partial<ItemInUse> }) => {
   const { itemsInUse, currentCompany } = useUserCompaniesContext()
@@ -69,15 +70,17 @@ const ChangeItem = ({ item }: { item: Partial<ItemInUse> }) => {
 
   const handleChange = () => {
     const { amount: amountDiff, newPrice } = diff
-    console.log('cambiar item', {
-      paymentId: item.paymentId,
-      newChange: {
-        amount: amountDiff,
-        newPrice,
-        newItemID: _selected,
-        oldItemId: item.id
-      }
+
+    if (!item.paymentId) return console.error('no payment id')
+
+    return changeItem(item.paymentId, {
+      amount: amountDiff,
+      newPrice: newPrice || null,
+      newItemId: _selected || '',
+      oldItemId: item.id || ''
     })
+      .then((res) => console.log(res))
+      .catch(console.error)
   }
 
   return (
@@ -125,16 +128,13 @@ const ChangeItem = ({ item }: { item: Partial<ItemInUse> }) => {
             <CurrencySpan quantity={diff?.amount} />
           </Typography>
           <div className="flex justify-center mt-8">
-            <Button
-              className=""
-              variant="outlined"
-              onClick={(e) => {
-                e.preventDefault()
-                handleChange()
+            <ButtonLoadingAsync
+              onClick={() => {
+                return handleChange()
               }}
-            >
-              Cambiar
-            </Button>
+              label="Cambiar"
+              loadingLabel="Cambiando..."
+            ></ButtonLoadingAsync>
           </div>
         </>
       )}

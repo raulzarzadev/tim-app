@@ -104,6 +104,7 @@ const Checkout = ({
           <ModalPayment
             amount={total}
             disabled={!client?.phone || !client?.name}
+            onCloseParent={() => modal.onClose()}
           />
         </Box>
       </Modal>

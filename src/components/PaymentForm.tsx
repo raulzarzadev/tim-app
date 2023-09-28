@@ -13,7 +13,7 @@ import ModalConfirm from './ModalConfirm'
 import { useForm } from 'react-hook-form'
 import { paymentMethods } from '@/CONSTS/paymentMethods'
 import CurrencySpan from './CurrencySpan'
-import { Payment, PaymentData } from '@/types/payment'
+import { PaymentData } from '@/types/payment'
 
 const PaymentForm = ({
   amount = 0,

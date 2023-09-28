@@ -1,9 +1,9 @@
-import { CreatePayment, Payment } from '@/types/payment'
+import { CreatePayment, Payment, PaymentChange } from '@/types/payment'
 import { storage } from './auth'
 import { FirebaseCRUD } from './firebase.CRUD'
 import { db } from './main'
 import { BaseType } from '@/types/base'
-import { orderBy, where } from 'firebase/firestore'
+import { arrayUnion, where } from 'firebase/firestore'
 import { ArticleType } from '@/types/article'
 
 /*
@@ -54,4 +54,24 @@ export const finishItemRent = async (
   })
 }
 
-//export const changeItem = (paymentId, oldItem, newItem) => {}
+export const changeItem = async (
+  paymentId: ArticleType['id'],
+  newChange: PaymentChange
+) => {
+  const payment: Payment = await itemCRUD.getItem(paymentId)
+  const items = payment?.items
+
+  const removedItem = items.filter(
+    (item) => item.itemId !== newChange.oldItemId
+  )
+  const newItem = {
+    itemId: newChange.newItemId,
+    inUse: true,
+    qty: newChange.newPrice?.quantity,
+    unit: newChange.newPrice?.unit
+  }
+  return await updatePayment(paymentId, {
+    items: [...removedItem, newItem],
+    changes: arrayUnion(newChange)
+  })
+}

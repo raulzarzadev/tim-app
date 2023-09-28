@@ -21,12 +21,7 @@ import asDate from '@/lib/asDate'
 import PreviewImage from './PreviewImage'
 
 const CompanyPayments = () => {
-  const { currentCompany } = useUserCompaniesContext()
-  const [payments, setPayments] = useState<Payment[]>([])
-
-  useEffect(() => {
-    listenCompanyActivePayments(currentCompany?.id || '', setPayments)
-  }, [currentCompany?.id])
+  const { payments } = useUserCompaniesContext()
 
   const sortByDate = (a: Payment, b: Payment) => {
     return (
@@ -35,7 +30,7 @@ const CompanyPayments = () => {
   }
   return (
     <div>
-      {payments.sort(sortByDate).map((payment) => (
+      {payments?.sort(sortByDate).map((payment) => (
         <Payment key={payment.id} payment={payment} />
       ))}
     </div>

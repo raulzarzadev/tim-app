@@ -9,12 +9,14 @@ const ModalConfirm = ({
   children,
   disabled,
   label = 'Guardar',
-  color = 'primary'
+  color = 'primary',
+  acceptLabel = 'Aceptar'
 }: {
   handleConfirm: () => void | Promise<any>
   children?: ReactNode
   disabled?: boolean
   label?: string
+  acceptLabel?: string
   color?: ButtonProps['color']
 }) => {
   const modal = useModal()
@@ -46,7 +48,7 @@ const ModalConfirm = ({
               setDone(true)
             }}
             loading={loading}
-            label={done ? 'Hecho' : 'Aceptar'}
+            label={done ? 'Hecho' : acceptLabel}
           />
         </Box>
       </Modal>
