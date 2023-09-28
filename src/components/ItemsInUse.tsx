@@ -91,11 +91,13 @@ const ItemRow = ({ item }: { item: Partial<ItemInUse> }) => {
           {item.qty}x {item.unit}
         </Grid2>
         <Grid2 xs={3}>{fromNow(item.rentFinishAt)}</Grid2>
-        <Grid2 xs={2}>
+        <Grid2 xs={2} className="">
           {onTime ? (
-            <div className="bg-green-400 rounded-md p-2">En tiempo</div>
+            <div className="bg-green-400 rounded-md p-2 truncate">
+              En tiempo
+            </div>
           ) : (
-            <div className="bg-red-400 rounded-md p-2">Retraso</div>
+            <div className="bg-red-400 rounded-md p-2 truncate">Retraso</div>
           )}
         </Grid2>
       </Grid2>
@@ -123,16 +125,6 @@ const ItemInUse = ({
 
   return (
     <Box className="grid gap-6">
-      <Button
-        onClick={(e) => {
-          e.preventDefault()
-          modal.onOpen()
-        }}
-        variant="outlined"
-        color="info"
-      >
-        Cambiar <AppIcon icon="switch" />
-      </Button>
       {!!moreItemsInUse?.length && (
         <Box>
           <Typography>Otras unidades del mismo cliente...</Typography>
@@ -151,27 +143,30 @@ const ItemInUse = ({
       <Typography className="text-center my-4">
         Revisa que la unidad este en buen estado.
       </Typography>
-      <Button
-        onClick={(e) => {
-          e.preventDefault()
-          handleFinishRent(item)
-        }}
-        variant="contained"
-        color="success"
-      >
-        {`Recibir ${item.category} ${item.serialNumber || item.name}`}
-      </Button>
-      {/* <ModalConfirm
-        label="Recibir unidad"
-        handleConfirm={() => handleFinishRent(item)}
-        acceptLabel={`Recibir ${item.category} ${
-          item.serialNumber || item.name
-        }`}
-      >
-        <Typography className="text-center my-4">
-          Revisa que la unidad este en buen estado.
-        </Typography>
-      </ModalConfirm> */}
+      <Box className="flex w-full gap-4">
+        <Button
+          fullWidth
+          onClick={(e) => {
+            e.preventDefault()
+            modal.onOpen()
+          }}
+          variant="outlined"
+          color="info"
+        >
+          Cambiar <AppIcon icon="switch" />
+        </Button>
+        <Button
+          fullWidth
+          onClick={(e) => {
+            e.preventDefault()
+            handleFinishRent(item)
+          }}
+          variant="outlined"
+          color="success"
+        >
+          {`Recibir ${item.category} ${item.serialNumber || item.name}`}
+        </Button>
+      </Box>
 
       <Modal {...modal}>
         <ChangeItem item={item} />
