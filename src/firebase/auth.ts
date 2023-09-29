@@ -33,7 +33,14 @@ export async function authStateChanged(cb: CallableFunction) {
   onAuthStateChanged(auth, async (user) => {
     if (user?.email) {
       const dbUser = await getUser(user.uid)
-      cb(dbUser)
+      //* create a default new user when is the first login
+      const newUser = {
+        name: user.displayName || '',
+        email: user.email || '',
+        rol: 'CLIENT',
+        image: user.photoURL || ''
+      }
+      cb(dbUser || newUser)
     } else {
       cb(null)
     }
@@ -49,9 +56,11 @@ export async function googleLogin() {
       const token = credential?.accessToken
       // The signed-in user info.
       const user = result.user
+
       if (user) {
         const dbUser = await findUserByEmail({ email: user.email || '' })
         if (dbUser) return dbUser
+
         const newUser = await setUser(user.uid, {
           name: user.displayName || '',
           email: user.email || '',
