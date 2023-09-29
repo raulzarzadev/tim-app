@@ -16,7 +16,7 @@ interface IFormInput {
 const CompanyForm = ({ company }: { company?: CompanyType }) => {
   const router = useRouter()
   const { user } = useAuthContext()
-
+  const { resetCompanies } = useUserCompaniesContext()
   const { handleSubmit, register, watch } = useForm({
     defaultValues: company || {
       name: ''
@@ -51,10 +51,12 @@ const CompanyForm = ({ company }: { company?: CompanyType }) => {
         })
           .then((res) => {
             console.log(res)
+            router.push('/dashboard')
           })
           .catch((err) => console.error(err))
       }
       setDone(true)
+      resetCompanies?.()
     } catch (error) {
       console.error(error)
     }
@@ -102,7 +104,7 @@ const CompanyForm = ({ company }: { company?: CompanyType }) => {
           Atras
         </Button>
         <ModalConfirm handleConfirm={handleSubmit(onSubmit)} disabled={done}>
-          <Typography>Se creara la siguiente compañia: </Typography>
+          <Typography>Se creara la siguiente empresa: </Typography>
           <Typography>{formValues.name}</Typography>
         </ModalConfirm>
       </div>
