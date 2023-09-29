@@ -70,6 +70,7 @@ export async function googleLogin() {
       // The AuthCredential type that was used.
       const credential = GoogleAuthProvider.credentialFromError(error)
       console.error({ error })
+      throw new Error('error in google login')
       return null
     })
 }

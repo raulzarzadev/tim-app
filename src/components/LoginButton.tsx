@@ -8,8 +8,9 @@ const LoginButton = () => {
       aria-label="sign-in-button"
       onClick={async (e) => {
         const res = await googleLogin()
+        console.log({ res })
       }}
-      variant="contained"
+      variant="text"
     >
       Ingresar
     </Button>

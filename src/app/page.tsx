@@ -26,7 +26,7 @@ export default function Home() {
         <p>Autos</p>
         <p>Lavadoras</p>
         <p>y mas...</p>
-        {!user && (
+        {user === null && (
           <div className="my-4">
             <LoginButton />
           </div>
