@@ -19,6 +19,7 @@ import LoginButton from './LoginButton'
 import { AuthContext, useAuthContext } from '@/context/authContext'
 import { logout } from '@/firebase/auth'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext'
+import { UserType } from '@/types/user'
 
 const pages = [
   {
@@ -152,7 +153,7 @@ function ResponsiveAppBar() {
             <Skeleton variant="circular" width={50} height={50} />
           )}
           {user === null && <LoginButton />}
-          {user && <UserNavMenu />}
+          {user && <UserNavMenu user={user} />}
         </Toolbar>
       </Container>
     </AppBar>
@@ -178,7 +179,7 @@ const settings: { label: string; route?: string; action?: () => void }[] = [
   }
 ]
 
-const UserNavMenu = () => {
+const UserNavMenu = ({ user }: { user: UserType }) => {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   )
@@ -190,9 +191,9 @@ const UserNavMenu = () => {
   }
   return (
     <Box sx={{ flexGrow: 0 }}>
-      <Tooltip title="Open settings">
+      <Tooltip title={user.email}>
         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-          <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+          <Avatar alt={user.email} src={user.image} />
         </IconButton>
       </Tooltip>
       <Menu
