@@ -10,7 +10,10 @@ const LoginButton = () => {
         const res = await googleLogin()
         console.log({ res })
       }}
-      variant="text"
+      variant="contained"
+      style={{
+        backgroundColor: '#4285F4'
+      }}
     >
       Ingresar
     </Button>
