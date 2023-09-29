@@ -4,7 +4,6 @@ import { FirebaseCRUD } from './firebase.CRUD'
 import { db } from './main'
 import { BaseType } from '@/types/base'
 import { CompanyType } from '@/types/company'
-import { getAuth } from 'firebase/auth'
 
 /*
  * You should be able to copy all this file and just replace
