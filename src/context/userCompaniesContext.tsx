@@ -23,6 +23,7 @@ export type UserCompaniesContextType = {
   setSelected: (id: CompanyType['id']) => void
   currentCompany: CompanyType | undefined
   setUserCompanies: () => void
+  resetCompanies?: () => void
   itemsInUse: Partial<ItemInUse>[]
   items: ArticleType[]
   payments?: Payment[]
@@ -35,6 +36,7 @@ export const UserCompaniesContext = createContext<UserCompaniesContextType>({
   setSelected: (id: CompanyType['id']) => {},
   currentCompany: undefined,
   setUserCompanies: () => {},
+  resetCompanies: () => {},
   itemsInUse: [],
   items: [],
   payments: []
@@ -48,16 +50,25 @@ export function UserCompaniesProvider({
   const [companies, setCompanies] = useState<CompanyType[]>([])
   const [selected, setSelected] = useState<CompanyType['id']>('')
 
+  const { user } = useAuthContext()
   useEffect(() => {
     setUserCompanies()
-  }, [])
+    if (user === null) {
+      setCompanies([])
+      setSelected('')
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user])
   const setUserCompanies = () => {
-    getUserCompanies()
+    getUserCompanies({ userId: user?.id || '' })
       .then((res) => {
         setCompanies(res || [])
         setSelected(res?.[0]?.id)
       })
       .catch(console.error)
+  }
+  const resetCompanies = () => {
+    setUserCompanies()
   }
 
   const currentCompany = companies.find((company) => company?.id === selected)
@@ -98,7 +109,8 @@ export function UserCompaniesProvider({
         setUserCompanies,
         itemsInUse: itemsInUse(),
         items,
-        payments
+        payments,
+        resetCompanies
       }}
     >
       {children}

@@ -18,12 +18,15 @@ const UserCard = () => {
         <Typography component={'p'} className="text-center w-full text-xl my-4">
           Comienza a rentar
         </Typography>
-        <div className="my-4 w-full flex justify-center">
-          <LoginButton />
-        </div>
       </div>
     )
-
+  if (user === null) {
+    return (
+      <div className="my-4 w-full flex justify-center">
+        <LoginButton />
+      </div>
+    )
+  }
   const handleSetUser = async (user: Partial<UserType>) => {
     if (!user.id) return console.error(' No user id')
     return await updateUser(user?.id, user)

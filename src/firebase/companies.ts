@@ -1,8 +1,10 @@
+import { where } from 'firebase/firestore'
 import { storage } from './auth'
 import { FirebaseCRUD } from './firebase.CRUD'
 import { db } from './main'
 import { BaseType } from '@/types/base'
 import { CompanyType } from '@/types/company'
+import { getAuth } from 'firebase/auth'
 
 /*
  * You should be able to copy all this file and just replace
@@ -15,7 +17,7 @@ import { CompanyType } from '@/types/company'
 const COLLECTION_NAME = 'companies'
 type ItemType = CompanyType
 type NewItem = Partial<CompanyType>
-type CreateCompany_DTO = Pick<CompanyType, 'name' | 'userId'>
+type CreateCompany_DTO = Pick<CompanyType, 'name' | 'userId' | 'staff'>
 export const itemCRUD = new FirebaseCRUD(COLLECTION_NAME, db, storage)
 
 export const setCompany = async (itemId: ItemType['id'], newItem: NewItem) =>
@@ -38,6 +40,6 @@ export const listenCompany = async (
   cb: CallableFunction
 ) => await itemCRUD.listenItem(itemId, cb)
 
-export const getUserCompanies = async () => {
-  return await itemCRUD.getUserItems([])
+export const getUserCompanies = async ({ userId }: { userId: string }) => {
+  return await itemCRUD.getUserItems([where('userId', '==', userId)])
 }

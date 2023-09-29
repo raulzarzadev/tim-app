@@ -2,6 +2,7 @@
 
 import { authStateChanged } from '@/firebase/auth'
 import { UserType } from '@/types/user'
+import { useRouter } from 'next/navigation'
 import {
   ReactNode,
   SetStateAction,
@@ -24,10 +25,15 @@ export type AuthContextType = {
 
 export function AuthContextProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<UserType | null | undefined>(undefined)
+  const router = useRouter()
   useEffect(() => {
     authStateChanged((user: SetStateAction<UserType | null | undefined>) => {
+      if (user === null) {
+        router.replace('/')
+      }
       setUser(user)
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const value = useMemo(() => ({ user, setUser }), [user, setUser])

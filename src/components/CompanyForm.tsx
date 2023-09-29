@@ -16,7 +16,7 @@ interface IFormInput {
 const CompanyForm = ({ company }: { company?: CompanyType }) => {
   const router = useRouter()
   const { user } = useAuthContext()
-  console.log({ company })
+
   const { handleSubmit, register, watch } = useForm({
     defaultValues: company || {
       name: ''
@@ -25,6 +25,7 @@ const CompanyForm = ({ company }: { company?: CompanyType }) => {
 
   const formValues = watch()
   const [done, setDone] = useState(false)
+
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     try {
       if (company?.id) {
@@ -36,7 +37,17 @@ const CompanyForm = ({ company }: { company?: CompanyType }) => {
       } else {
         await createCompany({
           name: data?.name,
-          userId: user?.id || ''
+          userId: user?.id || '',
+          staff: [
+            {
+              id: user?.id || '',
+              permissions: {
+                ADMIN: true
+              },
+              name: user?.name || '',
+              email: user?.email || ''
+            }
+          ]
         })
           .then((res) => {
             console.log(res)

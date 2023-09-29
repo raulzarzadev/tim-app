@@ -252,11 +252,6 @@ export class FirebaseCRUD {
    * @param filters: where(itemField,'==','value')
    */
   async getUserItems(filters: any[]) {
-    const userId = getAuth().currentUser?.uid
-    this.validateFilters(
-      [...filters, where('userId', '==', userId)],
-      this.collectionName
-    )
     const q: Query = query(collection(this.db, this.collectionName), ...filters)
 
     const querySnapshot = await getDocs(q)
