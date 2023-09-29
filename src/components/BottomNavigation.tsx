@@ -15,6 +15,8 @@ export default function BottomNavigation() {
 
   const ref = React.useRef<HTMLDivElement>(null)
   const { companies } = useUserCompaniesContext()
+  const { user } = useAuthContext()
+
   const isOwner = companies.length > 0
   const pages: {
     href: string
@@ -49,11 +51,12 @@ export default function BottomNavigation() {
   ]
 
   const [value, setValue] = React.useState(0)
-  const { user } = useAuthContext()
   React.useEffect(() => {
     setValue(pages?.findIndex((p) => p.href === pathname))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname, user])
+
+  if (!user) return <></>
 
   return (
     <Box sx={{ pb: 7 }} ref={ref}>
