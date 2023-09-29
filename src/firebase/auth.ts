@@ -58,6 +58,7 @@ export async function googleLogin() {
           rol: 'CLIENT',
           image: user.photoURL || ''
         })
+
         return newUser
       }
     })
