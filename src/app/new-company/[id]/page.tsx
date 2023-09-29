@@ -12,7 +12,7 @@ const Page = () => {
   const router = useRouter()
   const handleDeleteCompany = async () => {
     await deleteCompany(company?.id || '')
-    resetCompanies()
+    resetCompanies?.()
     router.back()
   }
   if (!company) return <div>Cargando...</div>
