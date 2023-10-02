@@ -13,7 +13,7 @@ import Select from './Select'
 import CurrencySpan from './CurrencySpan'
 import { CashboxContext } from './CompanyCashbox'
 import { calculateTotal } from '@/lib/calculateTotalItem'
-import CheckoutItemRow from './CheckoutItemRow'
+import CheckoutItemRow from './CheckoutItemRow2'
 
 const CheckoutItemsList = ({
   items
@@ -30,10 +30,9 @@ const CheckoutItemsList = ({
       <Grid2 container spacing={1} className=" font-bold ">
         <Grid2 xs={2}>Categoria</Grid2>
         <Grid2 xs={2}>No.Serie</Grid2>
-        <Grid2 className="text-center" xs={3}>
-          Cant
+        <Grid2 className="text-center" xs={6}>
+          Tiempo
         </Grid2>
-        <Grid2 xs={3}>Tiempo</Grid2>
         <Grid2 xs={2}>Precio</Grid2>
       </Grid2>
       {items
