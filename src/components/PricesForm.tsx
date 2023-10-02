@@ -52,10 +52,10 @@ const PricesForm = ({
           label="Unidad"
           onSelect={(value) => handleChange('unit', value)}
           options={[
-            {
-              label: 'Minutos',
-              value: 'minutes'
-            },
+            // {
+            //   label: 'Minutos',
+            //   value: 'minutes'
+            // },
             {
               label: 'Hora',
               value: 'hour'
