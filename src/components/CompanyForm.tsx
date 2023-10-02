@@ -1,6 +1,6 @@
 'use client'
 import { useForm, SubmitHandler } from 'react-hook-form'
-import { Button, Input, TextField, Typography } from '@mui/material'
+import { Button, TextField, Typography } from '@mui/material'
 import ModalConfirm from './ModalConfirm'
 import { createCompany, updateCompany } from '@/firebase/companies'
 import { useAuthContext } from '@/context/authContext'

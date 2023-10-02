@@ -8,12 +8,14 @@ import { useUserCompaniesContext } from '@/context/userCompaniesContext'
 import { StaffType } from '@/types/staff'
 import StaffPermissionsForm from './StaffPermissionsForm'
 import { addStaff, removeStaff, updateStaff } from '@/firebase/staff'
+import { useAuthContext } from '@/context/authContext'
 
 interface IFormInput extends StaffType {}
 
 const StaffForm = ({ staff }: { staff?: StaffType }) => {
   const router = useRouter()
   const { currentCompany, setUserCompanies } = useUserCompaniesContext()
+  const { user } = useAuthContext()
   const { handleSubmit, register, watch, setValue } = useForm({
     defaultValues: staff || {
       name: ''
@@ -70,6 +72,7 @@ const StaffForm = ({ staff }: { staff?: StaffType }) => {
       <StaffPermissionsForm
         permissions={staff?.permissions}
         setPermissions={(permissions) => setValue('permissions', permissions)}
+        isOwner={currentCompany?.userId === user?.id}
       />
 
       <div className="flex w-full justify-evenly my-4">

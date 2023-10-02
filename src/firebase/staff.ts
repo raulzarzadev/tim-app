@@ -1,12 +1,13 @@
 import { arrayRemove, arrayUnion } from 'firebase/firestore'
 import { getCompany, updateCompany } from './companies'
-import { v4 as uidGenerator } from 'uuid'
 import { StaffType } from '@/types/staff'
 
 export const addStaff = async (companyId: string, staff: StaffType) => {
   return await updateCompany(companyId, {
     // @ts-ignore FIXME: Type 'StaffType' is not assignable to type 'StaffType'.
-    staff: arrayUnion({ ...staff, id: uidGenerator() })
+    staff: arrayUnion({ ...staff }),
+    // @ts-ignore FIXME: Type 'StaffType' is not assignable to type 'StaffType'.
+    staffMails: arrayUnion(staff?.email)
   })
 }
 
@@ -17,8 +18,9 @@ export const removeStaff = async (companyId: string, staffId: string) => {
   )
   return await updateCompany(companyId, {
     // @ts-ignore FIXME: Type 'StaffType' is not assignable to type 'StaffType'.
-
-    staff: arrayRemove(staff)
+    staff: arrayRemove(staff),
+    // @ts-ignore FIXME: Type 'StaffType' is not assignable to type 'StaffType'.
+    staffMails: arrayRemove(staff?.email)
   })
 }
 

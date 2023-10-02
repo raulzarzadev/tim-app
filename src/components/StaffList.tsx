@@ -7,6 +7,7 @@ import AppIcon from './AppIcon'
 import useModal from '@/hooks/useModal'
 import Modal from './Modal'
 import StaffForm from './StaffForm'
+import { useAuthContext } from '@/context/authContext'
 
 const StaffList = () => {
   const { currentCompany } = useUserCompaniesContext()
