@@ -82,19 +82,12 @@ export const CheckoutItemRow = ({ item }: { item: Partial<ArticleType> }) => {
             </Box>
             <Box className="grid gap-2 grid-flow-col">
               {item.prices?.map((p, i) => (
-                <Box
-                  component={Button}
-                  onClick={() => handleSelectPrice(p)}
+                <PriceButton
+                  p={p}
                   key={i}
-                  className={`${
-                    isSelectedPrice(p) ? 'bg-blue-300' : ''
-                  } shadow-md rounded-md p-2 text-center flex flex-col justify-center`}
-                >
-                  <p>
-                    {p?.quantity} {p?.unit}
-                  </p>
-                  <p>${asNumber(p.price).toFixed(2)}</p>
-                </Box>
+                  isSelected={isSelectedPrice(p)}
+                  onClick={() => handleSelectPrice(p)}
+                />
               ))}
             </Box>
             <Typography variant="body2" className="text-center">
@@ -144,6 +137,34 @@ export const CheckoutItemRow = ({ item }: { item: Partial<ArticleType> }) => {
         <CurrencySpan quantity={itemTotal} />
       </Grid2>
     </Grid2>
+  )
+}
+
+const PriceButton = ({
+  isSelected,
+  onClick,
+  p
+}: {
+  isSelected: boolean
+  onClick: () => void
+  p?: PriceType
+}) => {
+  return (
+    <Box
+      component={Button}
+      onClick={(e) => {
+        e.preventDefault()
+        onClick()
+      }}
+      className={`${
+        isSelected ? 'bg-blue-300' : ''
+      } shadow-md rounded-md p-2 text-center flex flex-col justify-center`}
+    >
+      <p>
+        {p?.quantity} {p?.unit}
+      </p>
+      <p>${asNumber(p?.price).toFixed(2)}</p>
+    </Box>
   )
 }
 

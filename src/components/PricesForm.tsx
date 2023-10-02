@@ -4,11 +4,12 @@ import AppIcon from './AppIcon'
 import { useState } from 'react'
 import PricesList from './PricesList'
 import ButtonNumber from './NumberInput'
+import { TimeUnits } from '@/types/TimeUnits'
 
 export type PriceType = {
   quantity: number
   price: number
-  unit?: 'hour' | 'minutes' | 'day' | 'week' | 'month' | null
+  unit?: TimeUnits
 }
 const PricesForm = ({
   prices = [],

@@ -15,7 +15,7 @@ const ModalConfirm = ({
   handleConfirm: () => void | Promise<any>
   children?: ReactNode
   disabled?: boolean
-  label?: string
+  label?: ReactNode
   acceptLabel?: string
   color?: ButtonProps['color']
 }) => {

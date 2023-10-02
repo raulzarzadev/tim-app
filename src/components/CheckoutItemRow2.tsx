@@ -1,87 +1,95 @@
 import { ArticleType } from '@/types/article'
 import { useContext, useEffect, useState } from 'react'
-import { CashboxContext } from './CompanyCashbox'
+import { CashboxContext, ItemSelected } from './CompanyCashbox'
 import { calculateTotal } from '@/lib/calculateTotalItem'
 import { PriceType } from './PricesForm'
-import useModal from '@/hooks/useModal'
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2'
-import AppIcon from './AppIcon'
-import Modal from './Modal'
-import { Box, Button, Typography } from '@mui/material'
 import asNumber from '@/lib/asNumber'
-import ModalConfirm from './ModalConfirm'
-import NumberInput from './NumberInput'
-import Select from './Select'
 import CurrencySpan from './CurrencySpan'
+import { timeUnitsLabels } from '@/types/TimeUnits'
+import AppIcon from './AppIcon'
+import ModalConfirm from './ModalConfirm'
+import { Typography } from '@mui/material'
 
 export const CheckoutItemRow = ({ item }: { item: Partial<ArticleType> }) => {
   const { items = [], removeItem, updateItem } = useContext(CashboxContext)
   const foundItem = items?.find((i: { itemId?: string }) => i.itemId == item.id)
-  const [qty, setQty] = useState(
-    foundItem?.qty || item.prices?.[0].quantity || 1
-  )
-  const [unit, setUnit] = useState<PriceType['unit']>(
-    foundItem?.unit || item.prices?.[0].unit
-  )
-  const [priceSelected, setPriceSelected] = useState<PriceType | undefined>(
-    undefined
-  )
+  const defaultPrice: {
+    unit: PriceType['unit']
+    quantity: PriceType['quantity']
+  } = {
+    unit: foundItem?.unit,
+    quantity: foundItem?.qty || 0
+  }
+
+  const [priceSelected, setPriceSelected] = useState<
+    Pick<PriceType, 'unit' | 'quantity'> | undefined
+  >(undefined)
+
+  useEffect(() => {
+    const priceExist = item?.prices?.find(
+      (p) =>
+        p.unit === priceSelected?.unit && p.quantity === priceSelected?.quantity
+    )
+    if (priceExist) {
+      setPriceSelected(defaultPrice)
+    } else {
+      setPriceSelected(item?.prices?.[0])
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const { total: itemTotal, price } = calculateTotal(
-    unit,
-    qty,
+    priceSelected?.unit,
+    priceSelected?.quantity,
     item.prices || []
   )
-
-  const uniquePrices = [
-    ...new Set(item.prices?.map((price) => price.unit))
-  ].map((unit) => ({
-    label: unit || '',
-    value: unit || ''
-  }))
-
-  const modal = useModal({ title: 'Detalles de articulo' })
 
   const handleRemoveItem = () => {
     item.id && removeItem?.(item.id)
   }
   const handleSelectPrice = (p: PriceType) => {
-    setUnit(p.unit)
-    setQty(p.quantity)
+    setPriceSelected(p)
+    updateItem?.(item.id, { qty: p.quantity, unit: p.unit })
   }
-  const isSelectedPrice = (p: PriceType) => {
-    return (
-      priceSelected?.unit === p.unit && priceSelected?.quantity === p.quantity
-    )
+  const isSelectedPrice = (
+    p: PriceType,
+    selected?: Pick<PriceType, 'unit' | 'quantity'>
+  ) => {
+    return selected?.unit === p.unit && selected?.quantity === p.quantity
   }
-
-  useEffect(() => {
-    if (item.id) updateItem?.(item.id, { qty, unit })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [qty, unit])
 
   return (
     <Grid2 container key={item?.id} spacing={1} alignItems={'center'}>
       <Grid2 xs={2}>{item?.category}</Grid2>
       <Grid2 xs={2}>{item?.serialNumber || item?.name}</Grid2>
-      <Grid2 xs={6} container>
+      <Grid2 xs={6} container wrap={'nowrap'} overflow={'auto'} padding={'8px'}>
         {item.prices?.map((p, i) => (
-          <Grid2 key={i} xs="auto">
-            <Box
-              component={Button}
+          <Grid2 key={i} xs={'auto'}>
+            <button
               onClick={() => handleSelectPrice(p)}
               className={`${
-                isSelectedPrice(p) ? 'bg-blue-300' : ''
-              } shadow-md rounded-md p-2 text-center flex flex-col justify-center`}
+                isSelectedPrice(p, priceSelected) ? 'bg-blue-300' : ''
+              } shadow-md rounded-md p-2 text-center flex flex-col justify-center `}
             >
-              <p>
-                {p?.quantity} {p?.unit}
+              <p className="text-center w-full ">
+                {p?.quantity} {p?.unit && timeUnitsLabels[p?.unit]}
+                {p.quantity > 1 ? 's' : ''}
               </p>
               <p>${asNumber(p.price).toFixed(2)}</p>
-            </Box>
+            </button>
           </Grid2>
         ))}
       </Grid2>
       <Grid2 xs={2}>
+        <ModalConfirm
+          label={<AppIcon icon="trash" />}
+          color="error"
+          handleConfirm={handleRemoveItem}
+        >
+          <Typography>Quitar item de la lsita</Typography>
+        </ModalConfirm>
+
         <CurrencySpan quantity={itemTotal} />
       </Grid2>
     </Grid2>

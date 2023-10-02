@@ -2,21 +2,13 @@
 import { ArticleType } from '@/types/article'
 import { Box, Button, Typography } from '@mui/material'
 import Modal from './Modal'
-import Select from './Select'
-import AppIcon from './AppIcon'
 import useModal from '@/hooks/useModal'
-import { useContext, useEffect, useState } from 'react'
-import NumberInput from './NumberInput'
-import { PriceType } from './PricesForm'
-import ModalConfirm from './ModalConfirm'
+import { useContext } from 'react'
 import { CategoryType } from '@/types/category'
 import asNumber from '@/lib/asNumber'
-import { CashboxContext, ItemSelected } from './CompanyCashbox'
+import { CashboxContext } from './CompanyCashbox'
 import ModalPayment from './ModalPayment2'
 import ModalClientInfo from './ModalClientInfo'
-import PreviewImage from './PreviewImage'
-import Grid2 from '@mui/material/Unstable_Grid2/Grid2'
-import CurrencySpan from './CurrencySpan'
 import CheckoutItemsList from './CheckoutItemsList'
 import { calculateFullTotal } from '@/lib/calculateTotalItem'
 
@@ -32,7 +24,6 @@ const Checkout = ({
     items: selectedItems = [],
     client
   } = useContext(CashboxContext)
-
   const modal = useModal({ title: 'Lista de articulos' })
 
   const fullItems: Partial<ArticleType>[] = selectedItems?.map(
@@ -45,11 +36,11 @@ const Checkout = ({
       return { ...fullItem, prices: categoryPrices }
     }
   )
-
   const total = calculateFullTotal(selectedItems, fullItems)
   const handleClearSearch = () => {
     setItems?.([])
   }
+
   if (fullItems.length === 0) return <></>
 
   return (
