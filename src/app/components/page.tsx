@@ -1,5 +1,6 @@
 'use client'
 import Checkout from '@/components/Checkout2'
+import { CashboxContextProvider } from '@/components/CompanyCashbox'
 import ModalPayment from '@/components/ModalPayment2'
 import { ArticleType } from '@/types/article'
 import { CategoryType } from '@/types/category'
@@ -95,7 +96,6 @@ const categories: CategoryType[] = [
   }
 ]
 function Page() {
-  const [searchParams, setSearchParams] = useSearchParams()
   const pathname = usePathname()
   const router = useRouter()
   const selectedItems = [
@@ -114,9 +114,13 @@ function Page() {
   return (
     <div>
       <div>
-        <Checkout items={items} categories={categories} />
+        Checkout
+        <CashboxContextProvider>
+          <Checkout items={items} categories={categories} />
+        </CashboxContextProvider>
       </div>
       <div>
+        Modal Payment
         <ModalPayment amount={200} />
       </div>
     </div>
