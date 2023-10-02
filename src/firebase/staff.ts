@@ -11,10 +11,10 @@ export const addStaff = async (companyId: string, staff: StaffType) => {
   })
 }
 
-export const removeStaff = async (companyId: string, staffId: string) => {
+export const removeStaff = async (companyId: string, staffEmail: string) => {
   const { staff: staffs } = await getCompany(companyId)
   const staff = staffs.find(
-    (c: { name: string; id: string }) => c.id === staffId
+    (c: { name: string; email: string }) => c.email === staffEmail
   )
   return await updateCompany(companyId, {
     // @ts-ignore FIXME: Type 'StaffType' is not assignable to type 'StaffType'.
@@ -26,21 +26,19 @@ export const removeStaff = async (companyId: string, staffId: string) => {
 
 export const updateStaff = async (
   companyId: string,
-  staffId: string,
+  staffEmail: string,
   updates: Partial<StaffType>
 ) => {
   const { staff: staffs } = await getCompany(companyId)
   const staff = staffs.find(
-    (c: { name: string; id: string }) => c.id === staffId
+    (s: { name: string; email: string }) => s.email === staffEmail
   )
   await updateCompany(companyId, {
     // @ts-ignore FIXME: Type 'StaffType' is not assignable to type 'StaffType'.
-
     staff: arrayRemove(staff)
   })
   await updateCompany(companyId, {
     // @ts-ignore FIXME: Type 'StaffType' is not assignable to type 'StaffType'.
-
     staff: arrayUnion(updates)
   })
 }

@@ -26,8 +26,12 @@ const StaffForm = ({ staff }: { staff?: StaffType }) => {
   const [done, setDone] = useState(false)
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     if (!currentCompany?.id) return console.error('no company id')
-    if (staff?.id) {
-      return await updateStaff(currentCompany?.id || '', staff?.id || '', data)
+    if (staff?.email) {
+      return await updateStaff(
+        currentCompany?.id || '',
+        staff?.email || '',
+        data
+      )
         .then((res) => {
           setUserCompanies()
           // router.back()
@@ -35,7 +39,7 @@ const StaffForm = ({ staff }: { staff?: StaffType }) => {
         .catch(console.error)
         .finally(() => setDone(true))
     }
-    addStaff(currentCompany?.id || '', data)
+    return addStaff(currentCompany?.id || '', data)
       .then((res) => {
         setUserCompanies()
         // router.back()
@@ -44,13 +48,15 @@ const StaffForm = ({ staff }: { staff?: StaffType }) => {
       .finally(() => setDone(true))
   }
   const handleRemove = async () => {
-    return await removeStaff(currentCompany?.id || '', staff?.id || '')
+    return await removeStaff(currentCompany?.id || '', staff?.email || '')
       .then((res) => {
         setUserCompanies()
         // router.back()
       })
       .catch(console.error)
   }
+
+  const isOwner = user?.id === currentCompany?.userId
 
   return (
     <form className="grid gap-4">
@@ -93,7 +99,12 @@ const StaffForm = ({ staff }: { staff?: StaffType }) => {
           <Typography>con los permisos:</Typography>
         </ModalConfirm>
       </div>
-      <ModalConfirm label="Eliminar" handleConfirm={handleRemove} color="error">
+      <ModalConfirm
+        label="Eliminar"
+        disabled={isOwner}
+        handleConfirm={handleRemove}
+        color="error"
+      >
         <Typography>¿Deseas eliminar empleado? </Typography>
         <Typography>{formValues.name}</Typography>
       </ModalConfirm>
