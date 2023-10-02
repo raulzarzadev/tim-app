@@ -15,6 +15,8 @@ import { CashboxContext, ItemSelected } from './CompanyCashbox'
 import ModalPayment from './ModalPayment2'
 import ModalClientInfo from './ModalClientInfo'
 import PreviewImage from './PreviewImage'
+import Grid2 from '@mui/material/Unstable_Grid2/Grid2'
+import CurrencySpan from './CurrencySpan'
 
 const Checkout = ({
   items,
@@ -119,13 +121,15 @@ const ItemsList = ({ items }: { items: (Partial<ArticleType> | null)[] }) => {
 
   return (
     <Box>
-      <Box className={'grid grid-cols-5'}>
-        <Box>Categoria</Box>
-        <Box>No.Serie</Box>
-        <Box>Cant</Box>
-        <Box>Tiempo</Box>
-        <Box>Precio</Box>
-      </Box>
+      <Grid2 container spacing={1} className=" font-bold ">
+        <Grid2 xs={2}>Categoria</Grid2>
+        <Grid2 xs={2}>No.Serie</Grid2>
+        <Grid2 className="text-center" xs={3}>
+          Cant
+        </Grid2>
+        <Grid2 xs={3}>Tiempo</Grid2>
+        <Grid2 xs={2}>Precio</Grid2>
+      </Grid2>
       {items
         .sort(sortByCat)
         .map((item, i) =>
@@ -223,13 +227,16 @@ export const ItemRow = ({ item }: { item: Partial<ArticleType> }) => {
   }, [qty, unit])
 
   return (
-    <Box
+    <Grid2
+      container
       key={item?.id}
-      className={
-        'grid grid-cols-5 items-center place-content-center my-2 shadow-md rounded-md p-2 text-center'
-      }
+      spacing={1}
+      // className={
+      //   'grid grid-cols-5 items-center place-content-center my-2 shadow-md rounded-md p-2 text-center'
+      // }
+      alignItems={'center'}
     >
-      <Box className="col-span-5 flex justify-end ">
+      <Grid2 xs={12} className="col-span-5 flex justify-end ">
         <button onClick={modal.onOpen}>
           <AppIcon icon="eye" />
         </button>
@@ -277,25 +284,33 @@ export const ItemRow = ({ item }: { item: Partial<ArticleType> }) => {
             </Box>
           </Box>
         </Modal>
-      </Box>
-      <Typography>{item?.category}</Typography>
-      <Typography>{item?.serialNumber || item?.name}</Typography>
-      <NumberInput
-        name="qty"
-        defaultValue={qty}
-        onChange={(value) => setQty(value)}
-        value={qty}
-      />
-      <Select
-        onSelect={(value) => setUnit(value as PriceType['unit'])}
-        label="Unidad"
-        selected={unit || ''}
-        options={uniquePrices}
-      />
-      <Box>
-        <Typography className="text-center">{itemTotal}</Typography>
-      </Box>
-    </Box>
+      </Grid2>
+      <Grid2 xs={2}>{item?.category}</Grid2>
+      <Grid2 xs={2}>{item?.serialNumber || item?.name}</Grid2>
+      <Grid2 xs={3}>
+        {' '}
+        <NumberInput
+          name="qty"
+          defaultValue={qty}
+          onChange={(value) => setQty(value)}
+          value={qty}
+          min={0}
+        />
+      </Grid2>
+      <Grid2 xs={3}>
+        <Select
+          variant="outlined"
+          fullWidth
+          onSelect={(value) => setUnit(value as PriceType['unit'])}
+          label="Unidad"
+          selected={unit || ''}
+          options={uniquePrices}
+        />
+      </Grid2>
+      <Grid2 xs={2}>
+        <CurrencySpan quantity={itemTotal} />
+      </Grid2>
+    </Grid2>
   )
 }
 
