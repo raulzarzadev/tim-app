@@ -1,4 +1,11 @@
-export type TimeUnits = 'hour' | 'minutes' | 'day' | 'week' | 'month' | 'year'
+export type TimeUnits =
+  | 'hour'
+  | 'minutes'
+  | 'day'
+  | 'week'
+  | 'month'
+  | 'year'
+  | ''
 
 export const timeUnitsLabels: Record<TimeUnits, string> = {
   hour: 'Hora',
@@ -6,5 +13,6 @@ export const timeUnitsLabels: Record<TimeUnits, string> = {
   day: 'Día',
   week: 'Semana',
   month: 'Mes',
-  year: 'Año'
+  year: 'Año',
+  '': 'n/a'
 }

@@ -7,12 +7,12 @@ import { Box, Button, Chip, Stack, Typography } from '@mui/material'
 import { ArticleType } from '@/types/article'
 import Select from './Select'
 import { ItemInUse } from './ItemsInUse'
-import { calculateTotal } from './Checkout2'
 import CurrencySpan from './CurrencySpan'
 import asNumber from '@/lib/asNumber'
 import { PriceType } from './PricesForm'
 import { changeItem, updatePayment } from '@/firebase/payments'
 import ButtonLoadingAsync from './ButtonLoadingAsync'
+import { calculateTotal } from '@/lib/calculateTotalItem'
 
 const ChangeItem = ({ item }: { item: Partial<ItemInUse> }) => {
   const { itemsInUse, currentCompany } = useUserCompaniesContext()

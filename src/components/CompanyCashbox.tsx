@@ -71,7 +71,7 @@ export const CashboxContextProvider = ({
     const newItem = {
       ...item,
       qty: item.qty ?? 0,
-      unit: item.unit ?? null,
+      unit: item.unit ?? '',
       inUse: true
     }
     setItems((items) => [...items, newItem])
@@ -79,7 +79,7 @@ export const CashboxContextProvider = ({
 
   const updateItem = (
     itemId: ItemSelected['itemId'],
-    { qty, unit = null }: { qty: number; unit: PriceType['unit'] }
+    { qty, unit = '' }: { qty: number; unit: PriceType['unit'] }
   ) => {
     setItems((items) =>
       items.map((item) =>
