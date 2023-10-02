@@ -16,7 +16,10 @@ import { CompanyType } from '@/types/company'
 const COLLECTION_NAME = 'companies'
 type ItemType = CompanyType
 type NewItem = Partial<CompanyType>
-type CreateCompany_DTO = Pick<CompanyType, 'name' | 'userId' | 'staff'>
+type CreateCompany_DTO = Pick<
+  CompanyType,
+  'name' | 'userId' | 'staff' | 'staffMails'
+>
 export const itemCRUD = new FirebaseCRUD(COLLECTION_NAME, db, storage)
 
 export const setCompany = async (itemId: ItemType['id'], newItem: NewItem) =>

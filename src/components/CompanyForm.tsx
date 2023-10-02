@@ -38,6 +38,7 @@ const CompanyForm = ({ company }: { company?: CompanyType }) => {
         await createCompany({
           name: data?.name,
           userId: user?.id || '',
+          staffMails: [user?.email || ''],
           staff: [
             {
               id: user?.id || '',
