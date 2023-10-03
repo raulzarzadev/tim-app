@@ -9,21 +9,20 @@ import { useAuthContext } from '@/context/authContext'
 import Link from 'next/link'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext'
 import { usePathname } from 'next/navigation'
-
+export type NavPages = {
+  href: string
+  label: string
+  icon: JSX.Element
+  visible: boolean
+}[]
 export default function BottomNavigation() {
   const pathname = usePathname()
 
   const ref = React.useRef<HTMLDivElement>(null)
-  const { companies } = useUserCompaniesContext()
+  const { currentCompany } = useUserCompaniesContext()
   const { user } = useAuthContext()
 
-  const isOwner = companies.length > 0
-  const pages: {
-    href: string
-    label: string
-    icon: JSX.Element
-    visible: boolean
-  }[] = [
+  const userPages: NavPages = [
     {
       href: '/',
       label: 'Buscar',
@@ -41,36 +40,91 @@ export default function BottomNavigation() {
       label: 'Perfil',
       icon: <AppIcon icon="person" />,
       visible: true
+    }
+    // {
+    //   href: '/dashboard',
+    //   label: 'Empresas',
+    //   icon: <AppIcon icon="store" />,
+    //   visible: isOwner
+    // }
+  ]
+
+  const ownerPages: NavPages = [
+    {
+      href: '/profile',
+      label: 'Perfil',
+      icon: <AppIcon icon="recordVoiceOver" />,
+      visible: true
     },
     {
       href: '/dashboard',
-      label: 'Empresas',
+      label: 'Dashboard',
+      icon: <AppIcon icon="dashboard" />,
+      visible:
+        currentCompany?.staff?.find((staff) => staff?.email === user?.email)
+          ?.permissions?.ADMIN || false
+    },
+    {
+      href: `/dashboard/${currentCompany?.id}/CASHBOX`,
+      label: 'Caja',
+      icon: <AppIcon icon="cashbox" />,
+      visible:
+        currentCompany?.staff?.find((staff) => staff?.email === user?.email)
+          ?.permissions?.CASHBOX || false
+    },
+    {
+      href: `/dashboard/${currentCompany?.id}/RECEPTION`,
+      label: 'Recepción',
       icon: <AppIcon icon="store" />,
-      visible: isOwner
+      visible:
+        currentCompany?.staff?.find((staff) => staff?.email === user?.email)
+          ?.permissions?.RECEPTION || false
+    },
+    {
+      href: `/dashboard/${currentCompany?.id}/MAINTENANCE`,
+      label: 'Mantenimiento',
+      icon: <AppIcon icon="fix" />,
+      visible:
+        currentCompany?.staff?.find((staff) => staff?.email === user?.email)
+          ?.permissions?.MAINTENANCE || false
     }
   ]
 
   const [value, setValue] = React.useState(0)
   React.useEffect(() => {
-    setValue(pages?.findIndex((p) => p.href === pathname))
+    setValue(userPages?.findIndex((p) => p.href === pathname))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname, user])
+
+  const [pages, setPages] = React.useState<NavPages>(userPages)
+  React.useEffect(() => {
+    if (currentCompany) {
+      setPages(ownerPages)
+    } else {
+      setPages(userPages)
+    }
+  }, [currentCompany])
 
   if (!user) return <></>
 
   return (
     <Box sx={{ pb: 7 }} ref={ref}>
       <Paper
-        sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}
+        sx={{
+          position: 'fixed',
+          bottom: 0,
+          left: 0,
+          right: 0
+        }}
         elevation={3}
       >
         <MUIBottomNavigation
-          className=""
           showLabels
           value={value}
           onChange={(event, newValue) => {
             setValue(newValue)
           }}
+          className="overflow-x-auto justify-start"
         >
           {pages.map((page) =>
             page.visible ? (

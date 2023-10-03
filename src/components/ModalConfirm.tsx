@@ -40,14 +40,18 @@ const ModalConfirm = ({
         {children}
         <Box className="flex w-full justify-center my-4">
           <ButtonLoading
-            disabled={done}
             onClick={async () => {
               setLoading(true)
               await handleConfirm()
               setLoading(false)
               setDone(true)
+              setTimeout(() => {
+                modal.onClose()
+                setDone(false)
+              }, 400)
             }}
             loading={loading}
+            disabled={done}
             label={done ? 'Hecho' : acceptLabel}
           />
         </Box>

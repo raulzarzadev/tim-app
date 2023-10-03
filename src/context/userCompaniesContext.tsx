@@ -48,9 +48,27 @@ export function UserCompaniesProvider({
   children: React.ReactNode
 }) {
   const [companies, setCompanies] = useState<CompanyType[]>([])
-  const [selected, setSelected] = useState<CompanyType['id']>('')
+  const [selected, setSelected] =
+    useState<UserCompaniesContextType['selected']>(undefined)
 
   const { user } = useAuthContext()
+
+  useEffect(() => {
+    const bajaRent = JSON.parse(localStorage.getItem('baja-rent') || '{}')
+    setSelected(bajaRent?.selectedCompany)
+  }, [])
+
+  useEffect(() => {
+    if (selected !== undefined) {
+      const bajaRent = JSON.parse(localStorage.getItem('baja-rent') || '{}')
+
+      localStorage.setItem(
+        'baja-rent',
+        JSON.stringify({ ...bajaRent, selectedCompany: selected || '' })
+      )
+    }
+  }, [selected])
+
   useEffect(() => {
     setUserCompanies()
     if (user === null) {
@@ -59,11 +77,12 @@ export function UserCompaniesProvider({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user])
+
   const setUserCompanies = () => {
     getUserCompanies({ userId: user?.id || '' })
       .then((res) => {
         setCompanies(res || [])
-        setSelected(res?.[0]?.id)
+        //setSelected(res?.[0]?.id)
       })
       .catch(console.error)
   }

@@ -17,7 +17,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import LocalShippingIcon from '@mui/icons-material/LocalShipping'
 import BuildIcon from '@mui/icons-material/Build'
 import SettingsApplicationsIcon from '@mui/icons-material/SettingsApplications'
-
+import RecordVoiceOverIcon from '@mui/icons-material/RecordVoiceOver'
 import PointOfSaleIcon from '@mui/icons-material/PointOfSale'
 import RemoveIcon from '@mui/icons-material/Remove'
 // https://mui.com/material-ui/material-icons/
@@ -26,6 +26,7 @@ import InfoIcon from '@mui/icons-material/Info'
 import SettingsIcon from '@mui/icons-material/Settings'
 
 import LoopIcon from '@mui/icons-material/Loop'
+import { Dashboard } from '@mui/icons-material'
 const icons = {
   add: <AddIcon />,
   edit: <EditIcon />,
@@ -50,7 +51,10 @@ const icons = {
   substr: <RemoveIcon />,
   eye: <VisibilityIcon />,
   info: <InfoIcon />,
-  switch: <LoopIcon />
+  switch: <LoopIcon />,
+  dashboard: <Dashboard />,
+  settingsApplications: <SettingsApplicationsIcon />,
+  recordVoiceOver: <RecordVoiceOverIcon />
 } as const
 export type IconName = keyof typeof icons
 const AppIcon = ({ icon }: { icon: IconName }) => {
