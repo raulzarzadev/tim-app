@@ -106,7 +106,7 @@ export default function BottomNavigation() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentCompany])
 
-  if (!user) return <>Cargando</>
+  if (!user) return <></>
 
   return (
     <Box sx={{ pb: 7 }} ref={ref}>
