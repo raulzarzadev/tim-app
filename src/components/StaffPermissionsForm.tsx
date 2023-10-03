@@ -39,11 +39,13 @@ const permissionsList: Record<
 export default function StaffPermissionsForm({
   permissions,
   setPermissions,
-  isOwner
+  isOwner,
+  newStaff
 }: {
   permissions?: StaffPermissions
   setPermissions?: (permissions: StaffPermissions) => void
   isOwner?: boolean
+  newStaff?: boolean
 }) {
   const [_permissions, _setPermissions] = React.useState<StaffPermissions>(
     permissions || {}
@@ -65,7 +67,7 @@ export default function StaffPermissionsForm({
             onChange={(e, value) => onChange(key, value)}
             key={key}
             value={key}
-            disabled={isOwner && key === 'ADMIN'}
+            disabled={key === 'ADMIN' && isOwner && !newStaff}
             control={
               <Checkbox
                 checked={_permissions[key as StaffPermissionKey] || false}

@@ -12,7 +12,13 @@ import { useAuthContext } from '@/context/authContext'
 
 interface IFormInput extends StaffType {}
 
-const StaffForm = ({ staff }: { staff?: StaffType }) => {
+const StaffForm = ({
+  staff,
+  newStaff
+}: {
+  staff?: StaffType
+  newStaff?: boolean
+}) => {
   const router = useRouter()
   const { currentCompany, setUserCompanies } = useUserCompaniesContext()
   const { user } = useAuthContext()
@@ -56,7 +62,8 @@ const StaffForm = ({ staff }: { staff?: StaffType }) => {
       .catch(console.error)
   }
 
-  const isOwner = user?.id === currentCompany?.userId
+  const isOwner =
+    user?.email === staff?.email && currentCompany?.userId === user?.id
 
   return (
     <form className="grid gap-4">
@@ -78,7 +85,8 @@ const StaffForm = ({ staff }: { staff?: StaffType }) => {
       <StaffPermissionsForm
         permissions={staff?.permissions}
         setPermissions={(permissions) => setValue('permissions', permissions)}
-        isOwner={currentCompany?.userId === user?.id}
+        isOwner={isOwner}
+        newStaff={newStaff}
       />
 
       <div className="flex w-full justify-evenly my-4">

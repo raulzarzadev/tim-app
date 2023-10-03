@@ -15,7 +15,7 @@ const CompanyStaff = () => {
         <AppIcon icon="add" />
       </Button>
       <Modal {...modal}>
-        <StaffForm />
+        <StaffForm newStaff />
       </Modal>
       <StaffList />
     </div>
