@@ -103,6 +103,7 @@ export default function BottomNavigation() {
     } else {
       setPages(userPages)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentCompany])
 
   if (!user) return <></>

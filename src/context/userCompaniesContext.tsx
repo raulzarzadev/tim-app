@@ -19,7 +19,7 @@ import asDate from '@/lib/asDate'
 export type UserCompaniesContextType = {
   companies: CompanyType[]
   setCompanies: (companies: CompanyType[]) => void
-  selected: CompanyType['id']
+  selected?: CompanyType['id']
   setSelected: (id: CompanyType['id']) => void
   currentCompany: CompanyType | undefined
   setUserCompanies: () => void
