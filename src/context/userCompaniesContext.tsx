@@ -1,6 +1,11 @@
 'use client'
 
-import { getUserCompanies } from '@/firebase/companies'
+import {
+  getCompanyAsStaff,
+  getUserCompanies,
+  listenStaffCompanies,
+  listenUserCompanies
+} from '@/firebase/companies'
 import { CompanyType } from '@/types/company'
 import { createContext, useContext, useEffect, useState } from 'react'
 import { useAuthContext } from './authContext'
@@ -69,28 +74,28 @@ export function UserCompaniesProvider({
     }
   }, [selected])
 
+  const [userOwnCompanies, setUserOwnCompanies] = useState<CompanyType[]>([])
+  const [staffCompanies, setStaffCompanies] = useState<CompanyType[]>([])
+
   useEffect(() => {
-    setUserCompanies()
-    if (user === null) {
-      setCompanies([])
-      setSelected('')
+    if (user) {
+      listenUserCompanies(user?.id, (res: CompanyType[]) => {
+        setUserOwnCompanies(res)
+      })
+      listenStaffCompanies(user?.email, (res: CompanyType[]) => {
+        setStaffCompanies(res)
+      })
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user])
 
-  const setUserCompanies = () => {
-    getUserCompanies({ userId: user?.id || '' })
-      .then((res) => {
-        setCompanies(res || [])
-        //setSelected(res?.[0]?.id)
-      })
-      .catch(console.error)
-  }
+  const setUserCompanies = async () => {}
   const resetCompanies = () => {
     setUserCompanies()
   }
 
-  const currentCompany = companies.find((company) => company?.id === selected)
+  const currentCompany = [...userOwnCompanies, ...staffCompanies].find(
+    (company) => company?.id === selected
+  )
 
   const [payments, setPayments] = useState<Payment[]>([])
 
@@ -123,7 +128,7 @@ export function UserCompaniesProvider({
         setCompanies,
         setSelected,
         selected,
-        companies,
+        companies: [...userOwnCompanies, ...staffCompanies],
         currentCompany,
         setUserCompanies,
         itemsInUse: itemsInUse(),

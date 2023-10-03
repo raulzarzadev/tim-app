@@ -22,82 +22,82 @@ export default function BottomNavigation() {
   const { currentCompany } = useUserCompaniesContext()
   const { user } = useAuthContext()
 
-  const userPages: NavPages = [
-    {
-      href: '/',
-      label: 'Buscar',
-      icon: <AppIcon icon="search" />,
-      visible: true
-    },
-    {
-      href: '/my-rentals',
-      label: 'Rentas',
-      icon: <AppIcon icon="bike" />,
-      visible: true
-    },
-    {
-      href: '/profile',
-      label: 'Perfil',
-      icon: <AppIcon icon="person" />,
-      visible: true
-    }
-    // {
-    //   href: '/dashboard',
-    //   label: 'Empresas',
-    //   icon: <AppIcon icon="store" />,
-    //   visible: isOwner
-    // }
-  ]
-
-  const ownerPages: NavPages = [
-    {
-      href: '/profile',
-      label: 'Perfil',
-      icon: <AppIcon icon="recordVoiceOver" />,
-      visible: true
-    },
-    {
-      href: '/dashboard',
-      label: 'Dashboard',
-      icon: <AppIcon icon="dashboard" />,
-      visible:
-        currentCompany?.staff?.find((staff) => staff?.email === user?.email)
-          ?.permissions?.ADMIN || false
-    },
-    {
-      href: `/dashboard/${currentCompany?.id}/CASHBOX`,
-      label: 'Caja',
-      icon: <AppIcon icon="cashbox" />,
-      visible:
-        currentCompany?.staff?.find((staff) => staff?.email === user?.email)
-          ?.permissions?.CASHBOX || false
-    },
-    {
-      href: `/dashboard/${currentCompany?.id}/RECEPTION`,
-      label: 'Recepción',
-      icon: <AppIcon icon="store" />,
-      visible:
-        currentCompany?.staff?.find((staff) => staff?.email === user?.email)
-          ?.permissions?.RECEPTION || false
-    },
-    {
-      href: `/dashboard/${currentCompany?.id}/MAINTENANCE`,
-      label: 'Mantenimiento',
-      icon: <AppIcon icon="fix" />,
-      visible:
-        currentCompany?.staff?.find((staff) => staff?.email === user?.email)
-          ?.permissions?.MAINTENANCE || false
-    }
-  ]
-
   const [value, setValue] = React.useState(0)
+  const [pages, setPages] = React.useState<NavPages | undefined>(undefined)
   React.useEffect(() => {
-    setValue(userPages?.findIndex((p) => p.href === pathname))
+    setValue(pages?.findIndex((p) => p.href === pathname) || 0)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname, user])
 
-  const [pages, setPages] = React.useState<NavPages>(userPages)
   React.useEffect(() => {
+    const userPages: NavPages = [
+      {
+        href: '/',
+        label: 'Buscar',
+        icon: <AppIcon icon="search" />,
+        visible: true
+      },
+      {
+        href: '/my-rentals',
+        label: 'Rentas',
+        icon: <AppIcon icon="bike" />,
+        visible: true
+      },
+      {
+        href: '/profile',
+        label: 'Perfil',
+        icon: <AppIcon icon="person" />,
+        visible: true
+      }
+      // {
+      //   href: '/dashboard',
+      //   label: 'Empresas',
+      //   icon: <AppIcon icon="store" />,
+      //   visible: isOwner
+      // }
+    ]
+
+    const ownerPages: NavPages = [
+      {
+        href: '/profile',
+        label: 'Perfil',
+        icon: <AppIcon icon="recordVoiceOver" />,
+        visible: true
+      },
+      {
+        href: '/dashboard',
+        label: 'Dashboard',
+        icon: <AppIcon icon="dashboard" />,
+        visible:
+          currentCompany?.staff?.find((staff) => staff?.email === user?.email)
+            ?.permissions?.ADMIN || false
+      },
+      {
+        href: `/dashboard/${currentCompany?.id}/CASHBOX`,
+        label: 'Caja',
+        icon: <AppIcon icon="cashbox" />,
+        visible:
+          currentCompany?.staff?.find((staff) => staff?.email === user?.email)
+            ?.permissions?.CASHBOX || false
+      },
+      {
+        href: `/dashboard/${currentCompany?.id}/RECEPTION`,
+        label: 'Recepción',
+        icon: <AppIcon icon="store" />,
+        visible:
+          currentCompany?.staff?.find((staff) => staff?.email === user?.email)
+            ?.permissions?.RECEPTION || false
+      },
+      {
+        href: `/dashboard/${currentCompany?.id}/MAINTENANCE`,
+        label: 'Mantenimiento',
+        icon: <AppIcon icon="fix" />,
+        visible:
+          currentCompany?.staff?.find((staff) => staff?.email === user?.email)
+            ?.permissions?.MAINTENANCE || false
+      }
+    ]
+
     if (currentCompany) {
       setPages(ownerPages)
     } else {
@@ -106,7 +106,7 @@ export default function BottomNavigation() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentCompany])
 
-  if (!user) return <></>
+  if (!user) return <>Cargando</>
 
   return (
     <Box sx={{ pb: 7 }} ref={ref}>
@@ -127,7 +127,7 @@ export default function BottomNavigation() {
           }}
           className="overflow-x-auto justify-start"
         >
-          {pages.map((page) =>
+          {pages?.map((page) =>
             page.visible ? (
               <BottomNavigationAction
                 key={page.href}

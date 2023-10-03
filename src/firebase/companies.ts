@@ -45,3 +45,27 @@ export const listenCompany = async (
 export const getUserCompanies = async ({ userId }: { userId: string }) => {
   return await itemCRUD.getUserItems([where('userId', '==', userId)])
 }
+
+export const getCompanyAsStaff = async ({
+  userEmail
+}: {
+  userEmail: string
+}) => {
+  return await itemCRUD.getUserItems([
+    where('staffMails', 'array-contains', userEmail)
+  ])
+}
+
+export const listenUserCompanies = async (
+  userId: string,
+  cb: CallableFunction
+) => {
+  await itemCRUD.listenItems([where('userId', '==', userId)], cb)
+}
+
+export const listenStaffCompanies = async (
+  email: string,
+  cb: CallableFunction
+) => {
+  await itemCRUD.listenItems([where('staffMails', 'array-contains', email)], cb)
+}
