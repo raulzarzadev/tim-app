@@ -29,9 +29,9 @@ const ClientForm = ({
     <div>
       <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
         {/* client name */}
-        <TextField {...register('name')} label="Nombre" />
+        <TextField {...register('name')} label="Nombre" required />
         {/* client phone */}
-        <TextField {...register('phone')} label="Telefono" />
+        <TextField {...register('phone')} label="Telefono" required />
         {/* client email */}
         <TextField {...register('email')} type="email" label="Email" />
         {/* client address */}
@@ -50,7 +50,7 @@ const ClientForm = ({
           setSignature={(signature) => setValue('signature', signature || '')}
         />
         {/* client signature */}
-        <Button variant="outlined" type="submit" disabled={!name || !phone}>
+        <Button variant="outlined" type="submit">
           Guardar
         </Button>
       </form>

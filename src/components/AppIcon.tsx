@@ -24,41 +24,52 @@ import RemoveIcon from '@mui/icons-material/Remove'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import InfoIcon from '@mui/icons-material/Info'
 import SettingsIcon from '@mui/icons-material/Settings'
-
+import PhoneIcon from '@mui/icons-material/Phone'
+import LocationOnIcon from '@mui/icons-material/LocationOn'
 import LoopIcon from '@mui/icons-material/Loop'
-import { Dashboard } from '@mui/icons-material'
+import { Dashboard, PhonelinkLockOutlined } from '@mui/icons-material'
+import EmailIcon from '@mui/icons-material/Email'
+import WhatsAppIcon from '@mui/icons-material/WhatsApp'
+import { SvgIconProps } from '@mui/material'
 const icons = {
-  add: <AddIcon />,
-  edit: <EditIcon />,
-  close: <CloseIcon />,
-  money: <AttachMoneyIcon />,
-  save: <SaveIcon />,
-  print: <PrintIcon />,
-  medicalInfo: <MedicalInformationIcon />,
-  restore: <RestoreIcon />,
-  favorite: <FavoriteIcon />,
-  archive: <ArchiveIcon />,
-  person: <PersonIcon />,
-  search: <SearchIcon />,
-  bike: <DirectionsBikeIcon />,
-  store: <StoreIcon />,
-  trash: <DeleteForeverIcon />,
-  delivery: <LocalShippingIcon />,
-  fix: <BuildIcon />,
-  settings: <SettingsIcon />,
-  sales: <AttachMoneyIcon />,
-  cashbox: <PointOfSaleIcon />,
-  substr: <RemoveIcon />,
-  eye: <VisibilityIcon />,
-  info: <InfoIcon />,
-  switch: <LoopIcon />,
-  dashboard: <Dashboard />,
-  settingsApplications: <SettingsApplicationsIcon />,
-  recordVoiceOver: <RecordVoiceOverIcon />
+  add: AddIcon,
+  edit: EditIcon,
+  close: CloseIcon,
+  money: AttachMoneyIcon,
+  save: SaveIcon,
+  print: PrintIcon,
+  medicalInfo: MedicalInformationIcon,
+  restore: RestoreIcon,
+  favorite: FavoriteIcon,
+  archive: ArchiveIcon,
+  person: PersonIcon,
+  search: SearchIcon,
+  bike: DirectionsBikeIcon,
+  store: StoreIcon,
+  trash: DeleteForeverIcon,
+  delivery: LocalShippingIcon,
+  fix: BuildIcon,
+  settings: SettingsIcon,
+  sales: AttachMoneyIcon,
+  cashbox: PointOfSaleIcon,
+  substr: RemoveIcon,
+  eye: VisibilityIcon,
+  info: InfoIcon,
+  switch: LoopIcon,
+  dashboard: Dashboard,
+  settingsApplications: SettingsApplicationsIcon,
+  recordVoiceOver: RecordVoiceOverIcon,
+  phone: PhoneIcon,
+  mail: EmailIcon,
+  whatsapp: WhatsAppIcon,
+  location: LocationOnIcon
 } as const
+
+// https://mui.com/material-ui/material-icons/
 export type IconName = keyof typeof icons
-const AppIcon = ({ icon }: { icon: IconName }) => {
-  return icons[icon]
+const AppIcon = ({ icon, ...props }: SvgIconProps & { icon: IconName }) => {
+  const Component = icons[icon]
+  return <Component {...props} />
 }
 
 export default AppIcon
