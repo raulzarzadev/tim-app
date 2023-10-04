@@ -8,6 +8,7 @@ import ArticleCard from './ArticleCard'
 import AppIcon from './AppIcon'
 import Link from 'next/link'
 import PricesList from './PricesList'
+import ArticlesList from './ArticlesList'
 
 const CategoryDetails = ({ category }: { category?: CategoryType }) => {
   const articles = useCategoryArticles({ categoryName: category?.name })
@@ -26,19 +27,17 @@ const CategoryDetails = ({ category }: { category?: CategoryType }) => {
           <AppIcon icon="edit"></AppIcon>
         </IconButton>
       </Typography>
+      <Typography className="text-center">{category?.description}</Typography>
+      <Typography variant="h5">Precios</Typography>
+      <PricesList prices={category?.prices || []} />
+      <Typography variant="h5">Aticlulos</Typography>
       <Button
         LinkComponent={Link}
         href={`/dashboard/${currentCompany?.id}/articles/new?category=${category?.name}`}
       >
         Agregar articulo <AppIcon icon="add" />
       </Button>
-      <PricesList prices={category?.prices || []} />
-      <Typography>{category?.description}</Typography>
-      <Box className="grid grid-cols-2 gap-4">
-        {articles?.map((a) => (
-          <ArticleCard article={a} key={a.id} />
-        ))}
-      </Box>
+      <ArticlesList articles={articles || []} />
     </div>
   )
 }

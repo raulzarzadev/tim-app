@@ -1,17 +1,9 @@
 'use client'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext'
-import {
-  Box,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  IconButton,
-  Typography
-} from '@mui/material'
+import { IconButton, Typography } from '@mui/material'
 import AppIcon from './AppIcon'
 import Link from 'next/link'
-import { ArticleType } from '@/types/article'
+import ArticlesList from './ArticlesList'
 
 const CompanyArticles = () => {
   const { currentCompany } = useUserCompaniesContext()
@@ -28,41 +20,8 @@ const CompanyArticles = () => {
           <AppIcon icon="add" />
         </IconButton>
       </Typography>
-      <Box className="grid grid-cols-2 gap-4">
-        {currentCompany?.articles?.map((article) => (
-          <Article key={article?.id} article={article} />
-        ))}
-      </Box>
+      <ArticlesList articles={currentCompany.articles || []} />
     </div>
-  )
-}
-
-const Article = ({ article }: { article: ArticleType }) => {
-  const { currentCompany } = useUserCompaniesContext()
-  return (
-    <Card sx={{ minWidth: 125 }}>
-      <CardContent>
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          {article.category}
-        </Typography>
-        <Typography variant="h5" component="div">
-          {article.name}
-        </Typography>
-        <Typography sx={{ mb: 0.5 }} color="text.secondary">
-          {article.color}
-        </Typography>
-        {/* <Typography variant="body2">{article.color}</Typography> */}
-      </CardContent>
-      <CardActions>
-        <Button
-          size="small"
-          LinkComponent={Link}
-          href={`/dashboard/${currentCompany?.id}/articles/${article.id}`}
-        >
-          Ver más
-        </Button>
-      </CardActions>
-    </Card>
   )
 }
 

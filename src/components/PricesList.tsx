@@ -10,8 +10,12 @@ const PricesList = ({
   handleRemove?: (index: number) => void
 }) => {
   return (
-    <Box>
-      <Typography className="text-center mt-4">Lista de precios</Typography>
+    <Box className="my-4">
+      {prices.length === 0 && (
+        <Typography className="text-center">
+          No hay precios registrados
+        </Typography>
+      )}
       {prices.map((p, index) => (
         <Box
           className={`grid ${

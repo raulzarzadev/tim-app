@@ -1,4 +1,5 @@
 'use client'
+import ArticleManage from '@/components/AritcleManage'
 import ArticleDetails from '@/components/ArticleDetails'
 import { useArticle } from '@/context/userCompaniesContext'
 import { Container } from '@mui/material'
@@ -11,6 +12,7 @@ const Page = () => {
   return (
     <Container>
       <ArticleDetails article={article} />
+      <ArticleManage article={article} />
     </Container>
   )
 }

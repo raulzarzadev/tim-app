@@ -87,7 +87,7 @@ export const CheckoutItemRow = ({ item }: { item: Partial<ArticleType> }) => {
           color="error"
           handleConfirm={handleRemoveItem}
         >
-          <Typography>Quitar item de la lsita</Typography>
+          <Typography>Remover articulo</Typography>
         </ModalConfirm>
 
         <CurrencySpan quantity={itemTotal} />

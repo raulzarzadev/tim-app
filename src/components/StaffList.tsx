@@ -7,14 +7,13 @@ import AppIcon from './AppIcon'
 import useModal from '@/hooks/useModal'
 import Modal from './Modal'
 import StaffForm from './StaffForm'
-import { useAuthContext } from '@/context/authContext'
 
 const StaffList = () => {
   const { currentCompany } = useUserCompaniesContext()
   return (
     <Box className="grid gap-4 my-4">
-      {currentCompany?.staff?.map((staff) => (
-        <StaffCard staff={staff} key={staff.id} />
+      {currentCompany?.staff?.map((staff, i) => (
+        <StaffCard staff={staff} key={i} />
       ))}
     </Box>
   )

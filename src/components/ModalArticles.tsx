@@ -1,5 +1,14 @@
 'use client'
-import { Button, Chip, Grid, IconButton, Stack, styled } from '@mui/material'
+import {
+  Box,
+  Button,
+  Chip,
+  Grid,
+  IconButton,
+  Stack,
+  Typography,
+  styled
+} from '@mui/material'
 import AppIcon from './AppIcon'
 import { ArticleType } from '@/types/article'
 import useModal from '@/hooks/useModal'
@@ -7,6 +16,8 @@ import Modal from './Modal'
 import { useContext, useEffect, useState } from 'react'
 import { CashboxContext } from './CompanyCashbox'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext'
+import ArticleCard from './ArticleCard'
+import ArticleDetails from './ArticleDetails'
 
 const Item = styled(Button)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -26,7 +37,9 @@ const ModalArticles = ({
   const modal = useModal({ title: 'Unidades' })
   const { addItem, removeItem, items } = useContext(CashboxContext)
   const { itemsInUse } = useUserCompaniesContext()
+  const [clickedArticle, setClickedArticle] = useState<ArticleType>()
   const handleClick = (articleId: ArticleType['id']) => {
+    setClickedArticle(articles.find((a) => a.id === articleId))
     if (_selected.find(({ itemId }) => itemId === articleId)) {
       removeItem?.(articleId)
       return
@@ -48,7 +61,11 @@ const ModalArticles = ({
         <AppIcon icon="eye" />
       </IconButton>
       <Modal {...modal}>
-        <Stack direction="row" flexWrap={'wrap'} className="justify-center">
+        <Stack
+          direction="row"
+          flexWrap={'wrap'}
+          className="justify-center gap-2"
+        >
           {articles?.map((article) => (
             <Chip
               disabled={
@@ -61,18 +78,19 @@ const ModalArticles = ({
               }
               className="p-1 m-1"
               key={article.id}
-              label={article.serialNumber || article.name}
+              label={`${article.serialNumber || ''} ${article.name || ''}`}
               onClick={() => handleClick(article.id)}
             />
           ))}
         </Stack>
-        {/* <Grid container spacing={2}>
-          {articles.map((article) => (
-            <Grid key={article.id} item xs={3} sm={2}>
-              <Item variant="contained">{article.name}</Item>
-            </Grid>
-          ))}
-        </Grid> */}
+        <Box>
+          {clickedArticle ? (
+            <>
+              <Typography>Descripción</Typography>
+              <ArticleDetails article={clickedArticle} />
+            </>
+          ) : null}
+        </Box>
       </Modal>
     </div>
   )
