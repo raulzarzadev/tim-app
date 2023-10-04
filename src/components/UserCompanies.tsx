@@ -55,7 +55,7 @@ const CompanyAccess = () => {
     currentCompany?.staff?.find((staff) => staff?.email === user?.email)
       ?.permissions || {}
   //* avoid that the owner delete there own admin permission
-  userPermissions.ADMIN = currentCompany?.userId === user?.id
+  //userPermissions.ADMIN = currentCompany?.userId === user?.id
   return (
     <div>
       <Typography className="text-xl font-bold my-2">Areas</Typography>
