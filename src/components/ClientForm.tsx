@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import InputFile from './InputUploadFile'
 import ModalSignature from './ModalSignature'
 import PreviewImage from './PreviewImage'
+import PhoneInput from './PhoneInput'
 
 const ClientForm = ({
   client,
@@ -12,7 +13,7 @@ const ClientForm = ({
   setClient?: (client: Partial<Client>) => void
   client?: Partial<Client>
 }) => {
-  const { handleSubmit, register, setValue, watch } = useForm({
+  const { handleSubmit, register, setValue, watch, control } = useForm({
     defaultValues: client
   })
   const onSubmit = (data: Partial<Client>) => {
@@ -30,7 +31,8 @@ const ClientForm = ({
         {/* client name */}
         <TextField {...register('name')} label="Nombre" required />
         {/* client phone */}
-        <TextField {...register('phone')} label="Telefono" required />
+        <PhoneInput {...register('phone')} label="Teléfono" control={control} />
+        {/* <TextField {...register('phone')} label="Telefono" required /> */}
         {/* client email */}
         <TextField {...register('email')} type="email" label="Email" />
         {/* client address */}

@@ -22,15 +22,14 @@ const ModalContactClient = ({ client }: { client: Payment['client'] }) => {
       label: 'Telefono',
       icon: 'phone',
       href: 'tel:',
-      value: client?.phone
+      value: client?.phone?.replaceAll('+', '').replaceAll(' ', '')
     },
     whatsapp: {
       label: 'Whatsapp',
       icon: 'whatsapp',
       href: 'https://wa.me/',
-      value: client?.phone
+      value: client?.phone?.replaceAll('+', '').replaceAll(' ', '')
     },
-
     address: {
       label: 'Dirección',
       icon: 'location',
