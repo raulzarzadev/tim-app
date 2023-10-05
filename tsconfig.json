@@ -29,7 +29,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/app/new-company/[id]"
+    "src/app/new-company/[id]",
+    "src/components/ErrorBoundary.js"
   ],
   "exclude": ["node_modules"]
 }

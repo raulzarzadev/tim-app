@@ -16,9 +16,10 @@ import { Payment } from '@/types/payment'
 import ModalConfirm from './ModalConfirm'
 import ChangeItem from './ChangeItem'
 import AppIcon from './AppIcon'
+import ErrorBoundary from './ErrorBoundary'
 
 const ItemsInUse = () => {
-  const { itemsInUse, items } = useUserCompaniesContext()
+  const { itemsInUse } = useUserCompaniesContext()
 
   const sortByFinishRent = (a: Partial<ItemInUse>, b: Partial<ItemInUse>) => {
     if (!a.rentFinishAt && !b.rentFinishAt) return 0
@@ -46,9 +47,11 @@ const ItemsInUse = () => {
         <Grid2 xs={2} className="font-bold truncate">
           Status
         </Grid2>
-        {itemsInUse.sort(sortByFinishRent).map((item, i) => (
-          <ItemRow key={i} item={item} />
-        ))}
+        <ErrorBoundary fallback={<p>Something went wrong</p>}>
+          {itemsInUse.sort(sortByFinishRent).map((item, i) => (
+            <ItemRow key={i} item={item} />
+          ))}
+        </ErrorBoundary>
       </Grid2>
     </Container>
   )
@@ -70,7 +73,10 @@ const ItemRow = ({ item }: { item: Partial<ItemInUse> }) => {
       item.serialNumber || item.name
     }`
   })
-  const onTime = item.rentFinishAt && isAfter(item.rentFinishAt, new Date())
+
+  const finishAt = asDate(item.rentFinishAt)
+
+  const onTime = finishAt && isAfter(finishAt, new Date())
   return (
     <>
       <Modal {...modal}>
@@ -90,7 +96,7 @@ const ItemRow = ({ item }: { item: Partial<ItemInUse> }) => {
         <Grid2 xs={2}>
           {item.qty}x {item.unit}
         </Grid2>
-        <Grid2 xs={3}>{fromNow(item.rentFinishAt)}</Grid2>
+        <Grid2 xs={3}>{fromNow(asDate(item.rentFinishAt))}</Grid2>
         <Grid2 xs={2} className="">
           {onTime ? (
             <div className="bg-green-400 rounded-md p-2 truncate">
