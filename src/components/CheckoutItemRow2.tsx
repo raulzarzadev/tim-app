@@ -46,8 +46,6 @@ export const CheckoutItemRow = ({ item }: { item: Partial<ArticleType> }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  console.log({ priceSelected })
-
   const { total: itemTotal, price } = calculateTotal(
     priceSelected?.unit,
     priceSelected?.quantity,

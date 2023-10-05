@@ -21,7 +21,6 @@ import ModalContactClient from './ModalContactClient'
 
 const CompanyPayments = () => {
   const { payments } = useUserCompaniesContext()
-  console.log({ payments })
   const sortByDate = (a: Payment, b: Payment) => {
     return (
       (asDate(b.startAt)?.getTime() || 0) - (asDate(a.startAt)?.getTime() || 0)
