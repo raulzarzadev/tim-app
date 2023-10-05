@@ -1,11 +1,9 @@
 import { useUserCompaniesContext } from '@/context/userCompaniesContext'
-import { ItemSelected } from './CompanyCashbox'
 import { Timestamp } from 'firebase/firestore'
 import { ArticleType } from '@/types/article'
 import { Box, Button, Container, Typography } from '@mui/material'
-import rentTime from '@/lib/rentTime'
 import { fromNow } from '@/lib/utils-date'
-import { addMinutes, isAfter } from 'date-fns'
+import { isAfter } from 'date-fns'
 import asDate from '@/lib/asDate'
 import { PriceType } from './PricesForm'
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2'
@@ -13,14 +11,12 @@ import Modal from './Modal'
 import useModal from '@/hooks/useModal'
 import { finishItemRent, getPayment } from '@/firebase/payments'
 import { Payment } from '@/types/payment'
-import ModalConfirm from './ModalConfirm'
 import ChangeItem from './ChangeItem'
 import AppIcon from './AppIcon'
 import ErrorBoundary from './ErrorBoundary'
 
 const ItemsInUse = () => {
   const { itemsInUse } = useUserCompaniesContext()
-
   const sortByFinishRent = (a: Partial<ItemInUse>, b: Partial<ItemInUse>) => {
     if (!a.rentFinishAt && !b.rentFinishAt) return 0
     return (

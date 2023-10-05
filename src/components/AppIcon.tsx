@@ -13,24 +13,25 @@ import SearchIcon from '@mui/icons-material/Search'
 import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike'
 import StoreIcon from '@mui/icons-material/Store'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
-
 import LocalShippingIcon from '@mui/icons-material/LocalShipping'
 import BuildIcon from '@mui/icons-material/Build'
 import SettingsApplicationsIcon from '@mui/icons-material/SettingsApplications'
 import RecordVoiceOverIcon from '@mui/icons-material/RecordVoiceOver'
 import PointOfSaleIcon from '@mui/icons-material/PointOfSale'
 import RemoveIcon from '@mui/icons-material/Remove'
-// https://mui.com/material-ui/material-icons/
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import InfoIcon from '@mui/icons-material/Info'
 import SettingsIcon from '@mui/icons-material/Settings'
 import PhoneIcon from '@mui/icons-material/Phone'
 import LocationOnIcon from '@mui/icons-material/LocationOn'
 import LoopIcon from '@mui/icons-material/Loop'
-import { Dashboard, PhonelinkLockOutlined } from '@mui/icons-material'
+import { Dashboard } from '@mui/icons-material'
 import EmailIcon from '@mui/icons-material/Email'
 import WhatsAppIcon from '@mui/icons-material/WhatsApp'
 import { SvgIconProps } from '@mui/material'
+
+// https://mui.com/material-ui/material-icons/
+
 const icons = {
   add: AddIcon,
   edit: EditIcon,

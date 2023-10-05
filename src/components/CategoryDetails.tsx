@@ -3,8 +3,7 @@ import {
   useUserCompaniesContext
 } from '@/context/userCompaniesContext'
 import { CategoryType } from '@/types/category'
-import { Box, Button, IconButton, Typography } from '@mui/material'
-import ArticleCard from './ArticleCard'
+import { Button, IconButton, Typography } from '@mui/material'
 import AppIcon from './AppIcon'
 import Link from 'next/link'
 import PricesList from './PricesList'

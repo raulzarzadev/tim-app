@@ -1,14 +1,11 @@
 import { useUserCompaniesContext } from '@/context/userCompaniesContext'
-import { listenCompanyActivePayments, updatePayment } from '@/firebase/payments'
+import { updatePayment } from '@/firebase/payments'
 import { Payment } from '@/types/payment'
 import { Box, Button, IconButton, Typography } from '@mui/material'
-import { useEffect, useState } from 'react'
 import AppIcon from './AppIcon'
 import useModal from '@/hooks/useModal'
 import Modal from './Modal'
-
 import { dateFormat, fromNow } from '@/lib/utils-date'
-
 import CurrencySpan from './CurrencySpan'
 import ModalConfirm from './ModalConfirm'
 import useItem from '@/hooks/useItem'
@@ -24,7 +21,7 @@ import ModalContactClient from './ModalContactClient'
 
 const CompanyPayments = () => {
   const { payments } = useUserCompaniesContext()
-
+  console.log({ payments })
   const sortByDate = (a: Payment, b: Payment) => {
     return (
       (asDate(b.startAt)?.getTime() || 0) - (asDate(a.startAt)?.getTime() || 0)

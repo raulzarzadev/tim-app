@@ -1,9 +1,5 @@
 import { Timestamp } from 'firebase/firestore'
-import {
-  format as fnsFormat,
-  formatDistanceToNow,
-  formatDistanceToNowStrict
-} from 'date-fns'
+import { format as fnsFormat, formatDistanceToNowStrict } from 'date-fns'
 import { es } from 'date-fns/locale'
 import asDate from './asDate'
 

@@ -1,6 +1,5 @@
 import { Client } from '@/types/client'
 import { Button, TextField } from '@mui/material'
-import { Dispatch } from 'react'
 import { useForm } from 'react-hook-form'
 import InputFile from './InputUploadFile'
 import ModalSignature from './ModalSignature'
@@ -22,8 +21,8 @@ const ClientForm = ({
   const formValues = watch()
   const imageId = formValues.imageID
   const signature = formValues.signature
-  const name = formValues.name
-  const phone = formValues.phone
+  // const name = formValues.name
+  // const phone = formValues.phone
 
   return (
     <div>

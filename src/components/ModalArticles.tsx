@@ -3,7 +3,6 @@ import {
   Box,
   Button,
   Chip,
-  Grid,
   IconButton,
   Stack,
   Typography,
@@ -16,7 +15,6 @@ import Modal from './Modal'
 import { useContext, useEffect, useState } from 'react'
 import { CashboxContext } from './CompanyCashbox'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext'
-import ArticleCard from './ArticleCard'
 import ArticleDetails from './ArticleDetails'
 
 const Item = styled(Button)(({ theme }) => ({

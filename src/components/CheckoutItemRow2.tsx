@@ -27,17 +27,26 @@ export const CheckoutItemRow = ({ item }: { item: Partial<ArticleType> }) => {
   >(undefined)
 
   useEffect(() => {
-    const priceExist = item?.prices?.find(
-      (p) =>
+    const priceExist = item?.prices?.find((p) => {
+      return (
         p.unit === priceSelected?.unit && p.quantity === priceSelected?.quantity
-    )
+      )
+    })
     if (priceExist) {
       setPriceSelected(defaultPrice)
+      updateItem?.(item.id, {
+        qty: defaultPrice.quantity,
+        unit: defaultPrice.unit
+      })
     } else {
+      const price = item?.prices?.[0]
       setPriceSelected(item?.prices?.[0])
+      updateItem?.(item.id, { qty: price?.quantity || 0, unit: price?.unit })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  console.log({ priceSelected })
 
   const { total: itemTotal, price } = calculateTotal(
     priceSelected?.unit,

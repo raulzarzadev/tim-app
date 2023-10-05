@@ -13,7 +13,6 @@ const CheckoutItemsList = ({
     a: { category?: string } | null,
     b: { category?: any } | null
   ): number => a?.category?.localeCompare(b?.category || '') || 0
-
   return (
     <Box>
       <Grid2 container spacing={1} className=" font-bold ">

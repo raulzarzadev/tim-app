@@ -109,14 +109,20 @@ export function UserCompaniesProvider({
     const itemsInUseFromPayments = payments
       .map((payment) => {
         const inUseItems = payment.items.filter((item) => item.inUse ?? true)
-        return inUseItems.map((item) => ({
-          ...items?.find(({ id }) => id === item.itemId),
-          ...item,
-          startAt: payment.startAt,
-          paymentId: payment.id,
-          rentFinishAt: rentFinishAt(item.qty || 0, item.unit, payment.startAt),
-          rentTime: rentTime(item.qty, item.unit)
-        }))
+        return inUseItems.map((item) => {
+          const startAt = asDate(payment.startAt)
+          const finishAt =
+            startAt && rentFinishAt(item.qty || 0, item.unit, startAt)
+          const rentInMinutes = rentTime(item.qty, item.unit)
+          return {
+            ...items?.find(({ id }) => id === item.itemId),
+            ...item,
+            startAt: payment.startAt,
+            paymentId: payment.id,
+            rentFinishAt: finishAt,
+            rentTime: rentInMinutes
+          }
+        })
       })
       .flat()
     return itemsInUseFromPayments.flat()

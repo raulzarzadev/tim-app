@@ -1,4 +1,4 @@
-import { Grid, IconButton, Tooltip, Typography } from '@mui/material'
+import { IconButton, Tooltip } from '@mui/material'
 import AppIcon, { IconName } from './AppIcon'
 import { Payment } from '@/types/payment'
 import Modal from './Modal'
