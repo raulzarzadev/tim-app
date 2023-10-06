@@ -9,6 +9,7 @@ import { useAuthContext } from '@/context/authContext'
 import Link from 'next/link'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext'
 import { usePathname } from 'next/navigation'
+import ErrorBoundary from './ErrorBoundary'
 export type NavPages = {
   href: string
   label: string
@@ -127,17 +128,19 @@ export default function BottomNavigation() {
           }}
           className="overflow-x-auto justify-start sm:justify-center  "
         >
-          {pages?.map((page) =>
-            page.visible ? (
-              <BottomNavigationAction
-                key={page.href}
-                LinkComponent={Link}
-                href={page.href}
-                label={page.label}
-                icon={page.icon}
-              />
-            ) : null
-          )}
+          <ErrorBoundary>
+            {pages?.map((page) =>
+              page.visible ? (
+                <BottomNavigationAction
+                  key={page.href}
+                  LinkComponent={Link}
+                  href={page.href}
+                  label={page.label}
+                  icon={page.icon}
+                />
+              ) : null
+            )}
+          </ErrorBoundary>
         </MUIBottomNavigation>
       </Paper>
     </Box>

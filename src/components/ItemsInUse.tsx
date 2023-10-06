@@ -126,54 +126,56 @@ const ItemInUse = ({
   const onTime = item.rentFinishAt && isAfter(item.rentFinishAt, new Date())
 
   return (
-    <Box className="grid gap-6">
-      {!!moreItemsInUse?.length && (
-        <Box>
-          <Typography>Otras unidades del mismo cliente...</Typography>
+    <ErrorBoundary>
+      <Box className="grid gap-6">
+        {!!moreItemsInUse?.length && (
           <Box>
-            {moreItemsInUse.map((item, i) => (
-              <ItemRow key={i} item={item} />
-            ))}
+            <Typography>Otras unidades del mismo cliente...</Typography>
+            <Box>
+              {moreItemsInUse.map((item, i) => (
+                <ItemRow key={i} item={item} />
+              ))}
+            </Box>
           </Box>
-        </Box>
-      )}
-      {!onTime && (
+        )}
+        {!onTime && (
+          <Typography className="text-center my-4">
+            Unidad fuera de tiempo.
+          </Typography>
+        )}
         <Typography className="text-center my-4">
-          Unidad fuera de tiempo.
+          Revisa que la unidad este en buen estado.
         </Typography>
-      )}
-      <Typography className="text-center my-4">
-        Revisa que la unidad este en buen estado.
-      </Typography>
-      <Box className="flex w-full gap-4">
-        <Button
-          fullWidth
-          onClick={(e) => {
-            e.preventDefault()
-            modal.onOpen()
-          }}
-          variant="outlined"
-          color="info"
-        >
-          Cambiar <AppIcon icon="switch" />
-        </Button>
-        <Button
-          fullWidth
-          onClick={(e) => {
-            e.preventDefault()
-            handleFinishRent(item)
-          }}
-          variant="outlined"
-          color="success"
-        >
-          {`Recibir ${item.category} ${item.serialNumber || item.name}`}
-        </Button>
-      </Box>
+        <Box className="flex w-full gap-4">
+          <Button
+            fullWidth
+            onClick={(e) => {
+              e.preventDefault()
+              modal.onOpen()
+            }}
+            variant="outlined"
+            color="info"
+          >
+            Cambiar <AppIcon icon="switch" />
+          </Button>
+          <Button
+            fullWidth
+            onClick={(e) => {
+              e.preventDefault()
+              handleFinishRent(item)
+            }}
+            variant="outlined"
+            color="success"
+          >
+            {`Recibir ${item.category} ${item.serialNumber || item.name}`}
+          </Button>
+        </Box>
 
-      <Modal {...modal}>
-        <ChangeItem item={item} />
-      </Modal>
-    </Box>
+        <Modal {...modal}>
+          <ChangeItem item={item} />
+        </Modal>
+      </Box>
+    </ErrorBoundary>
   )
 }
 

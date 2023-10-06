@@ -13,6 +13,7 @@ import { PriceType } from './PricesForm'
 import { changeItem, updatePayment } from '@/firebase/payments'
 import ButtonLoadingAsync from './ButtonLoadingAsync'
 import { calculateTotal } from '@/lib/calculateTotalItem'
+import ErrorBoundary from './ErrorBoundary'
 
 const ChangeItem = ({ item }: { item: Partial<ItemInUse> }) => {
   const { itemsInUse, currentCompany } = useUserCompaniesContext()
@@ -84,61 +85,63 @@ const ChangeItem = ({ item }: { item: Partial<ItemInUse> }) => {
   }
 
   return (
-    <Box>
-      <Typography className="my-4 text-center ">
-        Articulo:{' '}
-        <span className="font-bold">
-          {item.category} - {item.serialNumber || item.name}
-        </span>
-      </Typography>
-      <Select
-        options={categories}
-        onSelect={(_categoryName) => _setCategoryName(_categoryName)}
-        selected={_categoryName}
-        label="Categorias"
-        fullWidth
-        variant="outlined"
-      />
-      <div className="mt-8" />
-      {!!diff.newPrice && (
-        <Typography className="text-center my-4 ">
-          Cambiar por:{' '}
+    <ErrorBoundary>
+      <Box>
+        <Typography className="my-4 text-center ">
+          Articulo:{' '}
           <span className="font-bold">
-            {diff.newPrice?.quantity}x {diff.newPrice?.unit}
+            {item.category} - {item.serialNumber || item.name}
           </span>
         </Typography>
-      )}
-      <Stack direction="row" flexWrap={'wrap'} className="justify-center ">
-        {_items?.map((item) => (
-          <Chip
-            disabled={!!itemsInUse?.find(({ itemId }) => itemId === item.id)}
-            color={_selected === item.id ? 'primary' : 'default'}
-            className="p-1 m-1"
-            key={item.id}
-            label={item.serialNumber || item.name}
-            onClick={() => handleClick(item.id)}
-          />
-        ))}
-      </Stack>
-      {_selected && (
-        <>
+        <Select
+          options={categories}
+          onSelect={(_categoryName) => _setCategoryName(_categoryName)}
+          selected={_categoryName}
+          label="Categorias"
+          fullWidth
+          variant="outlined"
+        />
+        <div className="mt-8" />
+        {!!diff.newPrice && (
           <Typography className="text-center my-4 ">
-            {diff?.amount < 0 ? 'Devolver' : 'Cobrar'}
-            {': '}
-            <CurrencySpan quantity={diff?.amount} />
+            Cambiar por:{' '}
+            <span className="font-bold">
+              {diff.newPrice?.quantity}x {diff.newPrice?.unit}
+            </span>
           </Typography>
-          <div className="flex justify-center mt-8">
-            <ButtonLoadingAsync
-              onClick={() => {
-                return handleChange()
-              }}
-              label="Cambiar"
-              loadingLabel="Cambiando..."
-            ></ButtonLoadingAsync>
-          </div>
-        </>
-      )}
-    </Box>
+        )}
+        <Stack direction="row" flexWrap={'wrap'} className="justify-center ">
+          {_items?.map((item) => (
+            <Chip
+              disabled={!!itemsInUse?.find(({ itemId }) => itemId === item.id)}
+              color={_selected === item.id ? 'primary' : 'default'}
+              className="p-1 m-1"
+              key={item.id}
+              label={item.serialNumber || item.name}
+              onClick={() => handleClick(item.id)}
+            />
+          ))}
+        </Stack>
+        {_selected && (
+          <>
+            <Typography className="text-center my-4 ">
+              {diff?.amount < 0 ? 'Devolver' : 'Cobrar'}
+              {': '}
+              <CurrencySpan quantity={diff?.amount} />
+            </Typography>
+            <div className="flex justify-center mt-8">
+              <ButtonLoadingAsync
+                onClick={() => {
+                  return handleChange()
+                }}
+                label="Cambiar"
+                loadingLabel="Cambiando..."
+              ></ButtonLoadingAsync>
+            </div>
+          </>
+        )}
+      </Box>
+    </ErrorBoundary>
   )
 }
 

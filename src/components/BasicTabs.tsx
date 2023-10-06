@@ -5,6 +5,7 @@ import Tab from '@mui/material/Tab'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import ErrorBoundary from './ErrorBoundary'
 
 interface TabPanelProps {
   children?: React.ReactNode
@@ -68,24 +69,28 @@ function BasicTabs({
   return (
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          aria-label="basic tabs example"
-          variant="scrollable"
-          scrollButtons
-          allowScrollButtonsMobile
-        >
-          {tabs.map((tab, i) => (
-            <Tab key={i} label={tab.label} {...a11yProps(i)} />
-          ))}
-        </Tabs>
+        <ErrorBoundary>
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            aria-label="basic tabs example"
+            variant="scrollable"
+            scrollButtons
+            allowScrollButtonsMobile
+          >
+            {tabs.map((tab, i) => (
+              <Tab key={i} label={tab.label} {...a11yProps(i)} />
+            ))}
+          </Tabs>
+        </ErrorBoundary>
       </Box>
-      {tabs.map((tab, i) => (
-        <CustomTabPanel key={i} value={value} index={i}>
-          {tab.content}
-        </CustomTabPanel>
-      ))}
+      <ErrorBoundary>
+        {tabs.map((tab, i) => (
+          <CustomTabPanel key={i} value={value} index={i}>
+            {tab.content}
+          </CustomTabPanel>
+        ))}
+      </ErrorBoundary>
     </Box>
   )
 }

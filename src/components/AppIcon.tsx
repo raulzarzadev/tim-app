@@ -70,6 +70,7 @@ const icons = {
 export type IconName = keyof typeof icons
 const AppIcon = ({ icon, ...props }: SvgIconProps & { icon: IconName }) => {
   const Component = icons[icon]
+  if (!Component) return <>Icon</>
   return <Component {...props} />
 }
 

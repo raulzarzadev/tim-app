@@ -30,7 +30,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/app/new-company/[id]",
-    "src/components/ErrorBoundary.js"
+    "src/components/ErrorBoundary.tsx"
   ],
   "exclude": ["node_modules"]
 }

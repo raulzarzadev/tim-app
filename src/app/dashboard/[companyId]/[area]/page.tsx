@@ -5,6 +5,7 @@ import CompanyDelivery from '@/components/CompanyDelivery'
 import CompanyMaintenance from '@/components/CompanyMaintenance'
 import CompanyReception from '@/components/CompanyReception'
 import CompanyStore from '@/components/CompanyStore'
+import ErrorBoundary from '@/components/ErrorBoundary'
 import { StaffPermission, StaffPermissionLabels } from '@/types/staff'
 import { Container, Typography } from '@mui/material'
 
@@ -48,7 +49,7 @@ const Page = ({
       <Typography className="text-center text-xl font-bold my-4">
         {StaffPermissionLabels[area]}
       </Typography>
-      {component[area].component}
+      <ErrorBoundary>{component[area].component}</ErrorBoundary>
     </Container>
   )
 }
