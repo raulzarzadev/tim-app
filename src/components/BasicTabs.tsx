@@ -78,9 +78,11 @@ function BasicTabs({
             scrollButtons
             allowScrollButtonsMobile
           >
-            {tabs.map((tab, i) => (
-              <Tab key={i} label={tab.label} {...a11yProps(i)} />
-            ))}
+            <ErrorBoundary>
+              {tabs.map((tab, i) => (
+                <Tab key={i} label={tab.label} {...a11yProps(i)} />
+              ))}
+            </ErrorBoundary>
           </Tabs>
         </ErrorBoundary>
       </Box>
