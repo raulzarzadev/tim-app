@@ -1,5 +1,4 @@
 'use client'
-import { IconName } from '@/components/AppIcon'
 import CompanyAdmin from '@/components/CompanyAdmin'
 import CompanyCashbox from '@/components/CompanyCashbox'
 import CompanyDelivery from '@/components/CompanyDelivery'
@@ -23,14 +22,12 @@ const Page = ({
         <Typography className="text-center text-xl font-bold my-4">
           {StaffPermissionLabels[area]}
         </Typography>
-        {/* {comp} */}
-        <div>Espacio areas</div>
-        {/* {area === 'ADMIN' && <CompanyAdmin />}
+        {area === 'ADMIN' && <CompanyAdmin />}
         {area === 'CASHBOX' && <CompanyCashbox />}
         {area === 'DELIVERY' && <CompanyDelivery />}
         {area === 'MAINTENANCE' && <CompanyMaintenance />}
         {area === 'RECEPTION' && <CompanyReception />}
-        {area === 'SALES' && <CompanyStore />} */}
+        {area === 'SALES' && <CompanyStore />}
       </Container>
     </ErrorBoundary>
   )
