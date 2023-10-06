@@ -1,3 +1,4 @@
+'use client'
 import { IconName } from '@/components/AppIcon'
 import CompanyAdmin from '@/components/CompanyAdmin'
 import CompanyCashbox from '@/components/CompanyCashbox'
