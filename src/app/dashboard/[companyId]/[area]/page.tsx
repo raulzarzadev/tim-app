@@ -44,6 +44,7 @@ const Page = ({
   params: { area: StaffPermission; companyId: string }
 }) => {
   const { area } = params
+  console.log({ area })
   const comp = component[area].component
   console.log({ comp })
 
