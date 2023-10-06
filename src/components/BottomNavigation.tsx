@@ -106,7 +106,7 @@ export default function BottomNavigation() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentCompany])
-
+  console.log({ value, comp: pages?.[value].label })
   if (!user) return <></>
 
   return (
@@ -120,15 +120,15 @@ export default function BottomNavigation() {
         }}
         elevation={3}
       >
-        <MUIBottomNavigation
-          showLabels
-          value={value}
-          onChange={(event, newValue) => {
-            setValue(newValue)
-          }}
-          className="overflow-x-auto justify-start sm:justify-center  "
-        >
-          <ErrorBoundary>
+        <ErrorBoundary componentName="BottomNavigation">
+          <MUIBottomNavigation
+            showLabels
+            value={value}
+            onChange={(event, newValue) => {
+              setValue(newValue)
+            }}
+            className="overflow-x-auto justify-start sm:justify-center  "
+          >
             {pages?.map((page) =>
               page.visible ? (
                 <BottomNavigationAction
@@ -140,8 +140,8 @@ export default function BottomNavigation() {
                 />
               ) : null
             )}
-          </ErrorBoundary>
-        </MUIBottomNavigation>
+          </MUIBottomNavigation>
+        </ErrorBoundary>
       </Paper>
     </Box>
   )
