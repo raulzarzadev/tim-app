@@ -69,7 +69,7 @@ function BasicTabs({
   return (
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <ErrorBoundary>
+        <ErrorBoundary componentName="BasicTabs">
           <Tabs
             value={value}
             onChange={handleChange}
@@ -84,7 +84,7 @@ function BasicTabs({
           </Tabs>
         </ErrorBoundary>
       </Box>
-      <ErrorBoundary>
+      <ErrorBoundary componentName="BasicTabs-Panels">
         {tabs.map((tab, i) => (
           <CustomTabPanel key={i} value={value} index={i}>
             {tab.content}

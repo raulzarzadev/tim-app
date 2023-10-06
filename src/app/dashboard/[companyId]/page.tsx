@@ -10,7 +10,7 @@ const Page = async () => {
   return (
     <Container>
       <UserCompanies />
-      <ErrorBoundary>
+      <ErrorBoundary componentName="Dashboard">
         <BasicTabs
           tabs={[
             { label: 'Categorias', content: <CompanyCategories /> },

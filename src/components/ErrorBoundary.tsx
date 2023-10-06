@@ -5,6 +5,7 @@ interface Props {
   hasError?: boolean
   fallback?: ReactNode
   children?: ReactNode
+  componentName?: string
 }
 
 type State = {
@@ -28,7 +29,7 @@ class ErrorBoundary extends Component<Props, State> {
     //   in ErrorBoundary (created by App)
     //   in div (created by App)
     //   in App
-    logErrorToMyService(error, info.componentStack)
+    logErrorToMyService(error, info.componentStack, this.props?.componentName)
   }
 
   render() {
@@ -37,7 +38,7 @@ class ErrorBoundary extends Component<Props, State> {
       return this.props.fallback || <>¡Ups! Hubo un problema.</>
     }
 
-    return this.props.children || <></>
+    return this.props.children || <>No component</>
   }
 }
 
