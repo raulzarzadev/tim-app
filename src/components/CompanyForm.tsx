@@ -14,20 +14,21 @@ interface IFormInput {
   name: string
 }
 
-const CompanyForm = ({ company }: { company?: CompanyType }) => {
+const CompanyForm = ({ company }: { company?: Partial<CompanyType> }) => {
   const router = useRouter()
   const { user } = useAuthContext()
   const { resetCompanies } = useUserCompaniesContext()
   const { handleSubmit, register, watch, control } = useForm({
     defaultValues: company || {
-      name: ''
+      name: '',
+      phone: ''
     }
   })
 
   const formValues = watch()
   const [done, setDone] = useState(false)
 
-  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+  const onSubmit: SubmitHandler<Partial<IFormInput>> = async (data) => {
     try {
       if (company?.id) {
         await updateCompany(company?.id, data)
@@ -37,7 +38,7 @@ const CompanyForm = ({ company }: { company?: CompanyType }) => {
           .catch((err) => console.error(err))
       } else {
         await createCompany({
-          name: data?.name,
+          name: data?.name || '',
           userId: user?.id || '',
           staffMails: [user?.email || ''],
           staff: [
