@@ -50,12 +50,14 @@ const Page = ({
   if (!comp) return <>No component</>
 
   return (
-    <Container>
-      <Typography className="text-center text-xl font-bold my-4">
-        {StaffPermissionLabels[area]}
-      </Typography>
-      <ErrorBoundary componentName="Areas">{comp}</ErrorBoundary>
-    </Container>
+    <ErrorBoundary componentName="Areas">
+      <Container>
+        <Typography className="text-center text-xl font-bold my-4">
+          {StaffPermissionLabels[area]}
+        </Typography>
+        {comp}
+      </Container>
+    </ErrorBoundary>
   )
 }
 
