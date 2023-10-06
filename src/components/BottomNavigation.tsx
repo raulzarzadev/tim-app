@@ -106,7 +106,7 @@ export default function BottomNavigation() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentCompany])
-  console.log({ value, comp: pages?.[value].label })
+
   if (!user) return <></>
 
   return (

@@ -9,6 +9,7 @@ import { useAuthContext } from '@/context/authContext'
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2'
 import { StaffPermissionLabels, areaIcon } from '@/types/staff'
 import { StaffPermission } from '@/types/staff'
+import ErrorBoundary from './ErrorBoundary'
 
 const UserCompanies = () => {
   const { companies, selected, setSelected, currentCompany } =
@@ -64,10 +65,12 @@ const CompanyAccess = () => {
           .map(([key, value]) =>
             value ? (
               <Grid2 key={key} xs={6} sm={4} md={3} lg={2}>
-                <Area
-                  area={key as StaffPermission}
-                  href={`/dashboard/${currentCompany?.id}/${key}`}
-                />
+                <ErrorBoundary componentName={key}>
+                  <Area
+                    area={key as StaffPermission}
+                    href={`/dashboard/${currentCompany?.id}/${key}`}
+                  />
+                </ErrorBoundary>
               </Grid2>
             ) : null
           )}
