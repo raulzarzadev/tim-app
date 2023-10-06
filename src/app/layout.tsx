@@ -21,15 +21,23 @@ export default async function RootLayout({
         <title>BajaRent</title>
       </head>
       <body>
-        <AuthContextProvider>
-          <UserCompaniesProvider>
-            <ErrorBoundary>
-              <Navigation />
+        <ErrorBoundary componentName="RootLayout auth">
+          <AuthContextProvider>
+            <ErrorBoundary componentName="Companies">
+              <UserCompaniesProvider>
+                <ErrorBoundary componentName="RootLayout navigation">
+                  <Navigation />
+                </ErrorBoundary>
+                <ErrorBoundary componentName="RootLayout">
+                  {children}
+                </ErrorBoundary>
+                <ErrorBoundary componentName="BottomNavigation">
+                  <BottomNavigation />
+                </ErrorBoundary>
+              </UserCompaniesProvider>
             </ErrorBoundary>
-            <ErrorBoundary>{children}</ErrorBoundary>
-            <BottomNavigation />
-          </UserCompaniesProvider>
-        </AuthContextProvider>
+          </AuthContextProvider>
+        </ErrorBoundary>
       </body>
     </html>
   )
