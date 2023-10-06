@@ -12,10 +12,12 @@ import { StaffPermission } from '@/types/staff'
 import ErrorBoundary from './ErrorBoundary'
 
 const UserCompanies = () => {
+  const { user } = useAuthContext()
   const { companies, selected, setSelected, currentCompany } =
     useUserCompaniesContext()
 
-  if (companies.length === 0) {
+  if (!user) return <div>Cargando...</div>
+  if (!companies.length) {
     return <p>Aun no tienes una empresa.</p>
   }
   return (
@@ -44,7 +46,9 @@ const UserCompanies = () => {
       <Typography className="text-center my-4" component={'p'}>
         {currentCompany?.description}
       </Typography>
-      <CompanyAccess />
+      <ErrorBoundary componentName={'Campany access'}>
+        <CompanyAccess />
+      </ErrorBoundary>
     </div>
   )
 }

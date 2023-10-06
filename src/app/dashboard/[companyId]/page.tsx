@@ -8,11 +8,9 @@ import { Container } from '@mui/material'
 
 const Page = async () => {
   return (
-    <Container>
-      <ErrorBoundary componentName="Dashboard User companies">
+    <ErrorBoundary componentName="Dashboard">
+      <Container>
         <UserCompanies />
-      </ErrorBoundary>
-      <ErrorBoundary componentName="Dashboard">
         <BasicTabs
           tabs={[
             { label: 'Categorias', content: <CompanyCategories /> },
@@ -20,8 +18,8 @@ const Page = async () => {
             { label: 'Staff', content: <CompanyStaff /> }
           ]}
         />
-      </ErrorBoundary>
-    </Container>
+      </Container>
+    </ErrorBoundary>
   )
 }
 
