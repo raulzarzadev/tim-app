@@ -44,7 +44,7 @@ const Page = ({
   params: { area: StaffPermission; companyId: string }
 }) => {
   const { area } = params
-  console.log({ areas })
+  console.log({ area })
   return (
     <Container>
       <Typography className="text-center text-xl font-bold my-4">
