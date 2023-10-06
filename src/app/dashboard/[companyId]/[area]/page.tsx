@@ -44,12 +44,15 @@ const Page = ({
   params: { area: StaffPermission; companyId: string }
 }) => {
   const { area } = params
+  console.log({ areas })
   return (
     <Container>
       <Typography className="text-center text-xl font-bold my-4">
         {StaffPermissionLabels[area]}
       </Typography>
-      <ErrorBoundary>{component[area].component}</ErrorBoundary>
+      <ErrorBoundary componentName="Areas">
+        {component[area].component}
+      </ErrorBoundary>
     </Container>
   )
 }
