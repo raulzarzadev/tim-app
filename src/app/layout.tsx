@@ -1,3 +1,4 @@
+import ErrorBoundary from '@/components/ErrorBoundary'
 import './globals.css'
 import BottomNavigation from '@/components/BottomNavigation'
 import Navigation from '@/components/Navigation'
@@ -22,8 +23,10 @@ export default async function RootLayout({
       <body>
         <AuthContextProvider>
           <UserCompaniesProvider>
-            <Navigation />
-            {children}
+            <ErrorBoundary>
+              <Navigation />
+            </ErrorBoundary>
+            <ErrorBoundary>{children}</ErrorBoundary>
             <BottomNavigation />
           </UserCompaniesProvider>
         </AuthContextProvider>
