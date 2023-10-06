@@ -23,15 +23,15 @@ export default async function RootLayout({
       <body>
         <ErrorBoundary componentName="RootLayout auth">
           <AuthContextProvider>
-            <ErrorBoundary componentName="Companies">
+            <ErrorBoundary componentName="RootLayout Companies">
               <UserCompaniesProvider>
                 <ErrorBoundary componentName="RootLayout navigation">
                   <Navigation />
                 </ErrorBoundary>
-                <ErrorBoundary componentName="RootLayout">
+                <ErrorBoundary componentName="RootLayout child">
                   {children}
                 </ErrorBoundary>
-                <ErrorBoundary componentName="BottomNavigation">
+                <ErrorBoundary componentName="RootLayout BottomNavigation">
                   <BottomNavigation />
                 </ErrorBoundary>
               </UserCompaniesProvider>
