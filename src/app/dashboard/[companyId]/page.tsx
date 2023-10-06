@@ -9,7 +9,9 @@ import { Container } from '@mui/material'
 const Page = async () => {
   return (
     <Container>
-      <UserCompanies />
+      <ErrorBoundary componentName="Dashboard User companies">
+        <UserCompanies />
+      </ErrorBoundary>
       <ErrorBoundary componentName="Dashboard">
         <BasicTabs
           tabs={[
