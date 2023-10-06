@@ -8,6 +8,7 @@ import React from 'react'
 
 const validatePermissions = (WrappedComponent: any, area: StaffPermission) => {
   const hocComponent = ({ ...props }) => {
+    return WrappedComponent(props)
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const { user } = useAuthContext()
     // eslint-disable-next-line react-hooks/rules-of-hooks
