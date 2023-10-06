@@ -24,12 +24,13 @@ const Page = ({
           {StaffPermissionLabels[area]}
         </Typography>
         {/* {comp} */}
-        {area === 'ADMIN' && <CompanyAdmin />}
+        <div>Espacio areas</div>
+        {/* {area === 'ADMIN' && <CompanyAdmin />}
         {area === 'CASHBOX' && <CompanyCashbox />}
         {area === 'DELIVERY' && <CompanyDelivery />}
         {area === 'MAINTENANCE' && <CompanyMaintenance />}
         {area === 'RECEPTION' && <CompanyReception />}
-        {area === 'SALES' && <CompanyStore />}
+        {area === 'SALES' && <CompanyStore />} */}
       </Container>
     </ErrorBoundary>
   )
