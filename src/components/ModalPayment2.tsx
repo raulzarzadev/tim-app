@@ -18,10 +18,10 @@ const ModalPayment = ({
   disabled?: boolean
   onCloseParent?: () => void
 }) => {
-  const USD_PRICE = 16
   const modalPayment = useModal({ title: 'Pagar ' })
   const { handlePay, items, setItems, setClient } = useContext(CashboxContext)
   const { currentCompany } = useUserCompaniesContext()
+  const USD_PRICE = currentCompany?.usdPrice || 1
   return (
     <>
       <Button
@@ -41,7 +41,11 @@ const ModalPayment = ({
             Total: <CurrencySpan quantity={amount} />
           </Typography>
           <Typography variant="body2" className="text-center">
-            (usd): <CurrencySpan quantity={amount / USD_PRICE} />
+            (precio del dolar <CurrencySpan quantity={USD_PRICE} />
+            ):{' '}
+            <span className="font-bold">
+              <CurrencySpan quantity={amount / USD_PRICE} />
+            </span>
           </Typography>
         </Box>
         <PaymentForm

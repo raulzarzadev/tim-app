@@ -32,7 +32,7 @@ const ClientForm = ({
         <TextField {...register('name')} label="Nombre" required />
         {/* client phone */}
         <PhoneInput {...register('phone')} label="Teléfono" control={control} />
-        {/* <TextField {...register('phone')} label="Telefono" required /> */}
+        {/* <TextField {...register('phone')} label="Teléfono" required /> */}
         {/* client email */}
         <TextField {...register('email')} type="email" label="Email" />
         {/* client address */}

@@ -92,7 +92,7 @@ const Payment = ({ payment }: { payment: Payment }) => {
         <Box className="flex items-center">
           <Box>
             <Typography>Nombre: {payment?.client?.name}</Typography>
-            <Typography>Telefono: {payment?.client?.phone}</Typography>
+            <Typography>Teléfono: {payment?.client?.phone}</Typography>
           </Box>
           <Box className="flex">
             {payment?.client?.imageID && (

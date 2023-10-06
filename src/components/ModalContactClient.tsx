@@ -19,7 +19,7 @@ const ModalContactClient = ({ client }: { client: Payment['client'] }) => {
       value: client?.email
     },
     phone: {
-      label: 'Telefono',
+      label: 'Teléfono',
       icon: 'phone',
       href: 'tel:',
       value: client?.phone?.replaceAll('+', '').replaceAll(' ', '')

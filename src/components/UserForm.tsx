@@ -4,6 +4,7 @@ import { Button, TextField } from '@mui/material'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import CheckboxLabel from './Checkbox'
+import PhoneInput from './PhoneInput'
 
 const UserForm = ({
   user,
@@ -15,7 +16,8 @@ const UserForm = ({
   const {
     register,
     handleSubmit,
-    formState: { isDirty }
+    formState: { isDirty },
+    control
   } = useForm({
     defaultValues: user
   })
@@ -35,7 +37,8 @@ const UserForm = ({
       <div className="grid gap-4 py-4">
         <TextField {...register('email')} label="Correo" disabled />
         <TextField {...register('name')} label="Nombre" />
-        <TextField {...register('phone')} label="Teléfono" />
+        {/* <TextField {...register('phone')} label="Teléfono" /> */}
+        <PhoneInput {...register('phone')} label="Teléfono" control={control} />
 
         <LoadingButton type="submit" disabled={!isDirty} loading={loading}>
           Actualizar

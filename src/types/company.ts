@@ -12,6 +12,8 @@ export type CompanyBase = {
   articles?: ArticleType[]
   staff?: StaffType[]
   staffMails: string[]
+  phone?: string
+  usdPrice?: number
 }
 
 export type CompanyType = BaseType & CompanyBase

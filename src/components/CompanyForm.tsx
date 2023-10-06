@@ -8,6 +8,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext'
 import { CompanyType } from '@/types/company'
+import PhoneInput from './PhoneInput'
 
 interface IFormInput {
   name: string
@@ -17,7 +18,7 @@ const CompanyForm = ({ company }: { company?: CompanyType }) => {
   const router = useRouter()
   const { user } = useAuthContext()
   const { resetCompanies } = useUserCompaniesContext()
-  const { handleSubmit, register, watch } = useForm({
+  const { handleSubmit, register, watch, control } = useForm({
     defaultValues: company || {
       name: ''
     }
@@ -80,6 +81,13 @@ const CompanyForm = ({ company }: { company?: CompanyType }) => {
         placeholder="Describe brevemente los productos que tu empresa ofrece"
         rows={3}
         {...register('description')}
+      />
+      <PhoneInput {...register('phone')} label="Teléfono" control={control} />
+      <TextField
+        className="w-36"
+        type="number"
+        {...register('usdPrice')}
+        label="Precio del dolar (usd)"
       />
       {/* <Controller
         name="iceCreamType"
