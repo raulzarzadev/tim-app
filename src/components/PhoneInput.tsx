@@ -19,7 +19,6 @@ const PhoneInput = forwardRef(
         <Controller
           control={control}
           name={name}
-          className="w-full rounded-[4px] pl-12 py-1 border-black border-opacity-25 border h-14"
           render={({ field }) => (
             <PhoneInput2
               preferredCountries={['mx', 'us', 'ca']}
