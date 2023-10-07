@@ -1,6 +1,7 @@
 import { MuiTelInput } from 'mui-tel-input'
 import { forwardRef } from 'react'
 import { Control, Controller, FieldValues } from 'react-hook-form'
+import ErrorBoundary from './ErrorBoundary'
 
 const PhoneInput = forwardRef(
   (
@@ -12,18 +13,20 @@ const PhoneInput = forwardRef(
     ref
   ) => {
     return (
-      <Controller
-        control={control}
-        name={name}
-        render={({ field }) => (
-          <MuiTelInput
-            {...field}
-            label={label}
-            preferredCountries={['MX', 'US', 'CA']}
-            defaultCountry="MX"
-          />
-        )}
-      />
+      <ErrorBoundary componentName="PhoneInput">
+        <Controller
+          control={control}
+          name={name}
+          render={({ field }) => (
+            <MuiTelInput
+              {...field}
+              label={label}
+              preferredCountries={['MX', 'US', 'CA']}
+              defaultCountry="MX"
+            />
+          )}
+        />
+      </ErrorBoundary>
     )
   }
 )
