@@ -94,7 +94,7 @@ const Payment = ({ payment }: { payment: Payment }) => {
             <Typography>Nombre: {payment?.client?.name}</Typography>
             <Typography>Teléfono: {payment?.client?.phone}</Typography>
           </Box>
-          <Box className="flex">
+          <Box className="flex justify-center w-full">
             {payment?.client?.imageID && (
               <PreviewImage
                 src={payment?.client?.imageID}
@@ -135,7 +135,9 @@ const Payment = ({ payment }: { payment: Payment }) => {
           >
             <Typography>¿Esta seguro que desea cancelar el pago?</Typography>
           </ModalConfirm>
-          <Button variant="outlined">Editar</Button>
+          <Button variant="outlined" disabled>
+            Editar
+          </Button>
         </Box>
       </Modal>
       <Box key={payment.id} className="p-2 my-2 rounded-md shadow-md">

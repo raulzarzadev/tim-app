@@ -20,11 +20,22 @@ const PreviewImage = ({
         }}
         className="relative h-16 aspect-video object-contain mx-auto"
       >
-        <Image src={src} fill alt={alt} className="object-contain" />
+        <Image
+          src={src}
+          fill
+          alt={alt}
+          className="object-cover object-center"
+        />
       </button>
       <Modal {...modalImage}>
         <div className="relative w-full aspect-square">
-          <Image src={src} fill alt={alt} className="object-contain" />
+          <Image
+            blurDataURL={src}
+            src={src}
+            fill
+            alt={alt}
+            className="object-contain"
+          />
         </div>
       </Modal>
     </>
