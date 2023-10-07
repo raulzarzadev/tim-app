@@ -53,16 +53,16 @@ const Payment = ({ payment }: { payment: Payment }) => {
           <Grid2 xs={2} className="font-bold truncate">
             Serie/Nombre
           </Grid2>
-          <Grid2 xs={3} className="font-bold">
+          <Grid2 xs={3} className="font-bold truncate">
             Categoria
           </Grid2>
-          <Grid2 xs={2} className="font-bold">
+          <Grid2 xs={2} className="font-bold truncate">
             Tiempo
           </Grid2>
-          <Grid2 xs={2} className="font-bold">
+          <Grid2 xs={2} className="font-bold truncate">
             Precio
           </Grid2>
-          <Grid2 xs={3} className="font-bold">
+          <Grid2 xs={3} className="font-bold truncate">
             Entrega
           </Grid2>
           {payment.items.map((item) => (
@@ -89,12 +89,12 @@ const Payment = ({ payment }: { payment: Payment }) => {
         <Typography className="font-bold mt-4 ">
           Información de cliente
         </Typography>
-        <Box className="flex items-center">
+        <Box className="flex items-center justify-between">
           <Box>
             <Typography>Nombre: {payment?.client?.name}</Typography>
             <Typography>Teléfono: {payment?.client?.phone}</Typography>
           </Box>
-          <Box className="flex justify-center w-full">
+          <Box className="flex justify-center w-1/2 flex-wrap">
             {payment?.client?.imageID && (
               <PreviewImage
                 src={payment?.client?.imageID}
@@ -201,7 +201,11 @@ const OnRoadItem = ({
       <Grid2 xs={2}>
         {item.qty}x {item.unit}
       </Grid2>
-      <Grid2 xs={2}>{itemsDetails?.ownPrice ? 'Ind' : 'Cat'}</Grid2>
+      <Grid2 xs={2}>
+        <Typography className="truncate">
+          {itemsDetails?.ownPrice ? 'Individual' : 'Categoria'}
+        </Typography>
+      </Grid2>
       <Grid2 xs={3}> {shouldDelivery(item)}</Grid2>
     </>
   )

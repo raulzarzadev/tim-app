@@ -18,13 +18,13 @@ const PreviewImage = ({
           e.stopPropagation()
           modalImage.onOpen()
         }}
-        className="relative h-16 aspect-video object-contain mx-auto"
+        className="relative h-16 aspect-video object-contain mx-auto "
       >
         <Image
           src={src}
           fill
           alt={alt}
-          className="object-cover object-center"
+          className="object-cover object-center rounded-md shadow-md cursor-pointer opacity-40 hover:opacity-100"
         />
       </button>
       <Modal {...modalImage}>
