@@ -1,7 +1,10 @@
-import { MuiTelInput } from 'mui-tel-input'
+// import { MuiTelInput } from 'mui-tel-input'
 import { forwardRef } from 'react'
 import { Control, Controller, FieldValues } from 'react-hook-form'
 import ErrorBoundary from './ErrorBoundary'
+import PhoneInput2 from 'react-phone-input-2'
+import { TextField } from '@mui/material'
+import 'react-phone-input-2/lib/style.css'
 
 const PhoneInput = forwardRef(
   (
@@ -18,11 +21,14 @@ const PhoneInput = forwardRef(
           control={control}
           name={name}
           render={({ field }) => (
-            <MuiTelInput
+            <PhoneInput2
+              preferredCountries={['mx', 'us', 'ca']}
+              country="mx"
+              inputProps={{
+                className:
+                  'w-full rounded-[4px] pl-12 py-1 border-black border-opacity-25 border h-14'
+              }}
               {...field}
-              label={label}
-              preferredCountries={['MX', 'US', 'CA']}
-              defaultCountry="MX"
             />
           )}
         />

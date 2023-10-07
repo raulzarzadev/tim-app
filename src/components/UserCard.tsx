@@ -8,6 +8,7 @@ import { useUserCompaniesContext } from '@/context/userCompaniesContext'
 import LoginButton from './LoginButton'
 import { updateUser } from '@/firebase/users'
 import { UserType } from '@/types/user'
+import ErrorBoundary from './ErrorBoundary'
 
 const UserCard = () => {
   const { user } = useAuthContext()
@@ -36,6 +37,7 @@ const UserCard = () => {
   return (
     <div>
       <UserForm user={user} setUser={handleSetUser} />
+
       {companies.length === 0 && (
         <div className="flex w-full justify-center">
           <Button LinkComponent={Link} href="/new-company">

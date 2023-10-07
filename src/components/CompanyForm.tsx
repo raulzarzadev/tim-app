@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext'
 import { CompanyType } from '@/types/company'
 import PhoneInput from './PhoneInput'
+import ErrorBoundary from './ErrorBoundary'
 
 interface IFormInput {
   name: string
@@ -66,31 +67,32 @@ const CompanyForm = ({ company }: { company?: Partial<CompanyType> }) => {
   }
 
   return (
-    <form className="grid gap-4">
-      <TextField
-        id="outlined-basic"
-        label="Nombre de la empresa"
-        variant="outlined"
-        fullWidth
-        {...register('name')}
-      />
-      <TextField
-        id="outlined-basic"
-        label="Descripción"
-        fullWidth
-        multiline
-        placeholder="Describe brevemente los productos que tu empresa ofrece"
-        rows={3}
-        {...register('description')}
-      />
-      <PhoneInput {...register('phone')} label="Teléfono" control={control} />
-      <TextField
-        className="w-36"
-        type="number"
-        {...register('usdPrice')}
-        label="Precio del dolar (usd)"
-      />
-      {/* <Controller
+    <ErrorBoundary componentName="CompanyForm">
+      <form className="grid gap-4">
+        <TextField
+          id="outlined-basic"
+          label="Nombre de la empresa"
+          variant="outlined"
+          fullWidth
+          {...register('name')}
+        />
+        <TextField
+          id="outlined-basic"
+          label="Descripción"
+          fullWidth
+          multiline
+          placeholder="Describe brevemente los productos que tu empresa ofrece"
+          rows={3}
+          {...register('description')}
+        />
+        <PhoneInput {...register('phone')} label="Teléfono" control={control} />
+        <TextField
+          className="w-36"
+          type="number"
+          {...register('usdPrice')}
+          label="Precio del dolar (usd)"
+        />
+        {/* <Controller
         name="iceCreamType"
         control={control}
         render={({ field }) => (
@@ -104,21 +106,22 @@ const CompanyForm = ({ company }: { company?: Partial<CompanyType> }) => {
           />
         )}
       /> */}
-      <div className="flex w-full justify-evenly my-4">
-        <Button
-          onClick={(e) => {
-            e.preventDefault()
-            router.back()
-          }}
-        >
-          Atras
-        </Button>
-        <ModalConfirm handleConfirm={handleSubmit(onSubmit)} disabled={done}>
-          <Typography>Se creara la siguiente empresa: </Typography>
-          <Typography>{formValues.name}</Typography>
-        </ModalConfirm>
-      </div>
-    </form>
+        <div className="flex w-full justify-evenly my-4">
+          <Button
+            onClick={(e) => {
+              e.preventDefault()
+              router.back()
+            }}
+          >
+            Atras
+          </Button>
+          <ModalConfirm handleConfirm={handleSubmit(onSubmit)} disabled={done}>
+            <Typography>Se creara la siguiente empresa: </Typography>
+            <Typography>{formValues.name}</Typography>
+          </ModalConfirm>
+        </div>
+      </form>
+    </ErrorBoundary>
   )
 }
 

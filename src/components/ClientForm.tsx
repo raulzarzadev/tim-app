@@ -24,7 +24,6 @@ const ClientForm = ({
   const signature = formValues.signature
   // const name = formValues.name
   // const phone = formValues.phone
-
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">

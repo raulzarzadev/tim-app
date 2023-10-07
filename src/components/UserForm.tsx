@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import CheckboxLabel from './Checkbox'
 import PhoneInput from './PhoneInput'
+import ErrorBoundary from './ErrorBoundary'
 
 const UserForm = ({
   user,
@@ -33,18 +34,24 @@ const UserForm = ({
     }
   }
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="grid gap-4 py-4">
-        <TextField {...register('email')} label="Correo" disabled />
-        <TextField {...register('name')} label="Nombre" />
-        {/* <TextField {...register('phone')} label="Teléfono" /> */}
-        <PhoneInput {...register('phone')} label="Teléfono" control={control} />
+    <ErrorBoundary componentName="UserForm">
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="grid gap-4 py-4">
+          <TextField {...register('email')} label="Correo" disabled />
+          <TextField {...register('name')} label="Nombre" />
+          {/* <TextField {...register('phone')} label="Teléfono" /> */}
+          <PhoneInput
+            {...register('phone')}
+            label="Teléfono"
+            control={control}
+          />
 
-        <LoadingButton type="submit" disabled={!isDirty} loading={loading}>
-          Actualizar
-        </LoadingButton>
-      </div>
-    </form>
+          <LoadingButton type="submit" disabled={!isDirty} loading={loading}>
+            Actualizar
+          </LoadingButton>
+        </div>
+      </form>
+    </ErrorBoundary>
   )
 }
 
