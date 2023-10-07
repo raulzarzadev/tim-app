@@ -42,11 +42,14 @@ const ModalSignature = ({
             penColor="green"
             ref={(ref) => (signatureRef.current = ref)}
             canvasProps={{
-              className: 'sigCanvas w-full aspect-video'
+              className: 'sigCanvas w-full aspect-video',
+              style: {
+                minHeight: '50vh'
+              }
             }}
           />
         </Box>
-        <Box className="flex w-full justify-around my-2 mt-4">
+        <Box className="flex w-full justify-around my-2 mt-4 ">
           <Button
             variant="outlined"
             size="small"
