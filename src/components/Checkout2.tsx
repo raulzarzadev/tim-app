@@ -11,6 +11,9 @@ import ModalPayment from './ModalPayment2'
 import ModalClientInfo from './ModalClientInfo'
 import CheckoutItemsList from './CheckoutItemsList'
 import { calculateFullTotal } from '@/lib/calculateTotalItem'
+import { dateFormat } from '@/lib/utils-date'
+import rentTime from '@/lib/rentTime'
+import { addMinutes } from 'date-fns'
 
 const Checkout = ({
   items,
@@ -40,9 +43,15 @@ const Checkout = ({
   const handleClearSearch = () => {
     setItems?.([])
   }
+  console.log({ selectedItems })
+  const returnBack = (): Date => {
+    const qty = selectedItems[0].qty
+    const unit = selectedItems[0].unit
+    const time = rentTime(qty, unit)
+    return addMinutes(new Date(), time)
+  }
 
   if (fullItems.length === 0) return <></>
-
   return (
     <>
       <Box className="flex-col-reverse  sm:flex-row flex w-full justify-between sticky bottom-12 bg-blue-300 mt-4 p-2 items-center  rounded-md shadow-md rounded-b-none">
@@ -73,7 +82,11 @@ const Checkout = ({
       <Modal {...modal}>
         <CheckoutItemsList items={fullItems} />
         {/* <ItemsList items={fullItems} /> */}
-        <Typography className="text-xl font-bold my-4 text-end">
+        <Typography className="text-end mt-4">
+          Regreso:
+          {dateFormat(returnBack(), ' dd-MMM HH:mm')}
+        </Typography>
+        <Typography className="text-xl font-bold mb-4 text-end">
           Total: ${asNumber(total)?.toFixed(2)}
         </Typography>
         <Box className="my-4">

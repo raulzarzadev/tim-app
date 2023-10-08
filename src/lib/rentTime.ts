@@ -3,11 +3,19 @@ import { PriceType } from '@/components/PricesForm'
 export type Ops = {
   inSeconds?: boolean
 }
+
+/**
+ *
+ * @param qty number quantity of units to rent
+ * @param unit string unit of time to rent PriceType['unit']
+ * @param ops.inSeconds boolean if in seconds, default false
+ * @returns number count of minutes to rent
+ */
 const rentTime = (
   qty: number = 0,
   unit: PriceType['unit'] = 'minutes',
   ops?: Ops
-) => {
+): number => {
   if (!unit) {
     return 0
   }
