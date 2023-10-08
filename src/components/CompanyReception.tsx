@@ -5,7 +5,6 @@ import ItemsInUse from './ItemsInUse'
 const CompanyAdmin = () => {
   return (
     <div>
-      Pagina de Recepción
       <ItemsInUse />
     </div>
   )

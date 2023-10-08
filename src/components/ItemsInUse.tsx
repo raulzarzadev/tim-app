@@ -29,9 +29,12 @@ const ItemsInUse = () => {
     <Container>
       <Grid2 container spacing={1}>
         <Grid2 xs={2} className="font-bold truncate">
+          Cliente
+        </Grid2>
+        <Grid2 xs={1} className="font-bold truncate">
           Serie
         </Grid2>
-        <Grid2 xs={3} className="font-bold truncate">
+        <Grid2 xs={2} className="font-bold truncate">
           Categoria
         </Grid2>
         <Grid2 xs={2} className="font-bold truncate">
@@ -62,6 +65,7 @@ export type ItemInUse = Partial<ArticleType> & {
   rentTime?: number
   paymentId: Payment['id']
   inUse?: boolean
+  payment?: Payment
 }
 const ItemRow = ({ item }: { item: Partial<ItemInUse> }) => {
   const modal = useModal({
@@ -87,8 +91,11 @@ const ItemRow = ({ item }: { item: Partial<ItemInUse> }) => {
           modal.onOpen()
         }}
       >
-        <Grid2 xs={2}>{item.serialNumber || item.name}</Grid2>
-        <Grid2 xs={3}>{item.category}</Grid2>
+        <Grid2 xs={2} className="whitespace-pre-wrap">
+          {item?.payment?.client?.name}
+        </Grid2>
+        <Grid2 xs={1}>{item.serialNumber || item.name}</Grid2>
+        <Grid2 xs={2}>{item.category}</Grid2>
         <Grid2 xs={2}>
           {item.qty}x {item.unit}
         </Grid2>

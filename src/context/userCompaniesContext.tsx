@@ -120,7 +120,8 @@ export function UserCompaniesProvider({
             startAt: payment.startAt,
             paymentId: payment.id,
             rentFinishAt: finishAt,
-            rentTime: rentInMinutes
+            rentTime: rentInMinutes,
+            payment
           }
         })
       })
