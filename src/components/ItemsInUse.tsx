@@ -2,7 +2,7 @@ import { useUserCompaniesContext } from '@/context/userCompaniesContext'
 import { Timestamp } from 'firebase/firestore'
 import { ArticleType } from '@/types/article'
 import { Box, Button, Container, Typography } from '@mui/material'
-import { fromNow } from '@/lib/utils-date'
+import { dateFormat, fromNow } from '@/lib/utils-date'
 import { isAfter } from 'date-fns'
 import asDate from '@/lib/asDate'
 import { PriceType } from './PricesForm'
@@ -99,7 +99,14 @@ const ItemRow = ({ item }: { item: Partial<ItemInUse> }) => {
         <Grid2 xs={2}>
           {item.qty}x {item.unit}
         </Grid2>
-        <Grid2 xs={3}>{fromNow(asDate(item.rentFinishAt))}</Grid2>
+        <Grid2 xs={3}>
+          <Typography>
+            {dateFormat(item.rentFinishAt, 'dd-MMM HH:mm')}
+          </Typography>
+          <Typography variant="caption">
+            {fromNow(asDate(item.rentFinishAt))}
+          </Typography>
+        </Grid2>
         <Grid2 xs={2} className="">
           {onTime ? (
             <div className="bg-green-400 rounded-md p-2 truncate">
@@ -134,6 +141,18 @@ const ItemInUse = ({
 
   return (
     <ErrorBoundary>
+      <Box>
+        <Typography className="text-center">
+          {item.payment?.client?.name}
+        </Typography>
+        <Typography className="text-center">
+          Entrega: {dateFormat(item.rentFinishAt, 'dd/MM HH:mm')}
+          <Typography variant="caption" className="text-center">
+            {' '}
+            {fromNow(asDate(item.rentFinishAt))}
+          </Typography>
+        </Typography>
+      </Box>
       <Box className="grid gap-6">
         {!!moreItemsInUse?.length && (
           <Box>
@@ -146,7 +165,7 @@ const ItemInUse = ({
           </Box>
         )}
         {!onTime && (
-          <Typography className="text-center my-4">
+          <Typography className="text-center my-4 font-bold" color={'error'}>
             Unidad fuera de tiempo.
           </Typography>
         )}
