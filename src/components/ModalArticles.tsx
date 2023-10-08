@@ -52,7 +52,15 @@ const ModalArticles = ({
   useEffect(() => {
     _setSelected(items || [])
   }, [items])
-
+  const sortIt = (a: ArticleType, b: ArticleType) => {
+    const aSerial = a.serialNumber
+    const bSerial = b.serialNumber
+    if (!isNaN(parseInt(aSerial)) && !isNaN(parseInt(bSerial))) {
+      return parseInt(aSerial) - parseInt(bSerial)
+    } else {
+      return String(aSerial).localeCompare(String(bSerial))
+    }
+  }
   return (
     <div>
       <IconButton size="small" onClick={() => modal.onOpen()}>
@@ -64,7 +72,7 @@ const ModalArticles = ({
           flexWrap={'wrap'}
           className="justify-center gap-2"
         >
-          {articles?.map((article) => (
+          {articles?.sort(sortIt)?.map((article) => (
             <Chip
               disabled={
                 !!itemsInUse.find(({ itemId }) => itemId === article.id)
