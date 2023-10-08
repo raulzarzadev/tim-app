@@ -30,7 +30,8 @@ const ModalPayment = ({
           e.preventDefault()
           modalPayment.onOpen()
         }}
-        size="small"
+        size="large"
+        color="success"
         disabled={disabled}
       >
         {'Pagar'} <AppIcon icon="money" />

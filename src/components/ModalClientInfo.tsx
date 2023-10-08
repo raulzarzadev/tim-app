@@ -1,13 +1,10 @@
 import { Button } from '@mui/material'
 import Modal from './Modal'
 import useModal from '@/hooks/useModal'
-import ClientForm from './ClientForm'
-import { useContext } from 'react'
-import { CashboxContext } from './CompanyCashbox'
+import ClientForm from './ClientForm2'
 
 const ModalClientInfo = () => {
   const modal = useModal({ title: 'Información de cliente' })
-  const { setClient, client } = useContext(CashboxContext)
 
   return (
     <div className="flex justify-center">
@@ -15,13 +12,7 @@ const ModalClientInfo = () => {
         Información de cliente
       </Button>
       <Modal {...modal}>
-        <ClientForm
-          client={client}
-          setClient={(data) => {
-            setClient?.(data)
-            modal.onClose()
-          }}
-        />
+        <ClientForm />
       </Modal>
     </div>
   )

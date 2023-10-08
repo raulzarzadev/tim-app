@@ -1,7 +1,3 @@
-export const unitLabels = {
-  hours: 'horas',
-  days: 'días',
-  weeks: 'semanas',
-  months: 'meses',
-  years: 'años'
-}
+import { TimeUnits, timeUnitsLabels } from '@/types/TimeUnits'
+
+export const unitLabels: Record<TimeUnits, string> = timeUnitsLabels

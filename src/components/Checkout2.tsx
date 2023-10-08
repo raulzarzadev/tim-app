@@ -82,7 +82,7 @@ const Checkout = ({
         <Box className="flex w-full justify-center">
           <ModalPayment
             amount={total}
-            disabled={!client?.phone || !client?.name}
+            disabled={!client?.name}
             onCloseParent={() => modal.onClose()}
           />
         </Box>

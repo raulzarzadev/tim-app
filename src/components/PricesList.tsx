@@ -1,6 +1,7 @@
 import { Box, Button, Typography } from '@mui/material'
 import { PriceType } from './PricesForm'
 import AppIcon from './AppIcon'
+import { timeUnitsLabels } from '@/types/TimeUnits'
 
 const PricesList = ({
   prices = [],
@@ -36,7 +37,7 @@ const PricesList = ({
             </Box>
           ) : null}
           <Box>{p.quantity}</Box>
-          <Box>{p.unit}</Box>
+          <Box>{p.unit && timeUnitsLabels[p.unit]}</Box>
           <Box>${p.price}</Box>
         </Box>
       ))}

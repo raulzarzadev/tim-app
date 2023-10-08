@@ -27,7 +27,7 @@ export default function Select({
   const [_value, _seValue] = React.useState(String(selected))
 
   return (
-    <FormControl fullWidth={fullWidth} size="small">
+    <FormControl fullWidth={fullWidth}>
       <InputLabel id={`simple-select-${label}`}>{label}</InputLabel>
       <MUISelect
         variant={variant}
