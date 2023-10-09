@@ -6,7 +6,6 @@ import { useEffect, useState } from 'react'
 import { Box, Button, Chip, Stack, Typography } from '@mui/material'
 import { ArticleType } from '@/types/article'
 import Select from './Select'
-import { ItemInUse } from './ItemsInUse'
 import CurrencySpan from './CurrencySpan'
 import asNumber from '@/lib/asNumber'
 import { PriceType } from './PricesForm'
@@ -14,8 +13,15 @@ import { changeItem, updatePayment } from '@/firebase/payments'
 import ButtonLoadingAsync from './ButtonLoadingAsync'
 import { calculateTotal } from '@/lib/calculateTotalItem'
 import ErrorBoundary from './ErrorBoundary'
+import { ItemRowStatus } from './ItemInUserRow'
 
-const ChangeItem = ({ item }: { item: Partial<ItemInUse> }) => {
+const ChangeItem = ({
+  item,
+  cashboxChange
+}: {
+  item: Partial<ItemRowStatus>
+  cashboxChange?: (newItem: ArticleType['id']) => void
+}) => {
   const { itemsInUse, currentCompany } = useUserCompaniesContext()
 
   const [_categoryName, _setCategoryName] = useState(item.category)
@@ -38,8 +44,10 @@ const ChangeItem = ({ item }: { item: Partial<ItemInUse> }) => {
     })) || []
 
   const differences = (): { amount: number; newPrice?: PriceType } => {
+    // console.log('qty ', item.qty, item.unit, item.id, _selected)
     const oldItem = calculateItemPrice(item.id, item.qty, item.unit)
     const newItem = calculateItemPrice(_selected, item.qty, item.unit)
+    // console.log({ oldItem, newItem })
     return {
       amount: asNumber((newItem.total - oldItem.total).toFixed(2) || 0),
       newPrice: newItem.price
@@ -50,13 +58,14 @@ const ChangeItem = ({ item }: { item: Partial<ItemInUse> }) => {
     itemId?: string,
     qty?: number,
     unit?: PriceType['unit']
-  ) => {
+  ): { total: number; price?: PriceType } => {
     const item = currentCompany?.articles?.find((item) => item.id === itemId)
     const categoryPrices = currentCompany?.categories?.find(
       (c: { name: string }) => c.name === item?.category
     )?.prices
     const itemPrices = item?.ownPrice ? item.prices : categoryPrices
     const itemPrice = calculateTotal(unit, qty, itemPrices || [])
+    // console.log({ itemPrice: itemPrice.total, itemPrices, qty, unit })
     return itemPrice
   }
 
@@ -71,17 +80,20 @@ const ChangeItem = ({ item }: { item: Partial<ItemInUse> }) => {
 
   const handleChange = () => {
     const { amount: amountDiff, newPrice } = diff
-
-    if (!item.paymentId) return console.error('no payment id')
-
-    return changeItem(item.paymentId, {
-      amount: amountDiff,
-      newPrice: newPrice || null,
-      newItemId: _selected || '',
-      oldItemId: item.id || ''
-    })
-      .then((res) => console.log(res))
-      .catch(console.error)
+    if (cashboxChange && _selected) {
+      return cashboxChange(_selected)
+    }
+    if (item.paymentId) {
+      return changeItem(item.paymentId, {
+        amount: amountDiff,
+        newPrice: newPrice || null,
+        newItemId: _selected || '',
+        oldItemId: item.id || ''
+      })
+        .then((res) => console.log(res))
+        .catch(console.error)
+    }
+    console.error('no paymentId, no cashboxChange')
   }
 
   return (

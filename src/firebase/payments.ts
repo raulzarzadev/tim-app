@@ -38,6 +38,14 @@ export const getPayment = async (itemId: BaseType['id']) =>
 export const listenCompanyActivePayments = async (
   companyId: string,
   cb: CallableFunction
+) =>
+  await itemCRUD.listenItems(
+    [where('companyId', '==', companyId), where('active', '==', true)],
+    cb
+  )
+export const listenCompanyPayments = async (
+  companyId: string,
+  cb: CallableFunction
 ) => await itemCRUD.listenItems([where('companyId', '==', companyId)], cb)
 
 export const finishItemRent = async (
@@ -51,6 +59,20 @@ export const finishItemRent = async (
   const removedItem = items.filter((item) => item.itemId !== itemId)
   return await updatePayment(paymentId, {
     items: [...removedItem, { ...oldItem, inUse: false }]
+  })
+}
+
+export const cancelFinishRent = async (
+  paymentId?: Payment['id'],
+  itemId?: ArticleType['id']
+) => {
+  if (!paymentId || !itemId) return
+  const payment: Payment = await itemCRUD.getItem(paymentId)
+  const items = payment?.items
+  const oldItem = items.find((item) => item.itemId === itemId)
+  const removedItem = items.filter((item) => item.itemId !== itemId)
+  return await updatePayment(paymentId, {
+    items: [...removedItem, { ...oldItem, inUse: true }]
   })
 }
 

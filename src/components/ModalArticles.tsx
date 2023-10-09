@@ -62,11 +62,14 @@ const ModalArticles = ({
     }
   }
   return (
-    <div>
+    <>
       <IconButton size="small" onClick={() => modal.onOpen()}>
-        <AppIcon icon="eye" />
+        <AppIcon icon="eye" fontSize="small" />
       </IconButton>
       <Modal {...modal}>
+        <Typography className="font-bold mb-2 ">
+          Selecciona las unidades que deseas agregar a la orden.
+        </Typography>
         <Stack
           direction="row"
           flexWrap={'wrap'}
@@ -74,6 +77,7 @@ const ModalArticles = ({
         >
           {articles?.sort(sortIt)?.map((article) => (
             <Chip
+              sx={{ margin: 4 }}
               disabled={
                 !!itemsInUse.find(({ itemId }) => itemId === article.id)
               }
@@ -98,7 +102,7 @@ const ModalArticles = ({
           ) : null}
         </Box>
       </Modal>
-    </div>
+    </>
   )
 }
 

@@ -39,7 +39,7 @@ export const CheckoutItemRow = ({ item }: { item: Partial<ArticleType> }) => {
     value: unit || ''
   }))
 
-  const modal = useModal({ title: 'Detalles de articulo' })
+  const modal = useModal({ title: 'Detalles de unidad' })
 
   const handleRemoveItem = () => {
     item.id && removeItem?.(item.id)

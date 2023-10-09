@@ -11,19 +11,22 @@ export const calculateTotal = (
   let total = 0
   let price = undefined
   const defaultPrice = pricesList?.[0]
-  if (!unit || !qty)
+  if (!unit || !qty) {
+    const t = asNumber(defaultPrice?.price) * asNumber(defaultPrice?.quantity)
+    // FIXME: t some times calculate wrong prices wen is in minutes
     return {
-      total:
-        asNumber(defaultPrice?.price) * asNumber(defaultPrice?.quantity) || 0,
+      total: t || 0,
       price: defaultPrice
     }
-
+  }
   const fullMatch = pricesList?.find(
-    (p) => p.unit === unit && p.quantity == asNumber(qty)
+    (p) => p.unit === unit && asNumber(p.quantity) === asNumber(qty)
   )
+  console.log(fullMatch)
   if (fullMatch) {
     total = asNumber(fullMatch.price)
     price = fullMatch
+    // console.log('full match', { total, price })
     return { total, price }
   }
   const unitMatch = pricesList?.find((p) => {
@@ -34,12 +37,14 @@ export const calculateTotal = (
       (asNumber(unitMatch?.price) || 0) / (asNumber(unitMatch?.quantity) || 1)
     total = unitMatch ? asNumber(prePrice) * asNumber(qty) : 0
     price = unitMatch
+    //console.log({ total, price })
+
     return { total, price }
   }
 
   total = asNumber(pricesList?.[0]?.price)
   price = pricesList?.[0]
-
+  console.log({ total, price })
   return { total: asNumber(asNumber(total).toFixed(2)), price }
 }
 

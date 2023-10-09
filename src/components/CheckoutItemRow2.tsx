@@ -10,9 +10,17 @@ import { timeUnitsLabels } from '@/types/TimeUnits'
 import AppIcon from './AppIcon'
 import ModalConfirm from './ModalConfirm'
 import { Typography } from '@mui/material'
+import useModal from '@/hooks/useModal'
+import Modal from './Modal'
+import ChangeItem from './ChangeItem'
 
 export const CheckoutItemRow = ({ item }: { item: Partial<ArticleType> }) => {
-  const { items = [], removeItem, updateItem } = useContext(CashboxContext)
+  const {
+    items = [],
+    removeItem,
+    updateItem,
+    addItem
+  } = useContext(CashboxContext)
   const foundItem = items?.find((i: { itemId?: string }) => i.itemId == item.id)
   const defaultPrice: {
     unit: PriceType['unit']
@@ -65,11 +73,34 @@ export const CheckoutItemRow = ({ item }: { item: Partial<ArticleType> }) => {
   ) => {
     return selected?.unit === p.unit && selected?.quantity === p.quantity
   }
-
+  const modalChangeItem = useModal({ title: 'Cambiar articulo' })
   return (
     <Grid2 container key={item?.id} spacing={1} alignItems={'center'}>
       <Grid2 xs={2}>{item?.category}</Grid2>
-      <Grid2 xs={2}>{item?.serialNumber || item?.name}</Grid2>
+      <Grid2 xs={2}>
+        <button
+          onClick={(e) => {
+            e.preventDefault()
+            modalChangeItem.onOpen()
+          }}
+        >
+          {item?.serialNumber || item?.name}
+        </button>
+        <Modal {...modalChangeItem}>
+          <ChangeItem
+            item={item}
+            cashboxChange={(newItem) => {
+              addItem?.({
+                inUse: true,
+                qty: priceSelected?.quantity,
+                unit: priceSelected?.unit,
+                itemId: newItem
+              })
+              removeItem?.(item.id || '')
+            }}
+          />
+        </Modal>
+      </Grid2>
       <Grid2 xs={6} container wrap={'nowrap'} overflow={'auto'} padding={'8px'}>
         {item.prices?.map((p, i) => (
           <Grid2 key={i} xs={'auto'}>

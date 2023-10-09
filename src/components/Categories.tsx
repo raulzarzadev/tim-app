@@ -7,6 +7,7 @@ import {
   ButtonGroup,
   Card,
   CardContent,
+  IconButton,
   Typography
 } from '@mui/material'
 import { useContext } from 'react'
@@ -14,6 +15,9 @@ import { CashboxContext } from './CompanyCashbox'
 import AppIcon from './AppIcon'
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2'
 import ModalArticles from './ModalArticles'
+import Modal from './Modal'
+import CategoryDetails from './CategoryDetails'
+import useModal from '@/hooks/useModal'
 
 const Categories = () => {
   const { currentCompany } = useUserCompaniesContext()
@@ -87,12 +91,27 @@ const Category = ({
     removeItem?.(lastCatArticles?.itemId || '')
   }
   const price = category?.prices?.[0]
-
+  const modal = useModal({ title: category.name })
   return (
     <Card className="flex flex-col justify-between h-full">
-      <Box className="flex w-full justify-between relative">
-        <Typography>Disponibles: {itemsLeft.length}</Typography>
-        <ModalArticles articles={articles} />
+      <Box className="flex w-full justify-between items-center relative">
+        <Box className="flex items-center ">
+          <Typography>Disponibles: {itemsLeft.length}</Typography>
+          <ModalArticles articles={articles} />
+        </Box>
+        <Box className="flex items-center ">
+          <IconButton
+            onClick={(e) => {
+              e.preventDefault()
+              modal.onOpen()
+            }}
+          >
+            <AppIcon icon="info" fontSize="small" />
+          </IconButton>
+          <Modal {...modal}>
+            <CategoryDetails category={category} />
+          </Modal>
+        </Box>
       </Box>
       <CardContent>
         <Typography

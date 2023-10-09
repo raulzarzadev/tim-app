@@ -10,16 +10,16 @@ import { CompanyType } from '@/types/company'
 import { createContext, useContext, useEffect, useState } from 'react'
 import { useAuthContext } from './authContext'
 import { StaffPermission } from '@/types/staff'
-import { listenCompanyActivePayments } from '@/firebase/payments'
+import { listenCompanyPayments } from '@/firebase/payments'
 import { Payment } from '@/types/payment'
 import { ArticleType } from '@/types/article'
 
-import { ItemInUse } from '@/components/ItemsInUse'
 import { PriceType } from '@/components/PricesForm'
 import { Timestamp } from 'firebase/firestore'
 import rentTime from '@/lib/rentTime'
 import { addMinutes } from 'date-fns'
 import asDate from '@/lib/asDate'
+import { ItemRowStatus } from '@/components/ItemInUserRow'
 
 export type UserCompaniesContextType = {
   companies: CompanyType[]
@@ -29,7 +29,8 @@ export type UserCompaniesContextType = {
   currentCompany: CompanyType | undefined
   setUserCompanies: () => void
   resetCompanies?: () => void
-  itemsInUse: Partial<ItemInUse>[]
+  itemsInUse: Partial<ItemRowStatus>[]
+  itemsFinished: Partial<ItemRowStatus>[]
   items: ArticleType[]
   payments?: Payment[]
 }
@@ -43,6 +44,7 @@ export const UserCompaniesContext = createContext<UserCompaniesContextType>({
   setUserCompanies: () => {},
   resetCompanies: () => {},
   itemsInUse: [],
+  itemsFinished: [],
   items: [],
   payments: []
 })
@@ -100,7 +102,7 @@ export function UserCompaniesProvider({
   const [payments, setPayments] = useState<Payment[]>([])
 
   useEffect(() => {
-    listenCompanyActivePayments(currentCompany?.id || '', setPayments)
+    listenCompanyPayments(currentCompany?.id || '', setPayments)
   }, [currentCompany?.id])
 
   const items = currentCompany?.articles || []
@@ -109,6 +111,32 @@ export function UserCompaniesProvider({
     const itemsInUseFromPayments = payments
       .map((payment) => {
         const inUseItems = payment.items.filter((item) => item.inUse ?? true)
+        return inUseItems.map((item) => {
+          const startAt = asDate(payment.startAt)
+          const finishAt =
+            startAt && rentFinishAt(item.qty || 0, item.unit, startAt)
+          const rentInMinutes = rentTime(item.qty, item.unit)
+          return {
+            ...items?.find(({ id }) => id === item.itemId),
+            ...item,
+            startAt: payment.startAt,
+            paymentId: payment.id,
+            rentFinishAt: finishAt,
+            rentTime: rentInMinutes,
+            payment
+          }
+        })
+      })
+      .flat()
+    return itemsInUseFromPayments.flat()
+  }
+
+  const itemsFinished = () => {
+    const itemsInUseFromPayments = payments
+      .map((payment) => {
+        const inUseItems = payment.items.filter(
+          (item) => (item.inUse ?? false) === false
+        )
         return inUseItems.map((item) => {
           const startAt = asDate(payment.startAt)
           const finishAt =
@@ -139,6 +167,7 @@ export function UserCompaniesProvider({
         currentCompany,
         setUserCompanies,
         itemsInUse: itemsInUse(),
+        itemsFinished: itemsFinished(),
         items,
         payments,
         resetCompanies
