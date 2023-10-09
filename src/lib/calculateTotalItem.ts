@@ -22,7 +22,6 @@ export const calculateTotal = (
   const fullMatch = pricesList?.find(
     (p) => p.unit === unit && asNumber(p.quantity) === asNumber(qty)
   )
-  console.log(fullMatch)
   if (fullMatch) {
     total = asNumber(fullMatch.price)
     price = fullMatch
@@ -44,7 +43,6 @@ export const calculateTotal = (
 
   total = asNumber(pricesList?.[0]?.price)
   price = pricesList?.[0]
-  console.log({ total, price })
   return { total: asNumber(asNumber(total).toFixed(2)), price }
 }
 
