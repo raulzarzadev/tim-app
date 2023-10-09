@@ -43,7 +43,6 @@ const Checkout = ({
   const handleClearSearch = () => {
     setItems?.([])
   }
-  console.log({ selectedItems })
   const returnBack = (): Date => {
     const qty = selectedItems[0].qty
     const unit = selectedItems[0].unit
