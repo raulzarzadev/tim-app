@@ -25,7 +25,11 @@ export default function Select({
     _seValue(event.target.value)
   }
   const [_value, _seValue] = React.useState(String(selected))
-
+  const sortByLabel = (a: { label?: string }, b: { label?: string }) => {
+    if ((a?.label || '') < (b?.label || '')) return -1
+    if ((a?.label || '') > (b?.label || '')) return 1
+    return 0
+  }
   return (
     <FormControl fullWidth={fullWidth}>
       <InputLabel id={`simple-select-${label}`}>{label}</InputLabel>
@@ -37,7 +41,7 @@ export default function Select({
         label={label}
         onChange={handleChange}
       >
-        {options.map((option) => (
+        {options.sort(sortByLabel).map((option) => (
           <MenuItem key={option.value} value={option.value}>
             {option.label}
           </MenuItem>
