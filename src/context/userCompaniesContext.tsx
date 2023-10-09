@@ -1,11 +1,6 @@
 'use client'
 
-import {
-  getCompanyAsStaff,
-  getUserCompanies,
-  listenStaffCompanies,
-  listenUserCompanies
-} from '@/firebase/companies'
+import { listenStaffCompanies, listenUserCompanies } from '@/firebase/companies'
 import { CompanyType } from '@/types/company'
 import { createContext, useContext, useEffect, useState } from 'react'
 import { useAuthContext } from './authContext'
@@ -107,7 +102,7 @@ export function UserCompaniesProvider({
 
   const items = currentCompany?.articles || []
 
-  const itemsInUse = (): Partial<ItemInUse>[] => {
+  const itemsInUse = (): Partial<ItemRowStatus>[] => {
     const itemsInUseFromPayments = payments
       .map((payment) => {
         const inUseItems = payment.items.filter((item) => item.inUse ?? true)
