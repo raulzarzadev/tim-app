@@ -15,12 +15,22 @@ export type Payment = {
   isCancelled?: boolean
   client?: Partial<Client>
   changes: PaymentChange[]
+  order: {
+    pickupStore: boolean
+    shippingAddress: string
+    shippingPrice: number
+    schedule: Date | Timestamp
+    pickupNow: boolean
+  }
 } & BaseType
 
 export type CreatePayment = Pick<
   Payment,
   'companyId' | 'startAt' | 'items' | 'payment' | 'client'
 >
+
+export type CreateOrder = Omit<CreatePayment, 'payment'> &
+  Pick<Payment, 'order'>
 
 export type PaymentChange = {
   amount: number

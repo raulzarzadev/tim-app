@@ -1,4 +1,9 @@
-import { CreatePayment, Payment, PaymentChange } from '@/types/payment'
+import {
+  CreateOrder,
+  CreatePayment,
+  Payment,
+  PaymentChange
+} from '@/types/payment'
 import { storage } from './auth'
 import { FirebaseCRUD } from './firebase.CRUD'
 import { db } from './main'
@@ -23,7 +28,7 @@ export const itemCRUD = new FirebaseCRUD(COLLECTION_NAME, db, storage)
 export const setPayment = async (itemId: ItemType['id'], newItem: NewItem) =>
   await itemCRUD.setItem(itemId || '', { ...newItem, id: itemId })
 
-export const createPayment = async (newItem: CreatePayment) =>
+export const createPayment = async (newItem: CreatePayment | CreateOrder) =>
   await itemCRUD.createItem({ ...newItem })
 
 export const updatePayment = async (itemId: string, updates: NewItem) =>

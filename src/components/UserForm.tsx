@@ -3,7 +3,6 @@ import { LoadingButton } from '@mui/lab'
 import { Button, TextField } from '@mui/material'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import CheckboxLabel from './Checkbox'
 import PhoneInput from './PhoneInput'
 import ErrorBoundary from './ErrorBoundary'
 

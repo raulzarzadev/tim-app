@@ -1,4 +1,4 @@
-import { IconButton, Tooltip } from '@mui/material'
+import { IconButton, Tooltip, Typography } from '@mui/material'
 import AppIcon, { IconName } from './AppIcon'
 import { Payment } from '@/types/payment'
 import Modal from './Modal'
@@ -37,6 +37,8 @@ const ModalContactClient = ({ client }: { client: Payment['client'] }) => {
       value: client?.address
     }
   }
+  const entries = Object.entries(methods)
+  const withValidValue = entries.filter(([key, value]) => value.value)
   return (
     <>
       <IconButton
@@ -48,7 +50,12 @@ const ModalContactClient = ({ client }: { client: Payment['client'] }) => {
       </IconButton>
       <Modal {...modal}>
         <Grid2 container spacing={2} justifyContent={'center'}>
-          {Object.entries(methods).map(
+          {withValidValue.length === 0 && (
+            <Grid2 xs={'auto'}>
+              <Typography>Sin datos de contacto</Typography>
+            </Grid2>
+          )}
+          {entries.map(
             ([key, value]) =>
               value?.value && (
                 <Grid2 key={key} xs={'auto'}>

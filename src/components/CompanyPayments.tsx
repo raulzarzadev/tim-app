@@ -18,6 +18,9 @@ import asDate from '@/lib/asDate'
 import PreviewImage from './PreviewImage'
 import ItemDetails from './ModalItemDetails'
 import ModalContactClient from './ModalContactClient'
+import PaymentInfo from './PaymentInfo'
+import OrderInfo from './OrderInfo'
+import ClientInfo from './ClientInfo'
 
 const CompanyPayments = () => {
   const { payments } = useUserCompaniesContext()
@@ -38,11 +41,15 @@ const CompanyPayments = () => {
 const Payment = ({ payment }: { payment: Payment }) => {
   const modal = useModal({ title: 'Detalle de pago' })
   const paymentData = payment.payment
+
   return (
     <>
       <Modal {...modal}>
         <Typography>
-          Fecha de pago: {dateFormat(paymentData.date, ' dd/MM/yy HH:mm')}
+          Fecha de pago:{' '}
+          {paymentData?.date
+            ? dateFormat(paymentData?.date, ' dd/MM/yy HH:mm')
+            : ' sin pago '}
         </Typography>
         <Typography>
           Fecha de inicio: {dateFormat(payment.startAt, ' dd/MM/yy HH:mm')}
@@ -86,51 +93,15 @@ const Payment = ({ payment }: { payment: Payment }) => {
             ))}
           </Box>
         )}
-        <Typography className="font-bold mt-4 ">
-          Información de cliente
-        </Typography>
-        <Box className="flex items-center justify-between">
-          <Box>
-            <Typography>Nombre: {payment?.client?.name}</Typography>
-            <Typography>Teléfono: {payment?.client?.phone}</Typography>
-          </Box>
-          <Box className="flex justify-center w-1/2 flex-wrap">
-            {payment?.client?.imageID && (
-              <PreviewImage
-                src={payment?.client?.imageID}
-                alt="Identificacion de usuario"
-              />
-            )}
-            {payment?.client?.signature && (
-              <PreviewImage
-                src={payment?.client?.signature}
-                alt="Firma de usuario"
-              />
-            )}
-          </Box>
-        </Box>
-        <Typography className="font-bold mt-4">Información de pago</Typography>
-        <Typography>
-          Total: <CurrencySpan quantity={paymentData.amount} />
-        </Typography>
-        <Typography>
-          Pagado: <CurrencySpan quantity={paymentData.charged} />{' '}
-          {paymentData.method}
-        </Typography>
-        <Typography>
-          Cambio: <CurrencySpan quantity={paymentData.rest} />
-        </Typography>
-        <Typography>
-          Precio(usd): <CurrencySpan quantity={paymentData.usdPrice} />
-        </Typography>
-        <Typography>descuento: {paymentData.discount || 0}</Typography>
+        <ClientInfo client={payment.client} />
+        <PaymentInfo payment={payment} />
+        <OrderInfo payment={payment} />
         <Box className="flex justify-evenly my-4">
           <ModalConfirm
             color="error"
             label="Cancelar"
-            handleConfirm={() => {
-              console.log('Canclear pago')
-              updatePayment(payment.id, { isCancelled: true })
+            handleConfirm={async () => {
+              return await updatePayment(payment.id, { isCancelled: true })
             }}
           >
             <Typography>¿Esta seguro que desea cancelar el pago?</Typography>

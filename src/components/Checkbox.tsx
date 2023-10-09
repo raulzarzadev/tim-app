@@ -1,23 +1,21 @@
 import * as React from 'react'
-import Checkbox from '@mui/material/Checkbox'
-import FormGroup from '@mui/material/FormGroup'
+import Checkbox, { CheckboxProps } from '@mui/material/Checkbox'
 import FormControlLabel from '@mui/material/FormControlLabel'
-import FormControl from '@mui/material/FormControl'
-import FormLabel from '@mui/material/FormLabel'
 
 export default function CheckboxLabel({
   labelSide = 'end',
   label = 'label',
-  value
+  value,
+  ...rest
 }: {
   label: string
   labelSide?: 'top' | 'bottom' | 'end' | 'start' | undefined
-  value: boolean
-}) {
+  value?: boolean
+} & CheckboxProps) {
   return (
     <FormControlLabel
       value={value}
-      control={<Checkbox />}
+      control={<Checkbox {...rest} />}
       label={label}
       labelPlacement={labelSide}
     />

@@ -14,7 +14,7 @@ import Checkout from './Checkout2'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { PriceType } from './PricesForm'
 import Categories from './Categories'
-import { CreatePayment } from '@/types/payment'
+import { CreateOrder, CreatePayment } from '@/types/payment'
 import { createPayment } from '@/firebase/payments'
 import { Client } from '@/types/client'
 
@@ -27,7 +27,7 @@ export type CashboxContext = {
     itemId: ItemSelected['itemId'],
     { qty, unit }: { qty: number; unit: PriceType['unit'] }
   ) => void
-
+  handleOrder?: (order: CreateOrder) => void | Promise<any>
   handlePay?: (payment: CreatePayment) => void | Promise<any>
   setClient?: (client: Partial<Client>) => void
   client?: Partial<Client>
@@ -49,7 +49,11 @@ export const CashboxContextProvider = ({
   const router = useRouter()
   const pathname = usePathname()
   const [items, setItems] = useState<ItemSelected[]>([])
-  const [client, setClient] = useState<Partial<Client>>({})
+  const [client, setClient] = useState<Partial<Client>>({
+    phone: '',
+    email: '',
+    name: ''
+  })
 
   useEffect(() => {
     searchParams.get('items') &&
@@ -89,8 +93,13 @@ export const CashboxContextProvider = ({
   }
 
   const handlePay = async (payment: CreatePayment) => {
-    // console.log('pagando', payment)
     await createPayment({ ...payment, client })
+  }
+  const handleOrder = async (order: CreateOrder) => {
+    return await createPayment({
+      ...order,
+      client
+    })
   }
 
   return (
@@ -103,7 +112,8 @@ export const CashboxContextProvider = ({
         updateItem,
         handlePay,
         client,
-        setClient
+        setClient,
+        handleOrder
       }}
     >
       {children}
