@@ -12,6 +12,7 @@ import ArticlesList from './ArticlesList'
 const CategoryDetails = ({ category }: { category?: CategoryType }) => {
   const articles = useCategoryArticles({ categoryName: category?.name })
   const { currentCompany } = useUserCompaniesContext()
+  if (!currentCompany) return <div>Cargando...</div>
   return (
     <div>
       <Typography
@@ -20,6 +21,7 @@ const CategoryDetails = ({ category }: { category?: CategoryType }) => {
       >
         {category?.name}{' '}
         <IconButton
+          color="info"
           LinkComponent={Link}
           href={`/dashboard/${currentCompany?.id}/categories/${category?.name}/edit`}
         >
@@ -29,14 +31,8 @@ const CategoryDetails = ({ category }: { category?: CategoryType }) => {
       <Typography className="text-center">{category?.description}</Typography>
       <Typography variant="h5">Precios</Typography>
       <PricesList prices={category?.prices || []} />
-      <Typography variant="h5">Aticlulos</Typography>
-      <Button
-        LinkComponent={Link}
-        href={`/dashboard/${currentCompany?.id}/articles/new?category=${category?.name}`}
-      >
-        Agregar articulo <AppIcon icon="add" />
-      </Button>
-      <ArticlesList articles={articles || []} />
+
+      <ArticlesList articles={articles || []} companyId={currentCompany?.id} />
     </div>
   )
 }

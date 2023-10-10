@@ -2,12 +2,17 @@
 import validatePermissions from "@/HOC's/validatePermissions"
 import ItemsInUse from './ItemsInUse'
 import ItemsFinished from './ItemsFinished'
+import BasicTabs from './BasicTabs'
 
 const CompanyAdmin = () => {
   return (
     <div>
-      <ItemsInUse />
-      <ItemsFinished />
+      <BasicTabs
+        tabs={[
+          { label: 'En uso ', content: <ItemsInUse /> },
+          { label: 'Terminadas', content: <ItemsFinished /> }
+        ]}
+      />
     </div>
   )
 }

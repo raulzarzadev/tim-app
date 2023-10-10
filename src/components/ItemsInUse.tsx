@@ -1,5 +1,5 @@
 import { useUserCompaniesContext } from '@/context/userCompaniesContext'
-import { Container } from '@mui/material'
+import { Container, Typography } from '@mui/material'
 import asDate from '@/lib/asDate'
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2'
 
@@ -40,7 +40,11 @@ const ItemsInUse = () => {
         <Grid2 xs={2} className="font-bold truncate">
           Status
         </Grid2>
+
         <ErrorBoundary fallback={<p>Something went wrong</p>}>
+          {itemsInUse.length === 0 && (
+            <Typography> No hay unidades en uso</Typography>
+          )}
           {itemsInUse.sort(sortByFinishRent).map((item, i) => (
             <ItemInUseRow key={i} item={item} />
           ))}
