@@ -6,13 +6,15 @@ import CompanyCategories from './CompanyCategories'
 import CompanyArticles from './CompanyArticles'
 import CompanyStaff from './CompanyStaff'
 import ItemsFinished from './ItemsFinished'
+import ItemsPending from './ItemsPending'
 
 const CompanyAdmin = () => {
   return (
     <div>
       <BasicTabs
         tabs={[
-          { label: 'Clientes ', content: <></> }, //CompanyPayments
+          //  { label: 'Clientes ', content: <></> }, //CompanyPayments
+          { label: 'Pendientes', content: <ItemsPending /> },
           { label: 'En uso', content: <ItemsInUse /> },
           { label: 'Terminados', content: <ItemsFinished /> },
           { label: 'Categorias', content: <CompanyCategories /> },

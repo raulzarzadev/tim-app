@@ -139,18 +139,15 @@ export function UserCompaniesProvider({
 
   console.log({ itemsFromOrders })
   const itemsInUse = itemsFromOrders.filter(
-    (i) => i.inUse
-    // item in use
-    // i.inUse &&
-    // item order shipping date is not in the future
-    //!isAfter(asDate(i.order.shipping.date) || new Date(), new Date())
+    (i) => i.inUse || i.rentStatus === 'taken'
   )
+
   const itemsFinished = itemsFromOrders.filter(
-    (i) =>
-      !i.inUse &&
-      isAfter(asDate(i.order.shipping.date) || new Date(), new Date())
+    (i) => i.rentStatus === 'finished'
   )
-  const itemsPending = itemsFromOrders.filter((i) => !i.inUse)
+
+  const itemsPending = itemsFromOrders.filter((i) => i.rentStatus === 'pending')
+
   return (
     <UserCompaniesContext.Provider
       value={{

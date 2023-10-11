@@ -136,6 +136,7 @@ const OrderOptions = ({ onCloseParent }: { onCloseParent?: () => void }) => {
     const res = await handleOrder?.({
       companyId: currentCompany?.id || ''
     })
+    setOrderSaved(true)
 
     // setItemsSelected?.([])
     // setClient?.({})
@@ -146,6 +147,8 @@ const OrderOptions = ({ onCloseParent }: { onCloseParent?: () => void }) => {
     inStore: true,
     pickupNow: true
   })
+
+  const [orderSaved, setOrderSaved] = useState(false)
 
   useEffect(() => {
     isPickupNow(shippingMenu.pickupNow)
@@ -216,8 +219,8 @@ const OrderOptions = ({ onCloseParent }: { onCloseParent?: () => void }) => {
       )}
       {(!shippingMenu.inStore || !shippingMenu.pickupNow) && (
         <ModalConfirm
-          disabled={!client?.name}
-          label="Guardar orden"
+          disabled={!client?.name || orderSaved}
+          label={`${orderSaved ? 'Orden guardada' : 'Guardar orden'}`}
           handleConfirm={handleSaveOrder}
           color="secondary"
         >
