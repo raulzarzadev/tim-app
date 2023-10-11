@@ -86,9 +86,7 @@ export function UserCompaniesProvider({
   }, [user])
 
   const setUserCompanies = async () => {}
-  const resetCompanies = () => {
-    setUserCompanies()
-  }
+  const resetCompanies = () => {}
 
   const currentCompany = [...userOwnCompanies, ...staffCompanies].find(
     (company) => company?.id === selected

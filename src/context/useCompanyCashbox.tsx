@@ -5,20 +5,20 @@ import {
   ReactNode,
   SetStateAction,
   createContext,
+  useContext,
   useEffect,
   useState
 } from 'react'
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { createPayment } from '@/firebase/payments'
-import { Client } from '@/types/client'
-import { createOrder } from '@/firebase/orders'
-import { OrderBase } from '@/types/order'
-import { CreatePayment, CreateOrder } from '@/types/payment'
+import { CreateOrder, createOrder, onPayOrder } from '@/firebase/orders'
+import { Order, OrderBase, Shipping } from '@/types/order'
+import { PriceType } from '@/components/PricesForm'
+import { Payment } from '@/types/order'
 
 export type CashboxContext = {
-  items?: ItemSelected[]
-  setItems?: Dispatch<SetStateAction<ItemSelected[]>>
+  itemsSelected?: ItemSelected[]
+  setItemsSelected?: Dispatch<SetStateAction<ItemSelected[]>>
   addItem?: (item: ItemSelected) => void
   removeItem?: (itemId: ArticleType['id']) => void
   updateItem?: (
@@ -26,9 +26,14 @@ export type CashboxContext = {
     { qty, unit }: { qty: number; unit: PriceType['unit'] }
   ) => void
   handleOrder?: (order: CreateOrder) => void | Promise<any>
-  handlePay?: (payment: CreatePayment) => void | Promise<any>
-  setClient?: (client: Partial<Client>) => void
-  client?: Partial<Client>
+  handlePayOrder?: (
+    orderId: Order['id'],
+    payment: Payment
+  ) => void | Promise<any>
+  setClient?: (client: Partial<Order['client']>) => void
+  client?: Partial<Order['client']>
+  shipping?: Partial<Order['shipping']>
+  setShipping?: Dispatch<SetStateAction<Shipping>>
 }
 export const CashboxContext = createContext<CashboxContext>({})
 export type ItemSelected = {
@@ -46,27 +51,34 @@ export const CashboxContextProvider = ({
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
-  const [items, setItems] = useState<ItemSelected[]>([])
-  const [client, setClient] = useState<Partial<Client>>({
+
+  const [itemsSelected, setItemsSelected] = useState<ItemSelected[]>([])
+  const [client, setClient] = useState<Partial<Order['client']>>({
     phone: '',
     email: '',
     name: ''
   })
+  const [shipping, setShipping] = useState<Shipping>({
+    address: 'store',
+    date: new Date()
+  })
 
   useEffect(() => {
     searchParams.get('items') &&
-      setItems(JSON.parse(searchParams.get('items') || '[]'))
+      setItemsSelected(JSON.parse(searchParams.get('items') || '[]'))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
     const params = new URLSearchParams()
-    params.set('items', JSON.stringify(items))
+    params.set('items', JSON.stringify(itemsSelected))
     router.replace(pathname + '?' + params, { scroll: false })
-  }, [items, pathname, router])
+  }, [itemsSelected, pathname, router])
 
   const removeItem = (articleId: ArticleType['id']) => {
-    setItems((items) => items.filter((item) => item.itemId !== articleId))
+    setItemsSelected((items) =>
+      items.filter((item) => item.itemId !== articleId)
+    )
   }
 
   const addItem = (item: ItemSelected) => {
@@ -76,45 +88,54 @@ export const CashboxContextProvider = ({
       unit: item.unit ?? '',
       inUse: true
     }
-    setItems((items) => [...items, newItem])
+    setItemsSelected((items) => [...items, newItem])
   }
 
   const updateItem = (
     itemId: ItemSelected['itemId'],
     { qty, unit = '' }: { qty: number; unit: PriceType['unit'] }
   ) => {
-    setItems((items) =>
+    setItemsSelected((items) =>
       items.map((item) =>
         item.itemId === itemId ? { ...item, qty, unit } : item
       )
     )
   }
 
-  const handlePay = async (payment: CreatePayment | CreateOrder) => {
-    await createPayment({ ...payment, client })
+  const handlePayOrder = async (orderId: Order['id'], payment: Payment) => {
+    return await onPayOrder(orderId, payment)
   }
   const handleOrder = async (order: Partial<OrderBase>) => {
     return await createOrder({
       ...order,
-      client
+      items: itemsSelected,
+      client,
+      shipping
     })
   }
 
   return (
     <CashboxContext.Provider
       value={{
-        items,
-        setItems,
+        itemsSelected,
+        setItemsSelected,
         removeItem,
         addItem,
         updateItem,
-        handlePay,
+        handlePayOrder,
         client,
         setClient,
-        handleOrder
+        handleOrder,
+        shipping,
+        setShipping
       }}
     >
       {children}
     </CashboxContext.Provider>
   )
+}
+
+export default function useCashboxContext() {
+  const cashboxContext = useContext(CashboxContext)
+  return cashboxContext
 }

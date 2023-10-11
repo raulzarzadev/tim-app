@@ -1,4 +1,4 @@
-import { useUserCompaniesContext } from '@/context/userCompaniesContext'
+import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 
 const useItem = ({ itemId }: { itemId?: string }) => {
   const { currentCompany } = useUserCompaniesContext()

@@ -1,5 +1,5 @@
 'use client'
-import { useUserCompaniesContext } from '@/context/userCompaniesContext'
+import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import { StaffType } from '@/types/staff'
 import { Box, Card, CardContent, IconButton, Typography } from '@mui/material'
 import StaffBadge from './StaffBadge'

@@ -1,7 +1,7 @@
 import {
   useCategoryArticles,
   useUserCompaniesContext
-} from '@/context/userCompaniesContext'
+} from '@/context/userCompaniesContext2'
 import { CategoryType } from '@/types/category'
 import { Button, IconButton, Typography } from '@mui/material'
 import AppIcon from './AppIcon'

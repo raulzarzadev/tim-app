@@ -1,6 +1,6 @@
 'use client'
 import { useAuthContext } from '@/context/authContext'
-import { useUserPermissions } from '@/context/userCompaniesContext'
+import { useUserPermissions } from '@/context/userCompaniesContext2'
 import { StaffPermission } from '@/types/staff'
 import { Button } from '@mui/material'
 import { useRouter } from 'next/navigation'

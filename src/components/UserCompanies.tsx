@@ -3,7 +3,7 @@
 import Select from './Select'
 import { Button, Typography } from '@mui/material'
 import Link from 'next/link'
-import { useUserCompaniesContext } from '@/context/userCompaniesContext'
+import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import AppIcon from './AppIcon'
 import { useAuthContext } from '@/context/authContext'
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2'
@@ -13,11 +13,11 @@ import ErrorBoundary from './ErrorBoundary'
 
 const UserCompanies = () => {
   const { user } = useAuthContext()
-  const { companies, selected, setSelected, currentCompany } =
+  const { userCompanies, companySelected, setCompanySelected, currentCompany } =
     useUserCompaniesContext()
 
   if (!user) return <div>Cargando...</div>
-  if (!companies.length) {
+  if (!userCompanies.length) {
     return <p>Aun no tienes una empresa.</p>
   }
   return (
@@ -30,16 +30,16 @@ const UserCompanies = () => {
       <div className="flex w-full  ">
         <Select
           fullWidth
-          selected={selected}
+          selected={companySelected}
           label="Empresas"
-          onSelect={(value) => setSelected(value)}
-          options={companies.map((company) => ({
+          onSelect={(value) => setCompanySelected(value)}
+          options={userCompanies.map((company) => ({
             value: company?.id,
             label: company?.name
           }))}
         />
 
-        <Button LinkComponent={Link} href={`/new-company/${selected}`}>
+        <Button LinkComponent={Link} href={`/new-company/${companySelected}`}>
           <AppIcon icon="edit" />
         </Button>
       </div>

@@ -15,7 +15,7 @@ import { dateFormat } from '@/lib/utils-date'
 import rentTime from '@/lib/rentTime'
 import { addMinutes } from 'date-fns'
 import CheckboxLabel from './Checkbox'
-import { useUserCompaniesContext } from '@/context/userCompaniesContext'
+import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import asDate from '@/lib/asDate'
 import ModalConfirm from './ModalConfirm'
 

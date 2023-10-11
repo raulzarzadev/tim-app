@@ -1,4 +1,4 @@
-import { useUserCompaniesContext } from '@/context/userCompaniesContext'
+import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import { updatePayment } from '@/firebase/payments'
 import { Payment } from '@/types/payment'
 import { Box, Button, IconButton, Typography } from '@mui/material'
@@ -23,19 +23,20 @@ import OrderInfo from './OrderInfo'
 import ClientInfo from './ClientInfo'
 
 const CompanyPayments = () => {
-  const { payments } = useUserCompaniesContext()
-  const sortByDate = (a: Payment, b: Payment) => {
-    return (
-      (asDate(b.startAt)?.getTime() || 0) - (asDate(a.startAt)?.getTime() || 0)
-    )
-  }
-  return (
-    <div>
-      {payments?.sort(sortByDate).map((payment) => (
-        <Payment key={payment.id} payment={payment} />
-      ))}
-    </div>
-  )
+  return <>Company Payments are disabled</>
+  // const { payments } = useUserCompaniesContext()
+  // const sortByDate = (a: Payment, b: Payment) => {
+  //   return (
+  //     (asDate(b.startAt)?.getTime() || 0) - (asDate(a.startAt)?.getTime() || 0)
+  //   )
+  // }
+  // return (
+  //   <div>
+  //     {payments?.sort(sortByDate).map((payment) => (
+  //       <Payment key={payment.id} payment={payment} />
+  //     ))}
+  //   </div>
+  // )
 }
 
 const Payment = ({ payment }: { payment: Payment }) => {

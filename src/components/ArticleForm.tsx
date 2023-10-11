@@ -11,7 +11,7 @@ import {
 import ModalConfirm from './ModalConfirm'
 import { useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useUserCompaniesContext } from '@/context/userCompaniesContext'
+import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import { ArticleType } from '@/types/article'
 import Select from './Select'
 import { addArticle, updateArticle } from '@/firebase/articles'
@@ -25,7 +25,7 @@ const ArticleForm = ({ article }: { article?: ArticleType | null }) => {
   const router = useRouter()
   const params = useSearchParams()
 
-  const { currentCompany, setUserCompanies } = useUserCompaniesContext()
+  const { currentCompany } = useUserCompaniesContext()
   const { handleSubmit, register, watch, setValue } = useForm({
     defaultValues: article || {
       name: '',
@@ -40,7 +40,6 @@ const ArticleForm = ({ article }: { article?: ArticleType | null }) => {
     if (article?.id) {
       return updateArticle(currentCompany?.id, article?.id, data)
         .then((res) => {
-          setUserCompanies()
           router.back()
         })
         .catch(console.error)
@@ -48,7 +47,6 @@ const ArticleForm = ({ article }: { article?: ArticleType | null }) => {
     }
     addArticle(currentCompany?.id, data)
       .then((res) => {
-        setUserCompanies()
         router.back()
       })
       .catch(console.error)

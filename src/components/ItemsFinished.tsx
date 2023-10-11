@@ -1,10 +1,12 @@
-import { useUserCompaniesContext } from '@/context/userCompaniesContext'
+import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import ItemsStatusTable from './ItemsStatusTable'
 
 const ItemsFinished = () => {
-  const { itemsFinished } = useUserCompaniesContext()
+  const {
+    ordersItems: { finished }
+  } = useUserCompaniesContext()
 
-  return <ItemsStatusTable items={itemsFinished || []} />
+  return <ItemsStatusTable items={finished || []} />
 }
 
 export default ItemsFinished

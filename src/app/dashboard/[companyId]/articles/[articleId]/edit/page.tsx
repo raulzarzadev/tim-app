@@ -1,6 +1,6 @@
 'use client'
 import ArticleForm from '@/components/ArticleForm'
-import { useArticle } from '@/context/userCompaniesContext'
+import { useArticle } from '@/context/userCompaniesContext2'
 import { Container, Typography } from '@mui/material'
 import { useParams } from 'next/navigation'
 

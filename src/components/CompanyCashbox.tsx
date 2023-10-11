@@ -1,6 +1,6 @@
 'use client'
 import validatePermissions from "@/HOC's/validatePermissions"
-import { useUserCompaniesContext } from '@/context/userCompaniesContext'
+import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import { ArticleType } from '@/types/article'
 import {
   Dispatch,

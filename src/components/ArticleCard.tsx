@@ -1,4 +1,4 @@
-import { useUserCompaniesContext } from '@/context/userCompaniesContext'
+import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import { ArticleType } from '@/types/article'
 import { Button, Card, CardActions, CardContent } from '@mui/material'
 import Link from 'next/link'

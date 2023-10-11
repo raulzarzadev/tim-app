@@ -1,4 +1,4 @@
-import { useUserCompaniesContext } from '@/context/userCompaniesContext'
+import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import { removeArticle } from '@/firebase/articles'
 import { Button, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation'
@@ -8,12 +8,11 @@ import { ArticleType } from '@/types/article'
 
 const ArticleManage = ({ article }: { article?: ArticleType }) => {
   const router = useRouter()
-  const { currentCompany, setUserCompanies } = useUserCompaniesContext()
+  const { currentCompany } = useUserCompaniesContext()
   const handleDelete = async () => {
     if (!currentCompany?.id || !article?.id)
       return console.error('no company or article id')
     return await removeArticle(currentCompany?.id, article?.id).then((res) => {
-      setUserCompanies()
       router.back()
     })
   }

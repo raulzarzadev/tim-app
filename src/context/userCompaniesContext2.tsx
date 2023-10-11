@@ -61,6 +61,10 @@ export const UserCompaniesContext = createContext<UserCompaniesContextType>({
   }
 })
 
+export function useUserCompaniesContext() {
+  return useContext(UserCompaniesContext)
+}
+
 export function UserCompaniesProvider({
   children
 }: {
@@ -145,10 +149,6 @@ const rentFinishAt = (
   if (!startAt) return null
   const rentMinutes = rentTime(qty, unit)
   return addMinutes(asDate(startAt) as Date, rentMinutes)
-}
-
-export function useUserCompaniesContext() {
-  return useContext(UserCompaniesContext)
 }
 
 type UseArticleProps = { articleId?: string }

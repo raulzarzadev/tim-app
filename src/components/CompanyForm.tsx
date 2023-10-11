@@ -6,7 +6,7 @@ import { createCompany, updateCompany } from '@/firebase/companies'
 import { useAuthContext } from '@/context/authContext'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useUserCompaniesContext } from '@/context/userCompaniesContext'
+import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import { CompanyType } from '@/types/company'
 import PhoneInput from './PhoneInput'
 import ErrorBoundary from './ErrorBoundary'
@@ -18,7 +18,6 @@ interface IFormInput {
 const CompanyForm = ({ company }: { company?: Partial<CompanyType> }) => {
   const router = useRouter()
   const { user } = useAuthContext()
-  const { resetCompanies } = useUserCompaniesContext()
   const { handleSubmit, register, watch, control } = useForm({
     defaultValues: company || {
       name: '',
@@ -60,7 +59,6 @@ const CompanyForm = ({ company }: { company?: Partial<CompanyType> }) => {
           .catch((err) => console.error(err))
       }
       setDone(true)
-      resetCompanies?.()
     } catch (error) {
       console.error(error)
     }

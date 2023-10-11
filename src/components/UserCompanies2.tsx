@@ -1,20 +1,14 @@
 'use client'
-
 import { Typography } from '@mui/material'
-import Link from 'next/link'
-import { useUserCompaniesContext } from '@/context/userCompaniesContext'
-import AppIcon from './AppIcon'
-import { useAuthContext } from '@/context/authContext'
+import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2'
-import { StaffPermissionLabels, areaIcon } from '@/types/staff'
-import { StaffPermission } from '@/types/staff'
 import { CompanyType } from '@/types/company'
 import ModalConfirm from './ModalConfirm'
 
 const UserCompanies = () => {
-  const { companies } = useUserCompaniesContext()
+  const { userCompanies } = useUserCompaniesContext()
 
-  if (companies.length === 0) {
+  if (userCompanies.length === 0) {
     return <p>Aun no tienes una empresa.</p>
   }
   return (
@@ -23,7 +17,7 @@ const UserCompanies = () => {
         Mis empresas
       </Typography>
       <Grid2 container spacing={2}>
-        {companies.map((company) => (
+        {userCompanies.map((company) => (
           <Grid2 xs={12} key={company.id}>
             <CompanyCard company={company} />
           </Grid2>
@@ -34,7 +28,7 @@ const UserCompanies = () => {
 }
 
 const CompanyCard = ({ company }: { company: CompanyType }) => {
-  const { setSelected, currentCompany } = useUserCompaniesContext()
+  const { setCompanySelected, currentCompany } = useUserCompaniesContext()
 
   const isSelected = company.id === currentCompany?.id
 
@@ -46,13 +40,16 @@ const CompanyCard = ({ company }: { company: CompanyType }) => {
     >
       <Typography variant="h6">{company.name}</Typography>
       {isSelected ? (
-        <ModalConfirm label={'Salir '} handleConfirm={() => setSelected('')}>
+        <ModalConfirm
+          label={'Salir '}
+          handleConfirm={() => setCompanySelected('')}
+        >
           Salir de esta empresa
         </ModalConfirm>
       ) : (
         <ModalConfirm
           label={'Entrar'}
-          handleConfirm={() => setSelected(company.id)}
+          handleConfirm={() => setCompanySelected(company.id)}
         >
           Entrar a esta empresa
         </ModalConfirm>

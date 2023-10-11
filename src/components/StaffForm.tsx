@@ -4,7 +4,7 @@ import { Button, TextField, Typography } from '@mui/material'
 import ModalConfirm from './ModalConfirm'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useUserCompaniesContext } from '@/context/userCompaniesContext'
+import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import { StaffType } from '@/types/staff'
 import StaffPermissionsForm from './StaffPermissionsForm'
 import { addStaff, removeStaff, updateStaff } from '@/firebase/staff'
@@ -20,7 +20,7 @@ const StaffForm = ({
   newStaff?: boolean
 }) => {
   const router = useRouter()
-  const { currentCompany, setUserCompanies } = useUserCompaniesContext()
+  const { currentCompany } = useUserCompaniesContext()
   const { user } = useAuthContext()
   const { handleSubmit, register, watch, setValue } = useForm({
     defaultValues: staff || {
@@ -39,7 +39,6 @@ const StaffForm = ({
         data
       )
         .then((res) => {
-          setUserCompanies()
           // router.back()
         })
         .catch(console.error)
@@ -47,7 +46,6 @@ const StaffForm = ({
     }
     return addStaff(currentCompany?.id || '', data)
       .then((res) => {
-        setUserCompanies()
         // router.back()
       })
       .catch(console.error)
@@ -56,7 +54,6 @@ const StaffForm = ({
   const handleRemove = async () => {
     return await removeStaff(currentCompany?.id || '', staff?.email || '')
       .then((res) => {
-        setUserCompanies()
         // router.back()
       })
       .catch(console.error)

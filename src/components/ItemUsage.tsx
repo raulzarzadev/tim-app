@@ -1,4 +1,4 @@
-import { useUserCompaniesContext } from '@/context/userCompaniesContext'
+import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import { cancelFinishRent, finishItemRent } from '@/firebase/payments'
 import useModal from '@/hooks/useModal'
 import { isAfter } from 'date-fns'
@@ -6,7 +6,7 @@ import ErrorBoundary from './ErrorBoundary'
 import { Box, Button, Typography } from '@mui/material'
 import { dateFormat, fromNow } from '@/lib/utils-date'
 import asDate from '@/lib/asDate'
-import ItemInUserRow, { ItemRowStatus } from './ItemInUserRow'
+import { ItemRowStatus } from './ItemInUserRow'
 import AppIcon from './AppIcon'
 import ChangeItem from './ChangeItem'
 import Modal from './Modal'
@@ -18,15 +18,18 @@ const ItemUsage = ({
   item: Partial<ItemRowStatus>
   onCloseParent?: () => void
 }) => {
-  const { itemsInUse, itemsFinished } = useUserCompaniesContext()
+  const {
+    ordersItems: { finished, inUse }
+  } = useUserCompaniesContext()
   const handleFinishRent = async (item: Partial<ItemRowStatus>) => {
     onCloseParent?.()
     return await finishItemRent(item.paymentId, item?.id || '')
   }
   const modal = useModal({ title: `Cambiar articulo` })
-  const moreItemsInUse = [...itemsFinished, ...itemsInUse].filter(
-    (i) => i.paymentId === item.paymentId && i.id !== item.itemId
-  )
+
+  // const moreItemsInUse = [...finished, ...inUse].filter(
+  //   (i) => i.paymentId === item.paymentId && i.id !== item.itemId
+  // )
 
   const rentalReturn = (item.inUse ?? false) === false
 
@@ -96,7 +99,9 @@ const ItemUsage = ({
             </Button>
           )}
         </Box>
-        {!!moreItemsInUse?.length && (
+
+        {/* TODO: add this functionality
+         {!!moreItemsInUse?.length && (
           <Box>
             <Typography className="text-center font-bold mt-6">
               Otras unidades del mismo cliente
@@ -107,7 +112,7 @@ const ItemUsage = ({
               ))}
             </Box>
           </Box>
-        )}
+        )} */}
         <Modal {...modal}>
           <ChangeItem item={item} />
         </Modal>

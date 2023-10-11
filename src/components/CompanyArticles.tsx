@@ -1,5 +1,5 @@
 'use client'
-import { useUserCompaniesContext } from '@/context/userCompaniesContext'
+import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 
 import ArticlesList from './ArticlesList'
 

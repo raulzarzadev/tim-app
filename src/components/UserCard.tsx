@@ -4,7 +4,7 @@ import { useAuthContext } from '@/context/authContext'
 import UserForm from './UserForm'
 import { Button, Typography } from '@mui/material'
 import Link from 'next/link'
-import { useUserCompaniesContext } from '@/context/userCompaniesContext'
+import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import LoginButton from './LoginButton'
 import { updateUser } from '@/firebase/users'
 import { UserType } from '@/types/user'
@@ -12,7 +12,7 @@ import ErrorBoundary from './ErrorBoundary'
 
 const UserCard = () => {
   const { user } = useAuthContext()
-  const { companies } = useUserCompaniesContext()
+  const { userCompanies } = useUserCompaniesContext()
   if (!user)
     return (
       <div>
@@ -36,15 +36,17 @@ const UserCard = () => {
   }
   return (
     <div>
-      <UserForm user={user} setUser={handleSetUser} />
+      <ErrorBoundary>
+        <UserForm user={user} setUser={handleSetUser} />
 
-      {companies.length === 0 && (
-        <div className="flex w-full justify-center">
-          <Button LinkComponent={Link} href="/new-company">
-            ¿Tienes algo que rentar?
-          </Button>
-        </div>
-      )}
+        {userCompanies.length === 0 && (
+          <div className="flex w-full justify-center">
+            <Button LinkComponent={Link} href="/new-company">
+              ¿Tienes algo que rentar?
+            </Button>
+          </div>
+        )}
+      </ErrorBoundary>
     </div>
   )
 }

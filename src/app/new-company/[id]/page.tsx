@@ -1,21 +1,20 @@
 'use client'
 import CompanyForm from '@/components/CompanyForm'
 import ModalConfirm from '@/components/ModalConfirm'
-import { useUserCompaniesContext } from '@/context/userCompaniesContext'
+import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import { deleteCompany } from '@/firebase/companies'
 import { Button, Container, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation'
 
 const Page = () => {
-  const { companies, selected, resetCompanies } = useUserCompaniesContext()
-  const company = companies.find((company) => company?.id === selected)
+  const { currentCompany } = useUserCompaniesContext()
+
   const router = useRouter()
   const handleDeleteCompany = async () => {
-    await deleteCompany(company?.id || '')
-    resetCompanies?.()
+    await deleteCompany(currentCompany?.id || '')
     router.back()
   }
-  if (!company) return <div>Cargando...</div>
+  if (!currentCompany) return <div>Cargando...</div>
   return (
     <Container>
       <Typography
@@ -25,7 +24,7 @@ const Page = () => {
         Editar empresa
       </Typography>
 
-      <CompanyForm company={company} />
+      <CompanyForm company={currentCompany} />
       <div className="flex justify-center mt-20">
         <ModalConfirm
           label="Eliminar empresa"

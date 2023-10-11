@@ -4,7 +4,7 @@ import { Button, Input, TextField, Typography } from '@mui/material'
 import ModalConfirm from './ModalConfirm'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useUserCompaniesContext } from '@/context/userCompaniesContext'
+import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import { CategoryType } from '@/types/category'
 import { addCategory, updateCategory } from '@/firebase/categories'
 import PricesForm from './PricesForm'
@@ -15,7 +15,7 @@ interface IFormInput {
 
 const CategoryForm = ({ category }: { category?: CategoryType }) => {
   const router = useRouter()
-  const { currentCompany, setUserCompanies } = useUserCompaniesContext()
+  const { currentCompany } = useUserCompaniesContext()
   const { handleSubmit, register, watch, setValue } = useForm({
     defaultValues: category || {
       name: ''
@@ -33,7 +33,6 @@ const CategoryForm = ({ category }: { category?: CategoryType }) => {
         data
       )
         .then((res) => {
-          setUserCompanies()
           router.back()
         })
         .catch(console.error)
@@ -41,7 +40,6 @@ const CategoryForm = ({ category }: { category?: CategoryType }) => {
     }
     addCategory(currentCompany?.id || '', data)
       .then((res) => {
-        setUserCompanies()
         router.back()
       })
       .catch(console.error)

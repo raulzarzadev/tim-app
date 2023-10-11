@@ -1,7 +1,7 @@
 'use client'
 import ArticleManage from '@/components/AritcleManage'
 import ArticleDetails from '@/components/ArticleDetails'
-import { useArticle } from '@/context/userCompaniesContext'
+import { useArticle } from '@/context/userCompaniesContext2'
 import { Container } from '@mui/material'
 import { useParams } from 'next/navigation'
 

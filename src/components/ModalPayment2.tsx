@@ -6,7 +6,7 @@ import CurrencySpan from './CurrencySpan'
 import PaymentForm from './PaymentForm'
 import { useContext } from 'react'
 import { CashboxContext } from './CompanyCashbox'
-import { useUserCompaniesContext } from '@/context/userCompaniesContext'
+import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import AppIcon from './AppIcon'
 
 const ModalPayment = ({

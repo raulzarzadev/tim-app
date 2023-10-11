@@ -18,7 +18,7 @@ import { Skeleton } from '@mui/material'
 import LoginButton from './LoginButton'
 import { AuthContext, useAuthContext } from '@/context/authContext'
 import { logout } from '@/firebase/auth'
-import { useUserCompaniesContext } from '@/context/userCompaniesContext'
+import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import { UserType } from '@/types/user'
 
 const pages = [

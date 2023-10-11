@@ -7,7 +7,7 @@ import Paper from '@mui/material/Paper'
 import AppIcon from './AppIcon'
 import { useAuthContext } from '@/context/authContext'
 import Link from 'next/link'
-import { useUserCompaniesContext } from '@/context/userCompaniesContext'
+import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import { usePathname } from 'next/navigation'
 import ErrorBoundary from './ErrorBoundary'
 export type NavPages = {

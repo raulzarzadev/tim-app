@@ -1,4 +1,4 @@
-import { useUserCompaniesContext } from '@/context/userCompaniesContext'
+import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import { ArticleType } from '@/types/article'
 import { CategoryType } from '@/types/category'
 import {
@@ -54,7 +54,9 @@ const Category = ({
   articles: ArticleType[]
 }) => {
   const { items, addItem, removeItem } = useContext(CashboxContext)
-  const { itemsInUse } = useUserCompaniesContext()
+  const {
+    ordersItems: { all: itemsInUse }
+  } = useUserCompaniesContext()
   const categoryArticles = articles.filter((a) => a.category === category.name)
   const categoryItemsSelected =
     items?.filter(({ itemId }) =>

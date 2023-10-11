@@ -1,6 +1,6 @@
 'use client'
 import CompanyAdmin from '@/components/CompanyAdmin'
-import CompanyCashbox from '@/components/CompanyCashbox'
+import CompanyCashbox2 from '@/components/CompanyCashbox2'
 import CompanyDelivery from '@/components/CompanyDelivery'
 import CompanyMaintenance from '@/components/CompanyMaintenance'
 import CompanyReception from '@/components/CompanyReception'
@@ -23,7 +23,7 @@ const Page = ({
           {StaffPermissionLabels[area]}
         </Typography>
         {area === 'ADMIN' && <CompanyAdmin />}
-        {area === 'CASHBOX' && <CompanyCashbox />}
+        {area === 'CASHBOX' && <CompanyCashbox2 />}
         {area === 'DELIVERY' && <CompanyDelivery />}
         {area === 'MAINTENANCE' && <CompanyMaintenance />}
         {area === 'RECEPTION' && <CompanyReception />}

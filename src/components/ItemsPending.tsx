@@ -1,9 +1,11 @@
-import { useUserCompaniesContext } from '@/context/userCompaniesContext'
+import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import ItemsStatusTable from './ItemsStatusTable'
 
 const ItemsPending = () => {
-  const { itemsPending } = useUserCompaniesContext()
-  return <ItemsStatusTable items={itemsPending || []} />
+  const {
+    ordersItems: { pending }
+  } = useUserCompaniesContext()
+  return <ItemsStatusTable items={pending || []} />
 }
 
 export default ItemsPending

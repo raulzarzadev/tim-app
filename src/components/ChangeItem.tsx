@@ -1,7 +1,7 @@
 import {
   useCategoryArticles,
   useUserCompaniesContext
-} from '@/context/userCompaniesContext'
+} from '@/context/userCompaniesContext2'
 import { useEffect, useState } from 'react'
 import { Box, Button, Chip, Stack, Typography } from '@mui/material'
 import { ArticleType } from '@/types/article'
@@ -22,7 +22,10 @@ const ChangeItem = ({
   item: Partial<ItemRowStatus>
   cashboxChange?: (newItem: ArticleType['id']) => void
 }) => {
-  const { itemsInUse, currentCompany } = useUserCompaniesContext()
+  const {
+    ordersItems: { all: itemsInUse },
+    currentCompany
+  } = useUserCompaniesContext()
 
   const [_categoryName, _setCategoryName] = useState(item.category)
   const [_items, _setItems] = useState<ArticleType[]>([])

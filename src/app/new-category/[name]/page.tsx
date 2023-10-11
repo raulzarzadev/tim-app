@@ -1,7 +1,7 @@
 'use client'
 import CategoryForm from '@/components/CategoryForm'
 import ModalConfirm from '@/components/ModalConfirm'
-import { useUserCompaniesContext } from '@/context/userCompaniesContext'
+import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import { removeCategory } from '@/firebase/categories'
 import { Box, Container, Typography } from '@mui/material'
 import { useParams, useRouter } from 'next/navigation'
@@ -12,7 +12,7 @@ const Page = () => {
   const params = useParams()
   const categoryName = decodeURIComponent(String(params.name))
 
-  const { currentCompany, setUserCompanies } = useUserCompaniesContext()
+  const { currentCompany } = useUserCompaniesContext()
   const category = currentCompany?.categories?.find(
     (c) => c.name === categoryName
   )
@@ -20,7 +20,6 @@ const Page = () => {
   const handleRemoveCategory = () => {
     removeCategory(currentCompany?.id || '', categoryName)
       .then((res) => {
-        setUserCompanies()
         router.back()
         console.log(res)
       })

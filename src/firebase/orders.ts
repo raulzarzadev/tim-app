@@ -4,7 +4,7 @@ import { db } from './main'
 import { BaseType } from '@/types/base'
 import { arrayUnion, where } from 'firebase/firestore'
 import { ArticleType } from '@/types/article'
-import { Order, OrderBase } from '@/types/order'
+import { Order, OrderBase, Payment } from '@/types/order'
 
 /*
  * You should be able to copy all this file and just replace
@@ -18,6 +18,7 @@ const COLLECTION_NAME = 'orders'
 type ItemType = Order
 type NewItem = Partial<OrderBase>
 type CreateItem = Partial<OrderBase>
+export type CreateOrder = Partial<OrderBase>
 export const itemCRUD = new FirebaseCRUD(COLLECTION_NAME, db, storage)
 
 export const setOrder = async (itemId: ItemType['id'], newItem: NewItem) =>
@@ -96,5 +97,12 @@ export const changeItem = async (
     items: [...removedItem, newItem],
     // @ts-ignore FIXME: Typescript error with arrayUnion
     changes: arrayUnion(newChange)
+  })
+}
+
+export const onPayOrder = async (orderId: Order['id'], payment: Payment) => {
+  return await updateOrder(orderId, {
+    // @ts-ignore FIXME: array union error FieldValue
+    payments: arrayUnion(payment)
   })
 }

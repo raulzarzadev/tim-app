@@ -10,7 +10,7 @@ import { UserType } from './user'
 
 export type OrderBase = {
   shipping: Shipping
-  client: Client
+  client: Partial<Client>
   items: ItemSelected[]
   payments: Payment[]
   changes: PaymentChange[]
