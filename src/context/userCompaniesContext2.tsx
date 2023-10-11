@@ -13,12 +13,20 @@ import { addMinutes, isAfter } from 'date-fns'
 import asDate from '@/lib/asDate'
 import { Order } from '@/types/order'
 import { listenCompanyOrders } from '@/firebase/orders'
-import { ItemSelected } from '@/components/CompanyCashbox'
 import { CompanyItem } from '@/types/article'
+import asNumber from '@/lib/asNumber'
+import { ItemSelected } from './useCompanyCashbox'
 
 export type ContextItem = ItemSelected & {
   order: Order
 }
+
+export type ItemOrder = Partial<CompanyItem> &
+  ItemSelected & {
+    order: Order
+    rentStartAt?: Date | Timestamp | null
+    rentFinishAt?: Date | Timestamp | null
+  }
 
 export type UserCompaniesContextType = {
   companySelected: CompanyType['id']
@@ -27,10 +35,10 @@ export type UserCompaniesContextType = {
   userCompanies: CompanyType[]
   companyItems: CompanyItem[]
   ordersItems: {
-    all: ContextItem[]
-    inUse: ContextItem[]
-    finished: ContextItem[]
-    pending: ContextItem[]
+    all: ItemOrder[]
+    inUse: ItemOrder[]
+    finished: ItemOrder[]
+    pending: ItemOrder[]
   }
   orders?: Order[]
 }
@@ -92,12 +100,6 @@ export function UserCompaniesProvider({
   useEffect(() => {
     listenCompanyOrders(currentCompany?.id || '', setOrders)
   }, [currentCompany?.id])
-
-  const companyItems = currentCompany?.articles || []
-  const itemsFromOrders = orders
-    .map((order) => order.items.map((item) => ({ ...item, order })))
-    .flat()
-
   const handleSetCompanySelected = (companySelectedId: string) => {
     localStorage.setItem(
       'baja-rent',
@@ -105,27 +107,50 @@ export function UserCompaniesProvider({
     )
     setCompanySelected(companySelectedId)
   }
+  const companyItems = currentCompany?.articles || []
 
+  const calculateFinishRentDate = (
+    rentDate: Date | null,
+    qty?: number | string,
+    unit?: PriceType['unit']
+  ): Date | null => {
+    if (!rentDate) {
+      return null
+    }
+    const rentMinutes = rentTime(asNumber(qty), unit)
+    return addMinutes(rentDate, rentMinutes)
+  }
+
+  const itemsFromOrders: ItemOrder[] = orders
+    .map((order) =>
+      order.items.map((item) => ({
+        ...companyItems.find((i) => i.id === item.itemId),
+        ...item,
+        order,
+        rentStartAt: asDate(order.shipping.date),
+        rentFinishAt: calculateFinishRentDate(
+          asDate(order.shipping.date),
+          item?.qty,
+          item.unit
+        )
+      }))
+    )
+    .flat()
+
+  console.log({ itemsFromOrders })
   const itemsInUse = itemsFromOrders.filter(
-    (i) =>
-      i.inUse &&
-      !isAfter(new Date(), asDate(i.order.shipping.date) || new Date())
+    (i) => i.inUse
+    // item in use
+    // i.inUse &&
+    // item order shipping date is not in the future
+    //!isAfter(asDate(i.order.shipping.date) || new Date(), new Date())
   )
-  const itemsFinished = itemsFromOrders.filter((i) => !i.inUse)
-  const itemsPending = itemsFromOrders.filter(
+  const itemsFinished = itemsFromOrders.filter(
     (i) =>
-      i.inUse &&
-      isAfter(new Date(), asDate(i.order.shipping.date) || new Date())
+      !i.inUse &&
+      isAfter(asDate(i.order.shipping.date) || new Date(), new Date())
   )
-
-  console.log({
-    orders,
-    itemsFromOrders,
-    itemsInUse,
-    itemsFinished,
-    itemsPending
-  })
-
+  const itemsPending = itemsFromOrders.filter((i) => !i.inUse)
   return (
     <UserCompaniesContext.Provider
       value={{
@@ -138,7 +163,7 @@ export function UserCompaniesProvider({
           all: itemsFromOrders,
           inUse: itemsInUse,
           finished: itemsFinished,
-          pending: []
+          pending: itemsPending
         },
         orders
       }}

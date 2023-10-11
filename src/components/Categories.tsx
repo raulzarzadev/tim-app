@@ -1,7 +1,6 @@
 import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2'
 import Category from './Category'
-import useCashboxContext from '@/context/useCompanyCashbox'
 
 const Categories = () => {
   const { currentCompany } = useUserCompaniesContext()

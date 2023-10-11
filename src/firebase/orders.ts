@@ -59,11 +59,14 @@ export const finishItemRent = async (
   const oldItem = items.find((item) => item.itemId === itemId)
   const removedItem = items.filter((item) => item.itemId !== itemId)
   return await updateOrder(OrderId, {
-    items: [...removedItem, { ...oldItem, inUse: false }]
+    items: [
+      ...removedItem,
+      { ...oldItem, inUse: false, rentStatus: 'finished' }
+    ]
   })
 }
 
-export const cancelFinishRent = async (
+export const startItemRent = async (
   OrderId?: Order['id'],
   itemId?: ArticleType['id']
 ) => {
@@ -73,7 +76,26 @@ export const cancelFinishRent = async (
   const oldItem = items.find((item) => item.itemId === itemId)
   const removedItem = items.filter((item) => item.itemId !== itemId)
   return await updateOrder(OrderId, {
-    items: [...removedItem, { ...oldItem, inUse: true }]
+    items: [...removedItem, { ...oldItem, inUse: true, rentStatus: 'taken' }]
+  })
+}
+
+export const finishOrderRent = async (OrderId?: Order['id']) => {
+  if (!OrderId) return
+  const Order: Order = await itemCRUD.getItem(OrderId)
+  const items = Order?.items
+  const newItems = items.map((item) => ({ ...item, inUse: false }))
+  return await updateOrder(OrderId, {
+    items: newItems
+  })
+}
+export const startOrderRent = async (OrderId?: Order['id']) => {
+  if (!OrderId) return
+  const Order: Order = await itemCRUD.getItem(OrderId)
+  const items = Order?.items
+  const newItems = items.map((item) => ({ ...item, inUse: true }))
+  return await updateOrder(OrderId, {
+    items: newItems
   })
 }
 
@@ -81,8 +103,8 @@ export const changeItem = async (
   OrderId: ArticleType['id'],
   newChange: ItemType['changes'][number]
 ) => {
-  const Order: Order = await itemCRUD.getItem(OrderId)
-  const items = Order?.items
+  const order: Order = await itemCRUD.getItem(OrderId)
+  const items = order?.items
 
   const removedItem = items.filter(
     (item) => item.itemId !== newChange.oldItemId
@@ -91,7 +113,8 @@ export const changeItem = async (
     itemId: newChange.newItemId,
     inUse: true,
     qty: newChange.newPrice?.quantity,
-    unit: newChange.newPrice?.unit
+    unit: newChange.newPrice?.unit,
+    rentStatus: 'taken'
   }
   return await updateOrder(OrderId, {
     items: [...removedItem, newItem],

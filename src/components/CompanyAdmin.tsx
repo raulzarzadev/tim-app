@@ -1,6 +1,5 @@
 'use client'
 import validatePermissions from "@/HOC's/validatePermissions"
-import CompanyPayments from './CompanyPayments'
 import BasicTabs from './BasicTabs'
 import ItemsInUse from './ItemsInUse'
 import CompanyCategories from './CompanyCategories'
@@ -13,7 +12,7 @@ const CompanyAdmin = () => {
     <div>
       <BasicTabs
         tabs={[
-          { label: 'Clientes ', content: <CompanyPayments /> },
+          { label: 'Clientes ', content: <></> }, //CompanyPayments
           { label: 'En uso', content: <ItemsInUse /> },
           { label: 'Terminados', content: <ItemsFinished /> },
           { label: 'Categorias', content: <CompanyCategories /> },

@@ -1,7 +1,7 @@
 import { PriceType } from '@/components/PricesForm'
 import asNumber from './asNumber'
-import { ItemSelected } from '@/components/CompanyCashbox'
 import { ArticleType } from '@/types/article'
+import { ItemSelected } from '@/context/useCompanyCashbox'
 
 export const calculateTotal = (
   unit: PriceType['unit'] | undefined,

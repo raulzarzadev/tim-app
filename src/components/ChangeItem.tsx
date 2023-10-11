@@ -1,25 +1,25 @@
 import {
+  ItemOrder,
   useCategoryArticles,
   useUserCompaniesContext
 } from '@/context/userCompaniesContext2'
 import { useEffect, useState } from 'react'
-import { Box, Button, Chip, Stack, Typography } from '@mui/material'
+import { Box, Chip, Stack, Typography } from '@mui/material'
 import { ArticleType } from '@/types/article'
 import Select from './Select'
 import CurrencySpan from './CurrencySpan'
 import asNumber from '@/lib/asNumber'
 import { PriceType } from './PricesForm'
-import { changeItem, updatePayment } from '@/firebase/payments'
 import ButtonLoadingAsync from './ButtonLoadingAsync'
 import { calculateTotal } from '@/lib/calculateTotalItem'
 import ErrorBoundary from './ErrorBoundary'
-import { ItemRowStatus } from './ItemInUserRow'
+import { changeItem } from '@/firebase/orders'
 
 const ChangeItem = ({
   item,
   cashboxChange
 }: {
-  item: Partial<ItemRowStatus>
+  item: Partial<ItemOrder>
   cashboxChange?: (newItem: ArticleType['id']) => void
 }) => {
   const {
@@ -86,8 +86,8 @@ const ChangeItem = ({
     if (cashboxChange && _selected) {
       return cashboxChange(_selected)
     }
-    if (item.paymentId) {
-      return changeItem(item.paymentId, {
+    if (item?.order?.id) {
+      return changeItem(item?.order?.id, {
         amount: amountDiff,
         newPrice: newPrice || null,
         newItemId: _selected || '',

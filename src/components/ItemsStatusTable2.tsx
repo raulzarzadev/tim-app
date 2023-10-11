@@ -1,14 +1,12 @@
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2'
 import ErrorBoundary from './ErrorBoundary'
-import ItemInUseRow, { ItemRowStatus } from './ItemInUserRow'
+import ItemInUseRow from './ItemInUserRow2'
 import asDate from '@/lib/asDate'
 import { Container } from '@mui/material'
+import { ItemOrder } from '@/context/userCompaniesContext2'
 
-const ItemsStatusTable = ({ items }: { items: Partial<ItemRowStatus>[] }) => {
-  const sortByFinishRent = (
-    a: Partial<ItemRowStatus>,
-    b: Partial<ItemRowStatus>
-  ) => {
+const ItemsStatusTable = ({ items }: { items: ItemOrder[] }) => {
+  const sortByFinishRent = (a: ItemOrder, b: ItemOrder) => {
     if (!a.rentFinishAt && !b.rentFinishAt) return 0
     return (
       (asDate(b.rentFinishAt)?.getTime() || 0) -

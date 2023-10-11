@@ -95,7 +95,8 @@ export const CheckoutItemRow = ({ item }: { item: Partial<ArticleType> }) => {
                 inUse: true,
                 qty: priceSelected?.quantity,
                 unit: priceSelected?.unit,
-                itemId: newItem
+                itemId: newItem,
+                rentStatus: 'taken'
               })
               removeItem?.(item.id || '')
             }}

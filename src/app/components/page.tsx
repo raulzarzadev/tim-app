@@ -1,7 +1,7 @@
 'use client'
 import Checkout from '@/components/Checkout3'
-import { CashboxContextProvider } from '@/components/CompanyCashbox'
 import ModalPayment from '@/components/ModalPayment2'
+import { CashboxContextProvider } from '@/context/useCompanyCashbox'
 import { ArticleType } from '@/types/article'
 import { CategoryType } from '@/types/category'
 import { usePathname, useRouter } from 'next/navigation'

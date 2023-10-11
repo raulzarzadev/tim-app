@@ -1,11 +1,10 @@
 'use client'
-import { ArticleType, CompanyItem } from '@/types/article'
+import { CompanyItem } from '@/types/article'
 import { Box, Button, TextField, Typography } from '@mui/material'
 import Modal from './Modal'
 import useModal from '@/hooks/useModal'
-import { useContext, useState } from 'react'
+import { useEffect, useState } from 'react'
 import asNumber from '@/lib/asNumber'
-import { CashboxContext, ItemSelected } from './CompanyCashbox'
 import ModalPayment from './ModalPayment2'
 import ModalClientInfo from './ModalClientInfo'
 import CheckoutItemsList from './CheckoutItemsList'
@@ -102,7 +101,15 @@ const Checkout = () => {
           )}
         </Box>
         <OrderOptions onCloseParent={() => modal.onClose()} />
-        <Box className="flex w-full justify-center">
+        <Box className="flex w-full justify-evenly">
+          <Button
+            variant="outlined"
+            onClick={() => {
+              handleClearSearch()
+            }}
+          >
+            Limpiar
+          </Button>
           <ModalPayment
             amount={total}
             disabled={!client?.name}
@@ -116,23 +123,44 @@ const Checkout = () => {
 
 const OrderOptions = ({ onCloseParent }: { onCloseParent?: () => void }) => {
   const { currentCompany } = useUserCompaniesContext()
-  const { handleOrder, setItemsSelected, setClient, setShipping, shipping } =
-    useCashboxContext()
+  const {
+    handleOrder,
+    setItemsSelected,
+    setClient,
+    setShipping,
+    shipping,
+    client
+  } = useCashboxContext()
 
   const handleSaveOrder = async () => {
     const res = await handleOrder?.({
       companyId: currentCompany?.id || ''
     })
 
-    setItemsSelected?.([])
-    setClient?.({})
-    onCloseParent?.()
+    // setItemsSelected?.([])
+    // setClient?.({})
+    //onCloseParent?.()
   }
 
   const [shippingMenu, setShippingMenu] = useState({
     inStore: true,
     pickupNow: true
   })
+
+  useEffect(() => {
+    isPickupNow(shippingMenu.pickupNow)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [shippingMenu.pickupNow])
+
+  const isPickupNow = (isPickupNow: boolean) => {
+    setItemsSelected?.((items) =>
+      items.map((item) => ({
+        ...item,
+        inUse: isPickupNow,
+        rentStatus: isPickupNow ? 'taken' : 'pending'
+      }))
+    )
+  }
 
   return (
     <Box className="flex flex-col items-center my-4">
@@ -172,7 +200,7 @@ const OrderOptions = ({ onCloseParent }: { onCloseParent?: () => void }) => {
         />
       </Box>
       {!shippingMenu.pickupNow && (
-        <Box>
+        <Box className="mb-4">
           <TextField
             type="datetime-local"
             label=""
@@ -188,11 +216,15 @@ const OrderOptions = ({ onCloseParent }: { onCloseParent?: () => void }) => {
       )}
       {(!shippingMenu.inStore || !shippingMenu.pickupNow) && (
         <ModalConfirm
+          disabled={!client?.name}
           label="Guardar orden"
           handleConfirm={handleSaveOrder}
           color="secondary"
         >
-          <Typography></Typography>
+          <Typography>
+            Guardar orden. Podras pagarla ahora o en la sección
+            recepción-pendientes
+          </Typography>
         </ModalConfirm>
       )}
     </Box>

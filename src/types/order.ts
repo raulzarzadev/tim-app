@@ -3,10 +3,10 @@ import { ArticleType } from './article'
 import { CompanyType } from './company'
 import { BaseType } from './base'
 import { PaymentMethods } from '@/CONSTS/paymentMethods'
-import { ItemSelected } from '@/components/CompanyCashbox'
 import { Client } from './client'
 import { PriceType } from '@/components/PricesForm'
 import { UserType } from './user'
+import { ItemSelected } from '@/context/useCompanyCashbox'
 
 export type OrderBase = {
   shipping: Shipping

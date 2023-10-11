@@ -51,7 +51,9 @@ const Category = ({ categoryName }: { categoryName: string }) => {
   const handleAddItem = () => {
     const newItem = itemsLeft[Math.floor(Math.random() * itemsLeft.length)]
     addItem?.({
+      //* should be as taken and in use by default, if change ""entregar ahora" to false change it
       inUse: true,
+      rentStatus: 'taken',
       itemId: newItem.id,
       unit: newItem.prices?.[0].unit,
       qty: 1

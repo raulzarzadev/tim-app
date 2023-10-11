@@ -41,6 +41,7 @@ export type ItemSelected = {
   qty?: number
   unit?: PriceType['unit']
   inUse?: boolean
+  rentStatus: 'pending' | 'taken' | 'finished'
 }
 
 export const CashboxContextProvider = ({
@@ -62,6 +63,8 @@ export const CashboxContextProvider = ({
     address: 'store',
     date: new Date()
   })
+
+  console.log({ itemsSelected })
 
   useEffect(() => {
     searchParams.get('items') &&
@@ -85,8 +88,7 @@ export const CashboxContextProvider = ({
     const newItem = {
       ...item,
       qty: item.qty ?? 0,
-      unit: item.unit ?? '',
-      inUse: true
+      unit: item.unit ?? ''
     }
     setItemsSelected((items) => [...items, newItem])
   }

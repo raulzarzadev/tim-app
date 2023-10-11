@@ -13,9 +13,9 @@ import { ArticleType } from '@/types/article'
 import useModal from '@/hooks/useModal'
 import Modal from './Modal'
 import { useContext, useEffect, useState } from 'react'
-import { CashboxContext } from './CompanyCashbox'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import ArticleDetails from './ArticleDetails'
+import useCashboxContext from '@/context/useCompanyCashbox'
 
 const Item = styled(Button)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -33,11 +33,12 @@ const ModalArticles = ({
   // setArticlesSelected?: (articles: ArticleType['id'][]) => void
 }) => {
   const modal = useModal({ title: 'Unidades' })
-  const { addItem, removeItem, items } = useContext(CashboxContext)
+  const { addItem, removeItem, itemsSelected: items } = useCashboxContext()
   const {
     ordersItems: { all: itemsInUse }
   } = useUserCompaniesContext()
   const [clickedArticle, setClickedArticle] = useState<ArticleType>()
+
   const handleClick = (articleId: ArticleType['id']) => {
     setClickedArticle(articles.find((a) => a.id === articleId))
     if (_selected.find(({ itemId }) => itemId === articleId)) {

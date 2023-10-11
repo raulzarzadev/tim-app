@@ -1,29 +1,30 @@
-import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
-import { cancelFinishRent, finishItemRent } from '@/firebase/payments'
+import {
+  ItemOrder,
+  useUserCompaniesContext
+} from '@/context/userCompaniesContext2'
 import useModal from '@/hooks/useModal'
 import { isAfter } from 'date-fns'
 import ErrorBoundary from './ErrorBoundary'
 import { Box, Button, Typography } from '@mui/material'
 import { dateFormat, fromNow } from '@/lib/utils-date'
 import asDate from '@/lib/asDate'
-import { ItemRowStatus } from './ItemInUserRow'
 import AppIcon from './AppIcon'
 import ChangeItem from './ChangeItem'
 import Modal from './Modal'
-
+import { finishItemRent, startItemRent } from '@/firebase/orders'
 const ItemUsage = ({
   item,
   onCloseParent
 }: {
-  item: Partial<ItemRowStatus>
+  item: ItemOrder
   onCloseParent?: () => void
 }) => {
   const {
     ordersItems: { finished, inUse }
   } = useUserCompaniesContext()
-  const handleFinishRent = async (item: Partial<ItemRowStatus>) => {
+  const handleFinishRent = async (item: ItemOrder) => {
     onCloseParent?.()
-    return await finishItemRent(item.paymentId, item?.id || '')
+    return await finishItemRent(item.order.id, item?.id || '')
   }
   const modal = useModal({ title: `Cambiar articulo` })
 
@@ -33,16 +34,18 @@ const ItemUsage = ({
 
   const rentalReturn = (item.inUse ?? false) === false
 
-  const onTime = item.rentFinishAt && isAfter(item.rentFinishAt, new Date())
-  const handleCancelFinishRent = async (item: Partial<ItemRowStatus>) => {
+  const onTime =
+    item.rentFinishAt &&
+    isAfter(asDate(item.rentFinishAt) || new Date(), new Date())
+  const handleCancelFinishRent = async (item: Partial<ItemOrder>) => {
     onCloseParent?.()
-    return await cancelFinishRent(item.paymentId, item?.id || '')
+    return await startItemRent(item?.order?.id, item?.id || '')
   }
   return (
     <ErrorBoundary>
       <Box className="my-4">
         <Typography className="text-center">
-          {item.payment?.client?.name}
+          {item.order?.client?.name}
         </Typography>
         <Typography className="text-center">
           Entrega: {dateFormat(item.rentFinishAt, 'dd/MM HH:mm')}
