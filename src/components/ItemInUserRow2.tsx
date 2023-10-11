@@ -8,17 +8,17 @@ import { Typography } from '@mui/material'
 import { dateFormat, fromNow } from '@/lib/utils-date'
 import { ItemOrder } from '@/context/userCompaniesContext2'
 
-const ItemInUseRow = ({ item }: { item: ItemOrder }) => {
+const ItemInUserRow = ({ item }: { item: ItemOrder }) => {
   const modal = useModal({
     title: `Detalles de unidad: ${item.category} ${
       item.serialNumber || item.name
     }`
   })
 
-  const finishAt = asDate(item.rentFinishAt)
-  const rentalReturn = (item.inUse ?? false) === false
-  const onTime = finishAt && isAfter(finishAt, new Date())
-  const payments = item?.order?.payments
+  const pending = item.rentStatus === 'pending'
+  const inUse = item.rentStatus === 'taken'
+  const finished = item.rentStatus === 'finished'
+  const onTime = isAfter(asDate(item.rentFinishAt) || new Date(), new Date())
   return (
     <>
       <Modal {...modal}>
@@ -58,14 +58,13 @@ const ItemInUseRow = ({ item }: { item: ItemOrder }) => {
           </Typography>
         </Grid2>
         <Grid2 xs={2} className="flex flex-wrap">
-          {!payments?.length ? (
-            <ItemStatus label="Sin pagos" status="error" />
-          ) : null}
-          {onTime && <ItemStatus label="En tiempo" status="success" />}
-          {!onTime && !rentalReturn && (
-            <ItemStatus label="Retraso" status="error" />
+          {pending && <ItemStatus label="Pendiente" status="pending" />}
+          {inUse && onTime && <ItemStatus label="En uso" status="success" />}
+          {inUse && !onTime && (
+            <ItemStatus label="Fuera de tiempo" status="error" />
           )}
-          {rentalReturn && <ItemStatus status="success" label="Terminada" />}
+
+          {finished && <ItemStatus label="Terminado" status="success" />}
         </Grid2>
       </Grid2>
     </>
@@ -85,10 +84,10 @@ const ItemStatus = ({
   }
   return (
     <div
-      className={`${statusColor[status]} m-0.5 rounded-md  truncate aspect-video w-16 items-center flex justify-center text-xs shadow-md`}
+      className={`${statusColor[status]} m-0.5 rounded-md  truncate aspect-video w-16 items-center flex justify-center text-xs shadow-md whitespace-pre-line`}
     >
       {label}
     </div>
   )
 }
-export default ItemInUseRow
+export default ItemInUserRow
