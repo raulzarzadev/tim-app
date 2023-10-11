@@ -11,3 +11,5 @@ export type ArticleType = {
   ownPrice?: boolean
   prices?: CategoryType['prices']
 }
+
+export type CompanyItem = ArticleType
