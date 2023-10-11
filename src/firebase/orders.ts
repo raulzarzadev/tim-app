@@ -6,6 +6,7 @@ import { arrayUnion, where } from 'firebase/firestore'
 import { ArticleType } from '@/types/article'
 import { Order, OrderBase, Payment } from '@/types/order'
 import { v4 as uidGenerator } from 'uuid'
+import { ItemSelected } from '@/context/useCompanyCashbox'
 /*
  * You should be able to copy all this file and just replace
  * ItemType
@@ -109,7 +110,7 @@ export const changeItem = async (
   const removedItem = items.filter(
     (item) => item.itemId !== newChange.oldItemId
   )
-  const newItem = {
+  const newItem: ItemSelected = {
     itemId: newChange.newItemId,
     inUse: true,
     qty: newChange.newPrice?.quantity,
