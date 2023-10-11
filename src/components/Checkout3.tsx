@@ -1,10 +1,9 @@
 'use client'
-import { ArticleType } from '@/types/article'
+import { ArticleType, CompanyItem } from '@/types/article'
 import { Box, Button, TextField, Typography } from '@mui/material'
 import Modal from './Modal'
 import useModal from '@/hooks/useModal'
 import { useContext, useState } from 'react'
-import { CategoryType } from '@/types/category'
 import asNumber from '@/lib/asNumber'
 import { CashboxContext, ItemSelected } from './CompanyCashbox'
 import ModalPayment from './ModalPayment2'
@@ -15,28 +14,28 @@ import { dateFormat } from '@/lib/utils-date'
 import rentTime from '@/lib/rentTime'
 import { addMinutes } from 'date-fns'
 import CheckboxLabel from './Checkbox'
-import {
-  useCompanyCategories,
-  useUserCompaniesContext
-} from '@/context/userCompaniesContext2'
+import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import asDate from '@/lib/asDate'
 import ModalConfirm from './ModalConfirm'
 import useCashboxContext from '@/context/useCompanyCashbox'
 
 const Checkout = () => {
   const { currentCompany } = useUserCompaniesContext()
-  const { client, itemsSelected, setItemsSelected } = useCashboxContext()
+  const { client, itemsSelected = [], setItemsSelected } = useCashboxContext()
   const categories = currentCompany?.categories
   const items = currentCompany?.articles
 
   const modal = useModal({ title: 'Lista de articulos' })
-  const fullItems: Partial<ArticleType[]> = itemsSelected?.map(
+
+  const fullItems: (CompanyItem | null)[] = itemsSelected?.map(
     (searchItem: { itemId?: string }) => {
       const fullItem = items?.find((item) => item?.id == searchItem.itemId)
+      if (!fullItem) return null
       if (fullItem?.ownPrice) return fullItem
       const categoryPrices = categories?.find(
         (c) => c.name === fullItem?.category
       )?.prices
+
       return { ...fullItem, prices: categoryPrices }
     }
   )
@@ -52,7 +51,7 @@ const Checkout = () => {
     return addMinutes(new Date(), time)
   }
 
-  if (fullItems.length === 0) return <></>
+  if (fullItems?.length === 0) return <></>
   return (
     <>
       <Box className="flex-col-reverse  sm:flex-row flex w-full justify-between sticky bottom-12 bg-blue-300 mt-4 p-2 items-center  rounded-md shadow-md rounded-b-none">
@@ -81,7 +80,7 @@ const Checkout = () => {
         </Button>
       </Box>
       <Modal {...modal}>
-        <CheckoutItemsList items={fullItems} />
+        <CheckoutItemsList items={fullItems || []} />
         {/* <ItemsList items={fullItems} /> */}
         <Typography className="text-end mt-4">
           Regreso:

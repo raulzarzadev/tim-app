@@ -47,12 +47,12 @@ export const calculateTotal = (
 }
 
 export const calculateFullTotal = (
-  selectedItems: ItemSelected[],
-  fullItems: Partial<ArticleType>[]
+  selectedItems: ItemSelected[] = [],
+  fullItems?: Partial<(ArticleType | null)[]>
 ) => {
   let total = 0
-  selectedItems.forEach(({ qty, unit, itemId }) => {
-    const pricesList = fullItems.find((item) => item.id == itemId)?.prices
+  selectedItems?.forEach(({ qty, unit, itemId }) => {
+    const pricesList = fullItems?.find((item) => item?.id == itemId)?.prices
     const defaultUnit = unit || pricesList?.[0].unit
     const { total: itemTotal } = calculateTotal(
       defaultUnit,

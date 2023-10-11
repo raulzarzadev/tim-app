@@ -1,16 +1,15 @@
 import { Client } from '@/types/client'
-import { TextField } from '@mui/material'
+import { Button, TextField } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import InputFile from './InputUploadFile'
 import ModalSignature from './ModalSignature'
 import PreviewImage from './PreviewImage'
 import PhoneInput from './PhoneInput'
-import { useContext, useEffect } from 'react'
-import { CashboxContext } from './CompanyCashbox'
-import { on } from 'events'
+import { useEffect } from 'react'
+import useCashboxContext from '@/context/useCompanyCashbox'
 
 const ClientForm = () => {
-  const { client, setClient } = useContext(CashboxContext)
+  const { client, setClient } = useCashboxContext()
   const { handleSubmit, register, setValue, watch, control } = useForm({
     defaultValues: client
   })
@@ -57,9 +56,6 @@ const ClientForm = () => {
           setSignature={(signature) => setValue('signature', signature || '')}
         />
         {/* client signature */}
-        {/* <Button variant="outlined" type="submit">
-          Guardar
-        </Button> */}
       </form>
     </div>
   )

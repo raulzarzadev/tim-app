@@ -16,43 +16,6 @@ import useModal from '@/hooks/useModal'
 import useCashboxContext from '@/context/useCompanyCashbox'
 
 const Category = ({ categoryName }: { categoryName: string }) => {
-  // // const {
-  // //   addItem,
-  // //   removeItem,
-  // //   itemsSelected: items,
-  // //   setItemsSelected: setItems
-  // // } = useCashboxContext()
-  // const {
-  //   ordersItems: { all: itemsInUse }
-  // } = useUserCompaniesContext()
-  // const categoryArticles = articles.filter((a) => a.category === category.name)
-  // const categoryItemsSelected =
-  //   items?.filter(({ itemId }) =>
-  //     categoryArticles.find(({ id }) => id === itemId)
-  //   ) || []
-
-  // const itemsLeft =
-  //   categoryArticles
-  //     ?.filter(
-  //       ({ id }) => !categoryItemsSelected?.find(({ itemId }) => id === itemId)
-  //     )
-  //     .filter(({ id }) => !itemsInUse.find(({ itemId }) => itemId === id)) || []
-
-  // const handleAddCategoryArticle = (name: string) => {
-  //   // Add a random / *disponible* article
-  //   const validArticles = categoryArticles
-  //     //* already are selected
-  //     .filter(({ id }) => !items?.find((i) => i.itemId === id))
-  //     .filter(({ id }) => !itemsInUse.find((i) => i.itemId === id))
-  //   const randomArticle =
-  //     validArticles[Math.floor(Math.random() * validArticles.length)]
-  //   const defaultUnit = randomArticle?.prices?.[0]?.unit
-  //   const newItem = { itemId: randomArticle.id, unit: defaultUnit, qty: 1 }
-  //   addItem?.(newItem)
-  // }
-
-  // const price = category?.prices?.[0]
-
   const { addItem, removeItem, itemsSelected, setItemsSelected } =
     useCashboxContext()
 
@@ -79,8 +42,6 @@ const Category = ({ categoryName }: { categoryName: string }) => {
   const itemsLeft = categoryItems.filter(
     (item) => !itemsSelected?.find(({ itemId }) => itemId === item.id)
   )
-  // categoryItems?.filter(({ id }) => categoryItems.find((i) => i.id === id)) ||
-  // []
 
   const price = category?.prices?.[0]
   const modal = useModal({ title: category?.name })
