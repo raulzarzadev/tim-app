@@ -4,10 +4,10 @@ import { Box, Button, Typography } from '@mui/material'
 import Modal from './Modal'
 import CurrencySpan from './CurrencySpan'
 import PaymentForm from './PaymentForm'
-import { useContext } from 'react'
-import { CashboxContext } from './CompanyCashbox'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import AppIcon from './AppIcon'
+import useCashboxContext from '@/context/useCompanyCashbox'
+import { Payment } from '@/types/order'
 
 const ModalPayment = ({
   amount,
@@ -19,9 +19,27 @@ const ModalPayment = ({
   onCloseParent?: () => void
 }) => {
   const modalPayment = useModal({ title: 'Pagar ' })
-  const { handlePay, items, setItems, setClient } = useContext(CashboxContext)
+  const { handleOrder, handlePayOrder, setItemsSelected, setClient } =
+    useCashboxContext()
   const { currentCompany } = useUserCompaniesContext()
   const USD_PRICE = currentCompany?.usdPrice || 1
+
+  const handlePay = async (payment: Partial<Payment>) => {
+    // create order
+    const order = await handleOrder?.({
+      companyId: currentCompany?.id || ''
+    })
+    //@ts-ignore
+    const orderId = order?.res?.id
+    if (orderId) {
+      const res = await handlePayOrder?.(orderId || '', payment)
+      // pay order
+      modalPayment.onClose()
+      setItemsSelected?.([])
+      setClient?.({})
+      onCloseParent?.()
+    }
+  }
   return (
     <>
       <Button
@@ -53,17 +71,7 @@ const ModalPayment = ({
           amount={amount}
           usdPrice={USD_PRICE}
           onPay={async (payment) => {
-            await handlePay?.({
-              startAt: new Date(),
-              companyId: currentCompany?.id || '',
-              items: items || [],
-              payment: { ...payment, date: new Date() }
-            })
-            modalPayment.onClose()
-            setItems?.([])
-            setClient?.({})
-            onCloseParent?.()
-            return
+            handlePay?.(payment)
           }}
         />
       </Modal>

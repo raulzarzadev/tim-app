@@ -14,6 +14,7 @@ import { useForm } from 'react-hook-form'
 import { paymentMethods } from '@/CONSTS/paymentMethods'
 import CurrencySpan from './CurrencySpan'
 import { PaymentData } from '@/types/payment'
+import AppIcon from './AppIcon'
 
 const PaymentForm = ({
   amount = 0,
@@ -106,12 +107,14 @@ const PaymentForm = ({
             return handlePay()
           }}
           color="success"
-          label="Pagar"
+          label={
+            <span>
+              Pagar <AppIcon icon="money" />
+            </span>
+          }
+          modalTitle="Confirmar pago"
         >
           <Box className="text-center">
-            <Typography className="text-center my-8" variant="h5">
-              Confirmar pago
-            </Typography>
             <Typography>
               Metodo:{' '}
               {

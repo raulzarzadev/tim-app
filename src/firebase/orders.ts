@@ -5,7 +5,7 @@ import { BaseType } from '@/types/base'
 import { arrayUnion, where } from 'firebase/firestore'
 import { ArticleType } from '@/types/article'
 import { Order, OrderBase, Payment } from '@/types/order'
-
+import { v4 as uidGenerator } from 'uuid'
 /*
  * You should be able to copy all this file and just replace
  * ItemType
@@ -100,9 +100,12 @@ export const changeItem = async (
   })
 }
 
-export const onPayOrder = async (orderId: Order['id'], payment: Payment) => {
+export const onPayOrder = async (
+  orderId: Order['id'],
+  payment: Partial<Payment>
+) => {
   return await updateOrder(orderId, {
     // @ts-ignore FIXME: array union error FieldValue
-    payments: arrayUnion(payment)
+    payments: arrayUnion({ ...payment, id: uidGenerator() })
   })
 }

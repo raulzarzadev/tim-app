@@ -1,10 +1,10 @@
 'use client'
-import Checkout from '@/components/Checkout2'
+import Checkout from '@/components/Checkout3'
 import { CashboxContextProvider } from '@/components/CompanyCashbox'
 import ModalPayment from '@/components/ModalPayment2'
 import { ArticleType } from '@/types/article'
 import { CategoryType } from '@/types/category'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 
 const items: ArticleType[] = [
@@ -116,7 +116,7 @@ function Page() {
       <div>
         Checkout
         <CashboxContextProvider>
-          <Checkout items={items} categories={categories} />
+          <Checkout />
         </CashboxContextProvider>
       </div>
       <div>

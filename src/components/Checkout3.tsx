@@ -116,49 +116,44 @@ const Checkout = () => {
 
 const OrderOptions = ({ onCloseParent }: { onCloseParent?: () => void }) => {
   const { currentCompany } = useUserCompaniesContext()
-  const { client, handleOrder, items, setItems, setClient } =
-    useContext(CashboxContext)
+  const { handleOrder, setItemsSelected, setClient, setShipping, shipping } =
+    useCashboxContext()
 
-  const [orderForm, setOrderForm] = useState({
-    pickupStore: true,
-    pickupNow: true,
-    shippingAddress: '',
-    shippingPrice: 0,
-    schedule: new Date()
-  })
   const handleSaveOrder = async () => {
     const res = await handleOrder?.({
-      startAt: orderForm.schedule,
-      companyId: currentCompany?.id || '',
-      items: items || [],
-      order: {
-        ...orderForm
-      }
+      companyId: currentCompany?.id || ''
     })
-    console.log({ res })
-    onCloseParent?.()
-    setItems?.([])
+
+    setItemsSelected?.([])
     setClient?.({})
     onCloseParent?.()
   }
+
+  const [shippingMenu, setShippingMenu] = useState({
+    inStore: true,
+    pickupNow: true
+  })
 
   return (
     <Box className="flex flex-col items-center my-4">
       <CheckboxLabel
         label="Entregar en tienda"
-        checked={!!orderForm.pickupStore}
+        checked={shippingMenu.inStore}
         onChange={(e) =>
-          setOrderForm((order) => ({ ...order, pickupStore: e.target.checked }))
+          setShippingMenu((order) => ({
+            ...order,
+            inStore: e.target.checked
+          }))
         }
       />
-      {!orderForm.pickupStore && (
+      {!shippingMenu.inStore && (
         <Box>
           <TextField
             label="Dirección"
             onChange={(e) => {
-              setOrderForm((order) => ({
-                ...order,
-                shippingAddress: e.target.value
+              setShipping?.((shipping) => ({
+                ...shipping,
+                address: e.target.value
               }))
             }}
           />
@@ -167,31 +162,31 @@ const OrderOptions = ({ onCloseParent }: { onCloseParent?: () => void }) => {
       <Box className="flex justify-start ">
         <CheckboxLabel
           label="Entregar ahora"
-          checked={!!orderForm.pickupNow}
+          checked={shippingMenu.pickupNow}
           onChange={(e) =>
-            setOrderForm((order) => ({
+            setShippingMenu((order) => ({
               ...order,
               pickupNow: e.target.checked
             }))
           }
         />
       </Box>
-      {!orderForm.pickupNow && (
+      {!shippingMenu.pickupNow && (
         <Box>
           <TextField
             type="datetime-local"
             label=""
             onChange={(e) => {
-              setOrderForm((order) => ({
-                ...order,
-                schedule: asDate(e.target.value) || new Date()
+              setShipping?.((shipping) => ({
+                ...shipping,
+                date: asDate(e.target.value) || new Date()
               }))
             }}
-            value={dateFormat(asDate(orderForm.schedule), "yyyy-MM-dd'T'HH:mm")}
+            value={dateFormat(asDate(shipping?.date), "yyyy-MM-dd'T'HH:mm")}
           />
         </Box>
       )}
-      {(!orderForm.pickupStore || !orderForm.pickupNow) && (
+      {(!shippingMenu.inStore || !shippingMenu.pickupNow) && (
         <ModalConfirm
           label="Guardar orden"
           handleConfirm={handleSaveOrder}
@@ -199,18 +194,6 @@ const OrderOptions = ({ onCloseParent }: { onCloseParent?: () => void }) => {
         >
           <Typography></Typography>
         </ModalConfirm>
-        // <Button
-        //   disabled={!client?.name}
-        //   className="mt-4 "
-        //   variant="outlined"
-        //   color="secondary"
-        //   onClick={(e) => {
-        //     e.preventDefault()
-        //     handleSaveOrder()
-        //   }}
-        // >
-        //   Guardar orden
-        // </Button>
       )}
     </Box>
   )

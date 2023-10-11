@@ -10,7 +10,8 @@ const ModalConfirm = ({
   disabled,
   label = 'Guardar',
   color = 'primary',
-  acceptLabel = 'Aceptar'
+  acceptLabel = 'Aceptar',
+  modalTitle = 'Confirmar'
 }: {
   handleConfirm: () => void | Promise<any>
   children?: ReactNode
@@ -18,6 +19,7 @@ const ModalConfirm = ({
   label?: ReactNode
   acceptLabel?: string
   color?: ButtonProps['color']
+  modalTitle?: string
 }) => {
   const modal = useModal()
   const [loading, setLoading] = useState(false)
@@ -36,7 +38,7 @@ const ModalConfirm = ({
       >
         {label}
       </Button>
-      <Modal {...modal} title="Confirmar">
+      <Modal {...modal} title={modalTitle}>
         {children}
         <Box className="flex w-full justify-center my-4">
           <ButtonLoading

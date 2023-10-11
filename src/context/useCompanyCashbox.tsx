@@ -25,10 +25,10 @@ export type CashboxContext = {
     itemId: ItemSelected['itemId'],
     { qty, unit }: { qty: number; unit: PriceType['unit'] }
   ) => void
-  handleOrder?: (order: CreateOrder) => void | Promise<any>
+  handleOrder?: (order: { companyId: string }) => void | Promise<unknown>
   handlePayOrder?: (
     orderId: Order['id'],
-    payment: Payment
+    payment: Partial<Payment>
   ) => void | Promise<any>
   setClient?: (client: Partial<Order['client']>) => void
   client?: Partial<Order['client']>
@@ -102,10 +102,13 @@ export const CashboxContextProvider = ({
     )
   }
 
-  const handlePayOrder = async (orderId: Order['id'], payment: Payment) => {
+  const handlePayOrder = async (
+    orderId: Order['id'],
+    payment: Partial<Payment>
+  ) => {
     return await onPayOrder(orderId, payment)
   }
-  const handleOrder = async (order: Partial<OrderBase>) => {
+  const handleOrder = async (order: { companyId: string }) => {
     return await createOrder({
       ...order,
       items: itemsSelected,

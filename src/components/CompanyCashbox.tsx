@@ -10,7 +10,7 @@ import {
   useEffect,
   useState
 } from 'react'
-import Checkout from './Checkout2'
+import Checkout from './Checkout3'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { PriceType } from './PricesForm'
 import Categories from './Categories'
@@ -127,8 +127,8 @@ const CompanyCashbox = () => {
       <CashboxContextProvider>
         <Categories />
         <Checkout
-          items={currentCompany?.articles}
-          categories={currentCompany?.categories}
+        // items={currentCompany?.articles}
+        // categories={currentCompany?.categories}
         />
       </CashboxContextProvider>
     </div>

@@ -9,7 +9,7 @@ import { StaffPermission } from '@/types/staff'
 import { PriceType } from '@/components/PricesForm'
 import { Timestamp } from 'firebase/firestore'
 import rentTime from '@/lib/rentTime'
-import { addMinutes } from 'date-fns'
+import { addMinutes, isAfter } from 'date-fns'
 import asDate from '@/lib/asDate'
 import { Order } from '@/types/order'
 import { listenCompanyOrders } from '@/firebase/orders'
@@ -106,6 +106,26 @@ export function UserCompaniesProvider({
     setCompanySelected(companySelectedId)
   }
 
+  const itemsInUse = itemsFromOrders.filter(
+    (i) =>
+      i.inUse &&
+      !isAfter(new Date(), asDate(i.order.shipping.date) || new Date())
+  )
+  const itemsFinished = itemsFromOrders.filter((i) => !i.inUse)
+  const itemsPending = itemsFromOrders.filter(
+    (i) =>
+      i.inUse &&
+      isAfter(new Date(), asDate(i.order.shipping.date) || new Date())
+  )
+
+  console.log({
+    orders,
+    itemsFromOrders,
+    itemsInUse,
+    itemsFinished,
+    itemsPending
+  })
+
   return (
     <UserCompaniesContext.Provider
       value={{
@@ -116,8 +136,8 @@ export function UserCompaniesProvider({
         companyItems,
         ordersItems: {
           all: itemsFromOrders,
-          inUse: [],
-          finished: [],
+          inUse: itemsInUse,
+          finished: itemsFinished,
           pending: []
         },
         orders
