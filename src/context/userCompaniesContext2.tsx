@@ -18,15 +18,6 @@ import { CompanyItem } from '@/types/article'
 
 export type ContextItem = ItemSelected & {
   order: Order
-  // itemId: string
-  // qty?: number
-  // unit?: PriceType['unit']
-  // startAt: Date | Timestamp
-  // rentFinishAt?: Date | null
-  // rentTime?: number
-  // paymentId: Payment['id']
-  // inUse?: boolean
-  // payment?: Payment
 }
 
 export type UserCompaniesContextType = {
@@ -72,26 +63,16 @@ export function UserCompaniesProvider({
 }) {
   const { user } = useAuthContext()
   const [companySelected, setCompanySelected] = useState('')
-
   const [userOwnCompanies, setUserOwnCompanies] = useState<CompanyType[]>([])
   const [staffCompanies, setStaffCompanies] = useState<CompanyType[]>([])
   const [orders, setOrders] = useState<Order[]>([])
 
   useEffect(() => {
-    const bajaRent = JSON.parse(localStorage.getItem('baja-rent') || '{}')
-    setCompanySelected(bajaRent?.selectedCompany)
+    const bajaRent: { selectedCompany: CompanyType['id'] } = JSON.parse(
+      localStorage.getItem('baja-rent') || '{}'
+    )
+    setCompanySelected(bajaRent.selectedCompany)
   }, [])
-
-  useEffect(() => {
-    if (companySelected !== undefined) {
-      const bajaRent = JSON.parse(localStorage.getItem('baja-rent') || '{}')
-
-      localStorage.setItem(
-        'baja-rent',
-        JSON.stringify({ ...bajaRent, selectedCompany: companySelected || '' })
-      )
-    }
-  }, [companySelected])
 
   useEffect(() => {
     if (user) {
@@ -117,14 +98,20 @@ export function UserCompaniesProvider({
     .map((order) => order.items.map((item) => ({ ...item, order })))
     .flat()
 
-  console.log({ itemsFromOrders })
+  const handleSetCompanySelected = (companySelectedId: string) => {
+    localStorage.setItem(
+      'baja-rent',
+      JSON.stringify({ selectedCompany: companySelectedId })
+    )
+    setCompanySelected(companySelectedId)
+  }
 
   return (
     <UserCompaniesContext.Provider
       value={{
         userCompanies: [...userOwnCompanies, ...staffCompanies],
         companySelected,
-        setCompanySelected,
+        setCompanySelected: handleSetCompanySelected,
         currentCompany,
         companyItems,
         ordersItems: {

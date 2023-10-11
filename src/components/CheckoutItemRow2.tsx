@@ -1,6 +1,5 @@
 import { ArticleType } from '@/types/article'
 import { useContext, useEffect, useState } from 'react'
-import { CashboxContext, ItemSelected } from './CompanyCashbox'
 import { calculateTotal } from '@/lib/calculateTotalItem'
 import { PriceType } from './PricesForm'
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2'
@@ -13,14 +12,16 @@ import { Typography } from '@mui/material'
 import useModal from '@/hooks/useModal'
 import Modal from './Modal'
 import ChangeItem from './ChangeItem'
+import useCashboxContext from '@/context/useCompanyCashbox'
 
 export const CheckoutItemRow = ({ item }: { item: Partial<ArticleType> }) => {
   const {
-    items = [],
+    itemsSelected: items = [],
     removeItem,
     updateItem,
     addItem
-  } = useContext(CashboxContext)
+  } = useCashboxContext()
+
   const foundItem = items?.find((i: { itemId?: string }) => i.itemId == item.id)
   const defaultPrice: {
     unit: PriceType['unit']
