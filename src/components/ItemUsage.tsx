@@ -184,7 +184,9 @@ const ItemUsage = ({
             </Box>
             {payments
               ?.sort(
-                (a, b) => asDate(b.date).getTime() - asDate(a.date)?.getTime()
+                (a, b) =>
+                  (asDate(b.date)?.getTime() || 0) -
+                  (asDate(a.date)?.getTime() || 0)
               )
               ?.map((p, i) => {
                 return (

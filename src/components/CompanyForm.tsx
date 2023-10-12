@@ -23,7 +23,7 @@ const CompanyForm = ({ company }: { company?: Partial<CompanyType> }) => {
       phone: '',
       name: '',
       ...company
-    }
+    } as Partial<CompanyType>
   })
 
   const formValues = watch()
