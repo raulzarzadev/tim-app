@@ -72,11 +72,15 @@ export const startItemRent = async (
   itemId?: ArticleType['id']
 ) => {
   if (!OrderId || !itemId) return
-  const Order: Order = await itemCRUD.getItem(OrderId)
-  const items = Order?.items
+  const order: Order = await itemCRUD.getItem(OrderId)
+  const items = order?.items
   const oldItem = items.find((item) => item.itemId === itemId)
   const removedItem = items.filter((item) => item.itemId !== itemId)
   return await updateOrder(OrderId, {
+    shipping: {
+      ...order.shipping,
+      date: new Date()
+    },
     items: [...removedItem, { ...oldItem, inUse: true, rentStatus: 'taken' }]
   })
 }
@@ -85,17 +89,30 @@ export const finishOrderRent = async (OrderId?: Order['id']) => {
   if (!OrderId) return
   const Order: Order = await itemCRUD.getItem(OrderId)
   const items = Order?.items
-  const newItems = items.map((item) => ({ ...item, inUse: false }))
+  const newItems: Order['items'] = items.map((item) => ({
+    ...item,
+    inUse: false,
+    rentStatus: 'finished'
+  }))
   return await updateOrder(OrderId, {
     items: newItems
   })
 }
+
 export const startOrderRent = async (OrderId?: Order['id']) => {
   if (!OrderId) return
-  const Order: Order = await itemCRUD.getItem(OrderId)
-  const items = Order?.items
-  const newItems = items.map((item) => ({ ...item, inUse: true }))
+  const order: Order = await itemCRUD.getItem(OrderId)
+  const items = order?.items
+  const newItems: Order['items'] = items.map((item) => ({
+    ...item,
+    inUse: true,
+    rentStatus: 'taken'
+  }))
   return await updateOrder(OrderId, {
+    shipping: {
+      ...order.shipping,
+      date: new Date()
+    },
     items: newItems
   })
 }

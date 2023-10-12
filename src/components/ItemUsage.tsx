@@ -19,12 +19,10 @@ const ItemUsage = ({
   item: ItemOrder
   onCloseParent?: () => void
 }) => {
-  const {
-    ordersItems: { finished, inUse }
-  } = useUserCompaniesContext()
   const handleFinishRent = async (item: ItemOrder) => {
+    await finishItemRent(item.order.id, item?.id || '')
     onCloseParent?.()
-    return await finishItemRent(item.order.id, item?.id || '')
+    return
   }
   const modal = useModal({ title: `Cambiar articulo` })
 
@@ -32,15 +30,24 @@ const ItemUsage = ({
   //   (i) => i.paymentId === item.paymentId && i.id !== item.itemId
   // )
 
-  const rentalReturn = (item.inUse ?? false) === false
+  const rentalReturn = item.rentStatus === 'finished'
+  const inUse = item.rentStatus === 'taken'
+  const pending = item.rentStatus === 'pending'
 
-  const onTime =
-    item.rentFinishAt &&
-    isAfter(asDate(item.rentFinishAt) || new Date(), new Date())
+  const onTime = isAfter(asDate(item.rentFinishAt) || new Date(), new Date())
+
   const handleCancelFinishRent = async (item: Partial<ItemOrder>) => {
+    await startItemRent(item?.order?.id, item?.id || '')
     onCloseParent?.()
-    return await startItemRent(item?.order?.id, item?.id || '')
+    return
   }
+
+  const handleStartItemRent = async (item: Partial<ItemOrder>) => {
+    await startItemRent(item?.order?.id, item?.id || '')
+    onCloseParent?.()
+    return
+  }
+
   return (
     <ErrorBoundary>
       <Box className="my-4">
@@ -76,7 +83,7 @@ const ItemUsage = ({
           >
             Cambiar <AppIcon icon="switch" />
           </Button>
-          {rentalReturn ? (
+          {rentalReturn && (
             <Button
               fullWidth
               onClick={(e) => {
@@ -88,7 +95,8 @@ const ItemUsage = ({
             >
               {`Regresar ${item.category} ${item.serialNumber || item.name}`}
             </Button>
-          ) : (
+          )}
+          {inUse && (
             <Button
               fullWidth
               onClick={(e) => {
@@ -99,6 +107,21 @@ const ItemUsage = ({
               color="success"
             >
               {`Recibir ${item.category} ${item.serialNumber || item.name}`}
+            </Button>
+          )}
+          {pending && (
+            <Button
+              fullWidth
+              onClick={(e) => {
+                e.preventDefault()
+                handleStartItemRent(item)
+              }}
+              variant="outlined"
+              color="success"
+            >
+              {`Inciar renta de: ${item.category} ${
+                item.serialNumber || item.name
+              }`}
             </Button>
           )}
         </Box>

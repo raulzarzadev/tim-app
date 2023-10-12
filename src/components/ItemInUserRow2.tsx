@@ -19,6 +19,7 @@ const ItemInUserRow = ({ item }: { item: ItemOrder }) => {
   const inUse = item.rentStatus === 'taken'
   const finished = item.rentStatus === 'finished'
   const onTime = isAfter(asDate(item.rentFinishAt) || new Date(), new Date())
+
   return (
     <>
       <Modal {...modal}>

@@ -11,8 +11,8 @@ import {
 } from 'react'
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { CreateOrder, createOrder, onPayOrder } from '@/firebase/orders'
-import { Order, OrderBase, Shipping } from '@/types/order'
+import { createOrder, onPayOrder } from '@/firebase/orders'
+import { Order, Shipping } from '@/types/order'
 import { PriceType } from '@/components/PricesForm'
 import { Payment } from '@/types/order'
 
