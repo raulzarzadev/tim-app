@@ -25,23 +25,23 @@ const Item = styled(Button)(({ theme }) => ({
   color: theme.palette.text.secondary
 }))
 
-const ModalArticles = ({
-  articles
-}: {
-  articles: ArticleType[]
-  // articlesSelected?: ArticleType['id'][]
-  // setArticlesSelected?: (articles: ArticleType['id'][]) => void
-}) => {
+const ModalArticles = ({ articles }: { articles: ArticleType[] }) => {
   const modal = useModal({ title: 'Unidades' })
-  const { addItem, removeItem, itemsSelected: items } = useCashboxContext()
+  const { addItem, removeItem, itemsSelected } = useCashboxContext()
+
   const {
-    ordersItems: { all: itemsInUse }
+    ordersItems: { inUse: itemsTaken }
   } = useUserCompaniesContext()
+
+  const itemsInUse = Array.from(
+    new Set([...(itemsSelected || []), ...itemsTaken].map((i) => i.itemId))
+  )
   const [clickedArticle, setClickedArticle] = useState<ArticleType>()
 
   const handleClick = (articleId: ArticleType['id']) => {
     setClickedArticle(articles.find((a) => a.id === articleId))
-    if (_selected.find(({ itemId }) => itemId === articleId)) {
+    const itemFound = itemsSelected?.find(({ itemId }) => itemId === articleId)
+    if (itemFound) {
       removeItem?.(articleId)
       return
     } else {
@@ -49,12 +49,6 @@ const ModalArticles = ({
     }
   }
 
-  const [_selected, _setSelected] = useState<{ itemId?: ArticleType['id'] }[]>(
-    []
-  )
-  useEffect(() => {
-    _setSelected(items || [])
-  }, [items])
   const sortIt = (a: ArticleType, b: ArticleType) => {
     const aSerial = a.serialNumber
     const bSerial = b.serialNumber
@@ -64,6 +58,7 @@ const ModalArticles = ({
       return String(aSerial).localeCompare(String(bSerial))
     }
   }
+
   return (
     <>
       <IconButton size="small" onClick={() => modal.onOpen()}>
@@ -82,10 +77,10 @@ const ModalArticles = ({
             <Chip
               sx={{ margin: 4 }}
               disabled={
-                !!itemsInUse.find(({ itemId }) => itemId === article.id)
+                !!itemsTaken.find(({ itemId }) => itemId === article.id)
               }
               color={
-                _selected.find(({ itemId }) => article.id === itemId)
+                itemsSelected?.find(({ itemId }) => article.id === itemId)
                   ? 'primary'
                   : 'default'
               }

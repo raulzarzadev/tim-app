@@ -66,8 +66,6 @@ export const CashboxContextProvider = ({
     date: new Date()
   })
 
-  console.log({ itemsSelected })
-
   useEffect(() => {
     searchParams.get('items') &&
       setItemsSelected(JSON.parse(searchParams.get('items') || '[]'))

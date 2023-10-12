@@ -31,16 +31,21 @@ const Category = ({ categoryName }: { categoryName: string }) => {
     (c) => c.name === categoryName
   )
 
-  const itemsInUse =
-    categoryItems?.filter(({ id }) => !inUse?.find((i) => i.itemId === id)) ||
-    []
+  // const itemsInUse =
+  //   categoryItems?.filter(({ id }) => !inUse?.find((i) => i.itemId === id)) ||
+  //   []
+
+  const itemsInUse = Array.from(
+    new Set([...(itemsSelected || []), ...inUse].map((i) => i.itemId))
+  )
 
   const categoryItemsSelected =
     categoryItems.filter(
       (item) => !!itemsSelected?.find(({ itemId }) => itemId === item.id)
     ) || []
+
   const itemsLeft = categoryItems.filter(
-    (item) => !itemsSelected?.find(({ itemId }) => itemId === item.id)
+    (item) => !itemsInUse?.find((itemId) => itemId === item.id)
   )
 
   const price = category?.prices?.[0]
