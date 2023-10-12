@@ -230,9 +230,9 @@ const ItemUsage = ({
               Otras unidades del mismo cliente
             </Typography>
             <Box>
-              {moreUserOrderItems.map((item, i) => (
-                <ItemInUserRow key={i} item={item} />
-              ))}
+              {moreUserOrderItems.map((item, i) =>
+                item ? <ItemInUserRow key={i} item={item} /> : null
+              )}
             </Box>
           </Box>
         )}
