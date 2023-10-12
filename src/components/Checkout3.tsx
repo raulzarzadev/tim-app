@@ -9,7 +9,7 @@ import ModalPayment from './ModalPayment2'
 import ModalClientInfo from './ModalClientInfo'
 import CheckoutItemsList from './CheckoutItemsList'
 import { calculateFullTotal } from '@/lib/calculateTotalItem'
-import { dateFormat } from '@/lib/utils-date'
+import { dateFormat, inputDateFormat } from '@/lib/utils-date'
 import rentTime from '@/lib/rentTime'
 import { addMinutes } from 'date-fns'
 import CheckboxLabel from './Checkbox'
@@ -214,7 +214,7 @@ const OrderOptions = ({ onCloseParent }: { onCloseParent?: () => void }) => {
                 date: asDate(e.target.value) || new Date()
               }))
             }}
-            value={dateFormat(asDate(shipping?.date), "yyyy-MM-dd'T'HH:mm")}
+            value={inputDateFormat(shipping?.date || new Date())}
           />
         </Box>
       )}

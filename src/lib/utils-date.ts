@@ -41,3 +41,7 @@ export const fromNow = (date?: number | Date | Timestamp | null) => {
   })
   return res
 }
+
+export const inputDateFormat = (
+  date: Date | Timestamp | string | number = new Date()
+) => dateFormat(asDate(date), "yyyy-MM-dd'T'HH:mm")
