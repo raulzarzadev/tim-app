@@ -1,4 +1,7 @@
-import { ItemOrder } from '@/context/userCompaniesContext2'
+import {
+  ItemOrder,
+  useUserCompaniesContext
+} from '@/context/userCompaniesContext2'
 import useModal from '@/hooks/useModal'
 import { isAfter } from 'date-fns'
 import ErrorBoundary from './ErrorBoundary'
@@ -10,7 +13,9 @@ import ChangeItem from './ChangeItem'
 import Modal from './Modal'
 import { finishItemRent, startItemRent, resumeRent } from '@/firebase/orders'
 import ModalPayment from './ModalPayment2'
-import { calculateTotal } from '@/lib/calculateTotalItem'
+import { calculateFullTotal, calculateTotal } from '@/lib/calculateTotalItem'
+import CurrencySpan from './CurrencySpan'
+import useCashboxContext from '@/context/useCompanyCashbox'
 const ItemUsage = ({
   item,
   onCloseParent
@@ -18,6 +23,7 @@ const ItemUsage = ({
   item: ItemOrder
   onCloseParent?: () => void
 }) => {
+  const { companyItems } = useUserCompaniesContext()
   const handleFinishRent = async (item: ItemOrder) => {
     await finishItemRent(item.order.id, item?.id || '')
     onCloseParent?.()
@@ -48,9 +54,13 @@ const ItemUsage = ({
   }
 
   const payments = item?.order?.payments
-  console.log(item.unit, item.qty, item.prices)
-  const amount = calculateTotal(item.unit, item.qty, item.prices)
-  console.log({ amount })
+
+  const itemTotals = calculateTotal(item.unit, item.qty, item.prices)
+  const orderTotal = calculateFullTotal(
+    item.order.items,
+    item.order.items?.map((i) => companyItems.find((c) => c.id === i.itemId))
+  )
+  //console.log({ orderTotal })
   return (
     <ErrorBoundary>
       <Box className="my-4">
@@ -129,6 +139,21 @@ const ItemUsage = ({
           )}
         </Box>
         <Box>
+          <Box className="flex justify-evenly my-4">
+            {/* <ModalPayment
+              label="Pagar articulo"
+              amount={itemTotals.total}
+              orderId={item?.order?.id}
+              onCloseParent={modalPay.onClose}
+            /> */}
+            <ModalPayment
+              label="Pagar orden "
+              amount={orderTotal}
+              orderId={item?.order?.id}
+              onCloseParent={modalPay.onClose}
+            />
+          </Box>
+
           {!payments?.length && (
             <>
               <button
@@ -145,24 +170,44 @@ const ItemUsage = ({
                   <Typography className="my-4">
                     No hay pagos registrados
                   </Typography>
-                  <ModalPayment amount={100} />
                 </Box>
               </Modal>
             </>
           )}
           <Box>
-            {payments?.map((p, i) => {
-              console.log({ p })
-              return (
-                <Box
-                  key={i}
-                  className="grid grid-cols-2 place-content-center items-center text-center shadow-md rounded-md p-1 m-1 "
-                >
-                  <Typography>{dateFormat(asDate(p.date))}</Typography>
-                  <Typography>{p.amount}</Typography>
-                </Box>
+            <Box className="grid grid-cols-6 place-content-center items-center text-center shadow-md rounded-md p-1 m-1 ">
+              <Typography className="col-span-2">Fecha</Typography>
+              <Typography>Metodo</Typography>
+              <Typography>Status</Typography>
+              <Typography>Dollar</Typography>
+              <Typography>Total</Typography>
+            </Box>
+            {payments
+              ?.sort(
+                (a, b) => asDate(b.date).getTime() - asDate(a.date)?.getTime()
               )
-            })}
+              ?.map((p, i) => {
+                return (
+                  <Box
+                    key={i}
+                    className="grid grid-cols-6 place-content-center items-center text-center shadow-md rounded-md p-1 m-1 "
+                  >
+                    <Typography className="col-span-2">
+                      {dateFormat(asDate(p.date), 'EEE dd-MM-yy HH:mm')}
+                    </Typography>
+                    <Typography>{p.method}</Typography>
+                    <Typography>
+                      {p.isCancelled ? 'Cancelado' : 'Pagado'}
+                    </Typography>
+                    <Typography>
+                      <CurrencySpan quantity={p.usdPrice} />
+                    </Typography>
+                    <Typography>
+                      <CurrencySpan quantity={p.amount}></CurrencySpan>
+                    </Typography>
+                  </Box>
+                )
+              })}
           </Box>
         </Box>
 

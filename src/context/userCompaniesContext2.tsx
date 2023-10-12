@@ -115,7 +115,13 @@ export function UserCompaniesProvider({
     )
     setCompanySelected(companySelectedId)
   }
-  const companyItems = currentCompany?.articles || []
+  const companyItems =
+    currentCompany?.articles?.map((i) => ({
+      ...i,
+      prices: i.ownPrice
+        ? i.prices
+        : currentCompany?.categories?.find((c) => c.name === i.category)?.prices
+    })) || []
 
   const calculateFinishRentDate = (
     rentDate: Date | null,

@@ -164,6 +164,6 @@ export const onPayOrder = async (
 ) => {
   return await updateOrder(orderId, {
     // @ts-ignore FIXME: array union error FieldValue
-    payments: arrayUnion({ ...payment, id: uidGenerator() })
+    payments: arrayUnion({ ...payment, id: uidGenerator(), date: new Date() })
   })
 }

@@ -12,8 +12,12 @@ import { Payment } from '@/types/order'
 const ModalPayment = ({
   amount,
   disabled,
-  onCloseParent
+  orderId,
+  onCloseParent,
+  label = 'Pagar'
 }: {
+  label?: string
+  orderId?: string
   amount: number
   disabled?: boolean
   onCloseParent?: () => void
@@ -24,7 +28,7 @@ const ModalPayment = ({
   const USD_PRICE = currentCompany?.usdPrice || 1
 
   const onPay = async (payment: Partial<Payment>) => {
-    await handlePay?.(payment)
+    const res = await handlePay?.(payment, orderId)
     onClearOrder?.()
     onCloseParent?.()
   }
@@ -40,7 +44,7 @@ const ModalPayment = ({
         color="success"
         disabled={disabled}
       >
-        {'Pagar'} <AppIcon icon="money" />
+        {label} <AppIcon icon="money" />
       </Button>
       <Modal {...modalPayment}>
         <Box>

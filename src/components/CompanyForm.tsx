@@ -19,9 +19,10 @@ const CompanyForm = ({ company }: { company?: Partial<CompanyType> }) => {
   const router = useRouter()
   const { user } = useAuthContext()
   const { handleSubmit, register, watch, control } = useForm({
-    defaultValues: company || {
+    defaultValues: {
+      phone: '',
       name: '',
-      phone: ''
+      ...company
     }
   })
 

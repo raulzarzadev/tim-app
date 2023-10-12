@@ -27,7 +27,10 @@ export type CashboxContext = {
     { qty, unit }: { qty: number; unit: PriceType['unit'] }
   ) => void
   handleOrder?: (order: { companyId: string }) => void | Promise<unknown>
-  handlePay?: (payment: Partial<Payment>) => void | Promise<any>
+  handlePay?: (
+    payment: Partial<Payment>,
+    orderId?: string
+  ) => void | Promise<any>
   onClearOrder?: () => void
   setClient?: (client: Partial<Order['client']>) => void
   client?: Partial<Order['client']>
@@ -104,7 +107,11 @@ export const CashboxContextProvider = ({
     )
   }
 
-  const handlePay = async (payment: Partial<Payment>) => {
+  const handlePay = async (payment: Partial<Payment>, orderId?: string) => {
+    console.log('pay', { orderId })
+    if (orderId) {
+      return await onPayOrder(orderId, payment)
+    }
     if (typeof orderSaved === 'string') {
       return await onPayOrder(orderSaved, payment)
     } else {
