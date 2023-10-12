@@ -1,7 +1,4 @@
-import {
-  ItemOrder,
-  useUserCompaniesContext
-} from '@/context/userCompaniesContext2'
+import { ItemOrder } from '@/context/userCompaniesContext2'
 import useModal from '@/hooks/useModal'
 import { isAfter } from 'date-fns'
 import ErrorBoundary from './ErrorBoundary'
@@ -11,7 +8,7 @@ import asDate from '@/lib/asDate'
 import AppIcon from './AppIcon'
 import ChangeItem from './ChangeItem'
 import Modal from './Modal'
-import { finishItemRent, startItemRent } from '@/firebase/orders'
+import { finishItemRent, startItemRent, resumeRent } from '@/firebase/orders'
 const ItemUsage = ({
   item,
   onCloseParent
@@ -37,7 +34,7 @@ const ItemUsage = ({
   const onTime = isAfter(asDate(item.rentFinishAt) || new Date(), new Date())
 
   const handleCancelFinishRent = async (item: Partial<ItemOrder>) => {
-    await startItemRent(item?.order?.id, item?.id || '')
+    await resumeRent({ itemId: item?.id || '', orderId: item?.order?.id || '' })
     onCloseParent?.()
     return
   }

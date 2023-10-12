@@ -141,6 +141,23 @@ export const changeItem = async (
   })
 }
 
+export const resumeRent = async ({
+  orderId,
+  itemId
+}: {
+  orderId: string
+  itemId: string
+}) => {
+  if (!orderId || !itemId) return
+  const order: Order = await itemCRUD.getItem(orderId)
+  const items = order?.items
+  const oldItem = items.find((item) => item.itemId === itemId)
+  const removedItem = items.filter((item) => item.itemId !== itemId)
+  return await updateOrder(orderId, {
+    items: [...removedItem, { ...oldItem, inUse: true, rentStatus: 'taken' }]
+  })
+}
+
 export const onPayOrder = async (
   orderId: Order['id'],
   payment: Partial<Payment>
