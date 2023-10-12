@@ -16,6 +16,7 @@ import ModalPayment from './ModalPayment2'
 import { calculateFullTotal, calculateTotal } from '@/lib/calculateTotalItem'
 import CurrencySpan from './CurrencySpan'
 import useCashboxContext from '@/context/useCompanyCashbox'
+import ShippingLink from './ShippingLink'
 const ItemUsage = ({
   item,
   onCloseParent
@@ -73,6 +74,9 @@ const ItemUsage = ({
             {' '}
             {fromNow(asDate(item.rentFinishAt))}
           </Typography>
+        </Typography>
+        <Typography className="text-center">
+          Lugar : <ShippingLink address={item.order.shipping.address} />
         </Typography>
       </Box>
       <Box className="grid gap-2">

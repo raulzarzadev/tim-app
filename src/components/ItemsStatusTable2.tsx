@@ -15,9 +15,10 @@ const ItemsStatusTable = ({ items }: { items: ItemOrder[] }) => {
         <Grid2 xs={1} className="font-bold truncate">
           Serie
         </Grid2>
-        <Grid2 xs={2} className="font-bold truncate">
+        <Grid2 xs={1} className="font-bold truncate">
           Categoria
         </Grid2>
+
         <Grid2 xs={1} className="font-bold truncate">
           Tiempo
         </Grid2>
@@ -26,6 +27,9 @@ const ItemsStatusTable = ({ items }: { items: ItemOrder[] }) => {
         </Grid2>
         <Grid2 xs={2} className="font-bold truncate">
           Termina
+        </Grid2>
+        <Grid2 xs={1} className="font-bold truncate">
+          Lugar de entrega
         </Grid2>
         <Grid2 xs={2} className="font-bold truncate">
           Status

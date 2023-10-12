@@ -8,6 +8,7 @@ import { Typography } from '@mui/material'
 import { dateFormat, fromNow } from '@/lib/utils-date'
 import { ItemOrder } from '@/context/userCompaniesContext2'
 import { unitLabels } from '@/CONSTS/unit-labels'
+import ShippingLink from './ShippingLink'
 
 const ItemInUserRow = ({ item }: { item: ItemOrder }) => {
   const modal = useModal({
@@ -20,7 +21,6 @@ const ItemInUserRow = ({ item }: { item: ItemOrder }) => {
   const inUse = item.rentStatus === 'taken'
   const finished = item.rentStatus === 'finished'
   const onTime = isAfter(asDate(item.rentFinishAt) || new Date(), new Date())
-
   return (
     <>
       <Modal {...modal}>
@@ -35,12 +35,16 @@ const ItemInUserRow = ({ item }: { item: ItemOrder }) => {
           modal.onOpen()
         }}
       >
-        <Grid2 xs={2} className="whitespace-pre-wrap">
+        <Grid2 xs={4} sm={2} className="whitespace-pre-wrap">
           {item?.order?.client?.name}
         </Grid2>
-        <Grid2 xs={1}>{item.serialNumber || item.name}</Grid2>
-        <Grid2 xs={2}>{item.category}</Grid2>
-        <Grid2 xs={1}>
+        <Grid2 xs={3} sm={1}>
+          {item.serialNumber || item.name}
+        </Grid2>
+        <Grid2 xs={3} sm={1}>
+          {item.category}
+        </Grid2>
+        <Grid2 xs={2} sm={1}>
           <Typography>
             <span className="font-bold">
               {item?.qty === 0.5 ? '1/2' : item.qty}{' '}
@@ -48,7 +52,8 @@ const ItemInUserRow = ({ item }: { item: ItemOrder }) => {
             {item.unit && unitLabels[item.unit]}
           </Typography>
         </Grid2>
-        <Grid2 xs={2}>
+        {/* Truncate when small  */}
+        <Grid2 xs={4} sm={2}>
           <Typography>
             {dateFormat(item.rentStartAt, 'dd-MMM HH:mm')}
           </Typography>
@@ -56,7 +61,8 @@ const ItemInUserRow = ({ item }: { item: ItemOrder }) => {
             {fromNow(asDate(item.rentStartAt))}
           </Typography>
         </Grid2>
-        <Grid2 xs={2}>
+
+        <Grid2 xs={3} sm={2}>
           <Typography>
             {dateFormat(asDate(item.rentFinishAt), 'dd-MMM HH:mm')}
           </Typography>
@@ -64,7 +70,10 @@ const ItemInUserRow = ({ item }: { item: ItemOrder }) => {
             {fromNow(asDate(item.rentFinishAt))}
           </Typography>
         </Grid2>
-        <Grid2 xs={2} className="flex flex-wrap">
+        <Grid2 xs={3} sm={1}>
+          <ShippingLink address={item.order.shipping.address} />
+        </Grid2>
+        <Grid2 xs={2} sm={2} className="flex flex-wrap">
           {pending && <ItemStatus label="Pendiente" status="pending" />}
           {inUse && onTime && <ItemStatus label="En uso" status="success" />}
           {inUse && !onTime && (
