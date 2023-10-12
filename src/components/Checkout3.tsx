@@ -129,14 +129,17 @@ const OrderOptions = ({ onCloseParent }: { onCloseParent?: () => void }) => {
     setClient,
     setShipping,
     shipping,
-    client
+    client,
+    setOrderSaved,
+    orderSaved
   } = useCashboxContext()
 
   const handleSaveOrder = async () => {
     const res = await handleOrder?.({
       companyId: currentCompany?.id || ''
     })
-    setOrderSaved(true)
+    //@ts-ignore
+    setOrderSaved?.(res?.res?.id)
 
     // setItemsSelected?.([])
     // setClient?.({})
@@ -147,8 +150,6 @@ const OrderOptions = ({ onCloseParent }: { onCloseParent?: () => void }) => {
     inStore: true,
     pickupNow: true
   })
-
-  const [orderSaved, setOrderSaved] = useState(false)
 
   useEffect(() => {
     isPickupNow(shippingMenu.pickupNow)
@@ -219,7 +220,7 @@ const OrderOptions = ({ onCloseParent }: { onCloseParent?: () => void }) => {
       )}
       {(!shippingMenu.inStore || !shippingMenu.pickupNow) && (
         <ModalConfirm
-          disabled={!client?.name || orderSaved}
+          disabled={!client?.name || !!orderSaved}
           label={`${orderSaved ? 'Orden guardada' : 'Guardar orden'}`}
           handleConfirm={handleSaveOrder}
           color="secondary"

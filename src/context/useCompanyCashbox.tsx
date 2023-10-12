@@ -15,6 +15,7 @@ import { createOrder, onPayOrder } from '@/firebase/orders'
 import { Order, Shipping } from '@/types/order'
 import { PriceType } from '@/components/PricesForm'
 import { Payment } from '@/types/order'
+import { useUserCompaniesContext } from './userCompaniesContext2'
 
 export type CashboxContext = {
   itemsSelected?: ItemSelected[]
@@ -26,14 +27,14 @@ export type CashboxContext = {
     { qty, unit }: { qty: number; unit: PriceType['unit'] }
   ) => void
   handleOrder?: (order: { companyId: string }) => void | Promise<unknown>
-  handlePayOrder?: (
-    orderId: Order['id'],
-    payment: Partial<Payment>
-  ) => void | Promise<any>
+  handlePay?: (payment: Partial<Payment>) => void | Promise<any>
+  onClearOrder?: () => void
   setClient?: (client: Partial<Order['client']>) => void
   client?: Partial<Order['client']>
   shipping?: Partial<Order['shipping']>
   setShipping?: Dispatch<SetStateAction<Shipping>>
+  orderSaved?: boolean | string
+  setOrderSaved?: Dispatch<SetStateAction<boolean | string>>
 }
 export const CashboxContext = createContext<CashboxContext>({})
 export type ItemSelected = {
@@ -52,6 +53,7 @@ export const CashboxContextProvider = ({
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
+  const { currentCompany } = useUserCompaniesContext()
 
   const [itemsSelected, setItemsSelected] = useState<ItemSelected[]>([])
   const [client, setClient] = useState<Partial<Order['client']>>({
@@ -104,11 +106,17 @@ export const CashboxContextProvider = ({
     )
   }
 
-  const handlePayOrder = async (
-    orderId: Order['id'],
-    payment: Partial<Payment>
-  ) => {
-    return await onPayOrder(orderId, payment)
+  const handlePay = async (payment: Partial<Payment>) => {
+    if (typeof orderSaved === 'string') {
+      return await onPayOrder(orderSaved, payment)
+    } else {
+      const order = await handleOrder({
+        companyId: currentCompany?.id || ''
+      })
+      if (order?.res.id) {
+        return await onPayOrder(order?.res.id, payment)
+      }
+    }
   }
   const handleOrder = async (order: { companyId: string }) => {
     return await createOrder({
@@ -118,7 +126,13 @@ export const CashboxContextProvider = ({
       shipping
     })
   }
-
+  const [orderSaved, setOrderSaved] = useState<boolean | string>(false)
+  const onClearOrder = () => {
+    setItemsSelected([])
+    setClient({})
+    setShipping({})
+    setOrderSaved(false)
+  }
   return (
     <CashboxContext.Provider
       value={{
@@ -127,12 +141,15 @@ export const CashboxContextProvider = ({
         removeItem,
         addItem,
         updateItem,
-        handlePayOrder,
+        handlePay,
         client,
         setClient,
         handleOrder,
+        onClearOrder,
         shipping,
-        setShipping
+        setShipping,
+        orderSaved,
+        setOrderSaved
       }}
     >
       {children}

@@ -2,7 +2,14 @@
 
 import { listenStaffCompanies, listenUserCompanies } from '@/firebase/companies'
 import { CompanyType } from '@/types/company'
-import { createContext, useContext, useEffect, useState } from 'react'
+import {
+  Dispatch,
+  SetStateAction,
+  createContext,
+  useContext,
+  useEffect,
+  useState
+} from 'react'
 import { useAuthContext } from './authContext'
 import { StaffPermission } from '@/types/staff'
 
@@ -34,6 +41,7 @@ export type UserCompaniesContextType = {
   currentCompany: CompanyType | undefined
   userCompanies: CompanyType[]
   companyItems: CompanyItem[]
+
   ordersItems: {
     all: ItemOrder[]
     inUse: ItemOrder[]
@@ -48,6 +56,7 @@ export const UserCompaniesContext = createContext<UserCompaniesContextType>({
   setCompanySelected: function (id: string): void {
     throw new Error('Function not implemented.')
   },
+
   currentCompany: undefined,
   userCompanies: [],
   orders: [],
@@ -74,7 +83,6 @@ export function UserCompaniesProvider({
   const [userOwnCompanies, setUserOwnCompanies] = useState<CompanyType[]>([])
   const [staffCompanies, setStaffCompanies] = useState<CompanyType[]>([])
   const [orders, setOrders] = useState<Order[]>([])
-
   useEffect(() => {
     const bajaRent: { selectedCompany: CompanyType['id'] } = JSON.parse(
       localStorage.getItem('baja-rent') || '{}'

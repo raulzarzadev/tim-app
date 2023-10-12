@@ -19,26 +19,14 @@ const ModalPayment = ({
   onCloseParent?: () => void
 }) => {
   const modalPayment = useModal({ title: 'Pagar ' })
-  const { handleOrder, handlePayOrder, setItemsSelected, setClient } =
-    useCashboxContext()
+  const { handlePay, onClearOrder } = useCashboxContext()
   const { currentCompany } = useUserCompaniesContext()
   const USD_PRICE = currentCompany?.usdPrice || 1
 
-  const handlePay = async (payment: Partial<Payment>) => {
-    // create order
-    const order = await handleOrder?.({
-      companyId: currentCompany?.id || ''
-    })
-    //@ts-ignore
-    const orderId = order?.res?.id
-    if (orderId) {
-      const res = await handlePayOrder?.(orderId || '', payment)
-      // pay order
-      modalPayment.onClose()
-      setItemsSelected?.([])
-      setClient?.({})
-      onCloseParent?.()
-    }
+  const onPay = async (payment: Partial<Payment>) => {
+    await handlePay?.(payment)
+    onClearOrder?.()
+    onCloseParent?.()
   }
   return (
     <>
@@ -71,7 +59,7 @@ const ModalPayment = ({
           amount={amount}
           usdPrice={USD_PRICE}
           onPay={async (payment) => {
-            handlePay?.(payment)
+            onPay?.(payment)
           }}
         />
       </Modal>
