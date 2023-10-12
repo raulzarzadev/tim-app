@@ -160,7 +160,6 @@ export function UserCompaniesProvider({
     )
     .flat()
 
-  console.log({ itemsFromOrders })
   const itemsInUse = itemsFromOrders.filter(
     (i) => i.inUse || i.rentStatus === 'taken'
   )

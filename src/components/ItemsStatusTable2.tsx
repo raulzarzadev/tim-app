@@ -6,14 +6,6 @@ import { Container } from '@mui/material'
 import { ItemOrder } from '@/context/userCompaniesContext2'
 
 const ItemsStatusTable = ({ items }: { items: ItemOrder[] }) => {
-  const sortByFinishRent = (a: ItemOrder, b: ItemOrder) => {
-    if (!a.rentFinishAt && !b.rentFinishAt) return 0
-    return (
-      (asDate(b.rentFinishAt)?.getTime() || 0) -
-      (asDate(a.rentFinishAt)?.getTime() || 0)
-    )
-  }
-
   return (
     <Container>
       <Grid2 container spacing={1}>
@@ -39,7 +31,7 @@ const ItemsStatusTable = ({ items }: { items: ItemOrder[] }) => {
           Status
         </Grid2>
         <ErrorBoundary fallback={<p>Something went wrong</p>}>
-          {items?.sort(sortByFinishRent).map((item, i) => (
+          {items?.map((item, i) => (
             <ItemInUseRow key={i} item={item} />
           ))}
         </ErrorBoundary>
