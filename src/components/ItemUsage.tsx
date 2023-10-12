@@ -9,6 +9,8 @@ import AppIcon from './AppIcon'
 import ChangeItem from './ChangeItem'
 import Modal from './Modal'
 import { finishItemRent, startItemRent, resumeRent } from '@/firebase/orders'
+import ModalPayment from './ModalPayment2'
+import { calculateTotal } from '@/lib/calculateTotalItem'
 const ItemUsage = ({
   item,
   onCloseParent
@@ -22,7 +24,7 @@ const ItemUsage = ({
     return
   }
   const modal = useModal({ title: `Cambiar articulo` })
-
+  const modalPay = useModal({ title: `Pagar` })
   // const moreItemsInUse = [...finished, ...inUse].filter(
   //   (i) => i.paymentId === item.paymentId && i.id !== item.itemId
   // )
@@ -45,6 +47,10 @@ const ItemUsage = ({
     return
   }
 
+  const payments = item?.order?.payments
+  console.log(item.unit, item.qty, item.prices)
+  const amount = calculateTotal(item.unit, item.qty, item.prices)
+  console.log({ amount })
   return (
     <ErrorBoundary>
       <Box className="my-4">
@@ -121,6 +127,43 @@ const ItemUsage = ({
               }`}
             </Button>
           )}
+        </Box>
+        <Box>
+          {!payments?.length && (
+            <>
+              <button
+                onClick={(e) => {
+                  e.preventDefault()
+                  modalPay.onOpen()
+                }}
+                className="text-center font-bold bg-yellow-400 shadow-md rounded-md p-1 w-full"
+              >
+                Sin pagos
+              </button>
+              <Modal {...modalPay}>
+                <Box className="text-center ">
+                  <Typography className="my-4">
+                    No hay pagos registrados
+                  </Typography>
+                  <ModalPayment amount={100} />
+                </Box>
+              </Modal>
+            </>
+          )}
+          <Box>
+            {payments?.map((p, i) => {
+              console.log({ p })
+              return (
+                <Box
+                  key={i}
+                  className="grid grid-cols-2 place-content-center items-center text-center shadow-md rounded-md p-1 m-1 "
+                >
+                  <Typography>{dateFormat(asDate(p.date))}</Typography>
+                  <Typography>{p.amount}</Typography>
+                </Box>
+              )
+            })}
+          </Box>
         </Box>
 
         {/* TODO: add this functionality

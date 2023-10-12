@@ -23,10 +23,9 @@ const ChangeItem = ({
   cashboxChange?: (newItem: ArticleType['id']) => void
 }) => {
   const {
-    ordersItems: { all: itemsInUse },
+    ordersItems: { inUse: itemsInUse },
     currentCompany
   } = useUserCompaniesContext()
-
   const [_categoryName, _setCategoryName] = useState(item.category)
   const [_items, _setItems] = useState<ArticleType[]>([])
   const [_selected, _setSelected] = useState<string>()

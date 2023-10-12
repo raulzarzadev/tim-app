@@ -131,17 +131,26 @@ export function UserCompaniesProvider({
 
   const itemsFromOrders: ItemOrder[] = orders
     .map((order) =>
-      order.items.map((item) => ({
-        ...companyItems.find((i) => i.id === item.itemId),
-        ...item,
-        order,
-        rentStartAt: asDate(order.shipping.date),
-        rentFinishAt: calculateFinishRentDate(
-          asDate(order.shipping.date),
-          item?.qty,
-          item.unit
-        )
-      }))
+      order.items.map((orderItem) => {
+        const fullItem = companyItems.find((i) => i.id === orderItem?.itemId)
+        const prices = fullItem?.ownPrice
+          ? fullItem.prices
+          : currentCompany?.categories?.find(
+              (c) => c.name === fullItem?.category
+            )?.prices
+        return {
+          ...fullItem,
+          ...orderItem,
+          prices,
+          order,
+          rentStartAt: asDate(order.shipping.date),
+          rentFinishAt: calculateFinishRentDate(
+            asDate(order.shipping.date),
+            orderItem?.qty,
+            orderItem.unit
+          )
+        }
+      })
     )
     .flat()
 

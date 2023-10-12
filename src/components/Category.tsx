@@ -111,7 +111,8 @@ const Category = ({ categoryName }: { categoryName: string }) => {
       <Box>
         <ButtonGroup variant="text" aria-label="text button group" fullWidth>
           <Button
-            onClick={() => {
+            onClick={(e) => {
+              e.preventDefault()
               handleRemoveItem()
             }}
             disabled={categoryItemsSelected?.length <= 0}
@@ -119,7 +120,8 @@ const Category = ({ categoryName }: { categoryName: string }) => {
             <AppIcon icon="substr" />
           </Button>
           <Button
-            onClick={() => {
+            onClick={(e) => {
+              e.preventDefault()
               handleAddItem()
             }}
             disabled={itemsLeft.length <= 0}

@@ -7,6 +7,7 @@ import Grid2 from '@mui/material/Unstable_Grid2/Grid2'
 import { Typography } from '@mui/material'
 import { dateFormat, fromNow } from '@/lib/utils-date'
 import { ItemOrder } from '@/context/userCompaniesContext2'
+import { unitLabels } from '@/CONSTS/unit-labels'
 
 const ItemInUserRow = ({ item }: { item: ItemOrder }) => {
   const modal = useModal({
@@ -40,7 +41,12 @@ const ItemInUserRow = ({ item }: { item: ItemOrder }) => {
         <Grid2 xs={1}>{item.serialNumber || item.name}</Grid2>
         <Grid2 xs={2}>{item.category}</Grid2>
         <Grid2 xs={1}>
-          {item.qty}x {item.unit}
+          <Typography>
+            <span className="font-bold">
+              {item?.qty === 0.5 ? '1/2' : item.qty}{' '}
+            </span>
+            {item.unit && unitLabels[item.unit]}
+          </Typography>
         </Grid2>
         <Grid2 xs={2}>
           <Typography>
@@ -66,6 +72,10 @@ const ItemInUserRow = ({ item }: { item: ItemOrder }) => {
           )}
 
           {finished && <ItemStatus label="Terminado" status="success" />}
+
+          {!item?.order?.payments?.length && (
+            <ItemStatus label="Sin pagos" status="warning" />
+          )}
         </Grid2>
       </Grid2>
     </>
@@ -75,13 +85,14 @@ const ItemStatus = ({
   status,
   label = ''
 }: {
-  status: 'error' | 'success' | 'pending'
+  status: 'error' | 'success' | 'pending' | 'warning'
   label: string
 }) => {
   const statusColor = {
     error: 'bg-red-400',
     success: 'bg-green-400',
-    pending: 'bg-yellow-400'
+    pending: 'bg-blue-400',
+    warning: 'bg-yellow-400'
   }
   return (
     <div
