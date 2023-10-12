@@ -17,6 +17,7 @@ import { calculateFullTotal, calculateTotal } from '@/lib/calculateTotalItem'
 import CurrencySpan from './CurrencySpan'
 import useCashboxContext from '@/context/useCompanyCashbox'
 import ShippingLink from './ShippingLink'
+import ItemInUserRow from './ItemInUserRow2'
 const ItemUsage = ({
   item,
   onCloseParent
@@ -24,7 +25,7 @@ const ItemUsage = ({
   item: ItemOrder
   onCloseParent?: () => void
 }) => {
-  const { companyItems } = useUserCompaniesContext()
+  const { companyItems, ordersItems } = useUserCompaniesContext()
   const handleFinishRent = async (item: ItemOrder) => {
     await finishItemRent(item.order.id, item?.id || '')
     onCloseParent?.()
@@ -32,9 +33,15 @@ const ItemUsage = ({
   }
   const modal = useModal({ title: `Cambiar articulo` })
   const modalPay = useModal({ title: `Pagar` })
-  // const moreItemsInUse = [...finished, ...inUse].filter(
-  //   (i) => i.paymentId === item.paymentId && i.id !== item.itemId
-  // )
+  console.log(item.order)
+  const moreUserOrderItems = item.order.items
+    .filter((i) => i.itemId !== item.itemId)
+    .map((i) =>
+      ordersItems.all.find(
+        (searchItem) =>
+          searchItem.id === i.itemId && searchItem.order.id === item.order.id
+      )
+    )
 
   const rentalReturn = item.rentStatus === 'finished'
   const inUse = item.rentStatus === 'taken'
@@ -183,7 +190,7 @@ const ItemUsage = ({
               <Typography className="col-span-2">Fecha</Typography>
               <Typography>Metodo</Typography>
               <Typography>Status</Typography>
-              <Typography>Dollar</Typography>
+              <Typography>Dolar $</Typography>
               <Typography>Total</Typography>
             </Box>
             {payments
@@ -217,19 +224,18 @@ const ItemUsage = ({
           </Box>
         </Box>
 
-        {/* TODO: add this functionality
-         {!!moreItemsInUse?.length && (
+        {!!moreUserOrderItems?.length && (
           <Box>
             <Typography className="text-center font-bold mt-6">
               Otras unidades del mismo cliente
             </Typography>
             <Box>
-              {moreItemsInUse.map((item, i) => (
+              {moreUserOrderItems.map((item, i) => (
                 <ItemInUserRow key={i} item={item} />
               ))}
             </Box>
           </Box>
-        )} */}
+        )}
         <Modal {...modal}>
           <ChangeItem item={item} />
         </Modal>

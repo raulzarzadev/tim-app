@@ -23,7 +23,7 @@ const ItemInUserRow = ({ item }: { item: ItemOrder }) => {
   const onTime = isAfter(asDate(item.rentFinishAt) || new Date(), new Date())
   return (
     <>
-      <Modal {...modal}>
+      <Modal {...modal} fullWidth>
         <ItemUsage item={item} onCloseParent={() => modal.onClose()} />
       </Modal>
       <Grid2
@@ -36,16 +36,20 @@ const ItemInUserRow = ({ item }: { item: ItemOrder }) => {
         }}
       >
         <Grid2 xs={4} sm={2} className="whitespace-pre-wrap">
-          {item?.order?.client?.name}
+          <Typography className="truncate">
+            {item?.order?.client?.name}
+          </Typography>
         </Grid2>
         <Grid2 xs={3} sm={1}>
-          {item.serialNumber || item.name}
+          <Typography className="truncate">
+            {item.serialNumber || item.name}
+          </Typography>
         </Grid2>
         <Grid2 xs={3} sm={1}>
-          {item.category}
+          <Typography className="truncate">{item.category}</Typography>
         </Grid2>
         <Grid2 xs={2} sm={1}>
-          <Typography>
+          <Typography className="truncate">
             <span className="font-bold">
               {item?.qty === 0.5 ? '1/2' : item.qty}{' '}
             </span>
@@ -71,7 +75,7 @@ const ItemInUserRow = ({ item }: { item: ItemOrder }) => {
           </Typography>
         </Grid2>
         <Grid2 xs={3} sm={1}>
-          <ShippingLink address={item.order.shipping.address} />
+          <ShippingLink address={item?.order?.shipping?.address} />
         </Grid2>
         <Grid2 xs={2} sm={2} className="flex flex-wrap">
           {pending && <ItemStatus label="Pendiente" status="pending" />}
