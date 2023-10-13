@@ -44,4 +44,5 @@ export type PaymentChange = {
   newPrice: PriceType | null
   newItemId: ArticleType['id']
   oldItemId: ArticleType['id']
+  resolved?: boolean
 }

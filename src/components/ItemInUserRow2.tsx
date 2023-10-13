@@ -4,11 +4,12 @@ import { isAfter } from 'date-fns'
 import Modal from './Modal'
 import ItemUsage from './ItemUsage'
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2'
-import { Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { dateFormat, fromNow } from '@/lib/utils-date'
 import { ItemOrder } from '@/context/userCompaniesContext2'
 import { unitLabels } from '@/CONSTS/unit-labels'
 import ShippingLink from './ShippingLink'
+import ItemRentStatus from './ItemRentStatus'
 
 const ItemInUserRow = ({ item }: { item: ItemOrder }) => {
   const modal = useModal({
@@ -19,8 +20,7 @@ const ItemInUserRow = ({ item }: { item: ItemOrder }) => {
 
   const pending = item.rentStatus === 'pending'
   const inUse = item.rentStatus === 'taken'
-  const finished = item.rentStatus === 'finished'
-  const onTime = isAfter(asDate(item.rentFinishAt) || new Date(), new Date())
+
   return (
     <>
       <Modal {...modal} fullWidth>
@@ -29,90 +29,58 @@ const ItemInUserRow = ({ item }: { item: ItemOrder }) => {
       <Grid2
         container
         xs={12}
-        className=" shadow-md rounded-md p-2 m-1 text-center"
+        className=" shadow-md rounded-md p-1  text-center"
         alignItems={'center'}
         onClick={() => {
           modal.onOpen()
         }}
       >
-        <Grid2 xs={4} sm={2} className="whitespace-pre-wrap">
+        {/* //* Client  */}
+        <Grid2 xs={4} className="whitespace-pre-wrap ">
           <Typography className="truncate">
             {item?.order?.client?.name}
           </Typography>
         </Grid2>
-        <Grid2 xs={3} sm={1}>
+        {/* //* Item  */}
+        <Grid2 xs={4}>
+          <Typography className="truncate">{item.category}</Typography>
           <Typography className="truncate">
             {item.serialNumber || item.name}
           </Typography>
         </Grid2>
-        <Grid2 xs={3} sm={1}>
-          <Typography className="truncate">{item.category}</Typography>
-        </Grid2>
-        <Grid2 xs={2} sm={1}>
-          <Typography className="truncate">
-            <span className="font-bold">
-              {item?.qty === 0.5 ? '1/2' : item.qty}{' '}
-            </span>
-            {item.unit && unitLabels[item.unit]}
-          </Typography>
-        </Grid2>
-        {/* Truncate when small  */}
-        <Grid2 xs={4} sm={2}>
-          <Typography>
-            {dateFormat(item.rentStartAt, 'dd-MMM HH:mm')}
-          </Typography>
-          <Typography variant="caption">
-            {fromNow(asDate(item.rentStartAt))}
-          </Typography>
-        </Grid2>
 
-        <Grid2 xs={3} sm={2}>
-          <Typography>
-            {dateFormat(asDate(item.rentFinishAt), 'dd-MMM HH:mm')}
-          </Typography>
-          <Typography variant="caption">
-            {fromNow(asDate(item.rentFinishAt))}
-          </Typography>
-        </Grid2>
-        <Grid2 xs={3} sm={1}>
-          <ShippingLink address={item?.order?.shipping?.address} />
-        </Grid2>
-        <Grid2 xs={2} sm={2} className="flex flex-wrap">
-          {pending && <ItemStatus label="Pendiente" status="pending" />}
-          {inUse && onTime && <ItemStatus label="En uso" status="success" />}
-          {inUse && !onTime && (
-            <ItemStatus label="Fuera de tiempo" status="error" />
-          )}
-
-          {finished && <ItemStatus label="Terminado" status="success" />}
-
-          {!item?.order?.payments?.length && (
-            <ItemStatus label="Sin pagos" status="warning" />
-          )}
+        {/* //* Status  */}
+        <Grid2 xs={4} className="flex items-center">
+          <Box className="w-1/2 ">
+            {inUse && (
+              <>
+                <Typography>Termina:</Typography>
+                <Typography className="text-xs">
+                  {dateFormat(asDate(item.rentFinishAt), 'dd-MMM HH:mm')}
+                </Typography>
+                <Typography className="text-xs">
+                  {fromNow(asDate(item.rentFinishAt))}
+                </Typography>
+              </>
+            )}
+            {pending && (
+              <>
+                <Typography>Comienza:</Typography>
+                <Typography className="text-xs">
+                  {dateFormat(item.rentStartAt, 'dd-MMM HH:mm')}
+                </Typography>
+                <Typography className="text-xs">
+                  {fromNow(asDate(item.rentStartAt))}
+                </Typography>
+              </>
+            )}
+          </Box>
+          <Box className="w-1/2">
+            <ItemRentStatus item={item} />
+          </Box>
         </Grid2>
       </Grid2>
     </>
-  )
-}
-const ItemStatus = ({
-  status,
-  label = ''
-}: {
-  status: 'error' | 'success' | 'pending' | 'warning'
-  label: string
-}) => {
-  const statusColor = {
-    error: 'bg-red-400',
-    success: 'bg-green-400',
-    pending: 'bg-blue-400',
-    warning: 'bg-yellow-400'
-  }
-  return (
-    <div
-      className={`${statusColor[status]} m-0.5 rounded-md  truncate aspect-video w-16 items-center flex justify-center text-xs shadow-md whitespace-pre-line`}
-    >
-      {label}
-    </div>
   )
 }
 export default ItemInUserRow

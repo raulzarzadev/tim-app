@@ -108,7 +108,6 @@ export const CashboxContextProvider = ({
   }
 
   const handlePay = async (payment: Partial<Payment>, orderId?: string) => {
-    console.log('pay', { orderId })
     if (orderId) {
       return await onPayOrder(orderId, payment)
     }

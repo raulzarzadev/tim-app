@@ -6,7 +6,6 @@ import useModal from '@/hooks/useModal'
 import { isAfter } from 'date-fns'
 import ErrorBoundary from './ErrorBoundary'
 import { Box, Button, Typography } from '@mui/material'
-import { dateFormat, fromNow } from '@/lib/utils-date'
 import asDate from '@/lib/asDate'
 import AppIcon from './AppIcon'
 import ChangeItem from './ChangeItem'
@@ -14,10 +13,11 @@ import Modal from './Modal'
 import { finishItemRent, startItemRent, resumeRent } from '@/firebase/orders'
 import ModalPayment from './ModalPayment2'
 import { calculateFullTotal, calculateTotal } from '@/lib/calculateTotalItem'
-import CurrencySpan from './CurrencySpan'
-import useCashboxContext from '@/context/useCompanyCashbox'
 import ShippingLink from './ShippingLink'
 import ItemInUserRow from './ItemInUserRow2'
+import OrderPaymentsTable from './OrderPaymentsTable'
+import ItemRentStatus from './ItemRentStatus'
+
 const ItemUsage = ({
   item,
   onCloseParent
@@ -26,14 +26,9 @@ const ItemUsage = ({
   onCloseParent?: () => void
 }) => {
   const { companyItems, ordersItems } = useUserCompaniesContext()
-  const handleFinishRent = async (item: ItemOrder) => {
-    await finishItemRent(item.order.id, item?.id || '')
-    onCloseParent?.()
-    return
-  }
+
   const modal = useModal({ title: `Cambiar articulo` })
   const modalPay = useModal({ title: `Pagar` })
-  console.log(item.order)
   const moreUserOrderItems = item.order.items
     .filter((i) => i.itemId !== item.itemId)
     .map((i) =>
@@ -43,31 +38,35 @@ const ItemUsage = ({
       )
     )
 
-  const rentalReturn = item.rentStatus === 'finished'
-  const inUse = item.rentStatus === 'taken'
-  const pending = item.rentStatus === 'pending'
-
-  const onTime = isAfter(asDate(item.rentFinishAt) || new Date(), new Date())
-
-  const handleCancelFinishRent = async (item: Partial<ItemOrder>) => {
-    await resumeRent({ itemId: item?.id || '', orderId: item?.order?.id || '' })
+  const handleFinishRent = async (item: ItemOrder) => {
     onCloseParent?.()
+    await finishItemRent(item.order.id, item?.id || '')
+    return
+  }
+  const handleCancelFinishRent = async (item: Partial<ItemOrder>) => {
+    onCloseParent?.()
+    await resumeRent({ itemId: item?.id || '', orderId: item?.order?.id || '' })
     return
   }
 
   const handleStartItemRent = async (item: Partial<ItemOrder>) => {
-    await startItemRent(item?.order?.id, item?.id || '')
     onCloseParent?.()
+    await startItemRent(item?.order?.id, item?.id || '')
     return
   }
 
   const payments = item?.order?.payments
 
+  const inUse = item.rentStatus === 'taken'
+  const pending = item.rentStatus === 'pending'
+  const onTime = isAfter(asDate(item.rentFinishAt) || new Date(), new Date())
+  const finished = item.rentStatus === 'finished'
   const itemTotals = calculateTotal(item.unit, item.qty, item.prices)
   const orderTotal = calculateFullTotal(
     item.order.items,
     item.order.items?.map((i) => companyItems.find((c) => c.id === i.itemId))
   )
+
   //console.log({ orderTotal })
   return (
     <ErrorBoundary>
@@ -75,39 +74,51 @@ const ItemUsage = ({
         <Typography className="text-center">
           {item.order?.client?.name}
         </Typography>
-        <Typography className="text-center">
+        <Typography className="text-center font-bold my-4">
+          {item.category} {item.serialNumber || item.name}
+        </Typography>
+        {/* {pending && (
+          <Box className="text-center">
+            <Typography>
+              Comienza: {dateFormat(asDate(item.rentStartAt), 'dd/MM HH:mm')}
+            </Typography>
+          </Box>
+        )} */}
+        {/* <Typography className="text-center">
           Entrega: {dateFormat(item.rentFinishAt, 'dd/MM HH:mm')}
           <Typography variant="caption" className="text-center">
             {' '}
             {fromNow(asDate(item.rentFinishAt))}
           </Typography>
-        </Typography>
+        </Typography> */}
         <Typography className="text-center">
           Lugar : <ShippingLink address={item.order.shipping.address} />
         </Typography>
       </Box>
       <Box className="grid gap-2">
-        {!onTime && !rentalReturn && (
+        {/* {!onTime && !finished && (
           <Typography className="text-center  font-bold" color={'error'}>
             Unidad fuera de tiempo.
           </Typography>
-        )}
+        )} */}
         <Typography className="text-center my-4">
           Revisa que la unidad este en buen estado.
         </Typography>
-        <Box className="flex w-full gap-4">
-          <Button
-            fullWidth
-            onClick={(e) => {
-              e.preventDefault()
-              modal.onOpen()
-            }}
-            variant="outlined"
-            color="info"
-          >
-            Cambiar <AppIcon icon="switch" />
-          </Button>
-          {rentalReturn && (
+        <Box className="grid gap-4 max-w-xs mx-auto">
+          {!finished && onTime && (
+            <Button
+              fullWidth
+              onClick={(e) => {
+                e.preventDefault()
+                modal.onOpen()
+              }}
+              variant="outlined"
+              color="info"
+            >
+              Cambiar <AppIcon icon="switch" />
+            </Button>
+          )}
+          {finished && (
             <Button
               fullWidth
               onClick={(e) => {
@@ -120,7 +131,10 @@ const ItemUsage = ({
               {`Regresar ${item.category} ${item.serialNumber || item.name}`}
             </Button>
           )}
-          {inUse && (
+          <Box>
+            <ItemRentStatus item={item} />
+          </Box>
+          {/* {inUse && (
             <Button
               fullWidth
               onClick={(e) => {
@@ -147,7 +161,7 @@ const ItemUsage = ({
                 item.serialNumber || item.name
               }`}
             </Button>
-          )}
+          )} */}
         </Box>
         <Box>
           <Box className="flex justify-evenly my-4">
@@ -157,71 +171,15 @@ const ItemUsage = ({
               orderId={item?.order?.id}
               onCloseParent={modalPay.onClose}
             /> */}
-            <ModalPayment
+            {/* <ModalPayment
               label="Pagar orden "
               amount={orderTotal}
               orderId={item?.order?.id}
               onCloseParent={modalPay.onClose}
-            />
+            /> */}
           </Box>
 
-          {!payments?.length && (
-            <>
-              <button
-                onClick={(e) => {
-                  e.preventDefault()
-                  modalPay.onOpen()
-                }}
-                className="text-center font-bold bg-yellow-400 shadow-md rounded-md p-1 w-full"
-              >
-                Sin pagos
-              </button>
-              <Modal {...modalPay}>
-                <Box className="text-center ">
-                  <Typography className="my-4">
-                    No hay pagos registrados
-                  </Typography>
-                </Box>
-              </Modal>
-            </>
-          )}
-          <Box>
-            <Box className="grid grid-cols-6 place-content-center items-center text-center shadow-md rounded-md p-1 m-1 ">
-              <Typography className="col-span-2">Fecha</Typography>
-              <Typography>Metodo</Typography>
-              <Typography>Status</Typography>
-              <Typography>Dolar $</Typography>
-              <Typography>Total</Typography>
-            </Box>
-            {payments
-              ?.sort(
-                (a, b) =>
-                  (asDate(b.date)?.getTime() || 0) -
-                  (asDate(a.date)?.getTime() || 0)
-              )
-              ?.map((p, i) => {
-                return (
-                  <Box
-                    key={i}
-                    className="grid grid-cols-6 place-content-center items-center text-center shadow-md rounded-md p-1 m-1 "
-                  >
-                    <Typography className="col-span-2">
-                      {dateFormat(asDate(p.date), 'EEE dd-MM-yy HH:mm')}
-                    </Typography>
-                    <Typography>{p.method}</Typography>
-                    <Typography>
-                      {p.isCancelled ? 'Cancelado' : 'Pagado'}
-                    </Typography>
-                    <Typography>
-                      <CurrencySpan quantity={p.usdPrice} />
-                    </Typography>
-                    <Typography>
-                      <CurrencySpan quantity={p.amount}></CurrencySpan>
-                    </Typography>
-                  </Box>
-                )
-              })}
-          </Box>
+          <OrderPaymentsTable payments={payments} />
         </Box>
 
         {!!moreUserOrderItems?.length && (
