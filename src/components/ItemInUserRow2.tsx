@@ -1,14 +1,11 @@
 import useModal from '@/hooks/useModal'
 import asDate from '@/lib/asDate'
-import { isAfter } from 'date-fns'
 import Modal from './Modal'
 import ItemUsage from './ItemUsage'
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2'
 import { Box, Typography } from '@mui/material'
 import { dateFormat, fromNow } from '@/lib/utils-date'
 import { ItemOrder } from '@/context/userCompaniesContext2'
-import { unitLabels } from '@/CONSTS/unit-labels'
-import ShippingLink from './ShippingLink'
 import ItemRentStatus from './ItemRentStatus'
 
 const ItemInUserRow = ({ item }: { item: ItemOrder }) => {

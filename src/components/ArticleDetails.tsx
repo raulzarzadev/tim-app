@@ -1,8 +1,8 @@
-import { ArticleType } from '@/types/article'
 import { Box, Button, Typography } from '@mui/material'
 import PricesList from './PricesList'
+import { ItemOrder } from '@/context/userCompaniesContext2'
 
-const ArticleDetails = ({ article }: { article?: ArticleType }) => {
+const ArticleDetails = ({ article }: { article?: ItemOrder }) => {
   return (
     <Box className="my-4 text-center">
       <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
@@ -25,7 +25,7 @@ const ArticleDetails = ({ article }: { article?: ArticleType }) => {
             {article?.ownPrice ? 'propio' : ' categoria'}
           </span>
         </Typography>
-        {article?.ownPrice && <PricesList prices={article.prices || []} />}
+        <PricesList prices={article?.prices || []} />
       </Box>
     </Box>
   )

@@ -11,7 +11,7 @@ import useCashboxContext from '@/context/useCompanyCashbox'
 const ClientForm = () => {
   const { client, setClient } = useCashboxContext()
   const { handleSubmit, register, setValue, watch, control } = useForm({
-    defaultValues: client
+    defaultValues: { phone: '', name: '', ...client } as Partial<Client>
   })
   const onSubmit = (data: Partial<Client>) => {
     setClient?.(data)

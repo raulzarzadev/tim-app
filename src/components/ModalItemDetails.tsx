@@ -9,11 +9,12 @@ const ModalItemDetails = ({ itemId }: { itemId: string }) => {
     ordersItems: { all: items }
   } = useUserCompaniesContext()
   const item = items?.find((i) => i.itemId === itemId)
-  const modal = useModal()
+  const modal = useModal({
+    title: `Detalles de ${item?.category} - ${item?.serialNumber || item?.name}`
+  })
   return (
     <span>
-      Modal item details
-      {/* <button
+      <button
         onClick={(e) => {
           e.preventDefault()
           e.stopPropagation()
@@ -27,9 +28,9 @@ const ModalItemDetails = ({ itemId }: { itemId: string }) => {
         {item ? (
           <ArticleDetails article={item} />
         ) : (
-          <div>No encontramos infroamción de este articulo</div>
+          <div>No encontramos información de este articulo</div>
         )}
-      </Modal> */}
+      </Modal>
     </span>
   )
 }

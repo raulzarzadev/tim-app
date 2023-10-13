@@ -5,6 +5,12 @@ import {
 import asDate from '@/lib/asDate'
 import { calculateFullTotal } from '@/lib/calculateTotalItem'
 import { isAfter } from 'date-fns'
+import Modal from './Modal'
+import useModal from '@/hooks/useModal'
+import { Box, Button, Typography } from '@mui/material'
+import React, { ReactNode } from 'react'
+import { finishItemRent, resumeRent, startItemRent } from '@/firebase/orders'
+import ModalPayment from './ModalPayment2'
 
 const ItemRentStatus = ({ item }: { item: ItemOrder }) => {
   const { companyItems } = useUserCompaniesContext()
@@ -25,36 +31,146 @@ const ItemRentStatus = ({ item }: { item: ItemOrder }) => {
   const paymentsAmount =
     item?.order?.payments?.reduce((a, b) => a + b?.amount, 0) || 0
   const total = orderTotal - paymentsAmount + changesAmount
-  console.log({ total, paymentsAmount, orderTotal, changesAmount })
+
+  const handleStartItemRent = async () => {
+    return await startItemRent(item?.order?.id, item?.id || '')
+  }
+  const handleFinishRent = async () => {
+    return await finishItemRent(item.order.id, item?.id || '')
+  }
+  const handleResumeRent = async () => {
+    return await resumeRent({
+      itemId: item?.id || '',
+      orderId: item?.order?.id || ''
+    })
+  }
+
   return (
-    <div className="grid">
-      {changesAmount !== 0 && (
-        <ItemStatus
-          label={`Pago pendiente $${changesAmount.toFixed(2)}`}
+    <div className="grid gap-2 my-2">
+      {total !== 0 && (
+        <ModalItemStatus
+          label={`${total < 0 ? 'Devolver ' : 'Cobrar'} pendiente $${Math.abs(
+            total
+          ).toFixed(2)}`}
+          status="warning"
+        >
+          <Typography className="text-center">
+            {total < 0 ? 'Devolver' : 'Cobrar'} Diferencia
+          </Typography>
+          <Box className="text-center">
+            <ModalPayment amount={total} />
+          </Box>
+        </ModalItemStatus>
+      )}
+      {pending && (
+        <ModalItemStatus
+          label="Entrega pendiente"
           status="pending"
-        />
+          onAction={handleStartItemRent}
+          actionLabel="Entregar"
+          closeModal
+        >
+          <Typography>Entrega pendiente</Typography>
+        </ModalItemStatus>
       )}
-      {pending && <ItemStatus label="Engrega pendiente" status="pending" />}
-      {inUse && onTime && <ItemStatus label="En uso" status="success" />}
       {inUse && !onTime && (
-        <ItemStatus label="Fuera de tiempo" status="error" />
+        <ModalItemStatus
+          label="Fuera de tiempo"
+          status="error"
+          onAction={() => {
+            return handleFinishRent()
+          }}
+          actionLabel="Recibir"
+          closeModal
+        >
+          <Typography className="text-center">
+            Unidad fuera de tiempo
+          </Typography>
+        </ModalItemStatus>
+      )}
+      {inUse && onTime && (
+        <ModalItemStatus
+          label="En uso"
+          status="success"
+          onAction={handleFinishRent}
+          actionLabel="Recibir"
+          closeModal
+        >
+          <Typography>Modal en uso</Typography>
+        </ModalItemStatus>
       )}
 
-      {finished && <ItemStatus label="Terminado" status="success" />}
-
+      {finished && onTime && (
+        <ModalItemStatus
+          label="Terminado"
+          status="success"
+          actionLabel="Devolver"
+          onAction={handleResumeRent}
+        >
+          <Typography className="text-center">
+            Renta finalizada. ¿Retomar?
+          </Typography>
+        </ModalItemStatus>
+      )}
+      {/* 
       {!item?.order?.payments?.length && (
         <ItemStatus label="Sin pagos" status="warning" />
-      )}
+      )} */}
     </div>
   )
 }
-const ItemStatus = ({
-  status,
-  label = ''
-}: {
+type ItemStatusCard = {
   status: 'error' | 'success' | 'pending' | 'warning'
   label: string
-}) => {
+}
+type ModalItemStatus = ItemStatusCard & {
+  onAction?: () => Promise<any> | void
+  actionLabel?: string
+  children?: ReactNode
+  closeModal?: boolean
+}
+const ModalItemStatus = ({
+  status,
+  label,
+  onAction,
+  actionLabel = 'Action label',
+  closeModal,
+  children
+}: ModalItemStatus) => {
+  const modal = useModal({ title: label })
+  return (
+    <button
+      onClick={(e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        modal.onOpen()
+      }}
+    >
+      <ItemStatus label={label} status={status} />
+      <Modal {...modal}>
+        {children}
+        {onAction && (
+          <Box className="flex justify-center mt-4">
+            <Button
+              variant="outlined"
+              color={status === 'pending' ? 'info' : status}
+              onClick={async (e) => {
+                e.stopPropagation()
+                e.preventDefault()
+                closeModal && modal.onClose()
+                await onAction?.()
+              }}
+            >
+              {actionLabel}
+            </Button>
+          </Box>
+        )}
+      </Modal>
+    </button>
+  )
+}
+
+const ItemStatus = ({ status, label = '' }: ItemStatusCard) => {
   const statusColor = {
     error: 'bg-red-400',
     success: 'bg-green-400',

@@ -48,7 +48,12 @@ const Modal = ({
           <Typography id={`modal-modal-${title}`} variant="h6" component="h2">
             {title}
           </Typography>
-          <IconButton onClick={(e) => onClose?.(e, 'escapeKeyDown')}>
+          <IconButton
+            onClick={(e) => {
+              e.stopPropagation()
+              onClose?.(e, 'escapeKeyDown')
+            }}
+          >
             <AppIcon icon="close" />
           </IconButton>
         </Box>
