@@ -2,10 +2,13 @@
 import { Button } from '@mui/material'
 import Modal from '../Modal'
 import useModal from '@/hooks/useModal'
-import BalanceForm from './BalanceForm'
+import BalanceForm, { Balance } from './BalanceForm'
 
 const ModalBalanceForm = () => {
   const modal = useModal({ title: 'Nuevo corte' })
+  const handleCalculateBalance = (balance: Balance) => {
+    console.log({ balance })
+  }
   return (
     <div className="flex w-full justify-center my-4">
       <Button
@@ -18,7 +21,7 @@ const ModalBalanceForm = () => {
         Nuevo corte
       </Button>
       <Modal {...modal}>
-        <BalanceForm />
+        <BalanceForm onCalculateBalance={handleCalculateBalance} />
       </Modal>
     </div>
   )

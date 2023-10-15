@@ -4,19 +4,31 @@ import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import { useForm } from 'react-hook-form'
 import { dateFormat, inputDateFormat } from '@/lib/utils-date'
 import asDate from '@/lib/asDate'
+import { Timestamp } from 'firebase/firestore'
 
-const BalanceForm = () => {
-  const nowDate = new Date()
+export type Balance = {
+  from: Timestamp | Date
+  to: Timestamp | Date
+  cashier: 'all' | string
+}
+const nowDate = new Date()
+const defaultBalance: Balance = {
+  from: nowDate,
+  to: nowDate,
+  cashier: 'all'
+}
+
+const BalanceForm = ({
+  onCalculateBalance
+}: {
+  onCalculateBalance: (balance: Balance) => void
+}) => {
   const { register, handleSubmit, watch, setValue } = useForm({
-    defaultValues: {
-      from: nowDate,
-      to: nowDate,
-      cashier: 'all'
-    }
+    defaultValues: defaultBalance
   })
   const formValues = watch()
   const onSubmit = (data: any) => {
-    console.log(data)
+    onCalculateBalance(data)
   }
   const { currentCompany } = useUserCompaniesContext()
   const staff =
@@ -24,19 +36,20 @@ const BalanceForm = () => {
       label: staff.name,
       value: staff.email
     })) || []
+
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box className="grid grid-cols-2 gap-4">
           <TextField
-            {...register('from')}
-            value={inputDateFormat(formValues.from || new Date())}
+            {...register('from', { valueAsDate: true })}
+            value={inputDateFormat(formValues.from || nowDate)}
             type="datetime-local"
             label="Desde"
           />
           <TextField
-            value={inputDateFormat(formValues.to)}
-            {...register('to')}
+            value={inputDateFormat(formValues.to || nowDate)}
+            {...register('to', { valueAsDate: true })}
             type="datetime-local"
             label="Hasta"
           />
@@ -46,6 +59,7 @@ const BalanceForm = () => {
             fullWidth
             variant="outlined"
             //{...register('cashier')}
+            selected={formValues.cashier}
             onSelect={(data) => setValue('cashier', data)}
             label="Usuario"
             options={[
