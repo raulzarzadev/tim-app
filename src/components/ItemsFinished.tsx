@@ -4,6 +4,7 @@ import {
 } from '@/context/userCompaniesContext2'
 import ItemsStatusTable from './ItemsStatusTable2'
 import asDate from '@/lib/asDate'
+import { Typography } from '@mui/material'
 
 const ItemsFinished = () => {
   const {
@@ -17,6 +18,13 @@ const ItemsFinished = () => {
       (asDate(a.rentFinishedAt)?.getTime() || 0)
     )
   }
+
+  if (finished.length === 0)
+    return (
+      <Typography className="text-center text-xl my-4">
+        No hay terminadas
+      </Typography>
+    )
   return <ItemsStatusTable items={finished.sort(sortByFinishRent) || []} />
 }
 

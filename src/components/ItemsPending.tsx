@@ -4,6 +4,7 @@ import {
 } from '@/context/userCompaniesContext2'
 import ItemsStatusTable from './ItemsStatusTable2'
 import asDate from '@/lib/asDate'
+import { Typography } from '@mui/material'
 
 const ItemsPending = () => {
   const {
@@ -16,6 +17,12 @@ const ItemsPending = () => {
       (asDate(b.rentStartAt)?.getTime() || 0)
     )
   }
+  if (pending.length === 0)
+    return (
+      <Typography className="text-center text-xl my-4">
+        No hay unidades pendientes
+      </Typography>
+    )
   return <ItemsStatusTable items={pending.sort(sortByStartAt) || []} />
 }
 
