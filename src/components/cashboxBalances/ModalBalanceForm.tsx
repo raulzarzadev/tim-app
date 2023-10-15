@@ -1,5 +1,5 @@
 'use client'
-import { Button } from '@mui/material'
+import { Box, Button, Typography } from '@mui/material'
 import Modal from '../Modal'
 import useModal from '@/hooks/useModal'
 import BalanceForm, { Balance } from './BalanceForm'
@@ -11,6 +11,8 @@ import { isAfter, isBefore } from 'date-fns'
 import asDate from '@/lib/asDate'
 import forceAsDate from '@/lib/forceAsDate'
 import { Order } from '@/types/order'
+import { useState } from 'react'
+import CurrencySpan from '../CurrencySpan'
 
 type BalanceItem = Pick<ItemOrder, 'id' | 'name' | 'serialNumber' | 'category'>
 const getOrdersByBalanceForm = (
@@ -27,9 +29,8 @@ const getOrdersByBalanceForm = (
   )
   return filteredByUser || []
 }
-const balanceDataFromOrders = (
-  orders?: Partial<Order>[]
-): {
+
+type BalanceDataFromOrders = {
   changes?: Order['changes'] & {
     order?: Partial<Order>
   }
@@ -37,7 +38,10 @@ const balanceDataFromOrders = (
   totalFromPayments?: number
 
   items: BalanceItem[]
-} => {
+}
+const balanceDataFromOrders = (
+  orders?: Partial<Order>[]
+): BalanceDataFromOrders => {
   const payments = orders
     ?.map((o) => o.payments?.map((p) => ({ ...p, order: o })) || [])
     ?.flat()
@@ -53,7 +57,13 @@ const balanceDataFromOrders = (
   console.log({ items })
   return { changes, payments, totalFromPayments, items }
 }
-const calculateBalance = (balance: Balance, orders?: Partial<Order>[]) => {
+type BalanceData = {
+  orders?: Partial<Order>[]
+} & BalanceDataFromOrders
+const calculateBalance = (
+  balance: Balance,
+  orders?: Partial<Order>[]
+): BalanceData => {
   const matchOrders = getOrdersByBalanceForm(balance, orders)
   const balanceData = balanceDataFromOrders(matchOrders)
   return {
@@ -64,9 +74,11 @@ const calculateBalance = (balance: Balance, orders?: Partial<Order>[]) => {
 const ModalBalanceForm = () => {
   const modal = useModal({ title: 'Nuevo corte' })
   const { orders, currentCompany } = useUserCompaniesContext()
+  const [balance, setBalance] = useState<BalanceData>()
   const handleCalculateBalance = async (balance: Balance) => {
     const balanceData = calculateBalance(balance, orders)
-    console.log({ balanceData })
+    setBalance(balanceData)
+    //console.log({ balanceData })
   }
   return (
     <div className="flex w-full justify-center my-4">
@@ -81,8 +93,23 @@ const ModalBalanceForm = () => {
       </Button>
       <Modal {...modal}>
         <BalanceForm onCalculateBalance={handleCalculateBalance} />
+        {balance && <BalanceCard balance={balance} />}
       </Modal>
     </div>
+  )
+}
+
+const BalanceCard = ({ balance }: { balance: BalanceData }) => {
+  return (
+    <Box>
+      <Typography>Ordenes: {balance?.orders?.length || 0}</Typography>
+      <Typography>Pagos: {balance?.payments?.length || 0}</Typography>
+      <Typography>Cambios: {balance?.changes?.length}</Typography>
+      <Typography>Unidades: {balance?.items?.length}</Typography>
+      <Typography>
+        Total estimado: <CurrencySpan quantity={balance.totalFromPayments} />
+      </Typography>
+    </Box>
   )
 }
 
