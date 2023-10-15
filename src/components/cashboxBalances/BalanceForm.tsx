@@ -2,8 +2,7 @@ import { Box, Button, TextField } from '@mui/material'
 import Select from '../Select'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import { useForm } from 'react-hook-form'
-import { dateFormat, inputDateFormat } from '@/lib/utils-date'
-import asDate from '@/lib/asDate'
+import { inputDateFormat } from '@/lib/utils-date'
 import { Timestamp } from 'firebase/firestore'
 
 export type Balance = {
