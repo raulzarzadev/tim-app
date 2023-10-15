@@ -5,7 +5,6 @@ import Modal from './Modal'
 import CurrencySpan from './CurrencySpan'
 import PaymentForm from './PaymentForm'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
-import AppIcon from './AppIcon'
 import useCashboxContext from '@/context/useCompanyCashbox'
 import { Payment } from '@/types/order'
 
@@ -29,6 +28,7 @@ const ModalPayment = ({
 
   const onPay = async (payment: Partial<Payment>) => {
     const res = await handlePay?.(payment, orderId)
+    console.log(res)
     onClearOrder?.()
     onCloseParent?.()
   }
@@ -44,7 +44,10 @@ const ModalPayment = ({
         color="success"
         disabled={disabled}
       >
-        {label} <AppIcon icon="money" />
+        {label}{' '}
+        <span className="font-bold ml-2 text-lg">
+          <CurrencySpan quantity={amount} />
+        </span>
       </Button>
       <Modal {...modalPayment}>
         <Box>

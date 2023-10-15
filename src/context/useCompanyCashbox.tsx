@@ -16,6 +16,7 @@ import { Order, Shipping } from '@/types/order'
 import { PriceType } from '@/components/PricesForm'
 import { Payment } from '@/types/order'
 import { useUserCompaniesContext } from './userCompaniesContext2'
+import { Timestamp } from 'firebase/firestore'
 
 export type CashboxContext = {
   itemsSelected?: ItemSelected[]
@@ -46,6 +47,7 @@ export type ItemSelected = {
   unit?: PriceType['unit']
   inUse?: boolean
   rentStatus?: 'pending' | 'taken' | 'finished'
+  rentFinishedAt?: Date | Timestamp
 }
 
 export const CashboxContextProvider = ({

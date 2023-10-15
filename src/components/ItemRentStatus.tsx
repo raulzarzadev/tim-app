@@ -17,20 +17,17 @@ const ItemRentStatus = ({ item }: { item: ItemOrder }) => {
   const pending = item.rentStatus === 'pending'
   const inUse = item.rentStatus === 'taken'
   const finished = item.rentStatus === 'finished'
-  const onTime = isAfter(asDate(item.rentFinishAt) || new Date(), new Date())
 
+  const onTime = isAfter(asDate(item.rentFinishAt) || new Date(), new Date())
   const orderTotal = calculateFullTotal(
     item.order.items,
     item.order.items?.map((i) => companyItems.find((c) => c.id === i.itemId))
   )
-  //* changes are paid or pending to pay
-  const changesAmount =
-    item?.order?.changes
-      ?.map((c) => (c?.resolved ? 0 : c?.amount))
-      ?.reduce((a, b) => a + b, 0) || 0
+
   const paymentsAmount =
     item?.order?.payments?.reduce((a, b) => a + b?.amount, 0) || 0
-  const total = orderTotal - paymentsAmount + changesAmount
+
+  const total = orderTotal - paymentsAmount
 
   const handleStartItemRent = async () => {
     return await startItemRent(item?.order?.id, item?.id || '')
@@ -54,11 +51,11 @@ const ItemRentStatus = ({ item }: { item: ItemOrder }) => {
           ).toFixed(2)}`}
           status="warning"
         >
-          <Typography className="text-center">
+          <Typography className="text-center my-4">
             {total < 0 ? 'Devolver' : 'Cobrar'} Diferencia
           </Typography>
           <Box className="text-center">
-            <ModalPayment amount={total} />
+            <ModalPayment amount={total} orderId={item?.order?.id} />
           </Box>
         </ModalItemStatus>
       )}
@@ -96,7 +93,7 @@ const ItemRentStatus = ({ item }: { item: ItemOrder }) => {
           actionLabel="Recibir"
           closeModal
         >
-          <Typography>Modal en uso</Typography>
+          <Typography className="text-center">Unidad en uso</Typography>
         </ModalItemStatus>
       )}
 
@@ -112,10 +109,6 @@ const ItemRentStatus = ({ item }: { item: ItemOrder }) => {
           </Typography>
         </ModalItemStatus>
       )}
-      {/* 
-      {!item?.order?.payments?.length && (
-        <ItemStatus label="Sin pagos" status="warning" />
-      )} */}
     </div>
   )
 }

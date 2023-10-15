@@ -15,6 +15,7 @@ import ItemInUserRow from './ItemInUserRow2'
 import OrderPaymentsTable from './OrderPaymentsTable'
 import ItemRentStatus from './ItemRentStatus'
 import ItemChanges from './ItemChanges'
+import { dateFormat, fromNow } from '@/lib/utils-date'
 
 const ItemUsage = ({
   item,
@@ -50,11 +51,44 @@ const ItemUsage = ({
         <Typography className="text-center font-bold my-4">
           {item.category} {item.serialNumber || item.name}
         </Typography>
-
-        <Typography className="text-center">
-          Lugar : <ShippingLink address={item.order.shipping.address} />
-        </Typography>
       </Box>
+      <Box className={'grid gap-2 place-content-center'}>
+        <Box className="col-span-3 text-center">
+          <Typography> Status: {item.rentStatus}</Typography>
+        </Box>
+        <Box>
+          <Typography>Comienza:</Typography>
+          <Typography className="text-xs">
+            {dateFormat(asDate(item.rentStartAt), 'dd-MMM HH:mm')}
+          </Typography>
+          <Typography className="text-xs">
+            {fromNow(asDate(item.rentStartAt))}
+          </Typography>
+        </Box>
+        <Box className="">
+          <Typography>Termina:</Typography>
+          <Typography className="text-xs">
+            {dateFormat(asDate(item.rentFinishAt), 'dd-MMM HH:mm')}
+          </Typography>
+          <Typography className="text-xs">
+            {fromNow(asDate(item.rentFinishAt))}
+          </Typography>
+        </Box>
+        {item.rentFinishedAt && (
+          <Box className="">
+            <Typography>Entregado:</Typography>
+            <Typography className="text-xs">
+              {dateFormat(asDate(item.rentFinishedAt), 'dd-MMM HH:mm')}
+            </Typography>
+            <Typography className="text-xs">
+              {fromNow(asDate(item.rentFinishedAt))}
+            </Typography>
+          </Box>
+        )}
+      </Box>
+      <Typography className="text-center mt-4">
+        Lugar : <ShippingLink address={item.order.shipping.address} />
+      </Typography>
       <Box className="grid gap-2">
         <Typography className="text-center my-4">
           Revisa que la unidad este en buen estado.

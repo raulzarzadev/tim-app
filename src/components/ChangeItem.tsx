@@ -120,7 +120,8 @@ const ChangeItem = ({
           <Typography className="text-center my-4 ">
             Cambiar por:{' '}
             <span className="font-bold">
-              {diff.newPrice?.quantity}x {diff.newPrice?.unit}
+              {diff.newPrice?.quantity}x {diff.newPrice?.unit}{' '}
+              <CurrencySpan quantity={diff.newPrice.price} />
             </span>
           </Typography>
         )}

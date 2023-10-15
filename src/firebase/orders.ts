@@ -62,7 +62,12 @@ export const finishItemRent = async (
   return await updateOrder(OrderId, {
     items: [
       ...removedItem,
-      { ...oldItem, inUse: false, rentStatus: 'finished' }
+      {
+        ...oldItem,
+        inUse: false,
+        rentStatus: 'finished',
+        rentFinishedAt: new Date()
+      }
     ]
   })
 }
