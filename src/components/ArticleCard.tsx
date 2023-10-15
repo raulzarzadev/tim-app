@@ -1,4 +1,7 @@
-import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
+import {
+  ItemOrder,
+  useUserCompaniesContext
+} from '@/context/userCompaniesContext2'
 import { ArticleType } from '@/types/article'
 import { Button, Card, CardActions, CardContent } from '@mui/material'
 import Link from 'next/link'
@@ -9,7 +12,8 @@ const ArticleCard = ({ article }: { article?: ArticleType }) => {
   return (
     <Card sx={{ minWidth: 125 }}>
       <CardContent>
-        <ArticleDetails article={article} />
+        {/* FIXME: should pase a item with order or recept a item without order */}
+        <ArticleDetails article={article as ItemOrder} />
       </CardContent>
       <CardActions>
         <Button

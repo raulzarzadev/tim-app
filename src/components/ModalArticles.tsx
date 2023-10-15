@@ -13,7 +13,10 @@ import { ArticleType } from '@/types/article'
 import useModal from '@/hooks/useModal'
 import Modal from './Modal'
 import { useContext, useEffect, useState } from 'react'
-import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
+import {
+  ItemOrder,
+  useUserCompaniesContext
+} from '@/context/userCompaniesContext2'
 import ArticleDetails from './ArticleDetails'
 import useCashboxContext from '@/context/useCompanyCashbox'
 
@@ -95,7 +98,8 @@ const ModalArticles = ({ articles }: { articles: ArticleType[] }) => {
           {clickedArticle ? (
             <>
               <Typography>Descripción</Typography>
-              <ArticleDetails article={clickedArticle} />
+              {/* FIXME: should pase a item with order or recept a item without order */}
+              <ArticleDetails article={clickedArticle as ItemOrder} />
             </>
           ) : null}
         </Box>

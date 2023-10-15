@@ -7,6 +7,7 @@ import Modal from './Modal'
 import ArticleDetails from './ArticleDetails'
 import AppIcon from './AppIcon'
 import Link from 'next/link'
+import { ItemOrder } from '@/context/userCompaniesContext2'
 
 const ArticlesList = ({
   articles,
@@ -56,8 +57,8 @@ const Article2 = ({
             Editar <AppIcon icon="edit" />
           </Button>
         </Box>
-
-        <ArticleDetails article={article} />
+        {/* FIXME: should pase a item with order or recept a item without order */}
+        <ArticleDetails article={article as ItemOrder} />
       </Modal>
       <button
         className=" grid grid-cols-4 items-center p-1 shadow-md rounded-md  "
