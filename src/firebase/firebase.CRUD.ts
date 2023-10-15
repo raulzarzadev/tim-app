@@ -148,11 +148,13 @@ export class FirebaseCRUD {
     return {
       created: {
         at: new Date(),
-        by: currentUser?.uid
+        by: currentUser?.uid,
+        byEmail: currentUser?.email
       },
       updated: {
         at: new Date(),
-        by: currentUser?.uid
+        by: currentUser?.uid,
+        byEmail: currentUser?.email
       }
     }
   }
@@ -162,7 +164,8 @@ export class FirebaseCRUD {
     return {
       updated: {
         at: new Date(),
-        by: currentUser?.uid
+        by: currentUser?.uid,
+        byEmail: currentUser?.email
       }
     }
   }

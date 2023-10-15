@@ -5,9 +5,11 @@ export type BaseType = {
   created: {
     at: Date | Timestamp
     by: string
+    byEmail: string
   }
   updated: {
     at: Date | Timestamp
     by: string
+    byEmail: string
   }
 }

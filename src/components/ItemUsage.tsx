@@ -24,7 +24,7 @@ const ItemUsage = ({
   item: ItemOrder
   onCloseParent?: () => void
 }) => {
-  const { ordersItems } = useUserCompaniesContext()
+  const { ordersItems, currentCompany } = useUserCompaniesContext()
 
   const modal = useModal({ title: `Cambiar articulo` })
   const moreUserOrderItems = item.order.items
@@ -52,6 +52,7 @@ const ItemUsage = ({
           {item.category} {item.serialNumber || item.name}
         </Typography>
       </Box>
+
       <Box className={'grid gap-2 place-content-center'}>
         <Box className="col-span-3 text-center">
           <Typography> Status: {item.rentStatus}</Typography>
@@ -74,6 +75,7 @@ const ItemUsage = ({
             {fromNow(asDate(item.rentFinishAt))}
           </Typography>
         </Box>
+
         {item.rentFinishedAt && (
           <Box className="">
             <Typography>Entregado:</Typography>
@@ -88,6 +90,12 @@ const ItemUsage = ({
       </Box>
       <Typography className="text-center mt-4">
         Lugar : <ShippingLink address={item.order.shipping.address} />
+      </Typography>
+      <Typography className="text-xs text-center">
+        Creada por:{' '}
+        {currentCompany?.staff?.find(
+          (s) => s.email === item.order.created.byEmail
+        )?.name || `${item.order.created.byEmail}*`}
       </Typography>
       <Box className="grid gap-2">
         <Typography className="text-center my-4">
