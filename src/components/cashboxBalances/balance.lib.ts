@@ -98,6 +98,7 @@ export const calculateBalance = (
   const balanceData = balanceDataFromOrders(matchOrders)
   return {
     orders: matchOrders,
-    ...balanceData
+    ...balanceData,
+    ...balance
   }
 }

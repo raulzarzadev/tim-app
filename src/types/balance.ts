@@ -17,8 +17,8 @@ export type SimpleBalance = BalanceType
 export type BalanceData = {
   orders?: Partial<Order>[]
 } & BalanceDataFromOrders &
-  Balance &
-  BaseType
+  Partial<Balance> &
+  Partial<BaseType>
 
 export type BalanceDataFromOrders = {
   changes?: Order['changes'] & {
