@@ -1,84 +1,46 @@
 'use client'
-import { Box, Button, Typography } from '@mui/material'
+import { Button } from '@mui/material'
 import Modal from '../Modal'
 import useModal from '@/hooks/useModal'
-import BalanceForm, { Balance } from './BalanceForm'
-import {
-  ItemOrder,
-  useUserCompaniesContext
-} from '@/context/userCompaniesContext2'
-import { isAfter, isBefore } from 'date-fns'
-import asDate from '@/lib/asDate'
-import forceAsDate from '@/lib/forceAsDate'
-import { Order } from '@/types/order'
+import BalanceForm from './BalanceForm'
+import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
+
 import { useState } from 'react'
-import CurrencySpan from '../CurrencySpan'
+import BalanceCard from './BalanceCard'
+import AppIcon from '../AppIcon'
+import { Balance, BalanceData } from '@/types/balance'
+import { balanceItemsData, calculateBalance } from './balance.lib'
+import { CreateBalance, createBalance } from '@/firebase/balances'
+import forceAsDate from '@/lib/forceAsDate'
 
-type BalanceItem = Pick<ItemOrder, 'id' | 'name' | 'serialNumber' | 'category'>
-const getOrdersByBalanceForm = (
-  balance: Balance,
-  orders?: Partial<Order>[]
-): Partial<Order>[] => {
-  const filteredByDate = orders?.filter(
-    (o) =>
-      isAfter(forceAsDate(o?.created?.at), forceAsDate(balance.from)) &&
-      isBefore(forceAsDate(o?.created?.at), forceAsDate(balance.to))
-  )
-  const filteredByUser = filteredByDate?.filter((o) =>
-    balance.cashier === 'all' ? true : o.created?.byEmail === balance.cashier
-  )
-  return filteredByUser || []
-}
-
-type BalanceDataFromOrders = {
-  changes?: Order['changes'] & {
-    order?: Partial<Order>
-  }
-  payments?: Order['payments'] & { order?: Partial<Order> }
-  totalFromPayments?: number
-
-  items: BalanceItem[]
-}
-const balanceDataFromOrders = (
-  orders?: Partial<Order>[]
-): BalanceDataFromOrders => {
-  const payments = orders
-    ?.map((o) => o.payments?.map((p) => ({ ...p, order: o })) || [])
-    ?.flat()
-  const changes = orders
-    ?.map((o) => o?.changes?.map((c) => ({ ...c, order: o })) || [])
-    ?.flat()
-  const totalFromPayments = payments
-    ?.flat()
-    ?.map((p) => p?.amount)
-    ?.reduce((p, c) => (p || 0) + (c || 0), 0)
-  const items: any[] =
-    orders?.map((o) => o.items?.map((i) => ({ ...i })) || []).flat() || []
-  console.log({ items })
-  return { changes, payments, totalFromPayments, items }
-}
-type BalanceData = {
-  orders?: Partial<Order>[]
-} & BalanceDataFromOrders
-const calculateBalance = (
-  balance: Balance,
-  orders?: Partial<Order>[]
-): BalanceData => {
-  const matchOrders = getOrdersByBalanceForm(balance, orders)
-  const balanceData = balanceDataFromOrders(matchOrders)
-  return {
-    orders: matchOrders,
-    ...balanceData
-  }
-}
 const ModalBalanceForm = () => {
   const modal = useModal({ title: 'Nuevo corte' })
   const { orders, currentCompany } = useUserCompaniesContext()
+  const [saved, setSaved] = useState(false)
   const [balance, setBalance] = useState<BalanceData>()
+  const [balanceProps, setBalanceProps] = useState<Balance>()
   const handleCalculateBalance = async (balance: Balance) => {
+    setSaved(false)
+    setBalanceProps(balance)
     const balanceData = calculateBalance(balance, orders)
-    setBalance(balanceData)
+    const itemsData = balanceItemsData(
+      balanceData.items || [],
+      currentCompany?.articles || []
+    )
+    setBalance({ ...balanceData, ...balance, itemsStats: itemsData })
     //console.log({ balanceData })
+  }
+  const handleSave = async () => {
+    const newBalance: CreateBalance = {
+      orders: balance?.orders || [],
+      from: forceAsDate(balanceProps?.from),
+      to: forceAsDate(balanceProps?.to),
+      cashier: balanceProps?.cashier || '',
+      companyId: currentCompany?.id || ''
+    }
+    await createBalance(newBalance).then((res) => {
+      setSaved(true)
+    })
   }
   return (
     <div className="flex w-full justify-center my-4">
@@ -91,25 +53,28 @@ const ModalBalanceForm = () => {
       >
         Nuevo corte
       </Button>
+
       <Modal {...modal}>
         <BalanceForm onCalculateBalance={handleCalculateBalance} />
-        {balance && <BalanceCard balance={balance} />}
+        {balance && (
+          <>
+            <Button
+              disabled={saved}
+              variant="outlined"
+              color="secondary"
+              onClick={(e) => {
+                e.preventDefault()
+                handleSave()
+              }}
+              fullWidth
+            >
+              Guardar <AppIcon icon="save"></AppIcon>
+            </Button>
+            <BalanceCard balance={balance} />
+          </>
+        )}
       </Modal>
     </div>
-  )
-}
-
-const BalanceCard = ({ balance }: { balance: BalanceData }) => {
-  return (
-    <Box>
-      <Typography>Ordenes: {balance?.orders?.length || 0}</Typography>
-      <Typography>Pagos: {balance?.payments?.length || 0}</Typography>
-      <Typography>Cambios: {balance?.changes?.length}</Typography>
-      <Typography>Unidades: {balance?.items?.length}</Typography>
-      <Typography>
-        Total estimado: <CurrencySpan quantity={balance.totalFromPayments} />
-      </Typography>
-    </Box>
   )
 }
 

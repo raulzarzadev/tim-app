@@ -4,12 +4,8 @@ import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import { useForm } from 'react-hook-form'
 import { inputDateFormat } from '@/lib/utils-date'
 import { Timestamp } from 'firebase/firestore'
+import { Balance } from '@/types/balance'
 
-export type Balance = {
-  from: Timestamp | Date
-  to: Timestamp | Date
-  cashier: 'all' | string
-}
 const nowDate = new Date()
 const defaultBalance: Balance = {
   from: nowDate,
