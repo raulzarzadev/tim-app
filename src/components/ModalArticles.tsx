@@ -12,7 +12,7 @@ import AppIcon from './AppIcon'
 import { ArticleType } from '@/types/article'
 import useModal from '@/hooks/useModal'
 import Modal from './Modal'
-import { useContext, useEffect, useState } from 'react'
+import { ReactNode, useContext, useEffect, useState } from 'react'
 import {
   ItemOrder,
   useUserCompaniesContext
@@ -28,7 +28,13 @@ const Item = styled(Button)(({ theme }) => ({
   color: theme.palette.text.secondary
 }))
 
-const ModalArticles = ({ articles }: { articles: ArticleType[] }) => {
+const ModalArticles = ({
+  articles,
+  label = ''
+}: {
+  articles: ArticleType[]
+  label?: ReactNode
+}) => {
   const modal = useModal({ title: 'Unidades' })
   const { addItem, removeItem, itemsSelected } = useCashboxContext()
 
@@ -36,9 +42,6 @@ const ModalArticles = ({ articles }: { articles: ArticleType[] }) => {
     ordersItems: { inUse: itemsTaken }
   } = useUserCompaniesContext()
 
-  const itemsInUse = Array.from(
-    new Set([...(itemsSelected || []), ...itemsTaken].map((i) => i.itemId))
-  )
   const [clickedArticle, setClickedArticle] = useState<ArticleType>()
 
   const handleClick = (articleId: ArticleType['id']) => {
@@ -65,6 +68,7 @@ const ModalArticles = ({ articles }: { articles: ArticleType[] }) => {
   return (
     <>
       <IconButton size="small" onClick={() => modal.onOpen()}>
+        {label}
         <AppIcon icon="eye" fontSize="small" />
       </IconButton>
       <Modal {...modal}>

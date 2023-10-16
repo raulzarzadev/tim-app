@@ -69,8 +69,14 @@ const Category = ({ categoryName }: { categoryName: string }) => {
     <Card className="flex flex-col justify-between h-full">
       <Box className="flex w-full justify-between items-center relative">
         <Box className="flex items-center ">
-          <Typography>Disponibles: {itemsLeft.length}</Typography>
-          <ModalArticles articles={categoryItems} />
+          <ModalArticles
+            articles={categoryItems}
+            label={
+              <Typography className="">
+                {itemsLeft?.length || 0}/{categoryItems?.length || 0}
+              </Typography>
+            }
+          />
         </Box>
         <Box className="flex items-center ">
           <IconButton
@@ -86,16 +92,18 @@ const Category = ({ categoryName }: { categoryName: string }) => {
           </Modal>
         </Box>
       </Box>
-      <CardContent>
-        <Typography
-          sx={{ fontSize: 20 }}
-          color="text.secondary"
-          gutterBottom
-          className="truncate"
-        >
+      <CardContent className="p-0.5 sm:p-2">
+        <Typography color="text.secondary">
           <span className="font-bold text-2xl ">
             {categoryItemsSelected?.length}x{' '}
           </span>
+        </Typography>
+        <Typography
+          // sx={{ fontSize: 20 }}
+          color="text.secondary"
+          gutterBottom
+          className="whitespace-pre-line sm:text-md "
+        >
           {category?.name}
         </Typography>
 
