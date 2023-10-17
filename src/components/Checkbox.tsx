@@ -8,7 +8,7 @@ export default function CheckboxLabel({
   value,
   ...rest
 }: {
-  label: string
+  label: React.ReactNode
   labelSide?: 'top' | 'bottom' | 'end' | 'start' | undefined
   value?: boolean
 } & CheckboxProps) {

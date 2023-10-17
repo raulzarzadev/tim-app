@@ -1,6 +1,6 @@
 'use client'
 import { CompanyItem } from '@/types/article'
-import { Box, Button, TextField, Typography } from '@mui/material'
+import { Box, Button, Fab, TextField, Typography } from '@mui/material'
 import Modal from './Modal'
 import useModal from '@/hooks/useModal'
 import { useEffect, useState } from 'react'
@@ -17,6 +17,7 @@ import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import asDate from '@/lib/asDate'
 import ModalConfirm from './ModalConfirm'
 import useCashboxContext from '@/context/useCompanyCashbox'
+import AppIcon from './AppIcon'
 
 const Checkout = () => {
   const { currentCompany } = useUserCompaniesContext()
@@ -53,34 +54,16 @@ const Checkout = () => {
   if (fullItems?.length === 0) return <></>
   return (
     <>
-      <Box className="flex-col-reverse  sm:flex-row flex w-full justify-between sticky bottom-12 bg-blue-300 mt-4 p-2 items-center  rounded-md shadow-md rounded-b-none">
-        <Button
-          variant="outlined"
-          onClick={() => {
-            handleClearSearch()
-          }}
-        >
-          Limpiar
-        </Button>
-        <Box>
-          <Typography className="text-center">
-            Articulos: {fullItems?.length || 0}
-          </Typography>
-          <Typography className="text-xl font-bold my-4">
-            Total: ${asNumber(total)?.toFixed(2) || 0}
-          </Typography>
-        </Box>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => modal.onOpen()}
-        >
-          Lista de Articulos
-        </Button>
-      </Box>
+      <Fab
+        color="primary"
+        className="fixed bottom-24 right-5 bg-blue-400"
+        aria-label="add"
+        onClick={() => modal.onOpen()}
+      >
+        <AppIcon icon="cashbox" />
+      </Fab>
       <Modal {...modal}>
         <CheckoutItemsList items={fullItems || []} />
-        {/* <ItemsList items={fullItems} /> */}
         <Typography className="text-end mt-4">
           Regreso:
           {dateFormat(returnBack(), ' dd-MMM HH:mm')}

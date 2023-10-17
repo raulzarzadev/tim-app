@@ -1,8 +1,10 @@
 import useModal from '@/hooks/useModal'
-import { Box, Button } from '@mui/material'
+import { Box, Button, Typography } from '@mui/material'
 import Modal from './Modal'
 import SignatureCanvas from 'react-signature-canvas'
 import { useRef, useState } from 'react'
+import CheckboxLabel from './Checkbox'
+import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 
 const ModalSignature = ({
   signature,
@@ -11,6 +13,7 @@ const ModalSignature = ({
   signature?: string | null
   setSignature?: (signature: string | null) => void
 }) => {
+  const { currentCompany } = useUserCompaniesContext()
   const modal = useModal({ title: 'Firmar' })
   const signatureRef = useRef<any>()
   const handleClearSignature = () => {
@@ -19,6 +22,9 @@ const ModalSignature = ({
   const handleSetSignature = (signature: string | null) => {
     setSignature?.(signature)
   }
+  const modalContract = useModal({
+    title: 'Terminos y condiciones'
+  })
   return (
     <>
       <Button
@@ -27,9 +33,45 @@ const ModalSignature = ({
         variant="outlined"
         fullWidth
       >
-        Firmar
+        Aceptar terminos y condiciones
       </Button>
       <Modal {...modal}>
+        <Box>
+          {/* <CheckboxLabel
+            label={
+              <span
+                className="underline text-blue-500 hover:text-blue-900"
+                onClick={(e) => {
+                  modalContract.onOpen()
+                }}
+              >
+                Aceptar terminos y condiciones
+              </span>
+            }
+          /> */}
+          <Typography
+            className="underline  text-blue-500 hover:text-blue-900 text-xl text-center my-2"
+            onClick={(e) => modalContract.onOpen()}
+          >
+            Lea con atención los términos y condiciones
+          </Typography>
+          <Modal {...modalContract}>
+            <Typography className="" variant="h4">
+              Contrato de arrendamiento
+            </Typography>
+            <Typography className="whitespace-pre-line">
+              {currentCompany?.contract || ''}
+            </Typography>
+            <Button
+              onClick={() => modalContract.onClose()}
+              variant="outlined"
+              fullWidth
+              className="my-4"
+            >
+              Entiendo y acepto.
+            </Button>
+          </Modal>
+        </Box>
         <Box className="border shadow-inner ">
           <SignatureCanvas
             onEnd={(e) => {

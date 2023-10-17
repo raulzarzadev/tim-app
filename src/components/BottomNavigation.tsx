@@ -10,12 +10,14 @@ import Link from 'next/link'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import { usePathname } from 'next/navigation'
 import ErrorBoundary from './ErrorBoundary'
+
 export type NavPages = {
   href: string
   label: string
   icon: JSX.Element
   visible: boolean
 }[]
+
 export default function BottomNavigation() {
   const pathname = usePathname()
 
@@ -116,7 +118,8 @@ export default function BottomNavigation() {
           position: 'fixed',
           bottom: 0,
           left: 0,
-          right: 0
+          right: 0,
+          py: 1
         }}
         elevation={3}
       >

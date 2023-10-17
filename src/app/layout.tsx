@@ -24,7 +24,7 @@ export default async function RootLayout({
       <head>
         <title>BajaRent</title>
       </head>
-      <body>
+      <body className="pb-16">
         <ErrorBoundary componentName="RootLayout auth">
           <AuthContextProvider>
             <ErrorBoundary componentName="RootLayout Companies">

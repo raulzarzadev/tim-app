@@ -39,22 +39,22 @@ const ClientForm = () => {
         <PhoneInput {...register('phone')} label="Teléfono" control={control} />
         {/* <TextField {...register('phone')} label="Teléfono" required /> */}
         {/* client email */}
-        <TextField {...register('email')} type="email" label="Email" />
+        {/* <TextField {...register('email')} type="email" label="Email" /> */}
         {/* client address */}
-        <TextField {...register('address')} label="Dirección" />
-
-        {imageId && (
-          <PreviewImage src={imageId} alt="Identificación de usuario" />
-        )}
+        {/* <TextField {...register('address')} label="Dirección" /> */}
 
         <InputFile
           label="Identificación"
           setURL={(url) => setValue('imageID', url)}
         />
-        {signature && <PreviewImage src={signature} alt="Firma de usuario" />}
+        {imageId && (
+          <PreviewImage src={imageId} alt="Identificación de usuario" />
+        )}
+
         <ModalSignature
           setSignature={(signature) => setValue('signature', signature || '')}
         />
+        {signature && <PreviewImage src={signature} alt="Firma de usuario" />}
         {/* client signature */}
       </form>
     </div>
