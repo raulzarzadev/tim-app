@@ -31,10 +31,8 @@ const CompanyForm = ({ company }: { company?: Partial<CompanyType> }) => {
   const formValues = watch()
   const [done, setDone] = useState(false)
   const { windowWidth } = useWindowSize()
-  console.log({ windowWidth })
   const contractRows =
     Math.floor((formValues.contract?.length || 0) / (windowWidth / 11)) || 1
-  console.log({ contractRows })
 
   const onSubmit: SubmitHandler<Partial<IFormInput>> = async (data) => {
     try {
