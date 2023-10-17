@@ -43,7 +43,7 @@ const ItemRentStatus = ({ item }: { item: ItemOrder }) => {
   }
 
   return (
-    <div className="grid gap-2 my-2">
+    <div className="grid  ">
       {total !== 0 && (
         <ModalItemStatus
           label={`${total < 0 ? 'Devolver ' : 'Cobrar'} pendiente $${Math.abs(
@@ -132,19 +132,22 @@ const ModalItemStatus = ({
 }: ModalItemStatus) => {
   const modal = useModal({ title: label })
   return (
-    <button
-      onClick={(e) => {
-        e.preventDefault()
-        e.stopPropagation()
-        modal.onOpen()
-      }}
-    >
-      <ItemStatus label={label} status={status} />
+    <>
+      <button
+        onClick={(e) => {
+          e.preventDefault()
+          e.stopPropagation()
+          modal.onOpen()
+        }}
+      >
+        <ItemStatus label={label} status={status} />
+      </button>
       <Modal {...modal}>
         {children}
         {onAction && (
           <Box className="flex justify-center mt-4">
             <Button
+              className=""
               variant="outlined"
               color={status === 'pending' ? 'info' : status}
               onClick={async (e) => {
@@ -159,7 +162,7 @@ const ModalItemStatus = ({
           </Box>
         )}
       </Modal>
-    </button>
+    </>
   )
 }
 
@@ -172,9 +175,9 @@ const ItemStatus = ({ status, label = '' }: ItemStatusCard) => {
   }
   return (
     <div
-      className={`${statusColor[status]} w-full m-0.5 rounded-md  truncate  items-center flex justify-center text-xs shadow-md whitespace-pre-line `}
+      className={`${statusColor[status]}   m-0.5 rounded-md  truncate  items-center flex justify-center text-xs shadow-md whitespace-pre-line `}
     >
-      <span className=" p-[4px]">{label}</span>
+      <span className="p-0.5 sm:p-[4px]">{label}</span>
     </div>
   )
 }

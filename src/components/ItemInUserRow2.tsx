@@ -26,20 +26,20 @@ const ItemInUserRow = ({ item }: { item: ItemOrder }) => {
       <Grid2
         container
         xs={12}
-        className=" shadow-md rounded-md p-1  text-center"
+        className=" shadow-md rounded-md text-center "
         alignItems={'center'}
         onClick={() => {
           modal.onOpen()
         }}
       >
         {/* //* Client  */}
-        <Grid2 xs={4} className="whitespace-pre-wrap ">
+        <Grid2 xs={4} className="whitespace-pre-wrap  p-1">
           <Typography className="truncate">
             {item?.order?.client?.name}
           </Typography>
         </Grid2>
         {/* //* Item  */}
-        <Grid2 xs={4}>
+        <Grid2 xs={4} className=" p-1">
           <Typography className="truncate">{item.category}</Typography>
           <Typography className="truncate">
             {item.serialNumber || item.name}
@@ -47,12 +47,12 @@ const ItemInUserRow = ({ item }: { item: ItemOrder }) => {
         </Grid2>
 
         {/* //* Status  */}
-        <Grid2 xs={4} className="flex items-center">
-          <Box className="w-1/2 ">
+        <Grid2 xs={4} className="flex items-center p-1  ">
+          <Box className="w-1/2  ">
             {inUse && (
               <>
-                <Typography>Termina:</Typography>
-                <Typography className="text-xs">
+                <Typography className="truncate">Termina:</Typography>
+                <Typography className="text-xs truncate">
                   {dateFormat(asDate(item.rentFinishAt), 'dd-MMM HH:mm')}
                 </Typography>
                 <Typography className="text-xs">
@@ -72,7 +72,7 @@ const ItemInUserRow = ({ item }: { item: ItemOrder }) => {
               </>
             )}
           </Box>
-          <Box className="w-1/2">
+          <Box className="w-1/2 p-2">
             <ItemRentStatus item={item} />
           </Box>
         </Grid2>

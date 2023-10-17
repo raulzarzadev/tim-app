@@ -5,7 +5,7 @@ import { ItemOrder } from '@/context/userCompaniesContext2'
 
 const ItemsStatusTable = ({ items }: { items: ItemOrder[] }) => {
   return (
-    <Grid2 container spacing={1} className="text-center">
+    <Grid2 container className="text-center">
       <Grid2 xs={4} className="font-bold truncate">
         Cliente
       </Grid2>
