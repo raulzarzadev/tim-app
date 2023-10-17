@@ -4,12 +4,13 @@ import { Button, TextField, Typography } from '@mui/material'
 import ModalConfirm from './ModalConfirm'
 import { createCompany, updateCompany } from '@/firebase/companies'
 import { useAuthContext } from '@/context/authContext'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import { CompanyType } from '@/types/company'
 import PhoneInput from './PhoneInput'
 import ErrorBoundary from './ErrorBoundary'
+import useWindowSize from '@/hooks/useWindowSize'
 
 interface IFormInput {
   name: string
@@ -22,12 +23,18 @@ const CompanyForm = ({ company }: { company?: Partial<CompanyType> }) => {
     defaultValues: {
       phone: '',
       name: '',
+      contract: '',
       ...company
     } as Partial<CompanyType>
   })
 
   const formValues = watch()
   const [done, setDone] = useState(false)
+  const { windowWidth } = useWindowSize()
+  console.log({ windowWidth })
+  const contractRows =
+    Math.floor((formValues.contract?.length || 0) / (windowWidth / 11)) || 1
+  console.log({ contractRows })
 
   const onSubmit: SubmitHandler<Partial<IFormInput>> = async (data) => {
     try {
@@ -90,6 +97,12 @@ const CompanyForm = ({ company }: { company?: Partial<CompanyType> }) => {
           type="number"
           {...register('usdPrice')}
           label="Precio del dolar (usd)"
+        />
+        <TextField
+          rows={contractRows}
+          multiline
+          {...register('contract')}
+          label="Contrato"
         />
         {/* <Controller
         name="iceCreamType"

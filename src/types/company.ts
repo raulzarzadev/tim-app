@@ -14,6 +14,7 @@ export type CompanyBase = {
   staffMails: string[]
   phone?: string
   usdPrice?: number
+  contract?: string
 }
 
 export type CompanyType = BaseType & CompanyBase
