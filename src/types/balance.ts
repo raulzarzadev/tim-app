@@ -29,6 +29,8 @@ export type BalanceDataFromOrders = {
 
   items: ItemSelected[]
   itemsStats?: BalanceItem[]
+
+  paymentsMethods: { card: number; mxn: number; usd: number } | undefined
 }
 
 export type BalanceItem = Pick<

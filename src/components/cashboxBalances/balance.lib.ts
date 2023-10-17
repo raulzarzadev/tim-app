@@ -1,7 +1,7 @@
 import { isAfter, isBefore } from 'date-fns'
 import forceAsDate from '@/lib/forceAsDate'
 import { ItemOrder } from '@/context/userCompaniesContext2'
-import { Order } from '@/types/order'
+import { Order, Payment } from '@/types/order'
 import { ItemSelected } from '@/context/useCompanyCashbox'
 import { CompanyItem } from '@/types/article'
 import rentTime from '@/lib/rentTime'
@@ -11,6 +11,7 @@ import {
   BalanceDataFromOrders,
   BalanceItem
 } from '@/types/balance'
+import asNumber from '@/lib/asNumber'
 
 export const getOrdersByBalanceForm = (
   balance: Balance,
@@ -40,10 +41,37 @@ export const balanceDataFromOrders = (
     ?.flat()
     ?.map((p) => p?.amount)
     ?.reduce((p, c) => (p || 0) + (c || 0), 0)
+
+  type PaymentsMethods = Record<Payment['method'], number>
+  //TODO: test this function
+  const methods: PaymentsMethods | undefined = payments?.reduce(
+    (p, c) => {
+      //*
+      if (c.method === 'usd') {
+        return {
+          ...p,
+          [c.method]: p[c?.method] + (c?.charged || 0),
+          mxn: p.mxn - (c?.rest || 0)
+        }
+      }
+      return {
+        ...p,
+        [c.method]: p[c?.method] + (c?.amount || 0)
+      }
+    },
+    { card: 0, mxn: 0, usd: 0 }
+  )
+
   const items: any[] =
     orders?.map((o) => o.items?.map((i) => ({ ...i })) || []).flat() || []
 
-  return { changes, payments, totalFromPayments, items }
+  return {
+    changes,
+    payments,
+    totalFromPayments,
+    paymentsMethods: methods,
+    items
+  }
 }
 
 const hoursInRent = (item: ItemSelected): number => {
