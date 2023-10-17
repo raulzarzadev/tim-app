@@ -25,7 +25,7 @@ function CustomTabPanel(props: TabPanelProps) {
       {...other}
     >
       {value === index && (
-        <Box>
+        <Box className="p-2 sm:p-4">
           <Typography component={'article'}>{children}</Typography>
         </Box>
       )}
@@ -77,6 +77,9 @@ function BasicTabs({
             variant="scrollable"
             scrollButtons
             allowScrollButtonsMobile
+            TabScrollButtonProps={{
+              className: 'w-[25px]'
+            }}
           >
             {tabs.map((tab, i) => (
               <Tab key={i} label={tab.label} {...a11yProps(i)} />

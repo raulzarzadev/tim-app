@@ -9,16 +9,14 @@ import { Container } from '@mui/material'
 const Page = async () => {
   return (
     <ErrorBoundary componentName="Dashboard">
-      <Container>
-        <UserCompanies />
-        <BasicTabs
-          tabs={[
-            { label: 'Categorias', content: <CompanyCategories /> },
-            { label: 'Articulos', content: <CompanyArticles /> },
-            { label: 'Staff', content: <CompanyStaff /> }
-          ]}
-        />
-      </Container>
+      <UserCompanies />
+      <BasicTabs
+        tabs={[
+          { label: 'Categorias', content: <CompanyCategories /> },
+          { label: 'Articulos', content: <CompanyArticles /> },
+          { label: 'Staff', content: <CompanyStaff /> }
+        ]}
+      />
     </ErrorBoundary>
   )
 }

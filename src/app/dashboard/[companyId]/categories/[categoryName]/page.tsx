@@ -11,9 +11,9 @@ const Page = () => {
   })
   if (!category) return <div>Cargando...</div>
   return (
-    <Container>
+    <>
       <CategoryDetails category={category} />
-    </Container>
+    </>
   )
 }
 

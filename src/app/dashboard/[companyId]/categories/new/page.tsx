@@ -30,7 +30,7 @@ const Page = () => {
   }
   if (!category) return <div>Cargando...</div>
   return (
-    <Container>
+    <>
       <Typography
         component={'h2'}
         className="text-center text-xl font-bold my-4"
@@ -48,7 +48,7 @@ const Page = () => {
           Eliminar categoria
         </ModalConfirm>
       </Box>
-    </Container>
+    </>
   )
 }
 

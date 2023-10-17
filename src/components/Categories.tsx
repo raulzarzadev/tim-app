@@ -5,7 +5,7 @@ import Category from './Category'
 const Categories = () => {
   const { currentCompany } = useUserCompaniesContext()
   return (
-    <Grid2 container spacing={2}>
+    <Grid2 container>
       {currentCompany?.categories?.map((category) => (
         <Grid2
           key={category.name}
@@ -14,6 +14,7 @@ const Categories = () => {
           md={3}
           lg={2}
           alignSelf={'stretch'}
+          className="p-2"
         >
           <Category categoryName={category.name} />
         </Grid2>
