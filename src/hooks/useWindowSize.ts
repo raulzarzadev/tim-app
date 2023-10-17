@@ -2,18 +2,19 @@
 import { useEffect, useState } from 'react'
 
 const useWindowSize = () => {
-  const [windowWidth, setWindowWidth] = useState<any>()
+  const [windowWidth, setWindowWidth] = useState<any>(0)
 
   useEffect(() => {
-    if (globalThis.window === undefined) return
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth)
-    }
+    if (typeof window !== 'undefined') {
+      const handleResize = () => {
+        setWindowWidth(window.innerWidth)
+      }
 
-    window.addEventListener('resize', handleResize)
+      window.addEventListener('resize', handleResize)
 
-    return () => {
-      window.removeEventListener('resize', handleResize)
+      return () => {
+        window.removeEventListener('resize', handleResize)
+      }
     }
   }, [])
 

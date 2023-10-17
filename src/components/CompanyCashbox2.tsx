@@ -6,7 +6,7 @@ import { CashboxContextProvider } from '@/context/useCompanyCashbox'
 
 const CompanyCashbox = () => {
   return (
-    <div className="">
+    <div className="relative">
       <CashboxContextProvider>
         <Categories />
         <Checkout />

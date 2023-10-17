@@ -14,7 +14,7 @@ const Categories = () => {
           md={3}
           lg={2}
           alignSelf={'stretch'}
-          className="p-2"
+          sx={{ p: 1 }}
         >
           <Category categoryName={category.name} />
         </Grid2>

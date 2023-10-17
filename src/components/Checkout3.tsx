@@ -58,6 +58,7 @@ const Checkout = () => {
         color="primary"
         className="fixed bottom-24 right-5 bg-blue-400"
         aria-label="add"
+        sx={{ bottom: 88, right: 22, position: 'fixed' }}
         onClick={() => modal.onOpen()}
       >
         <AppIcon icon="cashbox" />
