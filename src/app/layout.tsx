@@ -1,9 +1,10 @@
 import ErrorBoundary from '@/components/ErrorBoundary'
-import './globals.css'
 import BottomNavigation from '@/components/BottomNavigation'
 import Navigation from '@/components/Navigation'
 import { AuthContextProvider } from '@/context/authContext'
 import { UserCompaniesProvider as UserCompaniesProvider2 } from '@/context/userCompaniesContext2'
+import './globals.css'
+
 export const metadata = {
   title: 'baja-rent app',
   description: 'Take control of your rentals, easy and fast',

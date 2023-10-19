@@ -1,5 +1,4 @@
 'use client'
-import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import { Grid } from '@mui/material'
 import LoginButton from '@/components/LoginButton'

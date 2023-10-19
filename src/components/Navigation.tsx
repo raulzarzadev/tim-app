@@ -20,6 +20,7 @@ import { AuthContext, useAuthContext } from '@/context/authContext'
 import { logout } from '@/firebase/auth'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import { UserType } from '@/types/user'
+import Image from 'next/image'
 
 const pages = [
   {
@@ -60,7 +61,14 @@ function ResponsiveAppBar() {
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          {/* <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} /> */}
+          <Image
+            src="/images/icons/icon-384x384.png"
+            width={60}
+            height={60}
+            alt="logo"
+            className="rounded-full hidden md:flex"
+          />
           <Typography
             variant="h6"
             noWrap
@@ -117,7 +125,13 @@ function ResponsiveAppBar() {
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+          <Image
+            src="/images/icons/icon-384x384.png"
+            width={50}
+            height={50}
+            alt="logo"
+            className="rounded-sm flex md:hidden mx-2"
+          />
           <Typography
             variant="h5"
             noWrap
