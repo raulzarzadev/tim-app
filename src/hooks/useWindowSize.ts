@@ -9,6 +9,7 @@ const useWindowSize = () => {
       const handleResize = () => {
         setWindowWidth(window.innerWidth)
       }
+      setWindowWidth(window.innerWidth)
 
       window.addEventListener('resize', handleResize)
 
