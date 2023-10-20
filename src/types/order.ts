@@ -20,7 +20,7 @@ export type OrderBase = {
 export type Order = OrderBase & BaseType
 
 export type Shipping = {
-  date?: Timestamp | Date
+  date?: Timestamp | Date | 'now'
   address?: string | 'store'
 }
 

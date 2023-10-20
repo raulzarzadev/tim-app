@@ -43,7 +43,7 @@ const ItemRentStatus = ({ item }: { item: ItemOrder }) => {
   }
 
   return (
-    <div className="grid  ">
+    <div className="grid gap-4 ">
       {total !== 0 && (
         <ModalItemStatus
           label={`${total < 0 ? 'Devolver ' : 'Cobrar'} pendiente $${Math.abs(
@@ -175,9 +175,9 @@ const ItemStatus = ({ status, label = '' }: ItemStatusCard) => {
   }
   return (
     <div
-      className={`${statusColor[status]}   m-0.5 rounded-md  truncate  items-center flex justify-center text-xs shadow-md whitespace-pre-line `}
+      className={`${statusColor[status]} uppercase  sm:p-2 sm:text-sm rounded-md  truncate  items-center flex justify-center text-xs shadow-md whitespace-pre-line `}
     >
-      <span className="p-0.5 sm:p-[4px]">{label}</span>
+      <Typography className="text-sm">{label}</Typography>
     </div>
   )
 }

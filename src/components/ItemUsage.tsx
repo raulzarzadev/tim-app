@@ -16,6 +16,7 @@ import OrderPaymentsTable from './OrderPaymentsTable'
 import ItemRentStatus from './ItemRentStatus'
 import ItemChanges from './ItemChanges'
 import { dateFormat, fromNow } from '@/lib/utils-date'
+import ModalEditShipping from './ModalEditShipping'
 
 const ItemUsage = ({
   item,
@@ -40,8 +41,6 @@ const ItemUsage = ({
 
   const onTime = isAfter(asDate(item.rentFinishAt) || new Date(), new Date())
   const finished = item.rentStatus === 'finished'
-
-  //console.log({ orderTotal })
   return (
     <ErrorBoundary>
       <Box className="my-4">
@@ -88,8 +87,10 @@ const ItemUsage = ({
           </Box>
         )}
       </Box>
-      <Typography className="text-center mt-4">
-        Lugar : <ShippingLink address={item.order.shipping.address} />
+      <Typography className="text-center mt-4" component={'div'}>
+        <span>
+          Lugar : <ShippingLink address={item.order.shipping.address} />{' '}
+        </span>
       </Typography>
       <Typography className="text-xs text-center">
         Creada por:{' '}
@@ -102,6 +103,8 @@ const ItemUsage = ({
           Revisa que la unidad este en buen estado.
         </Typography>
         <Box className="grid gap-4 max-w-xs mx-auto">
+          <ModalEditShipping order={item?.order} />
+
           {!finished && onTime && (
             <Button
               fullWidth
@@ -112,12 +115,11 @@ const ItemUsage = ({
               variant="outlined"
               color="info"
             >
-              Cambiar <AppIcon icon="switch" />
+              Cambiar unidad
+              <AppIcon icon="switch" />
             </Button>
           )}
-          <Box>
-            <ItemRentStatus item={item} />
-          </Box>
+          <ItemRentStatus item={item} />
         </Box>
         <Box>
           <OrderPaymentsTable payments={payments} />

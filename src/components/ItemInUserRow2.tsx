@@ -47,8 +47,8 @@ const ItemInUserRow = ({ item }: { item: ItemOrder }) => {
         </Grid2>
 
         {/* //* Status  */}
-        <Grid2 xs={4} className="flex items-center p-1  ">
-          <Box className="w-1/2  ">
+        <Grid2 xs={4} className="flex items-center p-1 flex-col sm:flex-row ">
+          <Box className="sm:w-1/2  ">
             {inUse && (
               <>
                 <Typography className="truncate">Termina:</Typography>
@@ -72,7 +72,7 @@ const ItemInUserRow = ({ item }: { item: ItemOrder }) => {
               </>
             )}
           </Box>
-          <Box className="w-1/2 p-2">
+          <Box className="sm:w-1/2 p-2">
             <ItemRentStatus item={item} />
           </Box>
         </Grid2>

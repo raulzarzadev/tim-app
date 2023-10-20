@@ -23,6 +23,7 @@ import { listenCompanyOrders } from '@/firebase/orders'
 import { CompanyItem } from '@/types/article'
 import asNumber from '@/lib/asNumber'
 import { ItemSelected } from './useCompanyCashbox'
+import forceAsDate from '@/lib/forceAsDate'
 
 export type ContextItem = ItemSelected & {
   order: Order
@@ -144,14 +145,15 @@ export function UserCompaniesProvider({
           : currentCompany?.categories?.find(
               (c) => c.name === fullItem?.category
             )?.prices
+        const shippingDate = forceAsDate(order.shipping.date)
         return {
           ...fullItem,
           ...orderItem,
           prices,
           order,
-          rentStartAt: asDate(order.shipping.date),
+          rentStartAt: shippingDate,
           rentFinishAt: calculateFinishRentDate(
-            asDate(order.shipping.date),
+            shippingDate,
             orderItem?.qty,
             orderItem.unit
           )

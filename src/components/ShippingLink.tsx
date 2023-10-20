@@ -2,6 +2,8 @@ import { Order } from '@/types/order'
 import { IconButton } from '@mui/material'
 import Link from 'next/link'
 import AppIcon from './AppIcon'
+import ModalEditShipping from './ModalEditShipping'
+import { updateOrder } from '@/firebase/orders'
 
 const ShippingLink = ({
   address
@@ -11,7 +13,7 @@ const ShippingLink = ({
   return (
     <span>
       {address === 'store' ? (
-        'Local'
+        'En tienda'
       ) : (
         <IconButton
           LinkComponent={Link}
