@@ -13,7 +13,10 @@ const OrderPaymentsTable = ({ payments }: { payments: Payment[] }) => {
       <Typography className="text-center font-bold mt-6">Pagos</Typography>
       {!payments?.length ? (
         <>
-          <button
+          <Typography className="text-center my-4">
+            No hay pagos registrados
+          </Typography>
+          {/* <button
             onClick={(e) => {
               e.preventDefault()
               modalPay.onOpen()
@@ -26,7 +29,7 @@ const OrderPaymentsTable = ({ payments }: { payments: Payment[] }) => {
             <Box className="text-center ">
               <Typography className="my-4">No hay pagos registrados</Typography>
             </Box>
-          </Modal>
+          </Modal> */}
         </>
       ) : (
         <Box>
