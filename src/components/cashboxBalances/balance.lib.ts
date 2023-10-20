@@ -11,7 +11,7 @@ import {
   BalanceDataFromOrders,
   BalanceItem
 } from '@/types/balance'
-import asNumber from '@/lib/asNumber'
+import { calculateTotal } from '@/lib/calculateTotalItem'
 
 export const getOrdersByBalanceForm = (
   balance: Balance,
@@ -95,6 +95,7 @@ export const balanceItemsData = (
         const formatItem: BalanceItem = {
           hoursInRent: hoursInRent(curr),
           rentTimes: 1,
+          // TODO: raised: calculateTotal(curr.unit, curr.qty,),
           id: curr.itemId
         }
         return [...prev, formatItem]

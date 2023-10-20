@@ -39,4 +39,5 @@ export type BalanceItem = Pick<
 > & {
   rentTimes: number
   hoursInRent: number
+  raised?: number
 }

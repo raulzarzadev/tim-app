@@ -5,6 +5,9 @@ import ErrorBoundary from '../ErrorBoundary'
 import { dateFormat, fromNow } from '@/lib/utils-date'
 import forceAsDate from '@/lib/forceAsDate'
 import ModalItemDetails from '../ModalItemDetails'
+import AccordionSections from '../AccordionSections'
+import OrderItemsStats from '../OrderItemsStats'
+import OrdersTable from '../OrdersTable'
 
 const BalanceCard = ({ balance }: { balance: BalanceData }) => {
   return (
@@ -61,36 +64,22 @@ const BalanceCard = ({ balance }: { balance: BalanceData }) => {
             <CurrencySpan quantity={balance.paymentsMethods?.card} />
           </div>
         </Typography>
-        <Typography component={'div'} className="flex ">
-          <div className="text-end w-48">Total: </div>
-          <div className="w-28 ml-2 text-start">
-            <CurrencySpan quantity={balance.totalFromPayments} />
-          </div>
-        </Typography>
-        <div>
-          {balance?.orders?.map((o) => (
-            <div
-              key={o.id}
-              className="grid grid-cols-3 place-items-center items-center"
-            >
-              <div>{o.client?.name}</div>
-              <div>
-                <CurrencySpan
-                  quantity={o.payments?.reduce((a, b) => a + b.amount, 0)}
-                />
-              </div>
-              <div className="">
-                {o.items?.length || 0}
-                {/* {o.items?.map((i) => (
-                  <div key={i.itemId}>
-                    <ModalItemDetails itemId={i.itemId || ''} /> {i.qty}x
-                    {i.unit}
-                  </div>
-                ))} */}
-              </div>
-            </div>
-          ))}
-        </div>
+
+        <AccordionSections
+          sections={[
+            {
+              title: 'Detalle de ordenes',
+              subTitle: `${balance?.orders?.length || 0}`,
+              content: <OrdersTable orders={balance?.orders || []} />
+            },
+            {
+              title: 'Datalle de unidades',
+              subTitle: `${balance.itemsStats?.length || 0}`,
+              content: <OrderItemsStats itemsStats={balance.itemsStats || []} />
+            }
+          ]}
+        />
+        <div></div>
       </ErrorBoundary>
     </Box>
   )
