@@ -57,8 +57,7 @@ const Article2 = ({
             Editar <AppIcon icon="edit" />
           </Button>
         </Box>
-        {/* FIXME: should pase a item with order or recept a item without order */}
-        <ArticleDetails article={article as ItemOrder} />
+        <ArticleDetails article={article} />
       </Modal>
       <button
         className=" grid grid-cols-4 items-center p-1 shadow-md rounded-md  "

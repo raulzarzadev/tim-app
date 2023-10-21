@@ -85,9 +85,15 @@ const CompanyAccess = () => {
 
 const Area = ({ area, href }: { area: StaffPermission; href: string }) => {
   return (
-    <Link href={href}>
-      <button
-        className="p-1 w-full aspect-square rounded-md shadow-md bg-blue-100 hover:bg-blue-200 flex flex-col justify-center items-center"
+    <Button
+      href={href}
+      LinkComponent={Link}
+      className="w-full aspect-square"
+      variant="contained"
+      color="info"
+    >
+      <span
+        className=" flex flex-col justify-center items-center"
 
         // onClick={(e) => {
         //   e.preventDefault()
@@ -96,8 +102,8 @@ const Area = ({ area, href }: { area: StaffPermission; href: string }) => {
       >
         <AppIcon icon={areaIcon[area]} />
         {StaffPermissionLabels[area]}
-      </button>
-    </Link>
+      </span>
+    </Button>
   )
 }
 

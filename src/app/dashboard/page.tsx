@@ -4,11 +4,11 @@ import { Container } from '@mui/material'
 
 const Page = async () => {
   return (
-    <Container>
+    <>
       <ErrorBoundary componentName="Dashboard">
         <UserCompanies />
       </ErrorBoundary>
-    </Container>
+    </>
   )
 }
 

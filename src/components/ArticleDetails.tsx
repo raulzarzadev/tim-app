@@ -1,8 +1,9 @@
 import { Box, Button, Typography } from '@mui/material'
 import PricesList from './PricesList'
 import { ItemOrder } from '@/context/userCompaniesContext2'
+import { ArticleType } from '@/types/article'
 
-const ArticleDetails = ({ article }: { article?: ItemOrder }) => {
+const ArticleDetails = ({ article }: { article?: ItemOrder | ArticleType }) => {
   return (
     <Box className="my-4 text-center">
       <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
