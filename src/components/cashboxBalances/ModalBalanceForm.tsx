@@ -45,7 +45,7 @@ const ModalBalanceForm = () => {
   return (
     <div className="flex w-full justify-center my-4">
       <Button
-        variant="outlined"
+        variant="contained"
         onClick={(e) => {
           e.preventDefault()
           modal.onOpen()

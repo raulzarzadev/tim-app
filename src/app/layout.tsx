@@ -4,6 +4,8 @@ import Navigation from '@/components/Navigation'
 import { AuthContextProvider } from '@/context/authContext'
 import { UserCompaniesProvider as UserCompaniesProvider2 } from '@/context/userCompaniesContext2'
 import './globals.css'
+import { StyledEngineProvider } from '@mui/material/styles'
+import { CssBaseline } from '@mui/material'
 
 export const metadata = {
   title: 'baja-rent app',
@@ -26,23 +28,27 @@ export default async function RootLayout({
         <title>BajaRent</title>
       </head>
       <body className="pb-16">
-        <ErrorBoundary componentName="RootLayout auth">
-          <AuthContextProvider>
-            <ErrorBoundary componentName="RootLayout Companies">
-              <UserCompaniesProvider2>
-                <ErrorBoundary componentName="RootLayout navigation">
-                  <Navigation />
-                </ErrorBoundary>
-                <ErrorBoundary componentName="RootLayout child">
-                  {children}
-                </ErrorBoundary>
-                <ErrorBoundary componentName="RootLayout BottomNavigation">
-                  <BottomNavigation />
-                </ErrorBoundary>
-              </UserCompaniesProvider2>
-            </ErrorBoundary>
-          </AuthContextProvider>
-        </ErrorBoundary>
+        <CssBaseline />
+
+        <StyledEngineProvider injectFirst>
+          <ErrorBoundary componentName="RootLayout auth">
+            <AuthContextProvider>
+              <ErrorBoundary componentName="RootLayout Companies">
+                <UserCompaniesProvider2>
+                  <ErrorBoundary componentName="RootLayout navigation">
+                    <Navigation />
+                  </ErrorBoundary>
+                  <ErrorBoundary componentName="RootLayout child">
+                    {children}
+                  </ErrorBoundary>
+                  <ErrorBoundary componentName="RootLayout BottomNavigation">
+                    <BottomNavigation />
+                  </ErrorBoundary>
+                </UserCompaniesProvider2>
+              </ErrorBoundary>
+            </AuthContextProvider>
+          </ErrorBoundary>
+        </StyledEngineProvider>
       </body>
     </html>
   )
