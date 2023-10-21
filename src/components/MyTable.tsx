@@ -32,7 +32,7 @@ const MyTable = ({
                 <span className=" ">
                   {h.format
                     ? h.format(get(b, h.key))
-                    : get(b, h.key).toString()}
+                    : get(b, h?.key)?.toString() || '-'}
                 </span>
               </td>
             ))}

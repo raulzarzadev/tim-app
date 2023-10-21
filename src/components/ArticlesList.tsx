@@ -7,7 +7,6 @@ import Modal from './Modal'
 import ArticleDetails from './ArticleDetails'
 import AppIcon from './AppIcon'
 import Link from 'next/link'
-import { ItemOrder } from '@/context/userCompaniesContext2'
 
 const ArticlesList = ({
   articles,

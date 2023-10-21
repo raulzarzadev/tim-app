@@ -3,6 +3,7 @@ import { Box, Button, ButtonProps, Typography } from '@mui/material'
 import { ReactNode, useState } from 'react'
 import Modal from './Modal'
 import ButtonLoading from './ButtonLoading'
+import AppIcon, { IconName } from './AppIcon'
 
 const ModalConfirm = ({
   handleConfirm,
@@ -11,7 +12,8 @@ const ModalConfirm = ({
   label = 'Guardar',
   color = 'primary',
   acceptLabel = 'Aceptar',
-  modalTitle = 'Confirmar'
+  modalTitle = 'Confirmar',
+  openIcon
 }: {
   handleConfirm: () => void | Promise<any>
   children?: ReactNode
@@ -20,6 +22,7 @@ const ModalConfirm = ({
   acceptLabel?: string
   color?: ButtonProps['color']
   modalTitle?: string
+  openIcon?: IconName
 }) => {
   const modal = useModal()
   const [loading, setLoading] = useState(false)
@@ -35,6 +38,7 @@ const ModalConfirm = ({
         aria-label="button-modal-save"
         variant="outlined"
         color={color}
+        endIcon={openIcon ? <AppIcon icon={openIcon} /> : undefined}
       >
         {label}
       </Button>

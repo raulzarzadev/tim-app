@@ -4,10 +4,12 @@ import useModal from '@/hooks/useModal'
 
 const PreviewImage = ({
   src,
-  alt = 'alt text'
+  alt = 'alt text',
+  fullWidth
 }: {
   src: string
   alt: string
+  fullWidth?: boolean
 }) => {
   const modalImage = useModal({ title: 'Imagen ' })
   return (
@@ -18,7 +20,9 @@ const PreviewImage = ({
           e.stopPropagation()
           modalImage.onOpen()
         }}
-        className="relative h-16 aspect-video object-contain mx-auto "
+        className={`${
+          fullWidth ? 'w-full' : 'h-16 '
+        } aspect-video relative  object-contain mx-auto `}
       >
         <Image
           src={src}

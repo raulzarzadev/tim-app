@@ -3,11 +3,12 @@ import {
   useUserCompaniesContext
 } from '@/context/userCompaniesContext2'
 import { CategoryType } from '@/types/category'
-import { Button, IconButton, Typography } from '@mui/material'
+import { IconButton, Typography } from '@mui/material'
 import AppIcon from './AppIcon'
 import Link from 'next/link'
 import PricesList from './PricesList'
 import ArticlesList from './ArticlesList'
+import CategoryItems from './CategoryItems'
 
 const CategoryDetails = ({ category }: { category?: CategoryType }) => {
   const articles = useCategoryArticles({ categoryName: category?.name })
@@ -32,7 +33,8 @@ const CategoryDetails = ({ category }: { category?: CategoryType }) => {
       <Typography variant="h5">Precios</Typography>
       <PricesList prices={category?.prices || []} />
 
-      <ArticlesList articles={articles || []} companyId={currentCompany?.id} />
+      {/* <ArticlesList articles={articles || []} companyId={currentCompany?.id} /> */}
+      <CategoryItems categoryName={category?.name || ''} />
     </div>
   )
 }
