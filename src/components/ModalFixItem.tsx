@@ -20,8 +20,8 @@ const ModalFixItem = ({
   const { register, handleSubmit, setValue, watch } = useForm<Service>()
   const formValues = watch()
   const onSubmit = async (data: Partial<Service>) => {
-    const res = await createService({ ...data, companyId })
-    console.log({ res })
+    const res = await createService({ ...data, companyId, itemId })
+
     return res
   }
   // const [images, setImages] = useState<Service['images']>([])
