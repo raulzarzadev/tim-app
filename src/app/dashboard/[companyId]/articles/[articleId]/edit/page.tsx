@@ -9,10 +9,12 @@ const Page = () => {
   const article = useArticle({ articleId: String(articleId) })
   if (!article) return <div>Cargando...</div>
   return (
-    <>
-      <Typography>Editar articulo</Typography>
+    <Container className="my-4">
+      <Typography variant="h4" className="my-4 text-center">
+        Editar articulo
+      </Typography>
       <ArticleForm article={article} />
-    </>
+    </Container>
   )
 }
 

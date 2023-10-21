@@ -103,6 +103,7 @@ const ItemRentStatus = ({ item }: { item: ItemOrder }) => {
           status="success"
           actionLabel="Devolver"
           onAction={handleResumeRent}
+          closeModal
         >
           <Typography className="text-center">
             Renta finalizada. ¿Retomar?

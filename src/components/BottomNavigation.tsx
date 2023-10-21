@@ -10,6 +10,7 @@ import Link from 'next/link'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import { usePathname } from 'next/navigation'
 import ErrorBoundary from './ErrorBoundary'
+import zIndex from '@mui/material/styles/zIndex'
 
 export type NavPages = {
   href: string
@@ -119,7 +120,8 @@ export default function BottomNavigation() {
           bottom: 0,
           left: 0,
           right: 0,
-          py: 1
+          py: 1,
+          zIndex: 1
         }}
         elevation={3}
       >

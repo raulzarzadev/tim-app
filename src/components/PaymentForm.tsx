@@ -108,7 +108,7 @@ const PaymentForm = ({
           }}
           color="success"
           label={
-            <span>
+            <span className="flex items-center">
               Pagar <AppIcon icon="money" />
             </span>
           }
