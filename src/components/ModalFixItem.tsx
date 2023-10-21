@@ -9,13 +9,16 @@ import PreviewImage from './PreviewImage'
 import useModal from '@/hooks/useModal'
 import Modal from './Modal'
 import { createService } from '@/firebase/repairOrders'
+import { ArticleType } from '@/types/article'
 
 const ModalFixItem = ({
   itemId,
-  companyId
+  companyId,
+  item
 }: {
   itemId: string
   companyId: string
+  item?: ArticleType
 }) => {
   const { register, handleSubmit, setValue, watch } = useForm<Service>()
   const formValues = watch()
@@ -31,13 +34,16 @@ const ModalFixItem = ({
   const images = formValues?.images || []
 
   return (
-    <div>
+    <div className="flex w-full justify-center my-4">
       <ModalConfirm
         color="error"
         openIcon="fix"
         label="Enviar al taller"
         handleConfirm={handleSubmit(onSubmit)}
         acceptLabel="Enviar al taller"
+        modalTitle={`Enviar al taller ${
+          item && `${item?.category}-${item?.serialNumber || item?.name}`
+        }`}
       >
         <form className="grid gap-4">
           <TextField {...register('reason')} label="Motivo"></TextField>

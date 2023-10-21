@@ -24,6 +24,8 @@ import { CompanyItem } from '@/types/article'
 import asNumber from '@/lib/asNumber'
 import { ItemSelected } from './useCompanyCashbox'
 import forceAsDate from '@/lib/forceAsDate'
+import { Service } from '@/types/service'
+import { listenCompanyServices } from '@/firebase/repairOrders'
 
 export type ContextItem = ItemSelected & {
   order: Order
@@ -42,7 +44,7 @@ export type UserCompaniesContextType = {
   currentCompany: CompanyType | undefined
   userCompanies: CompanyType[]
   companyItems: CompanyItem[]
-
+  services?: Service[]
   ordersItems: {
     all: ItemOrder[]
     inUse: ItemOrder[]
@@ -84,6 +86,12 @@ export function UserCompaniesProvider({
   const [userOwnCompanies, setUserOwnCompanies] = useState<CompanyType[]>([])
   const [staffCompanies, setStaffCompanies] = useState<CompanyType[]>([])
   const [orders, setOrders] = useState<Order[]>([])
+  const [services, setServices] = useState<Service[]>([])
+
+  useEffect(() => {
+    listenCompanyServices(companySelected, setServices)
+  }, [companySelected])
+
   useEffect(() => {
     const bajaRent: { selectedCompany: CompanyType['id'] } = JSON.parse(
       localStorage.getItem('baja-rent') || '{}'
@@ -186,7 +194,8 @@ export function UserCompaniesProvider({
           finished: itemsFinished,
           pending: itemsPending
         },
-        orders
+        orders,
+        services
       }}
     >
       {children}

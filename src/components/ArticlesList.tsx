@@ -7,6 +7,7 @@ import Modal from './Modal'
 import ArticleDetails from './ArticleDetails'
 import AppIcon from './AppIcon'
 import Link from 'next/link'
+import ModalFixItem from './ModalFixItem'
 
 const ArticlesList = ({
   articles,
@@ -57,6 +58,11 @@ const Article2 = ({
           </Button>
         </Box>
         <ArticleDetails article={article} />
+        <ModalFixItem
+          companyId={companyId}
+          itemId={article.id}
+          item={article}
+        />
       </Modal>
       <button
         className=" grid grid-cols-4 items-center p-1 shadow-md rounded-md  "

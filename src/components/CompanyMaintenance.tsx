@@ -1,8 +1,19 @@
 'use client'
 import validatePermissions from "@/HOC's/validatePermissions"
+import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 
-const CompanyAdmin = () => {
-  return <div>Pagina de Mantenimiento</div>
+const CompanyMaintenance = () => {
+  return (
+    <div>
+      <ServicesList />
+    </div>
+  )
 }
 
-export default validatePermissions(CompanyAdmin, 'MAINTENANCE')
+const ServicesList = () => {
+  const { services } = useUserCompaniesContext()
+  console.log({ services })
+  return <>Servicios</>
+}
+
+export default validatePermissions(CompanyMaintenance, 'MAINTENANCE')
