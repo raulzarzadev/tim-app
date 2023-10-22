@@ -27,7 +27,7 @@ const ServiceForm = ({
   })
   const formValues = watch()
   const onSubmit = async (data: Partial<Service>) => {
-    setService?.({ ...data, companyId, itemId })
+    setService?.({ ...data, companyId, itemId, status: 'pending' })
   }
   // const [images, setImages] = useState<Service['images']>([])
   const modalRemove = useModal({
@@ -44,7 +44,9 @@ const ServiceForm = ({
         handleConfirm={handleSubmit(onSubmit)}
         acceptLabel="Crear order "
         modalTitle={`Orden de servicio: ${
-          item ? `${item?.category}-${item?.serialNumber}${item?.name}` : ''
+          item
+            ? `${item?.category}-${item?.serialNumber || ''}${item?.name || ''}`
+            : ''
         }`}
       >
         <form className="grid gap-4">

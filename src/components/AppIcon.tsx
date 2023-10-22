@@ -29,7 +29,7 @@ import { Dashboard } from '@mui/icons-material'
 import EmailIcon from '@mui/icons-material/Email'
 import WhatsAppIcon from '@mui/icons-material/WhatsApp'
 import { SvgIconProps } from '@mui/material'
-
+import AddCommentIcon from '@mui/icons-material/AddComment'
 // https://mui.com/material-ui/material-icons/
 
 const icons = {
@@ -63,7 +63,8 @@ const icons = {
   phone: PhoneIcon,
   mail: EmailIcon,
   whatsapp: WhatsAppIcon,
-  location: LocationOnIcon
+  location: LocationOnIcon,
+  addComment: AddCommentIcon
 } as const
 
 // https://mui.com/material-ui/material-icons/

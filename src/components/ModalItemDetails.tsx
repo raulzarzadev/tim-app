@@ -4,7 +4,13 @@ import { Typography } from '@mui/material'
 import useModal from '@/hooks/useModal'
 import ArticleDetails from './ArticleDetails'
 
-const ModalItemDetails = ({ itemId }: { itemId: string }) => {
+const ModalItemDetails = ({
+  itemId,
+  showCat
+}: {
+  itemId: string
+  showCat?: boolean
+}) => {
   const {
     ordersItems: { all: items }
   } = useUserCompaniesContext()
@@ -21,6 +27,7 @@ const ModalItemDetails = ({ itemId }: { itemId: string }) => {
           modal.onOpen()
         }}
       >
+        {showCat && `${item?.category}-`}
         {item?.serialNumber}
         <span className="font-thin text-gray-800 text-xs">{item?.name}</span>
       </button>

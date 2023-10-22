@@ -60,7 +60,7 @@ const Article2 = ({
           </Button>
         </Box>
         <ArticleDetails article={article} />
-        <ServiceItem companyId={companyId} itemId={article.id} />
+        <ServiceItem companyId={companyId} itemId={article.id} item={article} />
       </Modal>
       <button
         className=" grid grid-cols-4 items-center p-1 shadow-md rounded-md  "

@@ -1,4 +1,4 @@
-import { createService } from '@/firebase/repairOrders'
+import { createService } from '@/firebase/services'
 import ServiceForm from './ServiceForm'
 import { ArticleType } from '@/types/article'
 import { Service } from '@/types/service'

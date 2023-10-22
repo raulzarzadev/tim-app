@@ -24,11 +24,19 @@ export type ServiceBase = {
   assignedTo?: string
   assignedToEmail?: string
   images?: ServiceImage[]
+  comments?: ServiceComment[]
 }
-
 export type Service = ServiceBase & BaseType
 
 export type ServiceImage = {
   description: string
   url: string
+}
+
+export type ServiceComment = {
+  id?: string
+  content: string
+  images: string[]
+  date: Date | Timestamp
+  createdBy?: string
 }

@@ -2,12 +2,12 @@ import { storage } from './auth'
 import { FirebaseCRUD } from './firebase.CRUD'
 import { db } from './main'
 import { BaseType } from '@/types/base'
-import { arrayUnion, where } from 'firebase/firestore'
+import { arrayRemove, arrayUnion, where } from 'firebase/firestore'
 import { ArticleType } from '@/types/article'
-import { Service, ServiceBase, Payment } from '@/types/Service'
 import { v4 as uidGenerator } from 'uuid'
 import { ItemSelected } from '@/context/useCompanyCashbox'
-import { Service, ServiceBase } from '@/types/service'
+import { Service, ServiceBase, ServiceComment } from '@/types/service'
+import { getAuth } from 'firebase/auth'
 /*
  * You should be able to copy all this file and just replace
  * ItemType
@@ -50,6 +50,35 @@ export const listenCompanyServices = async (
   companyId: string,
   cb: CallableFunction
 ) => await itemCRUD.listenItems([where('companyId', '==', companyId)], cb)
+
+export const addServiceComment = async (
+  itemId: ItemType['id'],
+  comment: ServiceComment
+) => {
+  const user = getAuth().currentUser
+
+  return await itemCRUD.updateItem(itemId, {
+    comments: arrayUnion({
+      id: uidGenerator(),
+      content: comment.content || '',
+      date: new Date(),
+      images: comment.images || [],
+      createdBy: user?.email
+    })
+  })
+}
+// export const removeComment = async (
+//   itemId: ItemType['id'],
+//   commentId: ServiceComment['id']
+// ) => {
+//   const service = await getService(itemId)
+//   const comment = service.comments?.find(
+//     (comment: ServiceComment) => comment.id === commentId
+//   )
+//   return await itemCRUD.updateItem(itemId, {
+//     comments: arrayRemove(comment)
+//   })
+// }
 
 // export const finishItemRent = async (
 //   ServiceId?: Service['id'],

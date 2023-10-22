@@ -25,7 +25,7 @@ import asNumber from '@/lib/asNumber'
 import { ItemSelected } from './useCompanyCashbox'
 import forceAsDate from '@/lib/forceAsDate'
 import { Service } from '@/types/service'
-import { listenCompanyServices } from '@/firebase/repairOrders'
+import { listenCompanyServices } from '@/firebase/services'
 
 export type ContextItem = ItemSelected & {
   order: Order

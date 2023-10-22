@@ -5,16 +5,21 @@ import ModalConfirm from './ModalConfirm'
 import StaffList from './StaffList'
 import Modal from './Modal'
 import useModal from '@/hooks/useModal'
-import { updateService } from '@/firebase/repairOrders'
+import { updateService } from '@/firebase/services'
+import ServiceComments from './ServiceComments'
 
 const ServiceCard = ({ service }: { service: Service }) => {
   return (
     <div>
       <ServiceDetails service={service} />
       <Box className="grid gap-2 sm:flex w-full justify-evenly my-6">
-        <AssignService serviceId={service.id} />
+        <AssignService
+          serviceId={service.id}
+          assignedToEmail={service.assignedToEmail}
+        />
         <ChangeStatus serviceId={service.id} status={service.status} />
       </Box>
+      <ServiceComments serviceId={service.id} comments={service.comments} />
     </div>
   )
 }
@@ -78,7 +83,13 @@ const ButtonChangeStatusTo = ({
   )
 }
 
-const AssignService = ({ serviceId }: { serviceId: string }) => {
+const AssignService = ({
+  serviceId,
+  assignedToEmail
+}: {
+  serviceId: string
+  assignedToEmail?: string
+}) => {
   const handleAssign = async (email: string) => {
     try {
       await updateService(serviceId, { assignedToEmail: email })
@@ -90,7 +101,9 @@ const AssignService = ({ serviceId }: { serviceId: string }) => {
   const modal = useModal({ title: 'Asignar responsable' })
   return (
     <>
-      <Button onClick={modal.onOpen}>Asignar</Button>
+      <Button onClick={modal.onOpen}>
+        {assignedToEmail ? 'Asiganado' : 'Asignar'}
+      </Button>
       <Modal {...modal}>
         <StaffList simple onClick={handleAssign} />
       </Modal>
