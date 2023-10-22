@@ -1,7 +1,6 @@
 'use client'
 import CategoryDetails from '@/components/CategoryDetails'
 import { useCategory } from '@/context/userCompaniesContext2'
-import { Container } from '@mui/material'
 import { useParams } from 'next/navigation'
 
 const Page = () => {

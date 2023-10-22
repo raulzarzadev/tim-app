@@ -8,38 +8,61 @@ import useModal from '@/hooks/useModal'
 import Modal from './Modal'
 import StaffForm from './StaffForm'
 
-const StaffList = () => {
+const StaffList = ({
+  simple,
+  onClick
+}: {
+  simple: boolean
+  onClick?: (email: string) => void
+}) => {
   const { currentCompany } = useUserCompaniesContext()
   return (
     <Box className="grid gap-4 my-4">
       {currentCompany?.staff?.map((staff, i) => (
-        <StaffCard staff={staff} key={i} />
+        <StaffCard staff={staff} key={i} simple={simple} onClick={onClick} />
       ))}
     </Box>
   )
 }
 
-const StaffCard = ({ staff }: { staff: StaffType }) => {
+const StaffCard = ({
+  staff,
+  simple,
+  onClick
+}: {
+  staff: StaffType
+  simple: boolean
+  onClick?: (email: string) => void
+}) => {
   const modal = useModal({ title: 'Editar empleado' })
   return (
-    <Card>
+    <Card
+      onClick={() => onClick?.(staff?.email || '')}
+      className={`${
+        onClick ? 'cursor-pointer hover:bg-blue-300 active:shadow-none' : ''
+      }`}
+    >
       <CardContent>
         <Typography>
           {staff.name}{' '}
-          <IconButton color="primary" onClick={() => modal.onOpen()}>
-            <AppIcon icon="edit" />
-          </IconButton>
+          {!simple && (
+            <IconButton color="primary" onClick={() => modal.onOpen()}>
+              <AppIcon icon="edit" />
+            </IconButton>
+          )}
           <Modal {...modal}>
             <StaffForm staff={staff} />
           </Modal>
         </Typography>
         <Typography>{staff.email}</Typography>
       </CardContent>
-      <Box className="flex gap-2 p-2">
-        {Object.entries(staff.permissions).map(([key, value]) =>
-          value ? <StaffBadge badge={key} key={key} /> : null
-        )}
-      </Box>
+      {!simple && (
+        <Box className="flex gap-2 p-2">
+          {Object.entries(staff.permissions).map(([key, value]) =>
+            value ? <StaffBadge badge={key} key={key} /> : null
+          )}
+        </Box>
+      )}
     </Card>
   )
 }

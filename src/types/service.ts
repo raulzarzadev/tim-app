@@ -4,6 +4,13 @@ import { CompanyType } from './company'
 import { Order } from './order'
 import { BaseType } from './base'
 
+export const serviceStatusLabels: Record<Service['status'], string> = {
+  pending: 'Pendiente',
+  accepted: 'Aceptado',
+  rejected: 'Rechazado',
+  finished: 'Finalizado',
+  'in-progress': 'En proceso'
+}
 export type ServiceBase = {
   itemId?: ArticleType['id']
   companyId?: CompanyType['id']
@@ -13,7 +20,7 @@ export type ServiceBase = {
   reason: string
   date: Date | Timestamp
   description: string
-  status: 'pending' | 'accepted' | 'rejected' | 'finished'
+  status: 'pending' | 'accepted' | 'rejected' | 'finished' | 'in-progress'
   assignedTo?: string
   assignedToEmail?: string
   images?: ServiceImage[]

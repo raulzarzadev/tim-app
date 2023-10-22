@@ -40,10 +40,10 @@ const ServiceForm = ({
       <ModalConfirm
         color="error"
         openIcon="fix"
-        label="Enviar al taller"
+        label="Servicio"
         handleConfirm={handleSubmit(onSubmit)}
-        acceptLabel="Enviar al taller"
-        modalTitle={`Enviar al taller ${
+        acceptLabel="Crear order "
+        modalTitle={`Orden de servicio: ${
           item ? `${item?.category}-${item?.serialNumber}${item?.name}` : ''
         }`}
       >

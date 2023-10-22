@@ -1,24 +1,35 @@
-import { Service } from '@/types/service'
+import { Service, serviceStatusLabels } from '@/types/service'
 import { Typography } from '@mui/material'
 import ModalItemDetails from './ModalItemDetails'
 import { dateFormat } from '@/lib/utils-date'
 import PreviewImage from './PreviewImage'
 
 const ServiceDetails = ({ service }: { service: Service }) => {
-  console.log({ service })
   return (
     <div>
-      <Typography>
-        Item: <ModalItemDetails itemId={service.itemId || ''} />
+      <Typography className="text-center">
+        <span className="font-bold">Status: </span>
+        <span className="">{serviceStatusLabels[service?.status]}</span>
       </Typography>
       <Typography>
-        Razon: <span className="font-bold">{service.reason}</span>
+        <span className="font-bold">Item: </span>
+        <ModalItemDetails itemId={service.itemId || ''} />
       </Typography>
       <Typography>
-        Creado: {dateFormat(service.created.at, 'dd/MM/yy :HH:mm')}
+        <span className="font-bold">Razon: </span>
+        <span className="">{service.reason}</span>
       </Typography>
       <Typography>
-        Asignado a: {service.assignedToEmail ? service.assignedToEmail : '-'}
+        <span className="font-bold">Creado: </span>
+        {dateFormat(service.created.at, 'dd/MM/yy HH:mm')}
+      </Typography>
+      <Typography>
+        <span className="font-bold">Asignado a: </span>
+        {service.assignedToEmail ? service.assignedToEmail : '-'}
+      </Typography>
+      <Typography component={'div'}>
+        <span className="font-bold">Descripción: </span>
+        <div className="">{service.description}</div>
       </Typography>
       <div className="overflow-y-auto">
         <div className="inline-flex">

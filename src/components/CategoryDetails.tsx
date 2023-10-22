@@ -1,17 +1,12 @@
-import {
-  useCategoryArticles,
-  useUserCompaniesContext
-} from '@/context/userCompaniesContext2'
+import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import { CategoryType } from '@/types/category'
 import { IconButton, Typography } from '@mui/material'
 import AppIcon from './AppIcon'
 import Link from 'next/link'
 import PricesList from './PricesList'
-import ArticlesList from './ArticlesList'
 import CategoryItems from './CategoryItems'
 
 const CategoryDetails = ({ category }: { category?: CategoryType }) => {
-  const articles = useCategoryArticles({ categoryName: category?.name })
   const { currentCompany } = useUserCompaniesContext()
   if (!currentCompany) return <div>Cargando...</div>
   return (
