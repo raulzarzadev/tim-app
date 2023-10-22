@@ -1,11 +1,4 @@
-import {
-  Button,
-  Chip,
-  IconButton,
-  Stack,
-  TextField,
-  Typography
-} from '@mui/material'
+import { Button, Chip, IconButton, Stack, TextField } from '@mui/material'
 import AppIcon from './AppIcon'
 import ModalConfirm from './ModalConfirm'
 import { useForm } from 'react-hook-form'
@@ -18,8 +11,6 @@ import { ArticleType } from '@/types/article'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import Select from './Select'
 import { useEffect, useState } from 'react'
-import CurrencySpan from './CurrencySpan'
-import ButtonLoadingAsync from './ButtonLoadingAsync'
 import CheckboxLabel from './Checkbox'
 
 const ServiceForm = ({
@@ -36,19 +27,18 @@ const ServiceForm = ({
   service?: Service
 }) => {
   const { register, handleSubmit, setValue, watch } = useForm<Service>({
-    defaultValues: service
+    defaultValues: { itemId: itemId || '', companyId, ...service }
   })
   const formValues = watch()
-  const onSubmit = async (data: Partial<Service>) => {
-    setService?.({ ...data, companyId, itemId, status: 'pending' })
-  }
-  // const [images, setImages] = useState<Service['images']>([])
   const modalRemove = useModal({
     title: 'Remover imagen'
   })
   const [selectItem, setSelectItem] = useState(!!itemId)
   const images = formValues?.images || []
-  console.log({ formValues })
+  const onSubmit = async (data: Partial<Service>) => {
+    setService?.({ ...data, status: 'pending' })
+  }
+
   return (
     <div className="flex w-full justify-center my-4">
       <ModalConfirm
@@ -92,59 +82,65 @@ const ServiceForm = ({
             multiline
             rows={4}
           ></TextField>
-          <div className="overflow-x-auto ">
-            <div className=" inline-flex pb-2 ">
-              {images?.map((i, index) => (
-                <div key={i.url} className="  p-1 w-1/2 min-w-[170px] relative">
-                  <IconButton
-                    color="error"
-                    className="absolute top-0 right-0 opacity-70 hover:opacity-100 z-10"
-                    onClick={(e) => {
-                      e.preventDefault()
-                      e.stopPropagation()
-                      modalRemove.onOpen()
-                    }}
+          {images.length > 0 && (
+            <div className="overflow-x-auto ">
+              <div className=" inline-flex ">
+                {images?.map((i, index) => (
+                  <div
+                    key={i.url}
+                    className="  p-1 w-1/2 min-w-[170px] relative"
                   >
-                    <AppIcon icon="trash" />
-                  </IconButton>
-                  <Modal {...modalRemove}>
-                    <div className="flex justify-center">
-                      <Button
-                        color="error"
-                        variant="outlined"
-                        onClick={(e) => {
-                          e.preventDefault()
-                          e.stopPropagation()
-                          modalRemove.onClose()
+                    <IconButton
+                      color="error"
+                      className="absolute top-0 right-0 opacity-70 hover:opacity-100 z-10"
+                      onClick={(e) => {
+                        e.preventDefault()
+                        e.stopPropagation()
+                        modalRemove.onOpen()
+                      }}
+                    >
+                      <AppIcon icon="trash" />
+                    </IconButton>
+                    <Modal {...modalRemove}>
+                      <div className="flex justify-center">
+                        <Button
+                          color="error"
+                          variant="outlined"
+                          onClick={(e) => {
+                            e.preventDefault()
+                            e.stopPropagation()
+                            modalRemove.onClose()
 
-                          setValue(
-                            `images`,
-                            images.filter((image) => image.url !== i.url)
-                          )
-                        }}
-                      >
-                        Remover
-                      </Button>
-                    </div>
-                  </Modal>
-                  <PreviewImage
-                    fullWidth
-                    src={i.url}
-                    alt={`service order ${i.description}`}
-                  />
-                  <TextField
-                    label="Descripción"
-                    {...register(`images.${index}.description`)}
-                    //label="Descripción"
-                    className="mt-2"
-                    multiline
-                    rows={2}
-                    fullWidth
-                  />
-                </div>
-              ))}
+                            setValue(
+                              `images`,
+                              images.filter((image) => image.url !== i.url)
+                            )
+                          }}
+                        >
+                          Remover
+                        </Button>
+                      </div>
+                    </Modal>
+                    <PreviewImage
+                      fullWidth
+                      src={i.url}
+                      alt={`service order ${i.description}`}
+                    />
+                    <TextField
+                      label="Descripción"
+                      {...register(`images.${index}.description`)}
+                      //label="Descripción"
+                      className="mt-2"
+                      multiline
+                      rows={2}
+                      fullWidth
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
+
           <InputUploadFile
             label="Adjuntar imagen"
             setURL={(url) =>
@@ -171,12 +167,6 @@ const SelectItem = ({
   const [_categoryItems, _setCategoryItems] = useState<
     ArticleType[] | undefined
   >([])
-
-  console.log({ _categoryItems })
-
-  // const categoryItems = currentCompany?.articles?.filter(
-  //   (i) => i.category === categoryName
-  // )
 
   useEffect(() => {
     if (_categoryName) {

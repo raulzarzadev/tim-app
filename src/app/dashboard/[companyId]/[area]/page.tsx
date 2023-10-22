@@ -7,7 +7,7 @@ import CompanyReception from '@/components/CompanyReception'
 import CompanyStore from '@/components/CompanyStore'
 import ErrorBoundary from '@/components/ErrorBoundary'
 import { StaffPermission, StaffPermissionLabels } from '@/types/staff'
-import { Container, Typography } from '@mui/material'
+import { Typography } from '@mui/material'
 
 const Page = ({
   params

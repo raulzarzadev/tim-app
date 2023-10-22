@@ -3,9 +3,8 @@ import validatePermissions from "@/HOC's/validatePermissions"
 import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import BasicTabs from './BasicTabs'
 import ServicesTable from './ServicesTable'
-import { Button } from '@mui/material'
-import AppIcon from './AppIcon'
 import ServiceForm from './ServiceForm'
+import { createService } from '@/firebase/services'
 
 const CompanyMaintenance = () => {
   const { services, currentCompany } = useUserCompaniesContext()
@@ -17,7 +16,18 @@ const CompanyMaintenance = () => {
     <div>
       <div className="flex justify-center">
         {/* <Button endIcon={<AppIcon icon="add" />}>Servicio</Button> */}
-        <ServiceForm companyId={currentCompany?.id || ''} />
+        <ServiceForm
+          companyId={currentCompany?.id || ''}
+          setService={async (s) => {
+            console.log({ s })
+            try {
+              const res = await createService(s)
+              console.log(res)
+            } catch (err) {
+              console.error(err)
+            }
+          }}
+        />
       </div>
       <BasicTabs
         tabs={[

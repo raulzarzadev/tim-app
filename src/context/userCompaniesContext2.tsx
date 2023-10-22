@@ -87,7 +87,7 @@ export function UserCompaniesProvider({
   const [staffCompanies, setStaffCompanies] = useState<CompanyType[]>([])
   const [orders, setOrders] = useState<Order[]>([])
   const [services, setServices] = useState<Service[]>([])
-
+  console.log({ services })
   useEffect(() => {
     listenCompanyServices(companySelected, setServices)
   }, [companySelected])
@@ -144,41 +144,46 @@ export function UserCompaniesProvider({
     return addMinutes(rentDate, rentMinutes)
   }
 
-  const itemsFromOrders: ItemOrder[] = orders
-    .map((order) =>
-      order.items.map((orderItem) => {
-        const fullItem = companyItems.find((i) => i.id === orderItem?.itemId)
-        const prices = fullItem?.ownPrice
-          ? fullItem.prices
-          : currentCompany?.categories?.find(
-              (c) => c.name === fullItem?.category
-            )?.prices
-        const shippingDate = forceAsDate(order.shipping.date)
-        return {
-          ...fullItem,
-          ...orderItem,
-          prices,
-          order,
-          rentStartAt: shippingDate,
-          rentFinishAt: calculateFinishRentDate(
-            shippingDate,
-            orderItem?.qty,
-            orderItem.unit
+  const itemsFromOrders: ItemOrder[] =
+    orders
+      .map((order) =>
+        order?.items?.map((orderItem) => {
+          const fullItem = companyItems?.find(
+            (i) => i?.id === orderItem?.itemId
           )
-        }
-      })
-    )
-    .flat()
+          const prices = fullItem?.ownPrice
+            ? fullItem.prices
+            : currentCompany?.categories?.find(
+                (c) => c.name === fullItem?.category
+              )?.prices
+          const shippingDate = forceAsDate(order?.shipping?.date)
+          return {
+            ...fullItem,
+            ...orderItem,
+            prices,
+            order,
+            rentStartAt: shippingDate,
+            rentFinishAt: calculateFinishRentDate(
+              shippingDate,
+              orderItem?.qty,
+              orderItem.unit
+            )
+          }
+        })
+      )
+      .flat() || []
 
-  const itemsInUse = itemsFromOrders.filter(
-    (i) => i.inUse || i.rentStatus === 'taken'
+  const itemsInUse = itemsFromOrders?.filter(
+    (i) => i?.inUse || i?.rentStatus === 'taken'
   )
 
-  const itemsFinished = itemsFromOrders.filter(
-    (i) => i.rentStatus === 'finished'
+  const itemsFinished = itemsFromOrders?.filter(
+    (i) => i?.rentStatus === 'finished'
   )
 
-  const itemsPending = itemsFromOrders.filter((i) => i.rentStatus === 'pending')
+  const itemsPending = itemsFromOrders?.filter(
+    (i) => i?.rentStatus === 'pending'
+  )
 
   return (
     <UserCompaniesContext.Provider

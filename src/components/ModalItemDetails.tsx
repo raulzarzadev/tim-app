@@ -2,6 +2,7 @@ import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import Modal from './Modal'
 import useModal from '@/hooks/useModal'
 import ArticleDetails from './ArticleDetails'
+import { Typography } from '@mui/material'
 
 const ModalItemDetails = ({
   itemId,
@@ -13,10 +14,12 @@ const ModalItemDetails = ({
   const {
     ordersItems: { all: items }
   } = useUserCompaniesContext()
-  const item = items?.find((i) => i.itemId === itemId)
+  const item = items?.find((i) => i?.itemId === itemId)
   const modal = useModal({
     title: `Detalles de ${item?.category} - ${item?.serialNumber || item?.name}`
   })
+  if (!itemId) return <Typography>No item</Typography>
+  if (!item) return <Typography>No encontrado</Typography>
   return (
     <span>
       <button
