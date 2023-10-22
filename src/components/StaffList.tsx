@@ -12,7 +12,7 @@ const StaffList = ({
   simple,
   onClick
 }: {
-  simple: boolean
+  simple?: boolean
   onClick?: (email: string) => void
 }) => {
   const { currentCompany } = useUserCompaniesContext()
@@ -31,7 +31,7 @@ const StaffCard = ({
   onClick
 }: {
   staff: StaffType
-  simple: boolean
+  simple?: boolean
   onClick?: (email: string) => void
 }) => {
   const modal = useModal({ title: 'Editar empleado' })

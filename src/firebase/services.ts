@@ -2,10 +2,8 @@ import { storage } from './auth'
 import { FirebaseCRUD } from './firebase.CRUD'
 import { db } from './main'
 import { BaseType } from '@/types/base'
-import { arrayRemove, arrayUnion, where } from 'firebase/firestore'
-import { ArticleType } from '@/types/article'
+import { arrayUnion, where } from 'firebase/firestore'
 import { v4 as uidGenerator } from 'uuid'
-import { ItemSelected } from '@/context/useCompanyCashbox'
 import { Service, ServiceBase, ServiceComment } from '@/types/service'
 import { getAuth } from 'firebase/auth'
 /*
@@ -67,6 +65,11 @@ export const addServiceComment = async (
     })
   })
 }
+
+export const listenItemServices = async (
+  itemId: ItemType['id'],
+  cb: CallableFunction
+) => await itemCRUD.listenItems([where('itemId', '==', itemId)], cb)
 // export const removeComment = async (
 //   itemId: ItemType['id'],
 //   commentId: ServiceComment['id']

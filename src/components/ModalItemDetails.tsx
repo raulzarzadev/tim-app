@@ -12,14 +12,22 @@ const ModalItemDetails = ({
   showCat?: boolean
 }) => {
   const {
-    ordersItems: { all: items }
+    ordersItems: { inUse },
+    currentCompany
   } = useUserCompaniesContext()
-  const item = items?.find((i) => i?.itemId === itemId)
+
+  const items = currentCompany?.articles
+  const item = items?.find((i) => i?.id === itemId)
+
   const modal = useModal({
     title: `Detalles de ${item?.category} - ${item?.serialNumber || item?.name}`
   })
+
+  const itemInUse = inUse?.find((i) => i?.itemId === itemId)
+
   if (!itemId) return <Typography>No item</Typography>
   if (!item) return <Typography>No encontrado</Typography>
+
   return (
     <span>
       <button
@@ -31,7 +39,10 @@ const ModalItemDetails = ({
       >
         {showCat && `${item?.category}-`}
         {item?.serialNumber}
-        <span className="font-thin text-gray-800 text-xs">{item?.name}</span>
+        <span className="font-thin text-gray-800 text-xs">{item?.name} </span>
+        {itemInUse && (
+          <span className="bg-green-400 rounded-full p-1 py-0.5">En uso</span>
+        )}
       </button>
       <Modal {...modal}>
         {item ? (

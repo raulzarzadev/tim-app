@@ -2,14 +2,7 @@
 
 import { listenStaffCompanies, listenUserCompanies } from '@/firebase/companies'
 import { CompanyType } from '@/types/company'
-import {
-  Dispatch,
-  SetStateAction,
-  createContext,
-  useContext,
-  useEffect,
-  useState
-} from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 import { useAuthContext } from './authContext'
 import { StaffPermission } from '@/types/staff'
 
@@ -87,7 +80,6 @@ export function UserCompaniesProvider({
   const [staffCompanies, setStaffCompanies] = useState<CompanyType[]>([])
   const [orders, setOrders] = useState<Order[]>([])
   const [services, setServices] = useState<Service[]>([])
-  console.log({ services })
   useEffect(() => {
     listenCompanyServices(companySelected, setServices)
   }, [companySelected])

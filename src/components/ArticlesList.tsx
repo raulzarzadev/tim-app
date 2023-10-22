@@ -7,8 +7,6 @@ import Modal from './Modal'
 import ArticleDetails from './ArticleDetails'
 import AppIcon from './AppIcon'
 import Link from 'next/link'
-import ModalFixItem from './ModalFixItem'
-import ServiceForm from './ServiceForm'
 import ServiceItem from './ServiceItem'
 
 const ArticlesList = ({
