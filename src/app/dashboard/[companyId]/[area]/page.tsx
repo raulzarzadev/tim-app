@@ -21,14 +21,14 @@ const Page = ({
       <Typography className="text-center text-xl font-bold my-4">
         {StaffPermissionLabels[area]}
       </Typography>
-      <Container>
+      <>
         {area === 'ADMIN' && <CompanyAdmin />}
         {area === 'CASHBOX' && <CompanyCashbox2 />}
         {area === 'DELIVERY' && <CompanyDelivery />}
         {area === 'MAINTENANCE' && <CompanyMaintenance />}
         {area === 'RECEPTION' && <CompanyReception />}
         {area === 'SALES' && <CompanyStore />}
-      </Container>
+      </>
     </ErrorBoundary>
   )
 }

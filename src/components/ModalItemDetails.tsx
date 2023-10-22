@@ -1,6 +1,5 @@
 import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import Modal from './Modal'
-import { Typography } from '@mui/material'
 import useModal from '@/hooks/useModal'
 import ArticleDetails from './ArticleDetails'
 

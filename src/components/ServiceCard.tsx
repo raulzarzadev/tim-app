@@ -1,7 +1,6 @@
 import { Service, serviceStatusLabels } from '@/types/service'
 import ServiceDetails from './ServiceDetails'
 import { Box, Button } from '@mui/material'
-import ModalConfirm from './ModalConfirm'
 import StaffList from './StaffList'
 import Modal from './Modal'
 import useModal from '@/hooks/useModal'

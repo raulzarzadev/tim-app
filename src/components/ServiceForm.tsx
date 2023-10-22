@@ -1,4 +1,11 @@
-import { Button, IconButton, TextField } from '@mui/material'
+import {
+  Button,
+  Chip,
+  IconButton,
+  Stack,
+  TextField,
+  Typography
+} from '@mui/material'
 import AppIcon from './AppIcon'
 import ModalConfirm from './ModalConfirm'
 import { useForm } from 'react-hook-form'
@@ -8,6 +15,12 @@ import PreviewImage from './PreviewImage'
 import useModal from '@/hooks/useModal'
 import Modal from './Modal'
 import { ArticleType } from '@/types/article'
+import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
+import Select from './Select'
+import { useEffect, useState } from 'react'
+import CurrencySpan from './CurrencySpan'
+import ButtonLoadingAsync from './ButtonLoadingAsync'
+import CheckboxLabel from './Checkbox'
 
 const ServiceForm = ({
   itemId,
@@ -16,10 +29,10 @@ const ServiceForm = ({
   setService,
   service
 }: {
-  itemId: string
+  itemId?: string
   companyId: string
   item?: ArticleType
-  setService: (service: Partial<Service>) => void | Promise<any>
+  setService?: (service: Partial<Service>) => void | Promise<any>
   service?: Service
 }) => {
   const { register, handleSubmit, setValue, watch } = useForm<Service>({
@@ -33,8 +46,9 @@ const ServiceForm = ({
   const modalRemove = useModal({
     title: 'Remover imagen'
   })
+  const [selectItem, setSelectItem] = useState(!!itemId)
   const images = formValues?.images || []
-
+  console.log({ formValues })
   return (
     <div className="flex w-full justify-center my-4">
       <ModalConfirm
@@ -43,13 +57,34 @@ const ServiceForm = ({
         label="Servicio"
         handleConfirm={handleSubmit(onSubmit)}
         acceptLabel="Crear order "
-        modalTitle={`Orden de servicio: ${
+        modalTitle={`Orden de servicio ${
           item
-            ? `${item?.category}-${item?.serialNumber || ''}${item?.name || ''}`
+            ? `: ${item?.category}-${item?.serialNumber || ''}${
+                item?.name || ''
+              }`
             : ''
         }`}
       >
+        {!itemId && (
+          <CheckboxLabel
+            label="Seleccionar unidad"
+            onChange={(e) => {
+              setSelectItem(e.target.checked)
+              console.log(e.target.checked)
+              if (e.target.checked === false) setValue('itemId', '')
+            }}
+            checked={selectItem}
+          />
+        )}
         <form className="grid gap-4">
+          {!!selectItem && !itemId && (
+            <>
+              <SelectItem
+                setItem={(itemId) => setValue('itemId', itemId)}
+                itemSelected={formValues.itemId}
+              />
+            </>
+          )}
           <TextField {...register('reason')} label="Motivo"></TextField>
           <TextField
             {...register('description')}
@@ -119,6 +154,79 @@ const ServiceForm = ({
         </form>
       </ModalConfirm>
     </div>
+  )
+}
+
+const SelectItem = ({
+  categoryName,
+  itemSelected,
+  setItem
+}: {
+  categoryName?: string
+  itemSelected?: string
+  setItem?: (itemId: string) => void
+}) => {
+  const { currentCompany } = useUserCompaniesContext()
+  const [_categoryName, _setCategoryName] = useState(categoryName || '')
+  const [_categoryItems, _setCategoryItems] = useState<
+    ArticleType[] | undefined
+  >([])
+
+  console.log({ _categoryItems })
+
+  // const categoryItems = currentCompany?.articles?.filter(
+  //   (i) => i.category === categoryName
+  // )
+
+  useEffect(() => {
+    if (_categoryName) {
+      _setCategoryItems(
+        currentCompany?.articles?.filter((i) => i.category === _categoryName) ||
+          []
+      )
+    }
+  }, [_categoryName, currentCompany?.articles])
+
+  const categories =
+    currentCompany?.categories?.map((category) => ({
+      label: category.name,
+      value: category.name
+    })) || []
+
+  const handleClick = (itemId: string) => {
+    setItem?.(itemId)
+  }
+
+  return (
+    <>
+      <Select
+        options={categories}
+        onSelect={(_categoryName) => _setCategoryName(_categoryName)}
+        selected={_categoryName}
+        label="Categorias"
+        fullWidth
+        variant="outlined"
+      />
+      {_categoryName && (
+        <>
+          <Stack direction="row" flexWrap={'wrap'} className="justify-center ">
+            {_categoryItems?.map((item) => (
+              <Chip
+                // disabled={
+                //   !!itemsInUse?.find(({ itemId }) => itemId === item.id)
+                // }
+                //color={_selected === item.id ? 'primary' : 'default'}
+                color={itemSelected === item.id ? 'primary' : 'default'}
+                className="p-1 m-1"
+                key={item.id}
+                label={item.serialNumber || item.name}
+                onClick={() => handleClick(item.id)}
+              />
+            ))}
+          </Stack>
+        </>
+      )}
+    </>
   )
 }
 

@@ -24,12 +24,14 @@ export default function Select({
     onSelect?.(event.target.value as string)
     _seValue(event.target.value)
   }
+
   const [_value, _seValue] = React.useState(String(selected))
   const sortByLabel = (a: { label?: string }, b: { label?: string }) => {
     if ((a?.label || '') < (b?.label || '')) return -1
     if ((a?.label || '') > (b?.label || '')) return 1
     return 0
   }
+
   return (
     <FormControl fullWidth={fullWidth}>
       <InputLabel id={`simple-select-${label}`}>{label}</InputLabel>
