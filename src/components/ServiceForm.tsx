@@ -4,28 +4,30 @@ import ModalConfirm from './ModalConfirm'
 import { useForm } from 'react-hook-form'
 import InputUploadFile from './InputUploadFile'
 import { Service } from '@/types/service'
-import { useState } from 'react'
 import PreviewImage from './PreviewImage'
 import useModal from '@/hooks/useModal'
 import Modal from './Modal'
-import { createService } from '@/firebase/repairOrders'
 import { ArticleType } from '@/types/article'
 
-const ModalFixItem = ({
+const ServiceForm = ({
   itemId,
   companyId,
-  item
+  item,
+  setService,
+  service
 }: {
   itemId: string
   companyId: string
   item?: ArticleType
+  setService: (service: Partial<Service>) => void | Promise<any>
+  service?: Service
 }) => {
-  const { register, handleSubmit, setValue, watch } = useForm<Service>()
+  const { register, handleSubmit, setValue, watch } = useForm<Service>({
+    defaultValues: service
+  })
   const formValues = watch()
   const onSubmit = async (data: Partial<Service>) => {
-    const res = await createService({ ...data, companyId, itemId })
-
-    return res
+    setService?.({ ...data, companyId, itemId })
   }
   // const [images, setImages] = useState<Service['images']>([])
   const modalRemove = useModal({
@@ -42,7 +44,7 @@ const ModalFixItem = ({
         handleConfirm={handleSubmit(onSubmit)}
         acceptLabel="Enviar al taller"
         modalTitle={`Enviar al taller ${
-          item && `${item?.category}-${item?.serialNumber || item?.name}`
+          item ? `${item?.category}-${item?.serialNumber}${item?.name}` : ''
         }`}
       >
         <form className="grid gap-4">
@@ -118,4 +120,4 @@ const ModalFixItem = ({
   )
 }
 
-export default ModalFixItem
+export default ServiceForm

@@ -1,7 +1,8 @@
 import { get } from 'lodash'
+import { ReactNode } from 'react'
 
 export type MyTableData = {
-  headers: { key: string; label: string; format?: (value: any) => string }[]
+  headers: { key: string; label: string; format?: (value: any) => ReactNode }[]
   body: any[]
 }
 const MyTable = ({
@@ -24,7 +25,9 @@ const MyTable = ({
         {data.body.map((b) => (
           <tr
             key={b?.id}
-            className="hover:bg-slate-300 cursor-pointer"
+            className={`${
+              onRowClick ? ' hover:bg-slate-200 cursor-pointer ' : ''
+            } `}
             onClick={() => onRowClick?.(b.id)}
           >
             {data.headers.map((h) => (

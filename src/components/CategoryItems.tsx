@@ -1,17 +1,12 @@
-import {
-  ItemOrder,
-  useUserCompaniesContext
-} from '@/context/userCompaniesContext2'
+import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import MyTable from './MyTable'
 import ErrorBoundary from './ErrorBoundary'
 import useModal from '@/hooks/useModal'
 import Modal from './Modal'
-import { Box, Button, Typography } from '@mui/material'
 import { useState } from 'react'
 import { ArticleType } from '@/types/article'
 import ArticleDetails from './ArticleDetails'
-import AppIcon from './AppIcon'
-import ModalFixItem from './ModalFixItem'
+import ServiceItem from './ServiceItem'
 
 const CategoryItems = ({ categoryName }: { categoryName: string }) => {
   const { currentCompany, ordersItems } = useUserCompaniesContext()
@@ -54,9 +49,10 @@ const CategoryItems = ({ categoryName }: { categoryName: string }) => {
         ></MyTable>
         <Modal {...modal}>
           <ArticleDetails article={item} />
-          <ModalFixItem
+          <ServiceItem
             companyId={currentCompany?.id || ''}
             itemId={item?.id || ''}
+            item={item}
           />
         </Modal>
       </ErrorBoundary>
