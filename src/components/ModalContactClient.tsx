@@ -41,13 +41,16 @@ const ModalContactClient = ({ client }: { client: Payment['client'] }) => {
   const withValidValue = entries.filter(([key, value]) => value.value)
   return (
     <>
-      <IconButton
-        onClick={(e) => {
-          modal.onOpen()
-        }}
-      >
-        <AppIcon icon="phone" />
-      </IconButton>
+      <div className="flex items-center ">
+        <Typography className="whitespace-nowrap">Dato de contacto</Typography>
+        <IconButton
+          onClick={(e) => {
+            modal.onOpen()
+          }}
+        >
+          <AppIcon icon="phone" />
+        </IconButton>
+      </div>
       <Modal {...modal}>
         <Grid2 container spacing={2} justifyContent={'center'}>
           {withValidValue.length === 0 && (

@@ -1,15 +1,11 @@
 'use client'
 import validatePermissions from "@/HOC's/validatePermissions"
 import BasicTabs from './BasicTabs'
-import ItemsInUse from './ItemsInUse'
-import CompanyCategories from './CompanyCategories'
-import CompanyArticles from './CompanyArticles'
 import CompanyStaff from './CompanyStaff'
-import ItemsFinished from './ItemsFinished'
-import ItemsPending from './ItemsPending'
 import CompanyBalances from './cashboxBalances/CompanyBalances'
 import CompanyOrders from './CompanyOrders'
 import CompanyItems from './CompanyItems'
+import CompanyClients from './CompanyClients'
 
 const CompanyAdmin = () => {
   return (
@@ -17,6 +13,7 @@ const CompanyAdmin = () => {
       <BasicTabs
         tabs={[
           //  { label: 'Clientes ', content: <></> }, //CompanyPayments
+          { label: 'Clients', content: <CompanyClients /> },
           { label: 'Ordenes', content: <CompanyOrders /> },
           { label: 'Unidades', content: <CompanyItems /> },
           { label: 'Staff', content: <CompanyStaff /> },

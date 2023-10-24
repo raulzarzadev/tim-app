@@ -1,3 +1,4 @@
+import { where } from 'firebase/firestore'
 import { storage } from './auth'
 import { FirebaseCRUD } from './firebase.CRUD'
 import { db } from './main'
@@ -39,3 +40,8 @@ export const listenClient = async (
   itemId: BaseType['id'],
   cb: CallableFunction
 ) => await itemCRUD.listenItem(itemId, cb)
+
+export const listenCompanyClients = async (
+  companyId: string,
+  cb: CallableFunction
+) => await itemCRUD.listenItems([where('companyId', '==', companyId)], cb)

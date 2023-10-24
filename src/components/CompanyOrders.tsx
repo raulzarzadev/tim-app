@@ -17,16 +17,16 @@ const CompanyOrders = () => {
     <div>
       <BasicTabs
         tabs={[
-          { label: 'Todas', content: <OrdersTable orders={orders || []} /> },
-          { label: 'Activas', content: <OrdersTable orders={actives || []} /> },
           {
             label: 'Pendientes',
             content: <OrdersTable orders={pending || []} />
           },
+          { label: 'Activas', content: <OrdersTable orders={actives || []} /> },
           {
             label: 'Terminadas',
             content: <OrdersTable orders={finished || []} />
-          }
+          },
+          { label: 'Todas', content: <OrdersTable orders={orders || []} /> }
         ]}
       />
     </div>

@@ -10,11 +10,11 @@ const CompanyItems = () => {
     <div>
       <BasicTabs
         tabs={[
-          { label: 'Todas', content: <CompanyArticles /> },
-          { label: 'Categorias', content: <CompanyCategories /> },
           { label: 'Pendientes', content: <ItemsPending /> },
           { label: 'En uso', content: <ItemsInUse /> },
-          { label: 'Terminados', content: <ItemsFinished /> }
+          { label: 'Terminados', content: <ItemsFinished /> },
+          { label: 'Categorias', content: <CompanyCategories /> },
+          { label: 'Todas', content: <CompanyArticles /> }
         ]}
       />
     </div>
