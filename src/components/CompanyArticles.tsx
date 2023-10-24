@@ -1,17 +1,13 @@
 'use client'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
-
-import ArticlesList from './ArticlesList'
+import ItemsTable from './ItemsTable'
 
 const CompanyArticles = () => {
   const { currentCompany } = useUserCompaniesContext()
   if (!currentCompany) return <div>Cargando...</div>
   return (
     <div>
-      <ArticlesList
-        companyId={currentCompany.id}
-        articles={currentCompany.articles || []}
-      />
+      <ItemsTable items={currentCompany.articles || []} />
     </div>
   )
 }

@@ -1,4 +1,3 @@
-import forceAsDate from '@/lib/forceAsDate'
 import { dateFormat } from '@/lib/utils-date'
 import { Order } from '@/types/order'
 import CurrencySpan from './CurrencySpan'
@@ -46,7 +45,7 @@ const OrdersTable = ({ orders }: { orders: Partial<Order>[] }) => {
               key: 'payments',
               format: (payments) => (
                 <CurrencySpan
-                  quantity={payments.reduce((a, b) => a + b.amount, 0)}
+                  quantity={payments?.reduce((a, b) => a + b?.amount, 0)}
                 />
               )
             }

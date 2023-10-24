@@ -9,6 +9,7 @@ import ItemsFinished from './ItemsFinished'
 import ItemsPending from './ItemsPending'
 import CompanyBalances from './cashboxBalances/CompanyBalances'
 import CompanyOrders from './CompanyOrders'
+import CompanyItems from './CompanyItems'
 
 const CompanyAdmin = () => {
   return (
@@ -16,14 +17,10 @@ const CompanyAdmin = () => {
       <BasicTabs
         tabs={[
           //  { label: 'Clientes ', content: <></> }, //CompanyPayments
-          { label: 'Pendientes', content: <ItemsPending /> },
-          { label: 'En uso', content: <ItemsInUse /> },
-          { label: 'Terminados', content: <ItemsFinished /> },
-          { label: 'Categorias', content: <CompanyCategories /> },
-          { label: 'Articulos', content: <CompanyArticles /> },
+          { label: 'Ordenes', content: <CompanyOrders /> },
+          { label: 'Unidades', content: <CompanyItems /> },
           { label: 'Staff', content: <CompanyStaff /> },
-          { label: 'Cortes', content: <CompanyBalances /> },
-          { label: 'Ordenes', content: <CompanyOrders /> }
+          { label: 'Cortes', content: <CompanyBalances /> }
         ]}
       />
     </div>

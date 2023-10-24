@@ -60,7 +60,7 @@ export default function StaffPermissionsForm({
   }
   return (
     <FormControl component="fieldset">
-      <FormLabel component="legend">Perimisos</FormLabel>
+      <FormLabel component="legend">Perimsos</FormLabel>
       <FormGroup aria-label="position" row>
         {Object.entries(permissionsList).map(([key, { label, value }]) => (
           <FormControlLabel
