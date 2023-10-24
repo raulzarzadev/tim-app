@@ -17,6 +17,7 @@ import { PriceType } from '@/components/PricesForm'
 import { Payment } from '@/types/order'
 import { useUserCompaniesContext } from './userCompaniesContext2'
 import { Timestamp } from 'firebase/firestore'
+import { createClient, updateClient } from '@/firebase/clients'
 
 export type CashboxContext = {
   itemsSelected?: ItemSelected[]
@@ -124,11 +125,28 @@ export const CashboxContextProvider = ({
       }
     }
   }
+
+  const getClientData = async (
+    client: Partial<Order['client']>,
+    companyId: string
+  ) => {
+    let res = client
+    res.companyId = companyId
+    if (client.id) {
+      const clientUpdated = await updateClient(client.id, client)
+      return res
+    } else {
+      const newClient = await createClient(client)
+      return { ...res, id: newClient.res.id }
+    }
+  }
   const handleOrder = async (order: { companyId: string }) => {
+    const clientData = await getClientData(client, order.companyId)
+    console.log(clientData)
     return await createOrder({
       ...order,
       items: itemsSelected,
-      client,
+      client: clientData,
       shipping
     })
   }

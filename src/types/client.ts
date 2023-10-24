@@ -1,7 +1,12 @@
-import { UserType } from './user'
+import { BaseType } from './base'
 
-export type Client = Omit<UserType, 'rol'> & {
-  imageID: string
-  signature: string
-  address: string
+export type ClientBase = {
+  companyId: string
+  name: string
+  email?: string
+  phone?: string
+  address?: string
+  image?: string
 }
+
+export type Client = ClientBase & BaseType

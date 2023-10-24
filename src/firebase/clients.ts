@@ -1,8 +1,8 @@
-import { where } from 'firebase/firestore'
 import { storage } from './auth'
 import { FirebaseCRUD } from './firebase.CRUD'
 import { db } from './main'
 import { BaseType } from '@/types/base'
+import { Client } from '@/types/client'
 
 /*
  * You should be able to copy all this file and just replace
@@ -13,8 +13,8 @@ import { BaseType } from '@/types/base'
  */
 
 const COLLECTION_NAME = 'clients'
-type ItemType = NewClient
-type NewItem = Partial<NewClient>
+type ItemType = Client
+type NewItem = Partial<Client>
 
 export const itemCRUD = new FirebaseCRUD(COLLECTION_NAME, db, storage)
 
@@ -22,7 +22,7 @@ export const setClient = async (itemId: ItemType['id'], newItem: NewItem) =>
   await itemCRUD.setItem(itemId || '', { ...newItem, id: itemId })
 
 export const createClient = async (newItem: NewItem) =>
-  await itemCRUD.createItem({ ...newItem })
+  await itemCRUD.createItem(newItem)
 
 export const updateClient = async (
   itemId: string,
@@ -39,9 +39,3 @@ export const listenClient = async (
   itemId: BaseType['id'],
   cb: CallableFunction
 ) => await itemCRUD.listenItem(itemId, cb)
-
-export const listenClients = async (cb: CallableFunction) =>
-  await itemCRUD.listenItems([where('rol', '==', 'CLIENT')], cb)
-
-export const cancelClientPayment = async ({ clientId }: { clientId: string }) =>
-  await itemCRUD.updateItem(clientId, { 'payment.isCancelled': true })

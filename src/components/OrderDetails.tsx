@@ -9,6 +9,9 @@ import ItemChanges from './ItemChanges'
 const OrderDetails = ({ order }: { order?: Partial<Order> }) => {
   return (
     <div>
+      <Typography className="text-center" variant="caption">
+        Id: {order?.id}
+      </Typography>
       <div>
         <Typography variant="h5">Cliente</Typography>
         <Typography>Cliente: {order?.client?.name}</Typography>
