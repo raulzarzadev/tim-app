@@ -1,12 +1,16 @@
-import { BaseType } from './base'
+import { UserType } from './user'
 
-export type ClientBase = {
+export type ClientBase = Pick<
+  UserType,
+  'name' | 'image' | 'email' | 'phone'
+> & {
+  imageID: string
+  signature: string
+  address: string
   companyId: string
-  name: string
-  email?: string
-  phone?: string
-  address?: string
-  image?: string
 }
+
+import { BaseType } from './base'
+import { UserBase } from './user'
 
 export type Client = ClientBase & BaseType

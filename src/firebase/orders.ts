@@ -7,6 +7,7 @@ import { ArticleType } from '@/types/article'
 import { Order, OrderBase, Payment } from '@/types/order'
 import { v4 as uidGenerator } from 'uuid'
 import { ItemSelected } from '@/context/useCompanyCashbox'
+
 /*
  * You should be able to copy all this file and just replace
  * ItemType
