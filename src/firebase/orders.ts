@@ -172,3 +172,8 @@ export const onPayOrder = async (
     payments: arrayUnion({ ...payment, id: uidGenerator(), date: new Date() })
   })
 }
+
+export const listenItemOrders = async (
+  itemId: ItemType['id'],
+  cb: CallableFunction
+) => await itemCRUD.listenItems([where('itemId', '==', itemId)], cb)

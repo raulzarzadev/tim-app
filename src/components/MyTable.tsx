@@ -5,13 +5,13 @@ export type MyTableData = {
   headers: { key: string; label: string; format?: (value: any) => ReactNode }[]
   body: any[]
 }
-const MyTable = ({
-  data,
-  onRowClick
-}: {
+
+export type MyTableProps = {
   data: MyTableData
   onRowClick?: (id: string) => void
-}) => {
+}
+
+const MyTable = ({ data, onRowClick }: MyTableProps) => {
   return (
     <div className="overflow-x-auto">
       <table className="w-full text-center max-w-full ">

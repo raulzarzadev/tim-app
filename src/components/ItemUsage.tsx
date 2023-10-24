@@ -33,7 +33,8 @@ const ItemUsage = ({
     .map((i) =>
       ordersItems.all.find(
         (searchItem) =>
-          searchItem.id === i.itemId && searchItem.order.id === item.order.id
+          searchItem?.id === i?.itemId &&
+          searchItem?.order?.id === item?.order?.id
       )
     )
 

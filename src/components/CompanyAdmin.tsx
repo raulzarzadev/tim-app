@@ -8,6 +8,7 @@ import CompanyStaff from './CompanyStaff'
 import ItemsFinished from './ItemsFinished'
 import ItemsPending from './ItemsPending'
 import CompanyBalances from './cashboxBalances/CompanyBalances'
+import CompanyOrders from './CompanyOrders'
 
 const CompanyAdmin = () => {
   return (
@@ -21,7 +22,8 @@ const CompanyAdmin = () => {
           { label: 'Categorias', content: <CompanyCategories /> },
           { label: 'Articulos', content: <CompanyArticles /> },
           { label: 'Staff', content: <CompanyStaff /> },
-          { label: 'Cortes', content: <CompanyBalances /> }
+          { label: 'Cortes', content: <CompanyBalances /> },
+          { label: 'Ordenes', content: <CompanyOrders /> }
         ]}
       />
     </div>

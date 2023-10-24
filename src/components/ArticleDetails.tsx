@@ -1,18 +1,17 @@
-import { Box, Button, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import PricesList from './PricesList'
 import { ItemOrder } from '@/context/userCompaniesContext2'
 import { ArticleType } from '@/types/article'
-import ServicesTable from './ServicesTable'
 import AccordionSections from './AccordionSections'
 import MyTable from './MyTable'
 import { useEffect, useState } from 'react'
 import { listenItemServices } from '@/firebase/services'
 import { dateFormat } from '@/lib/utils-date'
-import ModalItemDetails from './ModalItemDetails'
 import { Service, serviceStatusLabels } from '@/types/service'
 import useModal from '@/hooks/useModal'
 import Modal from './Modal'
 import ServiceCard from './ServiceCard'
+import ItemOrders from './ItemOrders'
 
 const ArticleDetails = ({ article }: { article?: ItemOrder | ArticleType }) => {
   return (
@@ -44,6 +43,11 @@ const ArticleDetails = ({ article }: { article?: ItemOrder | ArticleType }) => {
               title: 'Servicios',
               subTitle: '',
               content: <ItemServices itemId={article?.id || ''} />
+            },
+            {
+              title: 'Ordenes',
+              subTitle: '',
+              content: <ItemOrders itemId={article?.id || ''} />
             }
           ]}
         />
