@@ -19,6 +19,8 @@ import { ItemSelected } from './useCompanyCashbox'
 import forceAsDate from '@/lib/forceAsDate'
 import { Service } from '@/types/service'
 import { listenCompanyServices } from '@/firebase/services'
+import { Client } from '@/types/client'
+import { listenCompanyClients } from '@/firebase/clients'
 
 export type ContextItem = ItemSelected & {
   order: Order
@@ -38,6 +40,7 @@ export type UserCompaniesContextType = {
   userCompanies: CompanyType[]
   companyItems: CompanyItem[]
   services?: Service[]
+  clients?: Client[]
   ordersItems: {
     all: ItemOrder[]
     inUse: ItemOrder[]
@@ -56,6 +59,7 @@ export const UserCompaniesContext = createContext<UserCompaniesContextType>({
   currentCompany: undefined,
   userCompanies: [],
   orders: [],
+  clients: [],
   companyItems: [],
   ordersItems: {
     all: [],
@@ -80,6 +84,10 @@ export function UserCompaniesProvider({
   const [staffCompanies, setStaffCompanies] = useState<CompanyType[]>([])
   const [orders, setOrders] = useState<Order[]>([])
   const [services, setServices] = useState<Service[]>([])
+  const [clients, setClients] = useState<Client[]>([])
+  const currentCompany = [...userOwnCompanies, ...staffCompanies].find(
+    (company) => company?.id === companySelected
+  )
   useEffect(() => {
     listenCompanyServices(companySelected, setServices)
   }, [companySelected])
@@ -102,9 +110,9 @@ export function UserCompaniesProvider({
     }
   }, [user])
 
-  const currentCompany = [...userOwnCompanies, ...staffCompanies].find(
-    (company) => company?.id === companySelected
-  )
+  useEffect(() => {
+    listenCompanyClients(currentCompany?.id || '', setClients)
+  }, [currentCompany?.id])
 
   useEffect(() => {
     listenCompanyOrders(currentCompany?.id || '', setOrders)
@@ -191,6 +199,7 @@ export function UserCompaniesProvider({
           finished: itemsFinished,
           pending: itemsPending
         },
+        clients,
         orders,
         services
       }}

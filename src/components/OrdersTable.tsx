@@ -1,5 +1,5 @@
 import { dateFormat } from '@/lib/utils-date'
-import { Order } from '@/types/order'
+import { Order, Payment } from '@/types/order'
 import CurrencySpan from './CurrencySpan'
 import Modal from './Modal'
 import OrderDetails from './OrderDetails'
@@ -45,7 +45,10 @@ const OrdersTable = ({ orders }: { orders: Partial<Order>[] }) => {
               key: 'payments',
               format: (payments) => (
                 <CurrencySpan
-                  quantity={payments?.reduce((a, b) => a + b?.amount, 0)}
+                  quantity={payments?.reduce(
+                    (acc: number, curr: Payment) => acc + curr?.amount,
+                    0
+                  )}
                 />
               )
             }

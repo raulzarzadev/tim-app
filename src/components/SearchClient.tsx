@@ -14,17 +14,14 @@ const SearchClient = ({
   onSelectClient?: (client: Partial<Client>) => void
 }) => {
   const modal = useModal({ title: 'Buscar cliente' })
-  const { currentCompany } = useUserCompaniesContext()
-  const [clients, setClients] = useState<Partial<Client[]>>([])
+  const { clients } = useUserCompaniesContext()
   const [search, setSearch] = useState('')
-  useEffect(() => {
-    listenCompanyClients(currentCompany?.id || '', setClients)
-  }, [currentCompany?.id])
-  const filteredClients = clients.filter((c) =>
+
+  const filteredClients = clients?.filter((c) =>
     c?.name.toLowerCase().includes(search.toLowerCase())
   )
   const handleSelect = (clientId: string) => {
-    const client = clients.find((c) => c?.id === clientId)
+    const client = clients?.find((c) => c?.id === clientId)
     onSelectClient?.({
       id: client?.id,
       name: client?.name || '',

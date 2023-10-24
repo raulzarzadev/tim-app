@@ -1,5 +1,5 @@
 import { Client } from '@/types/client'
-import { Button, IconButton, TextField } from '@mui/material'
+import { Button, TextField } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import InputFile from './InputUploadFile'
 import ModalSignature from './ModalSignature'
@@ -7,7 +7,6 @@ import PreviewImage from './PreviewImage'
 import PhoneInput from './PhoneInput'
 import { useEffect } from 'react'
 import useCashboxContext from '@/context/useCompanyCashbox'
-import AppIcon from './AppIcon'
 import SearchClient from './SearchClient'
 
 const ClientForm = () => {
@@ -29,7 +28,7 @@ const ClientForm = () => {
     handleSubmit(onSubmit)()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [imageId, signature, name, phone])
-  console.log({ formValues })
+
   return (
     <div>
       <form
