@@ -6,6 +6,7 @@ import OrderDetails from './OrderDetails'
 import MyTable from './MyTable'
 import useModal from '@/hooks/useModal'
 import { useState } from 'react'
+import StaffSpan from './StaffSpan'
 
 const OrdersTable = ({ orders }: { orders: Partial<Order>[] }) => {
   const [order, setOrder] = useState<Partial<Order>>()
@@ -51,6 +52,11 @@ const OrdersTable = ({ orders }: { orders: Partial<Order>[] }) => {
                   )}
                 />
               )
+            },
+            {
+              label: 'Asignado',
+              key: 'shipping.assignedToEmail',
+              format: (email) => <StaffSpan email={email} />
             }
           ],
           body: orders

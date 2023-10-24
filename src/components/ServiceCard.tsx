@@ -6,6 +6,7 @@ import Modal from './Modal'
 import useModal from '@/hooks/useModal'
 import { updateService } from '@/firebase/services'
 import ServiceComments from './ServiceComments'
+import AssignForm from './AssignForm'
 
 const ServiceCard = ({ service }: { service: Service }) => {
   return (
@@ -95,17 +96,10 @@ const AssignService = ({
     } catch (error) {
       console.error(error)
     }
-    modal.onClose()
   }
-  const modal = useModal({ title: 'Asignar responsable' })
   return (
     <>
-      <Button onClick={modal.onOpen}>
-        {assignedToEmail ? 'Asiganado' : 'Asignar'}
-      </Button>
-      <Modal {...modal}>
-        <StaffList simple onClick={handleAssign} />
-      </Modal>
+      <AssignForm assignTo={handleAssign} assignedTo={assignedToEmail} />
     </>
   )
 }

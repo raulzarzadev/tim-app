@@ -7,6 +7,7 @@ import { Client } from './client'
 import { PriceType } from '@/components/PricesForm'
 import { UserType } from './user'
 import { ItemSelected } from '@/context/useCompanyCashbox'
+import { StaffType } from './staff'
 
 export type OrderBase = {
   shipping: Shipping
@@ -20,6 +21,7 @@ export type OrderBase = {
 export type Order = OrderBase & BaseType
 
 export type Shipping = {
+  assignedToEmail?: StaffType['email']
   date?: Timestamp | Date
   address?: string | 'store'
 }
