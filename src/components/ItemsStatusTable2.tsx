@@ -9,8 +9,11 @@ const ItemsStatusTable = ({ items }: { items: ItemOrder[] }) => {
       <Grid2 xs={4} className="font-bold truncate">
         Cliente
       </Grid2>
-      <Grid2 xs={4} className="font-bold truncate">
+      <Grid2 xs={2} className="font-bold truncate">
         Item
+      </Grid2>
+      <Grid2 xs={2} className="font-bold truncate">
+        Asigando
       </Grid2>
       <Grid2 xs={4} className="font-bold truncate">
         Status

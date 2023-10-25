@@ -7,6 +7,7 @@ import { Box, Typography } from '@mui/material'
 import { dateFormat, fromNow } from '@/lib/utils-date'
 import { ItemOrder } from '@/context/userCompaniesContext2'
 import ItemRentStatus from './ItemRentStatus'
+import StaffSpan from './StaffSpan'
 
 const ItemInUserRow = ({ item }: { item: ItemOrder }) => {
   const modal = useModal({
@@ -39,10 +40,17 @@ const ItemInUserRow = ({ item }: { item: ItemOrder }) => {
           </Typography>
         </Grid2>
         {/* //* Item  */}
-        <Grid2 xs={4} className=" p-1">
+        <Grid2 xs={2} className=" p-1">
           <Typography className="truncate">{item.category}</Typography>
           <Typography className="truncate">
             {item.serialNumber || item.name}
+          </Typography>
+        </Grid2>
+
+        {/* //* Asigando  */}
+        <Grid2 xs={2} className=" p-1">
+          <Typography className="truncate">
+            <StaffSpan email={item.order.shipping.assignedToEmail || ''} />
           </Typography>
         </Grid2>
 

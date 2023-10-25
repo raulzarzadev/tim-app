@@ -17,6 +17,7 @@ import ItemRentStatus from './ItemRentStatus'
 import ItemChanges from './ItemChanges'
 import { dateFormat, fromNow } from '@/lib/utils-date'
 import ModalEditShipping from './ModalEditShipping'
+import StaffSpan from './StaffSpan'
 
 const ItemUsage = ({
   item,
@@ -44,6 +45,15 @@ const ItemUsage = ({
   const finished = item.rentStatus === 'finished'
   return (
     <ErrorBoundary>
+      <Box className="text-end">
+        <Typography variant="caption">
+          Creada por: <StaffSpan email={item.order.created.byEmail} />
+        </Typography>
+        <Typography variant="caption">
+          {' '}
+          {fromNow(item.order.created.at)}
+        </Typography>
+      </Box>
       <Box className="my-4">
         <Typography className="text-center">
           {item.order?.client?.name}
@@ -93,12 +103,13 @@ const ItemUsage = ({
           Lugar : <ShippingLink address={item.order.shipping.address} />{' '}
         </span>
       </Typography>
-      <Typography className="text-xs text-center">
-        Creada por:{' '}
-        {currentCompany?.staff?.find(
-          (s) => s.email === item.order.created.byEmail
-        )?.name || `${item.order.created.byEmail}*`}
+      <Typography className="text-center mt-4" component={'div'}>
+        <span>
+          Asigando:{' '}
+          <StaffSpan email={item?.order?.shipping?.assignedToEmail || ''} />
+        </span>
       </Typography>
+
       <Box className="grid gap-2">
         <Typography className="text-center my-4">
           Revisa que la unidad este en buen estado.
