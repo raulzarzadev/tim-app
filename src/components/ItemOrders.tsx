@@ -16,11 +16,7 @@ const ItemOrders = ({ itemId }: { itemId: string }) => {
     setOrders(itemOrders)
   }, [companyOrders, itemId])
 
-  return (
-    <div>
-      <OrdersTable orders={orders} />
-    </div>
-  )
+  return <OrdersTable orders={orders} />
 }
 
 export default ItemOrders

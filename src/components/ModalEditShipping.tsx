@@ -8,10 +8,11 @@ import CheckboxLabel from './Checkbox'
 import { inputDateFormat } from '@/lib/utils-date'
 import forceAsDate from '@/lib/forceAsDate'
 import { updateOrder } from '@/firebase/orders'
+import AssignForm from './AssignForm'
 
 const ModalEditShipping = ({ order }: { order: Order }) => {
   const [shipping, setShipping] = useState<Order['shipping']>(order.shipping)
-  const modal = useModal({ title: 'Cambiar Direccion' })
+  const modal = useModal({ title: 'Cambiar dirección' })
 
   const [loading, setLoading] = useState(false)
   const handleSave = async () => {
@@ -76,6 +77,7 @@ const ModalEditShipping = ({ order }: { order: Order }) => {
               }))
             }}
           />
+
           {!itsNow && (
             <TextField
               type="datetime-local"
@@ -88,6 +90,16 @@ const ModalEditShipping = ({ order }: { order: Order }) => {
               }
             ></TextField>
           )}
+
+          <AssignForm
+            assignTo={(email) =>
+              setShipping((shipping) => ({
+                ...shipping,
+                assignedToEmail: email
+              }))
+            }
+            assignedTo={shipping.assignedToEmail}
+          />
 
           <Button onClick={() => handleSave()} variant="outlined" fullWidth>
             Guardar

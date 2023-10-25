@@ -5,6 +5,7 @@ import MyTable from './MyTable'
 import { dateFormat } from '@/lib/utils-date'
 import ShippingLink from './ShippingLink'
 import ItemChanges from './ItemChanges'
+import StaffSpan from './StaffSpan'
 
 const OrderDetails = ({ order }: { order?: Partial<Order> }) => {
   return (
@@ -12,7 +13,7 @@ const OrderDetails = ({ order }: { order?: Partial<Order> }) => {
       <Typography className="text-center" variant="caption">
         Id: {order?.id}
       </Typography>
-      <div>
+      <div className="mb-4">
         <Typography variant="h5">Cliente</Typography>
         <Typography>Cliente: {order?.client?.name}</Typography>
         <Typography>Telefono: {order?.client?.phone}</Typography>
@@ -21,47 +22,55 @@ const OrderDetails = ({ order }: { order?: Partial<Order> }) => {
       </div>
       <div>
         <Typography variant="h5">Unidades</Typography>
-        <MyTable
-          data={{
-            headers: [
-              {
-                label: 'Unidad',
-                key: 'itemId',
-                format: (value) => (
-                  <ModalItemDetails itemId={value} hiddenCurrentStatus />
-                )
-              },
-              {
-                label: 'status',
-                key: 'rentStatus'
-              }
-            ],
-            body: order?.items || []
-          }}
-        />
+        {!!order?.items?.length ? (
+          <MyTable
+            data={{
+              headers: [
+                {
+                  label: 'Unidad',
+                  key: 'itemId',
+                  format: (value) => (
+                    <ModalItemDetails itemId={value} hiddenCurrentStatus />
+                  )
+                },
+                {
+                  label: 'status',
+                  key: 'rentStatus'
+                }
+              ],
+              body: order?.items || []
+            }}
+          />
+        ) : (
+          <Typography>No hay unidades</Typography>
+        )}
       </div>
-      <div>
+      <div className="mb-4">
         <Typography variant="h5">Pagos</Typography>
-        <MyTable
-          data={{
-            headers: [
-              {
-                label: 'Fecha',
-                key: 'date',
-                format: (value) => dateFormat(value, 'dd/MMM HH:mm')
-              },
-              {
-                label: 'Monto',
-                key: 'amount'
-              },
-              {
-                label: 'Metodo',
-                key: 'method'
-              }
-            ],
-            body: order?.payments || []
-          }}
-        />
+        {!!order?.payments?.length ? (
+          <MyTable
+            data={{
+              headers: [
+                {
+                  label: 'Fecha',
+                  key: 'date',
+                  format: (value) => dateFormat(value, 'dd/MMM HH:mm')
+                },
+                {
+                  label: 'Monto',
+                  key: 'amount'
+                },
+                {
+                  label: 'Metodo',
+                  key: 'method'
+                }
+              ],
+              body: order?.payments || []
+            }}
+          />
+        ) : (
+          <Typography>No hay pagos</Typography>
+        )}
       </div>
       <div>
         <Typography variant="h5">Cambios</Typography>
@@ -69,6 +78,9 @@ const OrderDetails = ({ order }: { order?: Partial<Order> }) => {
       </div>
       <div>
         <Typography variant="h5">Entrega </Typography>
+        <Typography>
+          Asignado: <StaffSpan email={order?.shipping?.assignedToEmail || ''} />
+        </Typography>
         <Typography>
           Lugar: <ShippingLink address={order?.shipping?.address} />
         </Typography>

@@ -4,7 +4,6 @@ import { BalanceData } from '@/types/balance'
 import ErrorBoundary from '../ErrorBoundary'
 import { dateFormat, fromNow } from '@/lib/utils-date'
 import forceAsDate from '@/lib/forceAsDate'
-import ModalItemDetails from '../ModalItemDetails'
 import AccordionSections from '../AccordionSections'
 import OrderItemsStats from '../OrderItemsStats'
 import OrdersTable from '../OrdersTable'
@@ -79,7 +78,6 @@ const BalanceCard = ({ balance }: { balance: BalanceData }) => {
             }
           ]}
         />
-        <div></div>
       </ErrorBoundary>
     </Box>
   )

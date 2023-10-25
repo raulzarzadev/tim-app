@@ -18,8 +18,6 @@ import asDate from '@/lib/asDate'
 import ModalConfirm from './ModalConfirm'
 import useCashboxContext from '@/context/useCompanyCashbox'
 import AppIcon from './AppIcon'
-import StaffList from './StaffList'
-import AssignOrder from './AssignOrder'
 import AssignForm from './AssignForm'
 
 const Checkout = () => {

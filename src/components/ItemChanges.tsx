@@ -5,9 +5,9 @@ import CurrencySpan from './CurrencySpan'
 
 const ItemChanges = ({ changes }: { changes: Order['changes'] }) => {
   return (
-    <div>
+    <div className="mb-4">
       {changes?.length === 0 && (
-        <Typography className="mt-4">No hay cambios</Typography>
+        <Typography className="">No hay cambios</Typography>
       )}
       {!!changes?.length && (
         <>

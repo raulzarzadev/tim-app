@@ -1,4 +1,3 @@
-import { updateOrder } from '@/firebase/orders'
 import AssignForm from './AssignForm'
 
 const AssignOrder = ({
@@ -11,18 +10,11 @@ const AssignOrder = ({
   const handleAssignTo = async (email: string) => {
     try {
       onAssignTo(email)
-      // const res = await updateOrder(orderId, {
-      //   'shipping.assignedToEmail': email
-      // })
     } catch (error) {
       console.error(error)
     }
   }
-  return (
-    <div>
-      <AssignForm assignTo={handleAssignTo} assignedTo={assignedTo} />
-    </div>
-  )
+  return <AssignForm assignTo={handleAssignTo} assignedTo={assignedTo} />
 }
 
 export default AssignOrder
