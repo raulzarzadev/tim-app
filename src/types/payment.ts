@@ -47,6 +47,7 @@ export type PaymentData = {
   discount?: number
   charged?: number
   rest?: number
+  ref?: string
 }
 
 export type PaymentItem = ItemSelected

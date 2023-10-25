@@ -7,6 +7,7 @@ import forceAsDate from '@/lib/forceAsDate'
 import AccordionSections from '../AccordionSections'
 import OrderItemsStats from '../OrderItemsStats'
 import OrdersTable from '../OrdersTable'
+import { PaymentMethods, paymentMethods } from '@/CONSTS/paymentMethods'
 
 const BalanceCard = ({ balance }: { balance: BalanceData }) => {
   return (
@@ -45,24 +46,19 @@ const BalanceCard = ({ balance }: { balance: BalanceData }) => {
         <Typography>
           Unidades rentadas: {balance?.itemsStats?.length}
         </Typography>
-        <Typography component={'div'} className="flex ">
-          <div className="text-end w-48">Efectivo: </div>
-          <div className="w-28 ml-2 text-start">
-            <CurrencySpan quantity={balance.paymentsMethods?.mxn} />
-          </div>
-        </Typography>
-        <Typography component={'div'} className="flex ">
-          <div className="text-end w-48">Dolares:</div>
-          <div className="w-28 ml-2 text-start">
-            <CurrencySpan quantity={balance.paymentsMethods?.usd} />
-          </div>
-        </Typography>
-        <Typography component={'div'} className="flex ">
-          <div className="text-end w-48">Tarjeta:</div>
-          <div className="w-28 ml-2 text-start">
-            <CurrencySpan quantity={balance.paymentsMethods?.card} />
-          </div>
-        </Typography>
+
+        {paymentMethods.map((method) => (
+          <Typography key={method.type} component={'div'} className="flex ">
+            <div className="text-end w-48 capitalize">{method.label}: </div>
+            <div className="w-28 ml-2 text-start">
+              <CurrencySpan
+                quantity={
+                  balance?.paymentsMethods?.[method.type as PaymentMethods]
+                }
+              />
+            </div>
+          </Typography>
+        ))}
 
         <AccordionSections
           sections={[

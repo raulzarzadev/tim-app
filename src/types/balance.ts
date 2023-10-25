@@ -4,6 +4,7 @@ import { ItemOrder } from '@/context/userCompaniesContext2'
 import { ItemSelected } from '@/context/useCompanyCashbox'
 import { BaseType } from './base'
 import { CompanyType } from './company'
+import { PaymentMethods } from '@/CONSTS/paymentMethods'
 
 export type Balance = {
   from: Timestamp | Date
@@ -30,7 +31,7 @@ export type BalanceDataFromOrders = {
   items: ItemSelected[]
   itemsStats?: BalanceItem[]
 
-  paymentsMethods: { card: number; mxn: number; usd: number } | undefined
+  paymentsMethods?: Record<PaymentMethods, number> //{ card: number; mxn: number; usd: number } | undefined
 }
 
 export type BalanceItem = Pick<

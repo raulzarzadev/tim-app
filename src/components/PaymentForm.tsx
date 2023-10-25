@@ -30,13 +30,14 @@ const PaymentForm = ({
     charged
   }: Pick<
     PaymentData,
-    'amount' | 'method' | 'usdPrice' | 'charged' | 'rest'
+    'amount' | 'method' | 'usdPrice' | 'charged' | 'rest' | 'ref'
   >) => void | Promise<any>
 }) => {
   const USD_PRICE = usdPrice
   const { register, watch } = useForm<{
     amount: number
     paymentMethod: PaymentData['method']
+    ref?: string
   }>({
     defaultValues: {
       paymentMethod: 'mxn'
@@ -82,6 +83,16 @@ const PaymentForm = ({
             ))}
           </RadioGroup>
         </FormControl>
+      </Box>
+      <Box className="max-w-sm mx-auto">
+        {formValues.paymentMethod === 'deposit' && (
+          <TextField
+            label="Referencia"
+            {...register('ref')}
+            fullWidth
+            required
+          />
+        )}
       </Box>
       <Box className="flex w-full justify-evenly items-center my-4">
         <TextField

@@ -12,6 +12,7 @@ import {
   BalanceItem
 } from '@/types/balance'
 import { calculateTotal } from '@/lib/calculateTotalItem'
+import { PaymentMethods, paymentMethods } from '@/CONSTS/paymentMethods'
 
 export const getOrdersByBalanceForm = (
   balance: Balance,
@@ -42,9 +43,9 @@ export const balanceDataFromOrders = (
     ?.map((p) => p?.amount)
     ?.reduce((p, c) => (p || 0) + (c || 0), 0)
 
-  type PaymentsMethods = Record<Payment['method'], number>
+  //type PaymentsMethods = Record<Payment['method'], number>
   //TODO: test this function
-  const methods: PaymentsMethods | undefined = payments?.reduce(
+  const methods: Record<PaymentMethods, number> | undefined = payments?.reduce(
     (p, c) => {
       //*
       if (c.method === 'usd') {
@@ -59,7 +60,7 @@ export const balanceDataFromOrders = (
         [c.method]: p[c?.method] + (c?.amount || 0)
       }
     },
-    { card: 0, mxn: 0, usd: 0 }
+    { card: 0, mxn: 0, usd: 0, deposit: 0 }
   )
 
   const items: any[] =
