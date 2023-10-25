@@ -10,7 +10,7 @@ import useCashboxContext from '@/context/useCompanyCashbox'
 import SearchClient from './SearchClient'
 
 const ClientForm = () => {
-  const { client, setClient } = useCashboxContext()
+  const { client, setClient, setShipping } = useCashboxContext()
   const { handleSubmit, register, setValue, watch, control, reset } = useForm({
     defaultValues: { phone: '', name: '', ...client } as Partial<Client>
   })
@@ -23,11 +23,18 @@ const ClientForm = () => {
   const signature = formValues.signature
   const name = formValues.name
   const phone = formValues.phone
+  const address = formValues.address
+  const email = formValues.email
   useEffect(() => {
     handleSubmit(onSubmit)()
+    //* should rewrite shipping address when client address change
+    setShipping?.((shipping) => ({
+      ...shipping,
+      address
+    }))
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [imageId, signature, name, phone])
-  console.log({ formValues })
+  }, [imageId, signature, name, phone, address, email])
+
   return (
     <div>
       <form

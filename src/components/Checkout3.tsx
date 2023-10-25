@@ -22,7 +22,7 @@ import AssignForm from './AssignForm'
 
 const Checkout = () => {
   const { currentCompany } = useUserCompaniesContext()
-  const { client, itemsSelected = [], setItemsSelected } = useCashboxContext()
+  const { client, itemsSelected = [], onClearOrder } = useCashboxContext()
   const categories = currentCompany?.categories
   const items = currentCompany?.articles
 
@@ -43,7 +43,7 @@ const Checkout = () => {
 
   const total = calculateFullTotal(itemsSelected, fullItems)
   const handleClearSearch = () => {
-    setItemsSelected?.([])
+    onClearOrder?.()
   }
   const returnBack = (): Date => {
     const qty = itemsSelected?.[0].qty
@@ -118,7 +118,7 @@ const OrderOptions = ({ onCloseParent }: { onCloseParent?: () => void }) => {
     setOrderSaved,
     orderSaved
   } = useCashboxContext()
-  console.log({ client })
+
   const handleSaveOrder = async () => {
     const res = await handleOrder?.({
       companyId: currentCompany?.id || ''
@@ -126,9 +126,7 @@ const OrderOptions = ({ onCloseParent }: { onCloseParent?: () => void }) => {
     //@ts-ignore
     setOrderSaved?.(res?.res?.id)
 
-    // setItemsSelected?.([])
-    // setClient?.({})
-    //onCloseParent?.()
+    //* omit onClear()
   }
 
   const [shippingMenu, setShippingMenu] = useState({
@@ -150,23 +148,24 @@ const OrderOptions = ({ onCloseParent }: { onCloseParent?: () => void }) => {
       }))
     )
   }
-
+  console.log({ shipping })
   return (
     <Box className="flex flex-col items-center my-4">
       <CheckboxLabel
         label="Entregar en tienda"
         checked={shippingMenu.inStore}
-        onChange={(e) =>
+        onChange={(e) => {
           setShippingMenu((order) => ({
             ...order,
             inStore: e.target.checked
           }))
-        }
+        }}
       />
       {!shippingMenu.inStore && (
         <Box>
           <TextField
             label="Dirección"
+            value={shipping?.address || client?.address}
             onChange={(e) => {
               setShipping?.((shipping) => ({
                 ...shipping,
