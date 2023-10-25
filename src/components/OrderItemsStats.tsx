@@ -33,7 +33,11 @@ const OrderItemsStats = ({
           {itemsStats?.map((item) => (
             <tr key={item.id}>
               <td>
-                <ModalItemDetails itemId={item?.id || ''} />
+                <ModalItemDetails
+                  itemId={item?.id || ''}
+                  showCat
+                  hiddenCurrentStatus
+                />
               </td>
               <td>{item?.rentTimes}</td>
               <td>

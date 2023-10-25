@@ -43,6 +43,7 @@ const ItemUsage = ({
 
   const onTime = isAfter(asDate(item.rentFinishAt) || new Date(), new Date())
   const finished = item.rentStatus === 'finished'
+  console.log({ client: item.order.client })
   return (
     <ErrorBoundary>
       <Box className="text-end">

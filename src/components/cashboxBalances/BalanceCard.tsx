@@ -72,7 +72,7 @@ const BalanceCard = ({ balance }: { balance: BalanceData }) => {
               content: <OrdersTable orders={balance?.orders || []} />
             },
             {
-              title: 'Datalle de unidades',
+              title: 'Detalle de unidades',
               subTitle: `${balance.itemsStats?.length || 0}`,
               content: <OrderItemsStats itemsStats={balance.itemsStats || []} />
             }

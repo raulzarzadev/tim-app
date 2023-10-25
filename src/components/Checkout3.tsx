@@ -118,7 +118,7 @@ const OrderOptions = ({ onCloseParent }: { onCloseParent?: () => void }) => {
     setOrderSaved,
     orderSaved
   } = useCashboxContext()
-
+  console.log({ client })
   const handleSaveOrder = async () => {
     const res = await handleOrder?.({
       companyId: currentCompany?.id || ''

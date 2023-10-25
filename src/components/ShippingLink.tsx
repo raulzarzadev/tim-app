@@ -10,6 +10,7 @@ const ShippingLink = ({
 }: {
   address: Order['shipping']['address']
 }) => {
+  console.log({ address })
   return (
     <span>
       {address === 'store' ? (

@@ -23,12 +23,11 @@ const ClientForm = () => {
   const signature = formValues.signature
   const name = formValues.name
   const phone = formValues.phone
-
   useEffect(() => {
     handleSubmit(onSubmit)()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [imageId, signature, name, phone])
-
+  console.log({ formValues })
   return (
     <div>
       <form

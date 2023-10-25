@@ -10,7 +10,6 @@ import Link from 'next/link'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import { usePathname } from 'next/navigation'
 import ErrorBoundary from './ErrorBoundary'
-import zIndex from '@mui/material/styles/zIndex'
 
 export type NavPages = {
   href: string
@@ -99,6 +98,14 @@ export default function BottomNavigation() {
         visible:
           currentCompany?.staff?.find((staff) => staff?.email === user?.email)
             ?.permissions?.MAINTENANCE || false
+      },
+      {
+        href: `/dashboard/${currentCompany?.id}/DELIVERY`,
+        label: 'Reparto',
+        icon: <AppIcon icon="delivery" />,
+        visible:
+          currentCompany?.staff?.find((staff) => staff?.email === user?.email)
+            ?.permissions?.DELIVERY || false
       }
     ]
 
