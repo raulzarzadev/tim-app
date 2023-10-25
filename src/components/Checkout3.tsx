@@ -148,7 +148,6 @@ const OrderOptions = ({ onCloseParent }: { onCloseParent?: () => void }) => {
       }))
     )
   }
-  console.log({ shipping })
   return (
     <Box className="flex flex-col items-center my-4">
       <CheckboxLabel

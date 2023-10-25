@@ -10,17 +10,20 @@ const ShippingLink = ({
 }: {
   address: Order['shipping']['address']
 }) => {
-  console.log({ address })
+  const googleMapsPrefix = ' https://maps.google.com/?q='
+
+  //* Regex checks if the string starts with http
+  const regex = /^http/
+  const formatted = regex.test(address || '')
+    ? address
+    : `${googleMapsPrefix}${address}`
+
   return (
     <span>
       {address === 'store' ? (
         'En tienda'
       ) : (
-        <IconButton
-          LinkComponent={Link}
-          target="_blank"
-          href={`https://maps.google.com/?q=${address}`}
-        >
+        <IconButton LinkComponent={Link} target="_blank" href={formatted || ''}>
           <AppIcon icon="location" />
         </IconButton>
       )}
