@@ -4,6 +4,7 @@ import ModalItemDetails from './ModalItemDetails'
 import CurrencySpan from './CurrencySpan'
 
 const ItemChanges = ({ changes }: { changes: Order['changes'] }) => {
+  console.log({ changes })
   return (
     <div className="mb-4">
       {changes?.length === 0 && (
@@ -18,12 +19,23 @@ const ItemChanges = ({ changes }: { changes: Order['changes'] }) => {
             {changes?.map((change, i) => (
               <Box
                 key={i}
-                className="grid grid-cols-2 items-center place-content-center text-center"
+                className="grid grid-cols-4 items-center place-content-center text-center"
               >
-                <Box>
-                  <ModalItemDetails itemId={change.oldItemId} />
+                <Box className="col-span-2 ">
+                  <ModalItemDetails
+                    itemId={change.oldItemId}
+                    hiddenCurrentStatus
+                    showCat
+                  />
                   {' -> '}
-                  <ModalItemDetails itemId={change.newItemId} />{' '}
+                  <ModalItemDetails
+                    itemId={change.newItemId}
+                    hiddenCurrentStatus
+                    showCat
+                  />{' '}
+                </Box>
+                <Box>
+                  {change.newPrice?.quantity}x{change.newPrice?.unit}
                 </Box>
                 <CurrencySpan quantity={change.amount} />
               </Box>

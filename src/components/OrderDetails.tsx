@@ -8,6 +8,7 @@ import ItemChanges from './ItemChanges'
 import StaffSpan from './StaffSpan'
 
 const OrderDetails = ({ order }: { order?: Partial<Order> }) => {
+  console.log({ order })
   return (
     <div>
       <Typography className="text-center" variant="caption">
