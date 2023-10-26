@@ -18,6 +18,7 @@ import ItemChanges from './ItemChanges'
 import { dateFormat, fromNow } from '@/lib/utils-date'
 import ModalEditShipping from './ModalEditShipping'
 import StaffSpan from './StaffSpan'
+import RenewOrder from './RenewOrder'
 
 const ItemUsage = ({
   item,
@@ -115,8 +116,10 @@ const ItemUsage = ({
           Revisa que la unidad este en buen estado.
         </Typography>
         <Box className="grid gap-4 max-w-xs mx-auto">
+          {/** Change shipping data address, assignedToEmail and date */}
           <ModalEditShipping order={item?.order} />
 
+          {/** Change item */}
           {!finished && onTime && (
             <Button
               fullWidth
@@ -131,11 +134,17 @@ const ItemUsage = ({
               <AppIcon icon="switch" />
             </Button>
           )}
+
+          {/** item rent status and options to modify the rent as finish rent, start rent , etc */}
           <ItemRentStatus item={item} />
+        </Box>
+        <Box className="flex justify-center">
+          <RenewOrder orderId={item?.order?.id} />
         </Box>
         <Box>
           <OrderPaymentsTable payments={payments} />
         </Box>
+
         <ItemChanges changes={item?.order?.changes} />
 
         {!!moreUserOrderItems?.length && (

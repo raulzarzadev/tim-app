@@ -3,11 +3,14 @@ import { Box, Typography } from '@mui/material'
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2'
 
 import CheckoutItemRow from './CheckoutItemRow2'
+import { PriceType } from './PricesForm'
 
 const CheckoutItemsList = ({
-  items
+  items,
+  onSelectPrice
 }: {
   items: (Partial<ArticleType> | null)[]
+  onSelectPrice?: (itemId: string, price: PriceType) => void
 }) => {
   const sortByCat = (
     a: { category?: string } | null,
@@ -27,7 +30,11 @@ const CheckoutItemsList = ({
         .sort(sortByCat)
         .map((item, i) =>
           item ? (
-            <CheckoutItemRow key={item.id} item={item} />
+            <CheckoutItemRow
+              key={item.id}
+              item={item}
+              onSelectPrice={onSelectPrice}
+            />
           ) : (
             <Typography key={i}>{`Articulo no encontrado`}</Typography>
           )

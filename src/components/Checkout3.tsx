@@ -19,6 +19,7 @@ import ModalConfirm from './ModalConfirm'
 import useCashboxContext from '@/context/useCompanyCashbox'
 import AppIcon from './AppIcon'
 import AssignForm from './AssignForm'
+import CheckoutItems from './CheckoutItems'
 
 const Checkout = () => {
   const { currentCompany } = useUserCompaniesContext()
@@ -65,14 +66,7 @@ const Checkout = () => {
         <AppIcon icon="cashbox" />
       </Fab>
       <Modal {...modal}>
-        <CheckoutItemsList items={fullItems || []} />
-        <Typography className="text-end mt-4">
-          Regreso:
-          {dateFormat(returnBack(), ' dd-MMM HH:mm')}
-        </Typography>
-        <Typography className="text-xl font-bold mb-4 text-end">
-          Total: ${asNumber(total)?.toFixed(2)}
-        </Typography>
+        <CheckoutItems itemsSelected={itemsSelected} />
         <Box className="my-4 text-center">
           <ModalClientInfo />
           {!client?.name && (

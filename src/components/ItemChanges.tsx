@@ -4,7 +4,6 @@ import ModalItemDetails from './ModalItemDetails'
 import CurrencySpan from './CurrencySpan'
 
 const ItemChanges = ({ changes }: { changes: Order['changes'] }) => {
-  console.log({ changes })
   return (
     <div className="mb-4">
       {changes?.length === 0 && (

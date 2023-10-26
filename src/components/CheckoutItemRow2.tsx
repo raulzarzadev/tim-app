@@ -12,9 +12,15 @@ import { Typography } from '@mui/material'
 import useModal from '@/hooks/useModal'
 import Modal from './Modal'
 import ChangeItem from './ChangeItem'
-import useCashboxContext from '@/context/useCompanyCashbox'
+import useCashboxContext, { ItemSelected } from '@/context/useCompanyCashbox'
 
-export const CheckoutItemRow = ({ item }: { item: Partial<ArticleType> }) => {
+export const CheckoutItemRow = ({
+  item,
+  onSelectPrice
+}: {
+  item: Partial<ArticleType & Pick<ItemSelected, 'qty' | 'unit'>>
+  onSelectPrice?: (itemId: string, price: PriceType) => void
+}) => {
   const {
     itemsSelected: items = [],
     removeItem,
@@ -26,14 +32,28 @@ export const CheckoutItemRow = ({ item }: { item: Partial<ArticleType> }) => {
   const defaultPrice: {
     unit: PriceType['unit']
     quantity: PriceType['quantity']
-  } = {
-    unit: foundItem?.unit,
-    quantity: foundItem?.qty || 0
-  }
+  } = foundItem
+    ? {
+        unit: foundItem?.unit,
+        quantity: foundItem?.qty || 0
+      }
+    : {
+        unit: item.unit,
+        quantity: item.qty || 0
+      }
 
   const [priceSelected, setPriceSelected] = useState<
     Pick<PriceType, 'unit' | 'quantity'> | undefined
-  >(undefined)
+  >(defaultPrice)
+  // console.log({ defaultPrice })
+  // useEffect(() => {
+  //   if (item.qty && item.unit) {
+  //     setPriceSelected({
+  //       unit: item.unit,
+  //       quantity: item.qty
+  //     })
+  //   }
+  // }, [])
 
   useEffect(() => {
     const priceExist = item?.prices?.find((p) => {
@@ -41,6 +61,7 @@ export const CheckoutItemRow = ({ item }: { item: Partial<ArticleType> }) => {
         p.unit === priceSelected?.unit && p.quantity === priceSelected?.quantity
       )
     })
+    console.log({ priceExist })
     if (priceExist) {
       setPriceSelected(defaultPrice)
       updateItem?.(item.id, {
@@ -67,6 +88,9 @@ export const CheckoutItemRow = ({ item }: { item: Partial<ArticleType> }) => {
   const handleSelectPrice = (p: PriceType) => {
     setPriceSelected(p)
     updateItem?.(item.id, { qty: p.quantity, unit: p.unit })
+
+    //* for the renew option
+    onSelectPrice?.(item.id || '', p)
   }
   const isSelectedPrice = (
     p: PriceType,

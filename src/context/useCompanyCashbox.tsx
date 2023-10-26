@@ -42,6 +42,7 @@ export type CashboxContext = {
   setOrderSaved?: Dispatch<SetStateAction<boolean | string>>
 }
 export const CashboxContext = createContext<CashboxContext>({})
+
 export type ItemSelected = {
   itemId?: ArticleType['id']
   qty?: number
