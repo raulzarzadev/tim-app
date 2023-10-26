@@ -11,6 +11,7 @@ import SearchClient from './SearchClient'
 
 const ClientForm = () => {
   const { client, setClient, setShipping } = useCashboxContext()
+
   const { handleSubmit, register, setValue, watch, control, reset } = useForm({
     defaultValues: { phone: '', name: '', ...client } as Partial<Client>
   })
@@ -25,6 +26,7 @@ const ClientForm = () => {
   const phone = formValues.phone
   const address = formValues.address
   const email = formValues.email
+
   useEffect(() => {
     handleSubmit(onSubmit)()
     //* should rewrite shipping address when client address change

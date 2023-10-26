@@ -1,6 +1,7 @@
 'use client'
 import Checkout from '@/components/Checkout3'
 import ModalPayment from '@/components/ModalPayment2'
+import OrderForm from '@/components/orders/orderForm'
 import { CashboxContextProvider } from '@/context/useCompanyCashbox'
 import { ArticleType } from '@/types/article'
 import { CategoryType } from '@/types/category'
@@ -122,6 +123,9 @@ function Page() {
       <div>
         Modal Payment
         <ModalPayment amount={200} />
+      </div>
+      <div>
+        <OrderForm />
       </div>
     </div>
   )
