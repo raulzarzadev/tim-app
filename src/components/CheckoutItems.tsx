@@ -9,14 +9,16 @@ import { calculateFullTotal } from '@/lib/calculateTotalItem'
 import { addMinutes } from 'date-fns'
 import rentTime from '@/lib/rentTime'
 import { PriceType } from './PricesForm'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 
 const CheckoutItems = ({
   itemsSelected,
-  setTotal
+  setTotal,
+  setItemsSelected
 }: {
   itemsSelected: ItemSelected[]
   setTotal?: Dispatch<SetStateAction<number>>
+  setItemsSelected?: (items: ItemSelected[]) => void
 }) => {
   const { currentCompany } = useUserCompaniesContext()
   const categories = currentCompany?.categories
@@ -48,6 +50,7 @@ const CheckoutItems = ({
     ]
     console.log({ newItems })
     _setItemsSelected(newItems)
+    setItemsSelected?.(itemsSelected)
 
     const t = calculateFullTotal(newItems, fullItems)
     _setTotal(t)
@@ -55,12 +58,16 @@ const CheckoutItems = ({
   }
 
   const returnBack = (): Date => {
-    const qty = itemsSelected?.[0].qty
-    const unit = itemsSelected?.[0].unit
+    const qty = itemsSelected?.[0]?.qty
+    const unit = itemsSelected?.[0]?.unit
     const time = rentTime(qty, unit)
     return addMinutes(new Date(), time)
   }
   //const total = calculateFullTotal(_itemsSelected, fullItems)
+
+  useEffect(() => {
+    _setItemsSelected(itemsSelected)
+  }, [itemsSelected])
 
   return (
     <div>

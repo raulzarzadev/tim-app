@@ -1,29 +1,55 @@
-import { Button, Typography } from '@mui/material'
+import { Button } from '@mui/material'
 import Modal from '../Modal'
 import useModal from '@/hooks/useModal'
 import SelectCompanyItem from './SelectCompanyItem'
 import { useState } from 'react'
-import { ArticleType } from '@/types/article'
+import CheckoutItems from '../CheckoutItems'
+import { ItemSelected } from '@/context/useCompanyCashbox'
 
-const OrderItemsForm = () => {
+const OrderItemsForm = ({
+  items,
+  setItems
+}: {
+  items?: ItemSelected[]
+  setItems?: (items: ItemSelected[]) => void
+}) => {
   const modalAddItem = useModal({ title: 'Agregar unidades' })
-  const [items, setItems] = useState<ArticleType['id'][]>([])
+  // const [_items, _setItems] = useState<ArticleType['id'][]>(items || [])
+  const [itemsSelected, setItemsSelected] = useState<ItemSelected[]>(
+    items || []
+  )
+
+  const handleSetItems = (items: ItemSelected[]) => {
+    setItemsSelected(items)
+  }
   return (
-    <div>
-      <Button onClick={modalAddItem.onOpen}>Agregar unidades</Button>
+    <div className="grid gap-4">
+      <Button onClick={modalAddItem.onOpen}>Seleccionar unidades</Button>
       <Modal {...modalAddItem}>
         <SelectCompanyItem
           multiple
-          itemsSelected={items}
+          itemsSelected={itemsSelected.map((i) => i.itemId || '') || []}
           setItems={(items) => {
-            setItems(items)
+            setItemsSelected?.(items.map((itemId) => ({ itemId })))
             modalAddItem.onClose()
           }}
         />
       </Modal>
-      {items.map((item) => (
-        <Typography key={item}>{item}</Typography>
-      ))}
+      <CheckoutItems
+        itemsSelected={itemsSelected}
+        setItemsSelected={handleSetItems}
+      />
+      <div className="flex justify-center">
+        <Button
+          onClick={() => {
+            //setItemsSelected?.()
+            setItems?.(itemsSelected)
+            modalAddItem.onClose()
+          }}
+        >
+          Listo
+        </Button>
+      </div>
     </div>
   )
 }
