@@ -20,10 +20,11 @@ const ClientForm = ({
       address: '',
       email: '',
       imageID: '',
+      signature: '',
       ...client
-    }
+    } as Partial<Client>
   })
-  const onSubmit = (data?: Client) => {
+  const onSubmit = (data?: Partial<Client>) => {
     setClient?.(data)
   }
 

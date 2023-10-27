@@ -26,9 +26,14 @@ const SelectCompanyItem = ({
   itemsDisabled,
   multiple = false,
   showItemDetails,
+  // FIXME: multiple conditional typing
+  //@ts-ignore
   itemsSelected,
+  //@ts-ignore
   itemSelected,
+  //@ts-ignore
   setItems,
+  //@ts-ignore
   setItem
 }: SelectItemsProps) => {
   console.log({ itemsSelected })
