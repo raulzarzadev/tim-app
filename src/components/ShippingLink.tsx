@@ -1,5 +1,5 @@
 import { Order } from '@/types/order'
-import { IconButton } from '@mui/material'
+import { IconButton, Tooltip } from '@mui/material'
 import Link from 'next/link'
 import AppIcon from './AppIcon'
 
@@ -12,20 +12,28 @@ const ShippingLink = ({
 
   //* Regex checks if the string starts with http
   const regex = /^http/
-  const formatted = regex.test(address || '')
-    ? address
-    : `${googleMapsPrefix}${address}`
+  const isLink = regex.test(address || '')
+  const formatted = isLink ? address : `${googleMapsPrefix}${address}`
 
   return (
-    <span>
-      {address === 'store' || !address ? (
-        'En tienda'
-      ) : (
-        <IconButton LinkComponent={Link} target="_blank" href={formatted || ''}>
-          <AppIcon icon="location" />
-        </IconButton>
-      )}
-    </span>
+    <Tooltip title={formatted}>
+      <span>
+        <>
+          {address === 'store' || !address ? (
+            'En tienda'
+          ) : (
+            <IconButton
+              size="small"
+              LinkComponent={Link}
+              target="_blank"
+              href={formatted || ''}
+            >
+              <AppIcon icon="location" fontSize="small" />
+            </IconButton>
+          )}
+        </>
+      </span>
+    </Tooltip>
   )
 }
 

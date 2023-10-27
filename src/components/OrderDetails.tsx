@@ -6,6 +6,7 @@ import { dateFormat } from '@/lib/utils-date'
 import ShippingLink from './ShippingLink'
 import ItemChanges from './ItemChanges'
 import StaffSpan from './StaffSpan'
+import ClientInfo from './ClientInfo'
 
 const OrderDetails = ({ order }: { order?: Partial<Order> }) => {
   console.log({ order })
@@ -15,11 +16,12 @@ const OrderDetails = ({ order }: { order?: Partial<Order> }) => {
         Id: {order?.id}
       </Typography>
       <div className="mb-4">
-        <Typography variant="h5">Cliente</Typography>
+        <ClientInfo client={order?.client} />
+        {/* <Typography variant="h5">Cliente</Typography>
         <Typography>Cliente: {order?.client?.name}</Typography>
         <Typography>Telefono: {order?.client?.phone}</Typography>
         <Typography>Dirección: {order?.client?.address}</Typography>
-        <Typography>Email: {order?.client?.email}</Typography>
+        <Typography>Email: {order?.client?.email}</Typography> */}
       </div>
       <div>
         <Typography variant="h5">Unidades</Typography>

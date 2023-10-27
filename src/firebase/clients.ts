@@ -4,6 +4,7 @@ import { FirebaseCRUD } from './firebase.CRUD'
 import { db } from './main'
 import { BaseType } from '@/types/base'
 import { Client } from '@/types/client'
+import { Order } from '@/types/order'
 
 /*
  * You should be able to copy all this file and just replace
@@ -45,3 +46,18 @@ export const listenCompanyClients = async (
   companyId: string,
   cb: CallableFunction
 ) => await itemCRUD.listenItems([where('companyId', '==', companyId)], cb)
+
+export const getAndUpdateClientData = async (
+  client: Partial<Order['client']>,
+  companyId: string
+) => {
+  let res = client
+  res.companyId = companyId
+  if (client.id) {
+    const clientUpdated = await updateClient(client.id, client)
+    return res
+  } else {
+    const newClient = await createClient(client)
+    return { ...res, id: newClient.res.id }
+  }
+}

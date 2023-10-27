@@ -10,7 +10,7 @@ const CompanyOrders = () => {
     o?.items?.some((i) => i?.rentStatus === 'taken')
   )
   const pending = orders?.filter((o) =>
-    o?.items?.some((i) => i?.rentStatus === 'pending')
+    o?.items?.some((i) => i?.rentStatus === 'pending' || !i.rentStatus)
   )
   const finished = orders?.filter((o) =>
     o?.items?.some((i) => i?.rentStatus === 'finished')

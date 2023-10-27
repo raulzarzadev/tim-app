@@ -7,6 +7,8 @@ import { ArticleType } from '@/types/article'
 import { Order, OrderBase, Payment } from '@/types/order'
 import { v4 as uidGenerator } from 'uuid'
 import { ItemSelected } from '@/context/useCompanyCashbox'
+import { getAndUpdateClientData } from './clients'
+import { Client } from '@/types/client'
 
 /*
  * You should be able to copy all this file and just replace
@@ -26,8 +28,13 @@ export const itemCRUD = new FirebaseCRUD(COLLECTION_NAME, db, storage)
 export const setOrder = async (itemId: ItemType['id'], newItem: NewItem) =>
   await itemCRUD.setItem(itemId || '', { ...newItem, id: itemId })
 
-export const createOrder = async (newItem: CreateItem) =>
-  await itemCRUD.createItem({ ...newItem })
+export const createOrder = async (newItem: CreateItem) => {
+  const clientData = await getAndUpdateClientData(
+    newItem.client as Client,
+    newItem.companyId || ''
+  )
+  return await itemCRUD.createItem({ ...newItem, client: clientData })
+}
 
 export const updateOrder = async (itemId: string, updates: NewItem) =>
   await itemCRUD.updateItem(itemId, updates)
