@@ -89,8 +89,10 @@ export function UserCompaniesProvider({
     (company) => company?.id === companySelected
   )
   useEffect(() => {
-    listenCompanyServices(companySelected, setServices)
-  }, [companySelected])
+    if (user) {
+      listenCompanyServices(companySelected, setServices)
+    }
+  }, [companySelected, user])
 
   useEffect(() => {
     const bajaRent: { selectedCompany: CompanyType['id'] } = JSON.parse(
@@ -111,12 +113,17 @@ export function UserCompaniesProvider({
   }, [user])
 
   useEffect(() => {
-    listenCompanyClients(currentCompany?.id || '', setClients)
-  }, [currentCompany?.id])
+    if (user) {
+      listenCompanyClients(currentCompany?.id || '', setClients)
+    }
+  }, [currentCompany?.id, user])
 
   useEffect(() => {
-    listenCompanyOrders(currentCompany?.id || '', setOrders)
-  }, [currentCompany?.id])
+    if (user) {
+      listenCompanyOrders(currentCompany?.id || '', setOrders)
+    }
+  }, [currentCompany?.id, user])
+
   const handleSetCompanySelected = (companySelectedId: string) => {
     localStorage.setItem(
       'baja-rent',

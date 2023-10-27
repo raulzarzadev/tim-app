@@ -2,7 +2,7 @@
 
 import { authStateChanged } from '@/firebase/auth'
 import { UserType } from '@/types/user'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import {
   ReactNode,
   SetStateAction,
@@ -26,9 +26,10 @@ export type AuthContextType = {
 export function AuthContextProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<UserType | null | undefined>(undefined)
   const router = useRouter()
+  const pathname = usePathname()
   useEffect(() => {
     authStateChanged((user: SetStateAction<UserType | null | undefined>) => {
-      if (user === null) {
+      if (user === null && !(pathname === '/components')) {
         router.replace('/')
       }
       setUser(user)
