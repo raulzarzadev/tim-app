@@ -5,6 +5,7 @@ import InputUploadFile from '../InputUploadFile'
 import PreviewImage from '../PreviewImage'
 import ModalSignature from '../ModalSignature'
 import PhoneInput from '../PhoneInput'
+import SearchClient from '../SearchClient'
 
 const ClientForm = ({
   client,
@@ -35,10 +36,32 @@ const ClientForm = ({
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)} className="grid gap-2">
-        <TextField {...register('name')} label="Nombre" required />
-        <TextField {...register('email')} label="Email" required />
+        {/* <TextField {...register('name')} label="Nombre" required /> */}
+        <div className="flex">
+          <TextField
+            {...register('name')}
+            label="Nombre"
+            required
+            className="w-full"
+          />{' '}
+          <div>
+            <SearchClient
+              onSelectClient={(e) => {
+                setClient?.(e)
+                setValue('id', e.id)
+                setValue('name', e.name)
+                setValue('phone', e.phone)
+                setValue('email', e.email)
+                setValue('address', e.address)
+                setValue('imageID', e.imageID)
+                setValue('signature', e.signature)
+              }}
+            />
+          </div>
+        </div>
+        <TextField {...register('email')} label="Email" />
         <PhoneInput {...register('phone')} label="Teléfono" control={control} />
-        <TextField {...register('address')} label="Dirección" required />
+        <TextField {...register('address')} label="Dirección" />
 
         {/* Identificación */}
         <InputUploadFile
