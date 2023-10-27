@@ -53,7 +53,10 @@ const OrderPaymentsTable = ({ payments }: { payments: Payment[] }) => {
                   className="grid grid-cols-6 place-content-center items-center text-center shadow-md rounded-md p-1 m-1 "
                 >
                   <Typography className="col-span-2">
-                    {dateFormat(asDate(p.date), 'EEE dd-MM-yy HH:mm')}
+                    {dateFormat(
+                      asDate(p.date || p.created.at),
+                      'EEE dd-MM-yy HH:mm'
+                    )}
                   </Typography>
                   <Typography>{p.method}</Typography>
                   <Typography>

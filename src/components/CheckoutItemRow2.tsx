@@ -61,7 +61,6 @@ export const CheckoutItemRow = ({
         p.unit === priceSelected?.unit && p.quantity === priceSelected?.quantity
       )
     })
-    console.log({ priceExist })
     if (priceExist) {
       setPriceSelected(defaultPrice)
       updateItem?.(item.id, {

@@ -24,6 +24,7 @@ export type Shipping = {
   assignedToEmail?: StaffType['email']
   date?: Timestamp | Date
   address?: string | 'store'
+  amount?: number
 }
 
 export type Payment = {

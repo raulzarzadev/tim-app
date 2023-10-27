@@ -4,6 +4,7 @@ import { Typography } from '@mui/material'
 import { dateFormat, fromNow } from '@/lib/utils-date'
 import asDate from '@/lib/asDate'
 import StaffSpan from './StaffSpan'
+import CurrencySpan from './CurrencySpan'
 
 const ShippingDetails = ({ shipping }: { shipping: Order['shipping'] }) => {
   return (
@@ -22,6 +23,9 @@ const ShippingDetails = ({ shipping }: { shipping: Order['shipping'] }) => {
       </Typography>
       <Typography>
         Lugar: <ShippingLink address={shipping.address} />
+      </Typography>
+      <Typography>
+        Costo: <CurrencySpan quantity={shipping.amount || 0} />
       </Typography>
     </div>
   )

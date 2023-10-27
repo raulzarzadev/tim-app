@@ -48,9 +48,8 @@ const CheckoutItems = ({
         unit: price.unit
       }
     ]
-    console.log({ newItems })
     _setItemsSelected(newItems)
-    setItemsSelected?.(itemsSelected)
+    setItemsSelected?.(newItems)
 
     const t = calculateFullTotal(newItems, fullItems)
     _setTotal(t)

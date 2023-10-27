@@ -125,7 +125,7 @@ function Page() {
         <ModalPayment amount={200} />
       </div>
       <div>
-        <OrderForm />
+        <OrderForm handleSave={(order) => console.log({ order })} />
       </div>
     </div>
   )

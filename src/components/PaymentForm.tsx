@@ -19,8 +19,10 @@ import AppIcon from './AppIcon'
 const PaymentForm = ({
   amount = 0,
   usdPrice = 1,
-  onPay
+  onPay,
+  exactAmount = true
 }: {
+  exactAmount?: boolean
   amount: number
   usdPrice: number
   onPay?: ({
@@ -58,6 +60,8 @@ const PaymentForm = ({
       ? formValues.amount * USD_PRICE
       : formValues.amount
   )
+
+  const disableOnPay = exactAmount && amountInMXN < amount
 
   return (
     <div>
@@ -113,7 +117,7 @@ const PaymentForm = ({
         />
 
         <ModalConfirm
-          disabled={amountInMXN < amount}
+          disabled={disableOnPay}
           handleConfirm={async () => {
             return handlePay()
           }}

@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Button, Chip, Stack } from '@mui/material'
 import { ArticleType } from '@/types/article'
 import ArticleDetails from '../ArticleDetails'
+import MyTable from '../MyTable'
 
 export type SelectItemsProps = {
   itemsDisabled?: string[]
@@ -30,6 +31,7 @@ const SelectCompanyItem = ({
   setItems,
   setItem
 }: SelectItemsProps) => {
+  console.log({ itemsSelected })
   const { currentCompany } = useUserCompaniesContext()
   const categories: { label: string; value: string }[] =
     currentCompany?.categories?.map((cat) => ({

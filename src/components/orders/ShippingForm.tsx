@@ -1,5 +1,5 @@
 import { Order } from '@/types/order'
-import { Dispatch, useState } from 'react'
+import { Dispatch, useEffect, useState } from 'react'
 import CheckboxLabel from '../Checkbox'
 import { Box, TextField } from '@mui/material'
 import { inputDateFormat } from '@/lib/utils-date'
@@ -14,8 +14,12 @@ const ShippingForm = ({
   setShipping?: Dispatch<Order['shipping']>
 }) => {
   const [shippingMenu, setShippingMenu] = useState({
-    inStore: true,
-    pickupNow: true
+    inStore: shipping?.address == 'store' || !shipping?.address ? true : false,
+    pickupNow:
+      forceAsDate(shipping?.date).getTime() < new Date().getTime()
+        ? false
+        : true,
+    freeShipping: !shipping?.amount
   })
 
   const [_shipping, _setShipping] = useState(
@@ -26,7 +30,17 @@ const ShippingForm = ({
     }
   )
 
-  const handleChangeShipping = (field: string, value: string | Date) => {
+  const handleChangeShippingMenu = (field: string, value: boolean) => {
+    setShippingMenu((menu) => ({
+      ...menu,
+      [field]: value
+    }))
+  }
+
+  const handleChangeShipping = (
+    field: string,
+    value: string | Date | number
+  ) => {
     const shippingCopy = { ..._shipping, [field]: value }
     _setShipping(shippingCopy)
     setShipping?.(shippingCopy)
@@ -34,14 +48,13 @@ const ShippingForm = ({
 
   return (
     <Box className="flex flex-col items-center my-4">
+      {/******   SHIPPING LOCATION  */}
       <CheckboxLabel
         label="Entregar en tienda"
         checked={shippingMenu.inStore}
         onChange={(e) => {
-          setShippingMenu((order) => ({
-            ...order,
-            inStore: e.target.checked
-          }))
+          e.target.checked && handleChangeShipping('address', 'store')
+          handleChangeShippingMenu('inStore', e.target.checked)
         }}
       />
       {!shippingMenu.inStore && (
@@ -55,15 +68,14 @@ const ShippingForm = ({
           />
         </Box>
       )}
+
+      {/******   SHIPPING DATE  */}
       <Box className="flex justify-start ">
         <CheckboxLabel
           label="Entregar ahora"
           checked={shippingMenu.pickupNow}
           onChange={(e) =>
-            setShippingMenu((order) => ({
-              ...order,
-              pickupNow: e.target.checked
-            }))
+            handleChangeShippingMenu('pickupNow', e.target.checked)
           }
         />
       </Box>
@@ -79,6 +91,36 @@ const ShippingForm = ({
           />
         </Box>
       )}
+
+      {/******   SHIPPING AMOUNT  */}
+
+      <Box className="flex justify-start ">
+        <CheckboxLabel
+          label="Sin costo $"
+          checked={shippingMenu.freeShipping}
+          onChange={(e) => {
+            handleChangeShippingMenu('freeShipping', e.target.checked)
+            if (!!e.target.checked) {
+              console.log('checked')
+              handleChangeShipping('amount', 0)
+            }
+          }}
+        />
+      </Box>
+      {!shippingMenu.freeShipping && (
+        <Box className="mb-4">
+          <TextField
+            type="number"
+            label="Costo de envío"
+            onChange={(e) => {
+              handleChangeShipping('amount', e.target.value)
+            }}
+            value={_shipping?.amount}
+          />
+        </Box>
+      )}
+
+      {/******   SHIPPING STAFF  */}
 
       <div className="my-4">
         <AssignForm

@@ -10,11 +10,18 @@ const ClientForm = ({
   client,
   setClient
 }: {
-  client?: Client
+  client?: Partial<Client>
   setClient?: (client?: Partial<Client>) => void
 }) => {
   const { register, handleSubmit, control, setValue, reset } = useForm({
-    defaultValues: client
+    defaultValues: {
+      phone: '',
+      name: '',
+      address: '',
+      email: '',
+      imageID: '',
+      ...client
+    }
   })
   const onSubmit = (data?: Client) => {
     setClient?.(data)
