@@ -42,14 +42,20 @@ const ModalContactClient = ({ client }: { client: Payment['client'] }) => {
   return (
     <>
       <div className="flex items-center ">
-        <Typography className="whitespace-nowrap">Dato de contacto</Typography>
-        <IconButton
-          onClick={(e) => {
-            modal.onOpen()
-          }}
+        <Typography
+          className="whitespace-nowrap"
+          component={'label'}
+          data-testid="contact-client"
         >
-          <AppIcon icon="phone" />
-        </IconButton>
+          Datos de contacto
+          <IconButton
+            onClick={(e) => {
+              modal.onOpen()
+            }}
+          >
+            <AppIcon icon="phone" />
+          </IconButton>
+        </Typography>
       </div>
       <Modal {...modal}>
         <Grid2 container spacing={2} justifyContent={'center'}>
@@ -62,7 +68,7 @@ const ModalContactClient = ({ client }: { client: Payment['client'] }) => {
             ([key, value]) =>
               value?.value && (
                 <Grid2 key={key} xs={'auto'}>
-                  <Tooltip title={value.label}>
+                  <Tooltip title={value.label} data-testid={`tooltip-${key}`}>
                     <IconButton
                       onClick={(e) => {}}
                       LinkComponent={Link}

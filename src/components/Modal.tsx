@@ -1,4 +1,4 @@
-import { Box, Container, IconButton, Typography } from '@mui/material'
+import { Box, Container, IconButton, Tooltip, Typography } from '@mui/material'
 import MUIModal, { ModalProps as MUIModalProps } from '@mui/material/Modal'
 import { ReactNode } from 'react'
 import AppIcon from './AppIcon'
@@ -48,14 +48,17 @@ const Modal = ({
           <Typography id={`modal-modal-${title}`} variant="h6" component="h2">
             {title}
           </Typography>
-          <IconButton
-            onClick={(e) => {
-              e.stopPropagation()
-              onClose?.(e, 'escapeKeyDown')
-            }}
-          >
-            <AppIcon icon="close" />
-          </IconButton>
+          <Tooltip title="Cerrar">
+            <IconButton
+              aria-label={`close-modal-${title}`}
+              onClick={(e) => {
+                e.stopPropagation()
+                onClose?.(e, 'escapeKeyDown')
+              }}
+            >
+              <AppIcon icon="close" />
+            </IconButton>
+          </Tooltip>
         </Box>
         <Typography id={`modal-modal-description-${title}`} sx={{ mt: 2 }}>
           {description}
