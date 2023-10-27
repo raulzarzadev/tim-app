@@ -54,7 +54,7 @@ const OrderDetails = ({ order }: { order?: Partial<Order> }) => {
               headers: [
                 {
                   label: 'Fecha',
-                  key: 'date',
+                  key: 'created.at',
                   format: (value) => dateFormat(value, 'dd/MMM HH:mm')
                 },
                 {

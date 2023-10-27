@@ -1,13 +1,10 @@
-import useModal from '@/hooks/useModal'
 import { Payment } from '@/types/order'
-import Modal from './Modal'
 import { Box, Typography } from '@mui/material'
 import asDate from '@/lib/asDate'
 import { dateFormat } from '@/lib/utils-date'
 import CurrencySpan from './CurrencySpan'
 
 const OrderPaymentsTable = ({ payments }: { payments: Payment[] }) => {
-  const modalPay = useModal()
   return (
     <div>
       <Typography className="text-center font-bold mt-6">Pagos</Typography>
@@ -16,20 +13,6 @@ const OrderPaymentsTable = ({ payments }: { payments: Payment[] }) => {
           <Typography className="text-center my-4">
             No hay pagos registrados
           </Typography>
-          {/* <button
-            onClick={(e) => {
-              e.preventDefault()
-              modalPay.onOpen()
-            }}
-            className="text-center font-bold bg-yellow-400 shadow-md rounded-md p-1 w-full"
-          >
-            Sin pagos
-          </button>
-          <Modal {...modalPay}>
-            <Box className="text-center ">
-              <Typography className="my-4">No hay pagos registrados</Typography>
-            </Box>
-          </Modal> */}
         </>
       ) : (
         <Box>
