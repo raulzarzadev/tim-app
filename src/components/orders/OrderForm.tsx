@@ -11,6 +11,7 @@ import CheckoutItems from '../CheckoutItems'
 import SelectCompanyItem from './SelectCompanyItem'
 import ModalPayment from '../ModalPayment3'
 import OrderPaymentsTable from '../OrderPaymentsTable'
+import asNumber from '@/lib/asNumber'
 
 const OrderForm = ({
   handleSave,
@@ -26,12 +27,19 @@ const OrderForm = ({
 
   const [order, setOrder] = useState<Partial<Order>>(defaultOrder || {})
 
-  const [total, setTotal] = useState(0)
+  const [itemsTotal, setItemsTotal] = useState(0)
 
   const orderPaymentsCharged =
-    order.payments?.reduce((acc, curr) => acc + curr.amount, 0) || 0
-  const paymentIsComplete = orderPaymentsCharged >= total
+    order.payments?.reduce((acc, curr) => {
+      if (curr.method === 'usd') return acc + curr.amount * curr.usdPrice
+      return acc + curr.amount
+    }, 0) || 0
 
+  const paymentIsComplete = orderPaymentsCharged >= itemsTotal
+
+  const shippingAmount = asNumber(order.shipping?.amount) || 0
+  const total = itemsTotal - orderPaymentsCharged + shippingAmount
+  console.log({ total, orderPaymentsCharged })
   return (
     <div>
       <Button onClick={modal.onOpen}>Orden</Button>
@@ -72,8 +80,9 @@ const OrderForm = ({
           <Button onClick={itemsForm.onOpen}>Seleccionar unidades</Button>
           {order.items && (
             <CheckoutItems
+              shippingAmount={shippingAmount}
               itemsSelected={order.items}
-              setTotal={setTotal}
+              setTotal={setItemsTotal}
               setItemsSelected={(itemsSelected) => {
                 setOrder({ ...order, items: itemsSelected })
               }}
@@ -98,7 +107,7 @@ const OrderForm = ({
           {!!order?.items?.length && (
             <ModalPayment
               disabled={!!paymentIsComplete}
-              amount={total - orderPaymentsCharged}
+              amount={total}
               label="Pagar "
               setPayment={(payment) => {
                 const payments = [...(order.payments || []), payment]

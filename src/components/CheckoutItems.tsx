@@ -10,15 +10,18 @@ import { addMinutes } from 'date-fns'
 import rentTime from '@/lib/rentTime'
 import { PriceType } from './PricesForm'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import CurrencySpan from './CurrencySpan'
 
 const CheckoutItems = ({
   itemsSelected,
   setTotal,
-  setItemsSelected
+  setItemsSelected,
+  shippingAmount
 }: {
   itemsSelected: ItemSelected[]
   setTotal?: Dispatch<SetStateAction<number>>
   setItemsSelected?: (items: ItemSelected[]) => void
+  shippingAmount?: number
 }) => {
   const { currentCompany } = useUserCompaniesContext()
   const categories = currentCompany?.categories
@@ -78,8 +81,20 @@ const CheckoutItems = ({
         Regreso:
         {dateFormat(returnBack(), ' dd-MMM HH:mm')}
       </Typography>
-      <Typography className="text-xl font-bold mb-4 text-end">
-        Total: ${asNumber(_total)?.toFixed(2)}
+
+      <Typography className="text-end mt-4">
+        Costo de envio:
+        <CurrencySpan quantity={shippingAmount} />
+      </Typography>
+
+      <Typography className="  text-end">
+        Unidades: <CurrencySpan quantity={_total} />
+      </Typography>
+      <Typography className="  text-end">
+        Total:{' '}
+        <span className="font-bold">
+          <CurrencySpan quantity={_total + (shippingAmount || 0)} />
+        </span>
       </Typography>
     </div>
   )

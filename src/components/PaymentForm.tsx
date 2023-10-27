@@ -141,7 +141,8 @@ const PaymentForm = ({
               Recibido (mxn) : <CurrencySpan quantity={amountInMXN} />
             </Typography>
             <Typography>
-              Cambio (mxn) : <CurrencySpan quantity={amountInMXN - amount} />
+              {(amountInMXN - amount || 0) < 0 ? 'Faltan' : 'Sobran'}:{' '}
+              <CurrencySpan quantity={Math.abs(amountInMXN - amount)} />
             </Typography>
           </Box>
         </ModalConfirm>
