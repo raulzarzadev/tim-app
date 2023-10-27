@@ -34,6 +34,10 @@ const permissionsList: Record<
   RECEPTION: {
     label: StaffPermissionLabels.RECEPTION,
     value: false
+  },
+  ORDERS: {
+    label: StaffPermissionLabels.ORDERS,
+    value: false
   }
 }
 export default function StaffPermissionsForm({

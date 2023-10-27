@@ -30,6 +30,7 @@ import EmailIcon from '@mui/icons-material/Email'
 import WhatsAppIcon from '@mui/icons-material/WhatsApp'
 import { SvgIconProps } from '@mui/material'
 import AddCommentIcon from '@mui/icons-material/AddComment'
+import ReceiptLongIcon from '@mui/icons-material/ReceiptLong'
 // https://mui.com/material-ui/material-icons/
 
 const icons = {
@@ -64,7 +65,8 @@ const icons = {
   mail: EmailIcon,
   whatsapp: WhatsAppIcon,
   location: LocationOnIcon,
-  addComment: AddCommentIcon
+  addComment: AddCommentIcon,
+  order: ReceiptLongIcon
 } as const
 
 // https://mui.com/material-ui/material-icons/

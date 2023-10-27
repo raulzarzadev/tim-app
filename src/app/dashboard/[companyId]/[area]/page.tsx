@@ -3,6 +3,7 @@ import CompanyAdmin from '@/components/CompanyAdmin'
 import CompanyCashbox2 from '@/components/CompanyCashbox2'
 import CompanyDelivery from '@/components/CompanyDelivery'
 import CompanyMaintenance from '@/components/CompanyMaintenance'
+import CompanyOrders from '@/components/CompanyOrders'
 import CompanyReception from '@/components/CompanyReception'
 import CompanyStore from '@/components/CompanyStore'
 import ErrorBoundary from '@/components/ErrorBoundary'
@@ -28,6 +29,7 @@ const Page = ({
         {area === 'MAINTENANCE' && <CompanyMaintenance />}
         {area === 'RECEPTION' && <CompanyReception />}
         {area === 'SALES' && <CompanyStore />}
+        {area === 'ORDERS' && <CompanyOrders />}
       </>
     </ErrorBoundary>
   )

@@ -106,6 +106,14 @@ export default function BottomNavigation() {
         visible:
           currentCompany?.staff?.find((staff) => staff?.email === user?.email)
             ?.permissions?.DELIVERY || false
+      },
+      {
+        href: `/dashboard/${currentCompany?.id}/ORDERS`,
+        label: 'Ordenes',
+        icon: <AppIcon icon="order" />,
+        visible:
+          currentCompany?.staff?.find((staff) => staff?.email === user?.email)
+            ?.permissions?.ORDERS || false
       }
     ]
 
