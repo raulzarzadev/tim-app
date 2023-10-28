@@ -54,6 +54,7 @@ export type ItemSelected = {
   inUse?: boolean
   rentStatus?: 'pending' | 'taken' | 'finished'
   rentFinishedAt?: Date | Timestamp
+  rentStartedAt?: Date | Timestamp
 }
 
 export const CashboxContextProvider = ({

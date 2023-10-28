@@ -98,34 +98,30 @@ export const startItemRent = async (
   })
 }
 
-export const finishOrderRent = async (OrderId?: Order['id']) => {
-  if (!OrderId) return
+export const finishOrderRent = async (OrderId: Order['id']) => {
   const Order: Order = await itemCRUD.getItem(OrderId)
   const items = Order?.items
   const newItems: Order['items'] = items.map((item) => ({
     ...item,
     inUse: false,
-    rentStatus: 'finished'
+    rentStatus: 'finished',
+    rentFinishedAt: new Date()
   }))
   return await updateOrder(OrderId, {
     items: newItems
   })
 }
 
-export const startOrderRent = async (OrderId?: Order['id']) => {
-  if (!OrderId) return
+export const startOrderRent = async (OrderId: Order['id']) => {
   const order: Order = await itemCRUD.getItem(OrderId)
   const items = order?.items
   const newItems: Order['items'] = items.map((item) => ({
     ...item,
     inUse: true,
-    rentStatus: 'taken'
+    rentStatus: 'taken',
+    rentStartedAt: new Date()
   }))
   return await updateOrder(OrderId, {
-    shipping: {
-      ...order.shipping,
-      date: new Date()
-    },
     items: newItems
   })
 }

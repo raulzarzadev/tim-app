@@ -7,6 +7,8 @@ import MyTable from './MyTable'
 import useModal from '@/hooks/useModal'
 import { useState } from 'react'
 import StaffSpan from './StaffSpan'
+import OrderActions from './orders/OrderActions'
+import { Tooltip } from '@mui/material'
 
 const OrdersTable = ({ orders }: { orders: Partial<Order>[] }) => {
   const [order, setOrder] = useState<Partial<Order>>()
@@ -17,6 +19,14 @@ const OrdersTable = ({ orders }: { orders: Partial<Order>[] }) => {
     <div>
       <Modal {...modal}>
         <OrderDetails order={order} />
+        {order?.id && (
+          <OrderActions
+            orderId={order.id}
+            onAction={(action) => {
+              modal.onClose()
+            }}
+          />
+        )}
       </Modal>
       <MyTable
         onRowClick={(id) => {
@@ -28,16 +38,21 @@ const OrdersTable = ({ orders }: { orders: Partial<Order>[] }) => {
             {
               label: 'Actualizado',
               key: 'updated.at',
-              format: (date) => dateFormat(date, 'dd/MMM HH:mm')
+              format: (date) => fromNow(date)
             },
             {
               label: 'Creado',
               key: 'created.at',
-              format: (date) => dateFormat(date, 'dd/MMM HH:mm')
+              format: (date) => fromNow(date)
             },
             {
-              label: 'Entrega',
+              label: 'Programado',
               key: 'shipping.date',
+              format: (date) => fromNow(date)
+            },
+            {
+              label: 'Entregado',
+              key: 'items.[0].rentStartedAt',
               format: (date) => fromNow(date)
             },
             {

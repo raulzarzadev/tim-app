@@ -10,7 +10,6 @@ import ClientInfo from './ClientInfo'
 import OrderActions from './orders/OrderActions'
 
 const OrderDetails = ({ order }: { order?: Partial<Order> }) => {
-  console.log({ order })
   return (
     <div>
       <div className="flex   flex-col items-end sm:justify-between sm:flex-row">
@@ -100,7 +99,6 @@ const OrderDetails = ({ order }: { order?: Partial<Order> }) => {
           Hora: {dateFormat(order?.shipping?.date, 'dd/MMM HH:mm')}
         </Typography>
       </div>
-      <div>{order?.id && <OrderActions orderId={order.id} />}</div>
     </div>
   )
 }

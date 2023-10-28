@@ -21,7 +21,7 @@ const ModalOrderForm = ({
   const modal = useModal({ title: 'Nueva orden' })
 
   return (
-    <div>
+    <>
       <Button
         onClick={modal.onOpen}
         endIcon={icon ? <AppIcon icon={icon} /> : undefined}
@@ -38,7 +38,7 @@ const ModalOrderForm = ({
           }}
         />
       </Modal>
-    </div>
+    </>
   )
 }
 

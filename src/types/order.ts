@@ -16,6 +16,7 @@ export type OrderBase = {
   payments: Payment[]
   changes: PaymentChange[]
   companyId: CompanyType['id']
+  status?: 'canceled' | 'pending' | 'finished' | 'in-progress'
 }
 
 export type Order = OrderBase & BaseType
