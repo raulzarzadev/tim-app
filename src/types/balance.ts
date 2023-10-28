@@ -31,7 +31,7 @@ export type BalanceDataFromOrders = {
   items: ItemSelected[]
   itemsStats?: BalanceItem[]
 
-  paymentsMethods?: Record<PaymentMethods, number> //{ card: number; mxn: number; usd: number } | undefined
+  paymentsMethods?: Record<PaymentMethods, number> & { total: number } //{ card: number; mxn: number; usd: number } | undefined
 }
 
 export type BalanceItem = Pick<

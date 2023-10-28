@@ -38,6 +38,7 @@ export const balanceDataFromOrders = (
   const changes = orders
     ?.map((o) => o?.changes?.map((c) => ({ ...c, order: o })) || [])
     ?.flat()
+
   const totalFromPayments = payments
     ?.flat()
     ?.map((p) => p?.amount)
@@ -120,15 +121,109 @@ export const balanceItemsData = (
   return items
 }
 
+const getPaymentsFromBalanceForm = (
+  balance: Balance,
+  orders?: Partial<Order>[]
+): Partial<Payment[]> => {
+  const payments: Partial<Payment[]> =
+    orders
+      ?.map((o) => o.payments?.map((p) => ({ ...p, orderId: o.id })))
+      .flat() || []
+
+  const matchDatePayments =
+    payments?.filter((p) => {
+      const paymentDate = p?.created?.at || p?.date
+      return (
+        isAfter(forceAsDate(paymentDate), forceAsDate(balance?.from)) &&
+        isBefore(forceAsDate(paymentDate), forceAsDate(balance?.to))
+      )
+    }) || []
+
+  return matchDatePayments
+}
+
 export const calculateBalance = (
   balance: Balance,
   orders?: Partial<Order>[]
 ): BalanceData => {
-  const matchOrders = getOrdersByBalanceForm(balance, orders)
+  const matchPayments = getPaymentsFromBalanceForm(balance, orders)
+  const matchOrders = orders?.filter((o) =>
+    matchPayments.find((p) => p?.orderId === o?.id)
+  )
+  // const matchOrders = getOrdersByBalanceForm(balance, orders)
   const balanceData = balanceDataFromOrders(matchOrders)
+  //const balancePaymentsData = balanceDataFromPayments(matchPayments || [])
+  //console.log({ balancePaymentsData })
+
+  const itemsUsed: ItemSelected[] = matchOrders
+    ?.map((o) => o.items)
+    .flat()
+    .reduce((acc: ItemSelected[], curr) => {
+      //if item already exist add time
+      if (acc?.find((i) => i.itemId === curr?.itemId)) {
+        return
+      }
+      // other way add new item
+    }, [])
+  const paymentsMethods = methodsTotals(matchPayments)
   return {
     orders: matchOrders,
-    ...balanceData,
-    ...balance
+    ...balance,
+    items: [],
+    changes: [],
+    totalFromPayments: 0,
+    payments: matchPayments.map((p) => ({
+      ...p,
+      order: orders?.find((o) => o.id === p?.orderId)
+    })) as Payment[],
+    paymentsMethods
+  }
+}
+
+// const balanceDataFromPayments: BalanceDataFromOrders = (
+//   payments?: Partial<Payment[]>
+// ) => {
+//   const paymentsMethods = methodsTotals(payments || [])
+//   return {
+//     paymentsMethods,
+//     totalFromPayments: paymentsMethods.total,
+//     payments,
+//     items: [],
+//     itemsStats: [],
+//     changes: []
+//   }
+// }
+
+const methodsTotals = (payments: Partial<Payment[]>) => {
+  const cardAmount =
+    payments?.reduce((acc: number, curr) => {
+      if (curr?.method === 'card') return acc + (curr?.amount || 0)
+      return acc
+    }, 0) || 0
+
+  const mxnAmount =
+    payments?.reduce((acc: number, curr) => {
+      if (curr?.method === 'mxn') return acc + (curr?.amount || 0)
+      return acc
+    }, 0) || 0
+
+  const usdAmount =
+    payments?.reduce((acc: number, curr) => {
+      if (curr?.method === 'usd')
+        return acc + (curr?.amount || 0) * curr.usdPrice
+      return acc
+    }, 0) || 0
+
+  const depositAmount =
+    payments?.reduce((acc: number, curr) => {
+      if (curr?.method === 'deposit') return acc + (curr?.amount || 0)
+      return acc
+    }, 0) || 0
+  return {
+    total: cardAmount + mxnAmount + usdAmount + depositAmount,
+    card: cardAmount,
+    mxn: mxnAmount,
+    usd: usdAmount,
+    deposit: depositAmount
   }
 }

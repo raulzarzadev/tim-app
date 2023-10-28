@@ -41,6 +41,7 @@ export type Payment = {
     by: UserType['id']
     at: Date | Timestamp
   }
+  orderId?: string
 }
 
 export type PaymentChange = {
