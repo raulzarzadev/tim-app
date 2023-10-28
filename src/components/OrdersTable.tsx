@@ -1,4 +1,4 @@
-import { dateFormat } from '@/lib/utils-date'
+import { dateFormat, fromNow } from '@/lib/utils-date'
 import { Order, Payment } from '@/types/order'
 import CurrencySpan from './CurrencySpan'
 import Modal from './Modal'
@@ -35,7 +35,11 @@ const OrdersTable = ({ orders }: { orders: Partial<Order>[] }) => {
               key: 'created.at',
               format: (date) => dateFormat(date, 'dd/MMM HH:mm')
             },
-
+            {
+              label: 'Entrega',
+              key: 'shipping.date',
+              format: (date) => fromNow(date)
+            },
             {
               label: 'Unidades',
               key: 'items.length'

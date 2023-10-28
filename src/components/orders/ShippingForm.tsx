@@ -22,13 +22,12 @@ const ShippingForm = ({
     freeShipping: !shipping?.amount
   })
 
-  const [_shipping, _setShipping] = useState(
-    shipping || {
-      address: '',
-      date: new Date(),
-      assignedToEmail: ''
-    }
-  )
+  const [_shipping, _setShipping] = useState({
+    address: '',
+    date: new Date(),
+    assignedToEmail: '',
+    ...shipping
+  })
 
   const handleChangeShippingMenu = (field: string, value: boolean) => {
     setShippingMenu((menu) => ({

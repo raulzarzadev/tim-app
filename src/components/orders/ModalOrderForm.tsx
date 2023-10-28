@@ -6,15 +6,17 @@ import AppIcon, { IconName } from '../AppIcon'
 import { Order } from '@/types/order'
 
 const ModalOrderForm = ({
-  label,
+  label = 'Nueva orden',
   icon,
   handleSave,
-  closeOnSave = true
+  closeOnSave = true,
+  order
 }: {
-  label: 'Nueva orden'
+  label: string
   icon?: IconName
   handleSave?: (data: Partial<Order>) => Promise<any> | void
   closeOnSave?: boolean
+  order?: Partial<Order>
 }) => {
   const modal = useModal({ title: 'Nueva orden' })
 
@@ -28,6 +30,7 @@ const ModalOrderForm = ({
       </Button>
       <Modal {...modal}>
         <OrderForm
+          defaultOrder={order}
           handleSave={async (data) => {
             const res = await handleSave?.(data)
             closeOnSave && modal.onClose()

@@ -2,26 +2,31 @@ import { Order } from '@/types/order'
 import { Typography } from '@mui/material'
 import ModalItemDetails from './ModalItemDetails'
 import MyTable from './MyTable'
-import { dateFormat } from '@/lib/utils-date'
+import { dateFormat, fromNow } from '@/lib/utils-date'
 import ShippingLink from './ShippingLink'
 import ItemChanges from './ItemChanges'
 import StaffSpan from './StaffSpan'
 import ClientInfo from './ClientInfo'
+import OrderActions from './orders/OrderActions'
 
 const OrderDetails = ({ order }: { order?: Partial<Order> }) => {
   console.log({ order })
   return (
     <div>
-      <Typography className="text-center" variant="caption">
-        Id: {order?.id}
-      </Typography>
+      <div className="flex   flex-col items-end sm:justify-between sm:flex-row">
+        <Typography className="text-center" variant="caption">
+          Id: {order?.id}
+        </Typography>
+
+        <Typography className="text-center" variant="caption">
+          Creada: {fromNow(order?.created?.at)}
+        </Typography>
+        <Typography className="text-center" variant="caption">
+          Ultima actualización: {fromNow(order?.updated?.at)}
+        </Typography>
+      </div>
       <div className="mb-4">
         <ClientInfo client={order?.client} />
-        {/* <Typography variant="h5">Cliente</Typography>
-        <Typography>Cliente: {order?.client?.name}</Typography>
-        <Typography>Telefono: {order?.client?.phone}</Typography>
-        <Typography>Dirección: {order?.client?.address}</Typography>
-        <Typography>Email: {order?.client?.email}</Typography> */}
       </div>
       <div>
         <Typography variant="h5">Unidades</Typography>
@@ -33,7 +38,11 @@ const OrderDetails = ({ order }: { order?: Partial<Order> }) => {
                   label: 'Unidad',
                   key: 'itemId',
                   format: (value) => (
-                    <ModalItemDetails itemId={value} hiddenCurrentStatus />
+                    <ModalItemDetails
+                      itemId={value}
+                      hiddenCurrentStatus
+                      showCat
+                    />
                   )
                 },
                 {
@@ -91,6 +100,7 @@ const OrderDetails = ({ order }: { order?: Partial<Order> }) => {
           Hora: {dateFormat(order?.shipping?.date, 'dd/MMM HH:mm')}
         </Typography>
       </div>
+      <div>{order?.id && <OrderActions orderId={order.id} />}</div>
     </div>
   )
 }

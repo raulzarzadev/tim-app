@@ -1,7 +1,6 @@
 import { Payment } from '@/types/payment'
 import { Box, Typography } from '@mui/material'
 import PreviewImage from './PreviewImage'
-import ModalContactClient from './ModalContactClient'
 import ShippingLink from './ShippingLink'
 
 const ClientInfo = ({ client }: { client: Payment['client'] }) => {
@@ -13,12 +12,6 @@ const ClientInfo = ({ client }: { client: Payment['client'] }) => {
         <ModalContactClient client={clientData} />
       </div> */}
       <Box className="flex items-center justify-between">
-        {/* <Box>
-          <Typography>Nombre: {clientData?.name}</Typography>
-          <Typography>
-            Dirección: <ShippingLink address={clientData?.address} />
-          </Typography>
-        </Box> */}
         <Box>
           <Typography variant="h5">Cliente</Typography>
           <Typography>Cliente: {clientData?.name}</Typography>

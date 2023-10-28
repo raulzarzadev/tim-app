@@ -17,7 +17,7 @@ const OrderForm = ({
   handleSave,
   defaultOrder
 }: {
-  defaultOrder?: Order
+  defaultOrder?: Partial<Order>
   handleSave?: (order: Partial<Order>) => Promise<void> | void
 }) => {
   const clientForm = useModal({ title: 'Detalles de cliente' })
