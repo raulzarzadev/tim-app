@@ -29,6 +29,7 @@ const OrdersTable = ({ orders }: { orders: Partial<Order>[] }) => {
         )}
       </Modal>
       <MyTable
+        search
         onRowClick={(id) => {
           setOrder(orders?.find((o) => o?.id === id))
           modal.onOpen()
@@ -53,6 +54,7 @@ const OrdersTable = ({ orders }: { orders: Partial<Order>[] }) => {
             {
               label: 'Entregado',
               key: 'items.[0].rentStartedAt',
+
               format: (date) => fromNow(date)
             },
             {
@@ -63,6 +65,11 @@ const OrdersTable = ({ orders }: { orders: Partial<Order>[] }) => {
             {
               label: 'Total',
               key: 'payments',
+              value: (p) =>
+                p?.reduce(
+                  (acc: number, curr: Payment) => acc + curr?.amount,
+                  0
+                ) || 0,
               format: (payments) => (
                 <CurrencySpan
                   quantity={payments?.reduce(
@@ -75,6 +82,7 @@ const OrdersTable = ({ orders }: { orders: Partial<Order>[] }) => {
             {
               label: 'Asignado',
               key: 'shipping.assignedToEmail',
+              value: (v) => v,
               format: (email) => <StaffSpan email={email} />
             }
           ],
