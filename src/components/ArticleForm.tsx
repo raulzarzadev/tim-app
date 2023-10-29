@@ -10,7 +10,7 @@ import {
 } from '@mui/material'
 import ModalConfirm from './ModalConfirm'
 import { useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import { ArticleType } from '@/types/article'
 import Select from './Select'
@@ -29,16 +29,20 @@ const ArticleForm = ({
   goBack?: boolean
 }) => {
   const router = useRouter()
-  const params = useSearchParams()
+  const searchParams = useSearchParams()
+  const params = useParams()
 
   const { currentCompany } = useUserCompaniesContext()
+
+  const defaultCategoryName: string =
+    searchParams.get('category') || params.categoryName.toString() || ''
+
   const { handleSubmit, register, watch, setValue, reset } = useForm({
     defaultValues: article || {
       name: '',
-      category: params.get('category') || ''
+      category: defaultCategoryName
     }
   })
-
   const formValues = watch()
   const [done, setDone] = useState(false)
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {

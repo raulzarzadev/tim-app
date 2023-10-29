@@ -4,11 +4,17 @@ import useModal from '@/hooks/useModal'
 import Modal from './Modal'
 import ArticleForm from './ArticleForm'
 
-const ModalItemForm = ({ label = 'Unidades' }: { label: string }) => {
+const ModalItemForm = ({
+  label = 'Unidades',
+  categoryName
+}: {
+  label: string
+  categoryName?: string
+}) => {
   const modal = useModal({ title: 'Nuevo item' })
   return (
     <span>
-      <Typography className="text-start font-bold text-lg" component={'span'}>
+      <Typography className=" font-bold text-lg" component={'span'}>
         {label}{' '}
         <IconButton color="success" onClick={modal.onOpen}>
           <AppIcon icon="add" />

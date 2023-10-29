@@ -25,8 +25,9 @@ const CategoryDetails = ({ category }: { category?: CategoryType }) => {
           <AppIcon icon="edit"></AppIcon>
         </IconButton>
       </Typography>
-
-      <ModalItemForm label="Nueva unidad" />
+      <div className="flex justify-center">
+        <ModalItemForm label="Nueva unidad" categoryName={category?.name} />
+      </div>
       <Typography className="text-center">{category?.description}</Typography>
       <Typography variant="h5">Precios</Typography>
       <PricesList prices={category?.prices || []} />

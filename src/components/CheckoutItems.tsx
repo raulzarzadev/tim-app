@@ -66,11 +66,16 @@ const CheckoutItems = ({
     return addMinutes(new Date(), time)
   }
   //const total = calculateFullTotal(_itemsSelected, fullItems)
+  useEffect(() => {
+    const t = calculateFullTotal(itemsSelected, fullItems)
+    _setTotal(t)
+    setTotal?.(t) //* to update total outside the component
+  }, [])
 
   useEffect(() => {
     _setItemsSelected(itemsSelected)
   }, [itemsSelected])
-
+  console.log({ _total })
   return (
     <div>
       <CheckoutItemsList
