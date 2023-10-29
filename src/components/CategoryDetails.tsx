@@ -5,6 +5,7 @@ import AppIcon from './AppIcon'
 import Link from 'next/link'
 import PricesList from './PricesList'
 import CategoryItems from './CategoryItems'
+import ModalItemForm from './ModalItemForm'
 
 const CategoryDetails = ({ category }: { category?: CategoryType }) => {
   const { currentCompany } = useUserCompaniesContext()
@@ -24,6 +25,8 @@ const CategoryDetails = ({ category }: { category?: CategoryType }) => {
           <AppIcon icon="edit"></AppIcon>
         </IconButton>
       </Typography>
+
+      <ModalItemForm label="Nueva unidad" />
       <Typography className="text-center">{category?.description}</Typography>
       <Typography variant="h5">Precios</Typography>
       <PricesList prices={category?.prices || []} />
