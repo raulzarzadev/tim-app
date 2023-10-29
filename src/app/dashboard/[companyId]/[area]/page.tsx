@@ -7,6 +7,7 @@ import CompanyOrders from '@/components/CompanyOrders'
 import CompanyReception from '@/components/CompanyReception'
 import CompanyStore from '@/components/CompanyStore'
 import ErrorBoundary from '@/components/ErrorBoundary'
+import StaffOrders from '@/components/StaffOrders'
 import { StaffPermission, StaffPermissionLabels } from '@/types/staff'
 import { Typography } from '@mui/material'
 
@@ -30,6 +31,7 @@ const Page = ({
         {area === 'RECEPTION' && <CompanyReception />}
         {area === 'SALES' && <CompanyStore />}
         {area === 'ORDERS' && <CompanyOrders />}
+        {area === 'MY_ORDERS' && <StaffOrders />}
       </>
     </ErrorBoundary>
   )

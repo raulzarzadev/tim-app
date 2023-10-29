@@ -32,8 +32,10 @@ import { SvgIconProps } from '@mui/material'
 import AddCommentIcon from '@mui/icons-material/AddComment'
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong'
 // https://mui.com/material-ui/material-icons/
+import AssignmentIndIcon from '@mui/icons-material/AssignmentInd'
 
 const icons = {
+  myOrder: AssignmentIndIcon,
   add: AddIcon,
   edit: EditIcon,
   close: CloseIcon,

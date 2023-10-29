@@ -28,7 +28,7 @@ export default function BottomNavigation() {
   const [value, setValue] = React.useState(0)
   const [pages, setPages] = React.useState<NavPages | undefined>(undefined)
   React.useEffect(() => {
-    setValue(pages?.findIndex((p) => p.href === pathname) || 0)
+    setValue(pages?.findIndex((p) => p?.href === pathname) || 0)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname, user])
 
@@ -114,6 +114,15 @@ export default function BottomNavigation() {
         visible:
           currentCompany?.staff?.find((staff) => staff?.email === user?.email)
             ?.permissions?.ORDERS || false
+      },
+
+      {
+        href: `/dashboard/${currentCompany?.id}/MY_ORDERS`,
+        label: 'Mis Ordenes',
+        icon: <AppIcon icon="myOrder" />,
+        visible:
+          currentCompany?.staff?.find((staff) => staff?.email === user?.email)
+            ?.permissions?.MY_ORDERS || false
       }
     ]
 
