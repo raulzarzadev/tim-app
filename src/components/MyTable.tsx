@@ -24,7 +24,6 @@ const MyTable = ({ data, onRowClick, title, search }: MyTableProps) => {
   const [filteredData, setFilteredData] = useState<MyTableData['body']>(
     data.body
   )
-  console.log({ b: data.body })
 
   const formattedData = data.body.map((row, i) => {
     let newRow: Record<string, any> = { ...row }
@@ -48,7 +47,7 @@ const MyTable = ({ data, onRowClick, title, search }: MyTableProps) => {
       data?.body?.filter(({ id }) => !!res?.find((res) => res?.id === id)) || []
     )
   }
-  console.log({ filteredData })
+
   return (
     <>
       {search && <SearchInput handleSetSearch={handleSearch} />}
