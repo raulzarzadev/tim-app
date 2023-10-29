@@ -34,6 +34,14 @@ export type BalanceDataFromOrders = {
   paymentsMethods?: Record<PaymentMethods, number> & { total: number } //{ card: number; mxn: number; usd: number } | undefined
 }
 
+export type BalanceFromPayments = {
+  methods?: Record<PaymentMethods, number> & { total: number }
+}
+
+export type PaymentMethodsTotals = Record<PaymentMethods, number> & {
+  total: number
+}
+
 export type BalanceItem = Pick<
   ItemOrder,
   'id' | 'name' | 'serialNumber' | 'category'

@@ -103,7 +103,7 @@ const OrderForm = ({
         {order.payments && <OrderPaymentsTable payments={order.payments} />}
         {!!order?.items?.length && (
           <ModalPayment
-            disabled={!!paymentIsComplete}
+            //disabled={!!paymentIsComplete}
             amount={total}
             label="Pagar "
             setPayment={(payment) => {
