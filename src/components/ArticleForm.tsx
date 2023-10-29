@@ -21,12 +21,18 @@ interface IFormInput {
   name: string
 }
 
-const ArticleForm = ({ article }: { article?: ArticleType | null }) => {
+const ArticleForm = ({
+  article,
+  goBack = true
+}: {
+  article?: ArticleType | null
+  goBack?: boolean
+}) => {
   const router = useRouter()
   const params = useSearchParams()
 
   const { currentCompany } = useUserCompaniesContext()
-  const { handleSubmit, register, watch, setValue } = useForm({
+  const { handleSubmit, register, watch, setValue, reset } = useForm({
     defaultValues: article || {
       name: '',
       category: params.get('category') || ''
@@ -37,20 +43,26 @@ const ArticleForm = ({ article }: { article?: ArticleType | null }) => {
   const [done, setDone] = useState(false)
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     if (!currentCompany?.id) return console.error('no company id')
-    if (article?.id) {
-      return updateArticle(currentCompany?.id, article?.id, data)
-        .then((res) => {
-          router.back()
-        })
-        .catch(console.error)
-        .finally(() => setDone(true))
+    try {
+      if (article?.id) {
+        const res = await updateArticle(currentCompany?.id, article?.id, data)
+        console.log({ res })
+        return res
+      }
+      const res = await addArticle(currentCompany?.id, data)
+      console.log({ res })
+      return res
+    } catch (e) {
+      console.error(e)
+    } finally {
+      setDone(true)
+      goBack && router.back()
+
+      reset()
+      setTimeout(() => {
+        setDone(false)
+      }, 1000)
     }
-    addArticle(currentCompany?.id, data)
-      .then((res) => {
-        router.back()
-      })
-      .catch(console.error)
-      .finally(() => setDone(true))
   }
 
   return (
