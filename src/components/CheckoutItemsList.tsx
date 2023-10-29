@@ -12,10 +12,14 @@ const CheckoutItemsList = ({
   items: (Partial<ArticleType> | null)[]
   onSelectPrice?: (itemId: string, price: PriceType) => void
 }) => {
-  const sortByCat = (
-    a: { category?: string } | null,
-    b: { category?: any } | null
-  ): number => a?.category?.localeCompare(b?.category || '') || 0
+  const sortByCatNameOrSerial = (
+    a: Partial<ArticleType> | null,
+    b: Partial<ArticleType> | null
+  ): number =>
+    a?.category?.localeCompare(b?.category || '') ||
+    a?.name?.localeCompare(b?.name || '') ||
+    a?.serialNumber?.localeCompare(b?.serialNumber || '') ||
+    0
   return (
     <Box>
       <Grid2 container spacing={1} className=" font-bold ">
@@ -27,7 +31,7 @@ const CheckoutItemsList = ({
         <Grid2 xs={2}>Precio</Grid2>
       </Grid2>
       {items
-        .sort(sortByCat)
+        .sort(sortByCatNameOrSerial)
         .map((item, i) =>
           item ? (
             <CheckoutItemRow

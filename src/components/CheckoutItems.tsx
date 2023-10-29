@@ -70,12 +70,13 @@ const CheckoutItems = ({
     const t = calculateFullTotal(itemsSelected, fullItems)
     _setTotal(t)
     setTotal?.(t) //* to update total outside the component
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
     _setItemsSelected(itemsSelected)
   }, [itemsSelected])
-  console.log({ _total })
+
   return (
     <div>
       <CheckoutItemsList
