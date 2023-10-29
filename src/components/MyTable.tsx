@@ -1,5 +1,5 @@
 import { get } from 'lodash'
-import { ReactNode, useState } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 import ErrorBoundary from './ErrorBoundary'
 import { TextField, Typography } from '@mui/material'
 
@@ -97,7 +97,14 @@ const SearchInput = ({
 }: {
   handleSetSearch?: (value: string) => void
 }) => {
-  const [value, setValue] = useState('')
+  const [inputValue, setInputValue] = useState('')
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      handleSetSearch?.(inputValue)
+    }, 800)
+    return () => clearTimeout(timeoutId)
+  }, [handleSetSearch, inputValue])
 
   return (
     <>
@@ -105,12 +112,9 @@ const SearchInput = ({
         size="small"
         fullWidth
         placeholder="Buscar"
-        value={value}
+        value={inputValue}
         onChange={(e) => {
-          setValue(e.target.value)
-          setTimeout(() => {
-            handleSetSearch?.(e.target.value)
-          }, 300)
+          setInputValue(e.target.value)
         }}
       />
     </>
