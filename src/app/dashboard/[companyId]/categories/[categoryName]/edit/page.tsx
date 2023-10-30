@@ -10,7 +10,7 @@ import { useState } from 'react'
 const Page = () => {
   const router = useRouter()
   const params = useParams()
-  const categoryName = decodeURIComponent(String(params.categoryName))
+  const categoryName = decodeURIComponent(String(params?.categoryName))
 
   const { currentCompany } = useUserCompaniesContext()
   const category = currentCompany?.categories?.find(

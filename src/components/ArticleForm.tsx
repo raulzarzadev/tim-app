@@ -35,7 +35,7 @@ const ArticleForm = ({
   const { currentCompany } = useUserCompaniesContext()
 
   const defaultCategoryName: string =
-    searchParams.get('category') || params.categoryName.toString() || ''
+    searchParams.get('category') || params?.categoryName?.toString() || ''
 
   const { handleSubmit, register, watch, setValue, reset } = useForm({
     defaultValues: article || {
