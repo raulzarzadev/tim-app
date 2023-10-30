@@ -5,7 +5,7 @@ export type ArticleType = {
   name: string
   serialNumber: string
   category: CategoryType['name']
-  color: string
+  color?: string
   status: 'active' | 'inactive'
   image?: string
   ownPrice?: boolean

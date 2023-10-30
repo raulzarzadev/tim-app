@@ -31,12 +31,12 @@ export type Shipping = {
 export type Payment = {
   isCancelled?: boolean
   date?: Timestamp | Date
-  amount: number
   usdPrice: number
   method: PaymentMethods
   discount?: number
   charged?: number
-  rest?: number
+  amount?: number //** this should be not necessary */
+  rest?: number //** this should be not necesary */
   created: {
     by: UserType['id']
     at: Date | Timestamp
