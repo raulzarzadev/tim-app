@@ -9,9 +9,10 @@ import { useState } from 'react'
 import BalanceCard from './BalanceCard'
 import AppIcon from '../AppIcon'
 import { Balance, BalanceData } from '@/types/balance'
-import { balanceItemsData, calculateBalance } from './balance.lib'
+import { balanceItemsData } from './balance.lib'
 import { CreateBalance, createBalance } from '@/firebase/balances'
 import forceAsDate from '@/lib/forceAsDate'
+import { calculateBalance } from './calculateBalance.lib'
 
 const ModalBalanceForm = () => {
   const modal = useModal({ title: 'Nuevo corte' })
@@ -22,13 +23,10 @@ const ModalBalanceForm = () => {
   const handleCalculateBalance = async (balance: Balance) => {
     setSaved(false)
     setBalanceProps(balance)
-    const balanceData = calculateBalance(balance, orders)
-    const itemsData = balanceItemsData(
-      balanceData.items || [],
-      currentCompany?.articles || []
-    )
-    setBalance({ ...balanceData, ...balance, itemsStats: itemsData })
-    //console.log({ balanceData })
+
+    const b = calculateBalance(balance, orders)
+    console.log(b)
+    setBalance(b)
   }
   const handleSave = async () => {
     const newBalance: CreateBalance = {

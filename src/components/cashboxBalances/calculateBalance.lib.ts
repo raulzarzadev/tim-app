@@ -1,6 +1,6 @@
 import { PaymentMethods } from '@/CONSTS/paymentMethods'
 import forceAsDate from '@/lib/forceAsDate'
-import { Balance } from '@/types/balance'
+import { Balance, BalanceData } from '@/types/balance'
 import { Order, Payment } from '@/types/order'
 import { isAfter, isBefore } from 'date-fns'
 
@@ -98,4 +98,42 @@ export const getPaymentsCreatedBy = (
 ) => {
   const filteredByDate = payments?.filter((p) => p?.created?.by === creator)
   return filteredByDate
+}
+
+export const calculateBalance = (
+  balance: Balance,
+  companyOrders?: Partial<Order>[]
+): BalanceData => {
+  const allPayments = companyOrders
+    ?.map((o) => o.payments?.map((p) => ({ ...p, orderId: o.id })))
+    .flat()
+  const matchDatePayments = getPaymentsBetweenDates(
+    balance,
+    (allPayments as Payment[]) || []
+  )
+  const balancePayments =
+    !(balance.cashier === 'all') || !balance.cashier
+      ? matchDatePayments.filter((p) => p.created?.by === balance.cashier)
+      : matchDatePayments
+
+  let balanceOrders: Order[] = []
+  balancePayments.forEach((payment) => {
+    if (!balanceOrders.find((o) => o.id === payment.orderId)) {
+      balanceOrders.push(
+        companyOrders?.find((o) => o.id === payment.orderId) as Order
+      )
+    }
+  })
+  const items: any[] =
+    balanceOrders?.map((o) => o.items?.map((i) => ({ ...i })) || []).flat() ||
+    []
+
+  const paymentsMethods = splitPaymentsByMethods(balancePayments)
+  return {
+    items,
+    ...balance,
+    orders: balanceOrders,
+    payments: balancePayments as Payment[],
+    paymentsMethods: paymentsMethods as BalanceData['paymentsMethods']
+  }
 }

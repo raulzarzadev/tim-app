@@ -9,7 +9,6 @@ const OrderItemsStats = ({
 }: {
   itemsStats: BalanceData['itemsStats']
 }) => {
-  console.log({ itemsStats })
   return (
     <div>
       <table className="w-full text-center">
