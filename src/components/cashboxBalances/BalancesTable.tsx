@@ -64,6 +64,8 @@ const BalancesTable = () => {
     )
     setBalanceDetails({ ...balanceData, ...balance, itemsStats: itemsData })
   }
+  if (balances === undefined) return <div>Cargando...</div>
+  if (table.body.length === 0) return <div>No hay balances aún</div>
   return (
     <div>
       <ErrorBoundary componentName="BalancesTable">
