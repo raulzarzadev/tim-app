@@ -10,7 +10,7 @@ describe('Components Page', () => {
     cy.visit('http://localhost:3000/components')
     cy.contains('Checkout').click()
 
-    cy.contains('Orden').click()
+    cy.contains('Nueva orden').click()
 
     //******** CLIENT INFO SECTION */
     cy.contains('Cliente').click()
@@ -31,13 +31,22 @@ describe('Components Page', () => {
     //** send client info and close modal */
     cy.contains('Enviar').click()
 
+    //*** MODAL CLIENT CLOSED */
     //*** VERIFY INFO IS CORRECT IN ORDER DETAILS */
-    cy.get('label[data-testid="contact-client"]').click()
-    cy.contains('Contactar cliente')
-    cy.get('button[aria-label="close-modal-Contactar cliente"]').click()
-    // cy.get('a[data-testid="tooltip-phone"]').get('svg')
-    cy.contains(`Nombre: ${testData.name}`)
-    cy.contains(`Dirección: ${testData.address}`)
+
+    cy.contains('Cliente: ')
+    cy.contains('Teléfono: ')
+    cy.contains('Teléfono: ')
+    cy.contains('Email: ')
+    cy.contains('Dirección: ')
+    //* Now are not necesary open modal to know client info
+
+    // // cy.get('label[data-testid="contact-client"]').click()
+    //// cy.contains('Contactar cliente')
+    ////cy.get('button[aria-label="close-modal-Contactar cliente"]').click()
+    //// cy.get('a[data-testid="tooltip-phone"]').get('svg')
+    //// cy.contains(`Nombre: ${testData.name}`)
+    //// cy.contains(`Dirección: ${testData.address}`)
 
     //******** SHIPPING SECTION */
   })

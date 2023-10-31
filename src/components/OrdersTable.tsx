@@ -67,13 +67,13 @@ const OrdersTable = ({ orders }: { orders: Partial<Order>[] }) => {
               key: 'payments',
               value: (p) =>
                 p?.reduce(
-                  (acc: number, curr: Payment) => acc + curr?.amount,
+                  (acc: number, { amount = 0 }: Payment) => acc + amount,
                   0
                 ) || 0,
               format: (payments) => (
                 <CurrencySpan
                   quantity={payments?.reduce(
-                    (acc: number, curr: Payment) => acc + curr?.amount,
+                    (acc: number, { amount = 0 }: Payment) => acc + amount,
                     0
                   )}
                 />

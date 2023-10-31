@@ -25,7 +25,7 @@ const ItemRentStatus = ({ item }: { item: ItemOrder }) => {
   )
 
   const paymentsAmount =
-    item?.order?.payments?.reduce((a, b) => a + b?.amount, 0) || 0
+    item?.order?.payments?.reduce((a, { amount = 0 }) => a + amount, 0) || 0
 
   const total = orderTotal - paymentsAmount
 

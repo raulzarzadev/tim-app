@@ -30,10 +30,13 @@ const OrderForm = ({
   const [itemsTotal, setItemsTotal] = useState(0)
 
   const orderPaymentsCharged =
-    order.payments?.reduce((acc, curr) => {
-      if (curr.method === 'usd') return acc + curr.amount * curr.usdPrice
-      return acc + curr.amount
-    }, 0) || 0
+    order.payments?.reduce(
+      (acc, { amount = 0, method = 'mxn', usdPrice = 1 }) => {
+        if (method === 'usd') return acc + amount * usdPrice
+        return acc + amount
+      },
+      0
+    ) || 0
 
   const paymentIsComplete = orderPaymentsCharged >= itemsTotal
 

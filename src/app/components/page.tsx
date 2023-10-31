@@ -126,7 +126,7 @@ function Page() {
         <ModalPayment amount={200} />
       </div>
       <div>
-        <ModalOrderForm />
+        <ModalOrderForm label="Nueva orden" />
       </div>
     </div>
   )

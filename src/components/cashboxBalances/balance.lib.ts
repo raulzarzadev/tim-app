@@ -47,7 +47,11 @@ export const balanceDataFromOrders = (
 
   //type PaymentsMethods = Record<Payment['method'], number>
   //TODO: test this function
-  const methods: Record<PaymentMethods, number> | undefined = payments?.reduce(
+  const methods:
+    | (Record<'mxn' | 'card' | 'usd' | 'deposit', number> & {
+        total: number
+      })
+    | undefined = payments?.reduce(
     (p, c) => {
       //*
       if (c.method === 'usd') {
@@ -62,7 +66,7 @@ export const balanceDataFromOrders = (
         [c.method]: p[c?.method] + (c?.amount || 0)
       }
     },
-    { card: 0, mxn: 0, usd: 0, deposit: 0 }
+    { card: 0, mxn: 0, usd: 0, deposit: 0, total: 0 }
   )
 
   const items: any[] =
@@ -72,8 +76,9 @@ export const balanceDataFromOrders = (
     changes,
     payments,
     totalFromPayments,
-    paymentsMethods: methods,
-    items
+    //paymentsMethods: methods,
+    items,
+    paymentsMethods: methods
   }
 }
 
@@ -151,21 +156,7 @@ export const calculateBalance = (
   const matchOrders = orders?.filter((o) =>
     matchPayments.find((p) => p?.orderId === o?.id)
   )
-  // const matchOrders = getOrdersByBalanceForm(balance, orders)
-  const balanceData = balanceDataFromOrders(matchOrders)
-  //const balancePaymentsData = balanceDataFromPayments(matchPayments || [])
-  //console.log({ balancePaymentsData })
 
-  const itemsUsed: ItemSelected[] = matchOrders
-    ?.map((o) => o.items)
-    .flat()
-    .reduce((acc: ItemSelected[], curr) => {
-      //if item already exist add time
-      if (acc?.find((i) => i.itemId === curr?.itemId)) {
-        return
-      }
-      // other way add new item
-    }, [])
   const paymentsMethods = methodsTotals(matchPayments)
   return {
     orders: matchOrders,

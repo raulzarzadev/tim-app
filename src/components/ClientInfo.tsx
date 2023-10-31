@@ -15,7 +15,7 @@ const ClientInfo = ({ client }: { client: Payment['client'] }) => {
         <Box>
           <Typography variant="h5">Cliente</Typography>
           <Typography>Cliente: {clientData?.name}</Typography>
-          <Typography>Telefono: {clientData?.phone || '-'}</Typography>
+          <Typography>Teléfono: {clientData?.phone || '-'}</Typography>
           <Typography>Email: {clientData?.email || '-'}</Typography>
           <Typography>
             Dirección: <ShippingLink address={clientData?.address} />

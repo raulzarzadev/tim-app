@@ -9,9 +9,11 @@
     "lint": "next lint",
     "commit": "cz",
     "type-check": "tsc --project tsconfig.json --pretty --noEmit && next lint",
-    "cypress:open": "cypress open",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
     "test": "vitest",
-    "pre-push": "vitest --run"
+    "pre-commit": "vitest --run && pnpm cy:run",
+    "pre-push": "pnpm pre-commit && pnpm type-check && git add . && pnpm commit"
   },
   "dependencies": {
     "@emotion/react": "^11.10.6",
