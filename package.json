@@ -10,7 +10,8 @@
     "commit": "cz",
     "type-check": "tsc --project tsconfig.json --pretty --noEmit && next lint",
     "cypress:open": "cypress open",
-    "test": "vitest"
+    "test": "vitest",
+    "pre-push": "vitest --run"
   },
   "dependencies": {
     "@emotion/react": "^11.10.6",
