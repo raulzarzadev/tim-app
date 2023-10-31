@@ -13,7 +13,8 @@
     "cy:run": "cypress run",
     "test": "vitest",
     "pre-commit": "vitest --run && pnpm cy:run",
-    "pre-push": "pnpm pre-commit && pnpm type-check && git add . && pnpm commit"
+    "pre-push": "pnpm pre-commit && pnpm type-check && git add . && pnpm commit",
+    "push": "pnpm pre-push && git checkout main && git merge dev && git checkout dev"
   },
   "dependencies": {
     "@emotion/react": "^11.10.6",
