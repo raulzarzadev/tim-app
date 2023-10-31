@@ -86,9 +86,15 @@ export const getPaymentsBetweenDates = (
   return filteredByDate
 }
 
-export const getPaymentsByCreator = (
-  creator: string,
-  payments: Partial<Payment>[]
+/**
+ *
+ * @param payments a list of payments from orders
+ * @param creator should be a email from staff
+ * @returns
+ */
+export const getPaymentsCreatedBy = (
+  payments: Partial<Payment>[],
+  creator: string
 ) => {
   const filteredByDate = payments?.filter((p) => p?.created?.by === creator)
   return filteredByDate

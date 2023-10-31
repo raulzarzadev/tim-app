@@ -48,7 +48,7 @@ export const basic_order3: Order = {
       id: '5',
       created: {
         at: new Date(2023, 10, 20, 13),
-        by: 'test'
+        by: 'test-1'
       },
       method: 'card',
       charged: 64.5,
@@ -61,7 +61,7 @@ export const basic_order3: Order = {
       id: '6',
       created: {
         at: new Date(2023, 10, 20, 12),
-        by: 'test'
+        by: 'test-2'
       },
       method: 'deposit',
       charged: 50,
@@ -74,7 +74,7 @@ export const basic_order3: Order = {
       id: '7',
       created: {
         at: new Date(2023, 10, 18, 11),
-        by: 'test'
+        by: 'test-3'
       },
       method: 'usd',
       charged: 10,
@@ -87,7 +87,7 @@ export const basic_order3: Order = {
       id: '8',
       created: {
         at: new Date(2023, 10, 17),
-        by: 'test'
+        by: 'test-2'
       },
       method: 'mxn',
       charged: 20.5,

@@ -5,7 +5,8 @@ import { basic_order3 } from '../DATA/basic_order3'
 import {
   calculateOrderBalance,
   calculateOrdersBalance,
-  getPaymentsBetweenDates
+  getPaymentsBetweenDates,
+  getPaymentsCreatedBy
 } from '../calculateBalance.lib'
 
 describe('calculate single order balance should return', () => {
@@ -135,6 +136,26 @@ describe('calculate balance based in dates  from multiples orders', () => {
         expect.objectContaining({ id: '3' }),
         expect.objectContaining({ id: '4' })
       ])
+    )
+  })
+})
+
+describe('get payments from created by', () => {
+  const payments = [
+    ...basic_order3.payments,
+    ...basic_order2.payments,
+    ...basic_order.payments
+  ]
+  test(' test-1  ', () => {
+    expect(getPaymentsCreatedBy(payments, 'test-1')).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ id: '5' }),
+        expect.objectContaining({ id: '2' }),
+        expect.objectContaining({ id: '4' })
+      ])
+    )
+    expect(getPaymentsCreatedBy(payments, 'test-1')).toEqual(
+      expect.arrayContaining([expect.not.objectContaining({ id: '3' })])
     )
   })
 })

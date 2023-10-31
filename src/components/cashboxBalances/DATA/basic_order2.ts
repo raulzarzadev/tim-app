@@ -47,7 +47,7 @@ export const basic_order2: Order = {
       //* this payment was make it on 2023-10-18 18:00
       created: {
         at: new Date(2023, 10, 18, 18),
-        by: 'test'
+        by: 'test-2'
       },
       method: 'usd',
       charged: 50, //50*16.5=825
@@ -61,7 +61,7 @@ export const basic_order2: Order = {
       id: '2',
       created: {
         at: new Date(2023, 10, 18, 15),
-        by: 'test'
+        by: 'test-1'
       },
       method: 'mxn',
       charged: 500,
