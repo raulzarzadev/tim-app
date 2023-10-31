@@ -12,6 +12,7 @@ import SelectCompanyItem from './SelectCompanyItem'
 import ModalPayment from '../ModalPayment3'
 import OrderPaymentsTable from '../OrderPaymentsTable'
 import asNumber from '@/lib/asNumber'
+import { ArticleType } from '@/types/article'
 
 const OrderForm = ({
   handleSave,
@@ -42,6 +43,8 @@ const OrderForm = ({
 
   const shippingAmount = asNumber(order?.shipping?.amount) || 0
   const total = itemsTotal - orderPaymentsCharged + shippingAmount
+  const itemsDisabled: ArticleType['id'][] = []
+
   return (
     <div>
       <div className="grid gap-2">
@@ -91,6 +94,7 @@ const OrderForm = ({
         <Modal {...itemsForm}>
           <SelectCompanyItem
             multiple
+            itemsDisabled={itemsDisabled}
             itemsSelected={order?.items?.map((i) => i.itemId || '') || []}
             setItems={(items) => {
               console.log({ items })

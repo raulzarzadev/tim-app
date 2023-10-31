@@ -4,7 +4,6 @@ import { useState } from 'react'
 import { Button, Chip, Stack } from '@mui/material'
 import { ArticleType } from '@/types/article'
 import ArticleDetails from '../ArticleDetails'
-import MyTable from '../MyTable'
 
 export type SelectItemsProps = {
   itemsDisabled?: string[]
@@ -23,7 +22,7 @@ export type SelectItemsProps = {
 )
 
 const SelectCompanyItem = ({
-  itemsDisabled,
+  // itemsDisabled,
   multiple = false,
   showItemDetails,
   // FIXME: multiple conditional typing
@@ -36,8 +35,13 @@ const SelectCompanyItem = ({
   //@ts-ignore
   setItem
 }: SelectItemsProps) => {
-  console.log({ itemsSelected })
-  const { currentCompany } = useUserCompaniesContext()
+  const {
+    currentCompany,
+    ordersItems: { inUse: itemsTaken }
+  } = useUserCompaniesContext()
+
+  const itemsDisabled = itemsTaken.map((i) => i.itemId)
+
   const categories: { label: string; value: string }[] =
     currentCompany?.categories?.map((cat) => ({
       label: cat.name,
