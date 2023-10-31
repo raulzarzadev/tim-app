@@ -29,6 +29,7 @@ export type Shipping = {
 }
 
 export type Payment = {
+  id?: string
   isCancelled?: boolean
   date?: Timestamp | Date
   usdPrice: number

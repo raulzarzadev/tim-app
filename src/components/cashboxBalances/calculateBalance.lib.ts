@@ -1,5 +1,8 @@
 import { PaymentMethods } from '@/CONSTS/paymentMethods'
-import { Payment } from '@/types/order'
+import forceAsDate from '@/lib/forceAsDate'
+import { Balance } from '@/types/balance'
+import { Order, Payment } from '@/types/order'
+import { isAfter, isBefore } from 'date-fns'
 
 export const totalCharged = (payments: Partial<Payment>[]) => {
   let total = 0
@@ -52,3 +55,41 @@ export const splitPaymentsByMethods = (
     },
     { card: 0, mxn: 0, usd: 0, deposit: 0, total: 0 }
   )
+
+export const calculateOrderBalance = (
+  order: Order
+): {
+  amounts: ReturnType<typeof splitPaymentsByMethods>
+} => {
+  const amounts = splitPaymentsByMethods(order.payments)
+  return {
+    amounts
+  }
+}
+export const calculateOrdersBalance = (orders: Order[]) => {
+  const payments = orders.map((o) => o.payments).flat()
+  const amounts = splitPaymentsByMethods(payments)
+  return {
+    amounts
+  }
+}
+
+export const getPaymentsBetweenDates = (
+  balanceData: Balance,
+  payments: Partial<Payment>[]
+) => {
+  const filteredByDate = payments?.filter(
+    (p) =>
+      isAfter(forceAsDate(p?.created?.at), forceAsDate(balanceData.from)) &&
+      isBefore(forceAsDate(p?.created?.at), forceAsDate(balanceData.to))
+  )
+  return filteredByDate
+}
+
+export const getPaymentsByCreator = (
+  creator: string,
+  payments: Partial<Payment>[]
+) => {
+  const filteredByDate = payments?.filter((p) => p?.created?.by === creator)
+  return filteredByDate
+}

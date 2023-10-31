@@ -1,27 +1,13 @@
 import { describe, test, expect } from 'vitest'
-import { Order } from '@/types/order'
-import { basic_order2 } from '../DATA/basic_order2'
 import { basic_order } from '../DATA/basic_order'
-import { splitPaymentsByMethods } from '../calculateBalance.lib'
+import { basic_order2 } from '../DATA/basic_order2'
 import { basic_order3 } from '../DATA/basic_order3'
+import {
+  calculateOrderBalance,
+  calculateOrdersBalance,
+  getPaymentsBetweenDates
+} from '../calculateBalance.lib'
 
-const calculateOrderBalance = (
-  order: Order
-): {
-  amounts: ReturnType<typeof splitPaymentsByMethods>
-} => {
-  const amounts = splitPaymentsByMethods(order.payments)
-  return {
-    amounts
-  }
-}
-const calculateOrdersBalance = (orders: Order[]) => {
-  const payments = orders.map((o) => o.payments).flat()
-  const amounts = splitPaymentsByMethods(payments)
-  return {
-    amounts
-  }
-}
 describe('calculate single order balance should return', () => {
   test('card 100, mxn 100, usd 0, deposit 0, total 200 ', () => {
     expect(calculateOrderBalance(basic_order)).toEqual({
@@ -70,5 +56,85 @@ describe('calculate multiple orders balance should return', () => {
         total: 1700
       }
     })
+  })
+})
+
+describe('calculate balance based in dates from a single order payments ', () => {
+  const payments = basic_order3.payments
+  test('between 2 hours  ', () => {
+    const p = getPaymentsBetweenDates(
+      {
+        cashier: 'all',
+        from: new Date(2023, 10, 20, 11, 30),
+        to: new Date(2023, 10, 20, 13, 30)
+      },
+      payments
+    )
+    expect(p).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ id: '6' }),
+        expect.objectContaining({ id: '5' })
+      ])
+    )
+  })
+  test('between 2 days  ', () => {
+    const p = getPaymentsBetweenDates(
+      {
+        cashier: 'all',
+        from: new Date(2023, 10, 18, 10, 59),
+        to: new Date(2023, 10, 20, 12, 59)
+      },
+      payments
+    )
+    expect(p).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ id: '6' }),
+        expect.objectContaining({ id: '7' })
+      ])
+    )
+  })
+})
+
+describe('calculate balance based in dates  from multiples orders', () => {
+  const payments = [
+    ...basic_order3.payments,
+    ...basic_order2.payments,
+    ...basic_order.payments
+  ]
+  test('between 2 days  ', () => {
+    const p = getPaymentsBetweenDates(
+      {
+        cashier: 'all',
+        from: new Date(2023, 10, 18, 10, 59),
+        to: new Date(2023, 10, 20, 12, 59)
+      },
+      payments
+    )
+    expect(p).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ id: '6' }),
+        expect.objectContaining({ id: '7' }),
+        expect.objectContaining({ id: '2' }),
+        expect.objectContaining({ id: '3' }),
+        expect.objectContaining({ id: '4' })
+      ])
+    )
+  })
+  test('between 2 hours same day ', () => {
+    const p = getPaymentsBetweenDates(
+      {
+        cashier: 'all',
+        from: new Date(2023, 10, 18, 12, 59),
+        to: new Date(2023, 10, 18, 17, 59)
+      },
+      payments
+    )
+    expect(p).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ id: '2' }),
+        expect.objectContaining({ id: '3' }),
+        expect.objectContaining({ id: '4' })
+      ])
+    )
   })
 })

@@ -44,8 +44,10 @@ export const basic_order3: Order = {
   payments: [
     //* this test payments are 300 mxn two payments 20.5mxn , 10usd , 50deposit,  64.5card should rest 0
     {
+      //* this payment was make it on 2023-10-20 13:00
+      id: '5',
       created: {
-        at: new Date(2023, 10, 20),
+        at: new Date(2023, 10, 20, 13),
         by: 'test'
       },
       method: 'card',
@@ -54,9 +56,11 @@ export const basic_order3: Order = {
       amount: 64.5,
       usdPrice: 16.5
     },
+    //* this payment was make it on 2023-10-20 12:00
     {
+      id: '6',
       created: {
-        at: new Date(2023, 10, 20),
+        at: new Date(2023, 10, 20, 12),
         by: 'test'
       },
       method: 'deposit',
@@ -65,9 +69,11 @@ export const basic_order3: Order = {
       amount: 114.5,
       usdPrice: 16.5
     },
+    //* this payment was make it on 2023-10-20 11:00
     {
+      id: '7',
       created: {
-        at: new Date(2023, 10, 20),
+        at: new Date(2023, 10, 18, 11),
         by: 'test'
       },
       method: 'usd',
@@ -76,9 +82,11 @@ export const basic_order3: Order = {
       amount: 279.5,
       usdPrice: 16.5
     },
+    //* this payment was make it on 2023-10-17
     {
+      id: '8',
       created: {
-        at: new Date(2023, 10, 20),
+        at: new Date(2023, 10, 17),
         by: 'test'
       },
       method: 'mxn',

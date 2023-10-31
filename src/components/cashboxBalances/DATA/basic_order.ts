@@ -37,8 +37,10 @@ export const basic_order: Order = {
   payments: [
     //* this test payments are 200 mxn two payments 100mxn , 100card
     {
+      //* this payment was make it on 2023-10-18 13:10
+      id: '3',
       created: {
-        at: new Date(2023, 10, 20),
+        at: new Date(2023, 10, 18, 13, 10),
         by: 'test'
       },
       method: 'card',
@@ -47,9 +49,11 @@ export const basic_order: Order = {
       amount: 100,
       usdPrice: 1
     },
+    //* this payment was make it on 2023-10-18 13:00
     {
+      id: '4',
       created: {
-        at: new Date(2023, 10, 35),
+        at: new Date(2023, 10, 18, 13, 0),
         by: 'test'
       },
       method: 'mxn',
