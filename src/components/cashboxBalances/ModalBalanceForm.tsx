@@ -25,10 +25,10 @@ const ModalBalanceForm = () => {
     setBalanceProps(balance)
 
     const b = calculateBalance(balance, orders)
-    console.log(b)
     setBalance(b)
   }
   const handleSave = async () => {
+    setSaved(true)
     const newBalance: CreateBalance = {
       orders: balance?.orders || [],
       from: forceAsDate(balanceProps?.from),
@@ -36,9 +36,13 @@ const ModalBalanceForm = () => {
       cashier: balanceProps?.cashier || '',
       companyId: currentCompany?.id || ''
     }
-    await createBalance(newBalance).then((res) => {
-      setSaved(true)
-    })
+    try {
+      const res = await createBalance(newBalance)
+      console.log({ res })
+    } catch (error) {
+      setSaved(false)
+      console.error(error)
+    }
   }
   return (
     <div className="flex w-full justify-center my-4">
@@ -60,9 +64,9 @@ const ModalBalanceForm = () => {
               disabled={saved}
               variant="outlined"
               color="secondary"
-              onClick={(e) => {
+              onClick={async (e) => {
                 e.preventDefault()
-                handleSave()
+                return await handleSave()
               }}
               fullWidth
             >

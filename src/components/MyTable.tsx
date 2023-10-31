@@ -21,9 +21,9 @@ export type MyTableProps = {
 }
 
 const MyTable = ({ data, onRowClick, title, search }: MyTableProps) => {
-  const [filteredData, setFilteredData] = useState<MyTableData['body']>(
-    data.body
-  )
+  const [filteredData, setFilteredData] = useState<MyTableData['body']>([
+    ...data.body
+  ])
 
   const formattedData = data.body.map((row, i) => {
     let newRow: Record<string, any> = { ...row }
@@ -47,6 +47,8 @@ const MyTable = ({ data, onRowClick, title, search }: MyTableProps) => {
       data?.body?.filter(({ id }) => !!res?.find((res) => res?.id === id)) || []
     )
   }
+
+  console.log(filteredData)
 
   return (
     <>
@@ -103,7 +105,8 @@ const SearchInput = ({
       handleSetSearch?.(inputValue)
     }, 800)
     return () => clearTimeout(timeoutId)
-  }, [handleSetSearch, inputValue])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inputValue])
 
   return (
     <>
