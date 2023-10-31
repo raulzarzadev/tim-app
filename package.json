@@ -14,7 +14,7 @@
     "test": "vitest",
     "pre-commit": "vitest --run && pnpm cy:run",
     "pre-push": "pnpm pre-commit && pnpm type-check && git add . && pnpm commit",
-    "push": "git checkout main && git merge dev && git push origin min && git checkout dev"
+    "push": "git checkout main && git merge dev && git push origin main && git checkout dev"
   },
   "dependencies": {
     "@emotion/react": "^11.10.6",
