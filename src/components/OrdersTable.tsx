@@ -62,23 +62,23 @@ const OrdersTable = ({ orders }: { orders: Partial<Order>[] }) => {
               key: 'items.length'
             },
             { label: 'Cliente', key: 'client.name' },
-            {
-              label: 'Total',
-              key: 'payments',
-              value: (p) =>
-                p?.reduce(
-                  (acc: number, { amount = 0 }: Payment) => acc + amount,
-                  0
-                ) || 0,
-              format: (payments) => (
-                <CurrencySpan
-                  quantity={payments?.reduce(
-                    (acc: number, { amount = 0 }: Payment) => acc + amount,
-                    0
-                  )}
-                />
-              )
-            },
+            // {
+            //   label: 'Total',
+            //   key: 'payments',
+            //   value: (p) =>
+            //     p?.reduce(
+            //       (acc: number, { amount = 0 }: Payment) => acc + amount,
+            //       0
+            //     ) || 0,
+            //   format: (payments) => (
+            //     <CurrencySpan
+            //       quantity={payments?.reduce(
+            //         (acc: number, { amount = 0 }: Payment) => acc + amount,
+            //         0
+            //       )}
+            //     />
+            //   )
+            // },
             {
               label: 'Asignado',
               key: 'shipping.assignedToEmail',

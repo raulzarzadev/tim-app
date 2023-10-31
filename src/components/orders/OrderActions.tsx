@@ -1,10 +1,17 @@
 import { Button, Typography } from '@mui/material'
 import ModalOrderForm from './ModalOrderForm'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
-import { finishOrderRent, startOrderRent, updateOrder } from '@/firebase/orders'
+import {
+  finishOrderRent,
+  onPayOrder,
+  startOrderRent,
+  updateOrder
+} from '@/firebase/orders'
 
 import { useState } from 'react'
-import { Order } from '@/types/order'
+import { Order, Payment } from '@/types/order'
+import ModalPayment from '../ModalPayment3'
+import { calculateOrderTotal } from '@/lib/calculateOrderTotal'
 
 const OrderActions = ({
   orderId,
@@ -13,7 +20,7 @@ const OrderActions = ({
   orderId: string
   onAction?: (action: 'start' | 'finish' | 'edit' | 'error') => void
 }) => {
-  const { orders } = useUserCompaniesContext()
+  const { orders, currentCompany } = useUserCompaniesContext()
   const order = orders?.find((o) => o?.id === orderId)
 
   const allItemsArePending = order?.items?.every(
@@ -26,6 +33,8 @@ const OrderActions = ({
   const itemsInUse = order?.items?.some((i) => i.rentStatus === 'taken')
 
   const itemsFinished = order?.items?.some((i) => i.rentStatus === 'finished')
+
+  const totalOrder = calculateOrderTotal({ company: currentCompany, order })
 
   const [loading, setLoading] = useState(false)
   const handleStartRent = async () => {
@@ -83,18 +92,23 @@ const OrderActions = ({
     }
   }
 
+  const handlePayOrder = async (payment: Payment) => {
+    try {
+      const res = await onPayOrder(orderId, payment)
+      console.log([res])
+      return res
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   return (
     <div>
       <Typography variant="h5" className="mt-4">
-        Acciones de la orden
+        Acciones de orden
       </Typography>
       <div className="grid gap-2 my-2 sm:grid-flow-col ">
-        <ModalOrderForm
-          label="Editar orden"
-          icon="edit"
-          order={order}
-          handleSave={handleSaveOrder}
-        />
+        <ModalPayment amount={totalOrder} setPayment={handlePayOrder} />
         <Button
           disabled={loading || !itemsPending}
           onClick={(e) => {
@@ -123,6 +137,13 @@ const OrderActions = ({
         >
           Cancelar orden
         </Button>
+
+        <ModalOrderForm
+          label="Editar orden"
+          icon="edit"
+          order={order}
+          handleSave={handleSaveOrder}
+        />
       </div>
     </div>
   )

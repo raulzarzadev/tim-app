@@ -88,7 +88,7 @@ const CheckoutItems = ({
       </Typography>
 
       <Typography className="text-end mt-4">
-        Costo de envio:
+        Costo de envío:
         <CurrencySpan quantity={shippingAmount} />
       </Typography>
 

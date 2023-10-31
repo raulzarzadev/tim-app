@@ -38,9 +38,9 @@ const OrderForm = ({
       0
     ) || 0
 
-  const paymentIsComplete = orderPaymentsCharged >= itemsTotal
+  // const paymentIsComplete = orderPaymentsCharged >= itemsTotal
 
-  const shippingAmount = asNumber(order.shipping?.amount) || 0
+  const shippingAmount = asNumber(order?.shipping?.amount) || 0
   const total = itemsTotal - orderPaymentsCharged + shippingAmount
   return (
     <div>
