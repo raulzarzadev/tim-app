@@ -4,6 +4,7 @@ import useModal from '@/hooks/useModal'
 import ArticleDetails from './ArticleDetails'
 import { Typography } from '@mui/material'
 import ItemCurrentStatus from './ItemCurrentStatus'
+import ItemActions from './ItemActions'
 
 const ModalItemDetails = ({
   itemId,
@@ -20,7 +21,9 @@ const ModalItemDetails = ({
   const item = items?.find((i) => i?.id === itemId)
 
   const modal = useModal({
-    title: `Detalles de ${item?.category} - ${item?.serialNumber || item?.name}`
+    title: `Detalles de ${item?.category && `${item?.category}-`}  ${
+      item?.serialNumber || item?.name
+    }`
   })
 
   if (!itemId) return <Typography>No item</Typography>
@@ -35,9 +38,9 @@ const ModalItemDetails = ({
           modal.onOpen()
         }}
       >
-        {showCat && `${item?.category}-`}
+        {showCat && `${item?.category} `}
         {item?.serialNumber}
-        <span className="font-thin text-gray-800 text-xs">{item?.name} </span>
+        <span className="font-bold text-gray-900 text-xs">{item?.name} </span>
         {!hiddenCurrentStatus && <ItemCurrentStatus itemId={itemId} />}
       </button>
       <Modal {...modal}>
@@ -46,6 +49,7 @@ const ModalItemDetails = ({
         ) : (
           <div>No encontramos información de este articulo</div>
         )}
+        <ItemActions itemId={itemId} />
       </Modal>
     </span>
   )

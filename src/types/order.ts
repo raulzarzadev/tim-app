@@ -38,6 +38,7 @@ export type Payment = {
   charged?: number
   amount?: number //** this should be not necessary */
   rest?: number //** this should be not necesary */
+  ref?: string
   created: {
     by: UserType['id']
     at: Date | Timestamp

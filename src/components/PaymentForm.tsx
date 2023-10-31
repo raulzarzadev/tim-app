@@ -13,8 +13,9 @@ import ModalConfirm from './ModalConfirm'
 import { useForm } from 'react-hook-form'
 import { paymentMethods } from '@/CONSTS/paymentMethods'
 import CurrencySpan from './CurrencySpan'
-import { PaymentData } from '@/types/payment'
+
 import AppIcon from './AppIcon'
+import { Payment } from '@/types/order'
 
 const PaymentForm = ({
   amount = 0,
@@ -31,14 +32,14 @@ const PaymentForm = ({
     method,
     charged
   }: Pick<
-    PaymentData,
+    Payment,
     'amount' | 'method' | 'usdPrice' | 'charged' | 'rest' | 'ref'
   >) => void | Promise<any>
 }) => {
   const USD_PRICE = usdPrice
   const { register, watch } = useForm<{
     amount: number
-    paymentMethod: PaymentData['method']
+    paymentMethod: Payment['method']
     ref?: string
   }>({
     defaultValues: {

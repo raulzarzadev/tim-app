@@ -1,9 +1,9 @@
-import { Payment } from '@/types/payment'
 import { Box, Typography } from '@mui/material'
 import PreviewImage from './PreviewImage'
 import ShippingLink from './ShippingLink'
+import { Order } from '@/types/order'
 
-const ClientInfo = ({ client }: { client: Payment['client'] }) => {
+const ClientInfo = ({ client }: { client?: Partial<Order['client']> }) => {
   const clientData = client
   if (!clientData) return <>Sin datos de cliente</>
   return (

@@ -1,12 +1,12 @@
 import { IconButton, Tooltip, Typography } from '@mui/material'
 import AppIcon, { IconName } from './AppIcon'
-import { Payment } from '@/types/payment'
 import Modal from './Modal'
 import useModal from '@/hooks/useModal'
 import Link from 'next/link'
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2'
+import { Order } from '@/types/order'
 
-const ModalContactClient = ({ client }: { client: Payment['client'] }) => {
+const ModalContactClient = ({ client }: { client: Order['client'] }) => {
   const modal = useModal({ title: 'Contactar cliente' })
   const methods: Record<
     string,

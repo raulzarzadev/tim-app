@@ -10,6 +10,7 @@ export type ArticleType = {
   image?: string
   ownPrice?: boolean
   prices?: CategoryType['prices']
+  description?: string
 }
 
 export type CompanyItem = ArticleType

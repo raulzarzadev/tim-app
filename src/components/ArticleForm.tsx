@@ -84,7 +84,7 @@ const ArticleForm = ({
       />
       <TextField
         id="outlined-basic"
-        label="Serie:"
+        label="No. de serie"
         variant="outlined"
         fullWidth
         {...register('serialNumber')}
@@ -101,6 +101,12 @@ const ArticleForm = ({
         label="Color"
         fullWidth
         {...register('color')}
+      />
+      <TextField
+        id="outlined-basic"
+        label="Descripción"
+        fullWidth
+        {...register('description')}
       />
       <Box>
         <FormControlLabel
