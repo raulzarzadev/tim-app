@@ -9,6 +9,7 @@ import { v4 as uidGenerator } from 'uuid'
 import { ItemSelected } from '@/context/useCompanyCashbox'
 import { getAndUpdateClientData } from './clients'
 import { Client } from '@/types/client'
+import { getAuth } from 'firebase/auth'
 
 /*
  * You should be able to copy all this file and just replace
@@ -173,7 +174,17 @@ export const onPayOrder = async (
 ) => {
   return await updateOrder(orderId, {
     // @ts-ignore FIXME: array union error FieldValue
-    payments: arrayUnion({ ...payment, id: uidGenerator(), date: new Date() })
+    payments: arrayUnion({
+      ...payment,
+      id: uidGenerator(),
+      date: new Date(),
+      created: {
+        by: getAuth().currentUser?.email,
+        at: new Date()
+      }
+      //createAt: new Date(),
+      //createdByEmail: getAuth().currentUser?.email
+    })
   })
 }
 

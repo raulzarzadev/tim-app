@@ -42,6 +42,8 @@ export type Payment = {
     by: UserType['id']
     at: Date | Timestamp
   }
+  // createAt?: Date | Timestamp
+  // createdByEmail?: UserType['email']
   orderId?: string
 }
 

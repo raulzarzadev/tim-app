@@ -7,7 +7,6 @@ import ShippingLink from './ShippingLink'
 import ItemChanges from './ItemChanges'
 import StaffSpan from './StaffSpan'
 import ClientInfo from './ClientInfo'
-import OrderActions from './orders/OrderActions'
 
 const OrderDetails = ({ order }: { order?: Partial<Order> }) => {
   return (

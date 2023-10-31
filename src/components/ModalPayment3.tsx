@@ -70,6 +70,7 @@ const ModalPayment = ({
           amount={amount}
           usdPrice={USD_PRICE}
           onPay={async (payment) => {
+            //TODO: should be created in the fact and add an id and save order in this moment?
             onPay?.({
               ...payment,
               amount: payment.charged || 0,
