@@ -1,9 +1,11 @@
 import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import Select from '../Select'
 import { useState } from 'react'
-import { Button, Chip, Stack } from '@mui/material'
+import { Chip, Stack } from '@mui/material'
 import { ArticleType } from '@/types/article'
 import ArticleDetails from '../ArticleDetails'
+import ButtonSave from '../ButtonSave'
+import ButtonClear from '../ButtonClear'
 
 export type SelectItemsProps = {
   itemsDisabled?: string[]
@@ -88,7 +90,13 @@ const SelectCompanyItem = ({
 
   const isSelected = (itemId?: string) =>
     _itemsSelected.includes(itemId || '') || _itemSelected === itemId
-
+  const handleClear = () => {
+    _setItemsSelected([])
+    _setItemSelected('')
+    setItems?.([])
+    setItem?.('')
+    setItemDetails(undefined)
+  }
   return (
     <div className="grid gap-4">
       <div>
@@ -133,9 +141,15 @@ const SelectCompanyItem = ({
       <div>{itemDetails && <ArticleDetails article={itemDetails} />}</div>
 
       <div className="flex justify-center">
-        <Button onClick={handleSetItems}>
+        <ButtonClear
+          onClick={() => {
+            handleClear()
+          }}
+        />
+        <ButtonSave onClick={handleSetItems} />
+        {/* <Button onClick={handleSetItems}>
           Seleccionar unidad{multiple && 'es'}
-        </Button>
+        </Button> */}
       </div>
     </div>
   )

@@ -12,8 +12,7 @@
     "cy:open": "cypress open",
     "cy:run": "cypress run",
     "test": "vitest",
-    "pre-commit": "vitest --run && pnpm cy:run",
-    "pre-push": "pnpm pre-commit && pnpm type-check && git add . && pnpm commit",
+    "pre-commit": "git add . && vitest --run && pnpm cy:run && pnpm type-check  && pnpm commit",
     "push": "git checkout main && git merge dev && git push origin min && git checkout dev"
   },
   "dependencies": {

@@ -1,18 +1,27 @@
 import { Order } from '@/types/order'
 import { Dispatch, useEffect, useState } from 'react'
 import CheckboxLabel from '../Checkbox'
-import { Box, TextField } from '@mui/material'
+import { Box, Button, TextField } from '@mui/material'
 import { inputDateFormat } from '@/lib/utils-date'
 import AssignForm from '../AssignForm'
 import forceAsDate from '@/lib/forceAsDate'
+import SaveButton from '../ButtonSave'
 
 const ShippingForm = ({
   shipping,
-  setShipping
+  setShipping,
+  handleSave
 }: {
   shipping?: Order['shipping']
   setShipping?: Dispatch<Order['shipping']>
+  handleSave?: (shipping: Order['shipping']) => Promise<void> | void
 }) => {
+  const defaultShipping = {
+    address: '',
+    date: new Date(),
+    assignedToEmail: '',
+    ...shipping
+  }
   const [shippingMenu, setShippingMenu] = useState({
     inStore: shipping?.address == 'store' || !shipping?.address ? true : false,
     pickupNow:
@@ -22,12 +31,7 @@ const ShippingForm = ({
     freeShipping: !shipping?.amount
   })
 
-  const [_shipping, _setShipping] = useState({
-    address: '',
-    date: new Date(),
-    assignedToEmail: '',
-    ...shipping
-  })
+  const [_shipping, _setShipping] = useState(defaultShipping)
 
   const handleChangeShippingMenu = (field: string, value: boolean) => {
     setShippingMenu((menu) => ({
@@ -128,6 +132,11 @@ const ShippingForm = ({
           }}
           assignedTo={_shipping?.assignedToEmail}
         />
+      </div>
+
+      <div className="flex justify-evenly w-full ">
+        <Button onClick={() => setShipping?.(defaultShipping)}>Limpiar</Button>
+        <SaveButton type="submit" onClick={() => handleSave?.(_shipping)} />
       </div>
     </Box>
   )

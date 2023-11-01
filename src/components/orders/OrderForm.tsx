@@ -59,7 +59,6 @@ const OrderForm = ({
                 ...order,
                 client
               })
-
               clientForm.onClose()
             }}
           />
@@ -73,24 +72,28 @@ const OrderForm = ({
               ...order.shipping,
               address: order?.client?.address || ''
             }}
-            setShipping={(data) => {
+            // setShipping={(data) => {
+            //   setOrder({ ...order, shipping: data })
+            //   // shippingForm.onClose()
+            // }}
+            handleSave={(data) => {
               setOrder({ ...order, shipping: data })
-              // shippingForm.onClose()
+              shippingForm.onClose()
             }}
           />
         </Modal>
         {/* **** Items Form section */}
         <Button onClick={itemsForm.onOpen}>Seleccionar unidades</Button>
-        {order.items && (
-          <CheckoutItems
-            shippingAmount={shippingAmount}
-            itemsSelected={order.items}
-            setTotal={setItemsTotal}
-            setItemsSelected={(itemsSelected) => {
-              setOrder({ ...order, items: itemsSelected })
-            }}
-          />
-        )}
+
+        <CheckoutItems
+          shippingAmount={shippingAmount}
+          itemsSelected={order.items || []}
+          setTotal={setItemsTotal}
+          setItemsSelected={(itemsSelected) => {
+            setOrder({ ...order, items: itemsSelected })
+          }}
+        />
+
         <Modal {...itemsForm}>
           <SelectCompanyItem
             multiple
@@ -106,6 +109,7 @@ const OrderForm = ({
             }}
           />
         </Modal>
+
         {/* **** Payment  section */}
         {order.payments && <OrderPaymentsTable payments={order.payments} />}
         {!!order?.items?.length && (

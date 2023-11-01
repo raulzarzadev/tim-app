@@ -6,6 +6,8 @@ import PreviewImage from '../PreviewImage'
 import ModalSignature from '../ModalSignature'
 import PhoneInput from '../PhoneInput'
 import SearchClient from '../SearchClient'
+import AppIcon from '../AppIcon'
+import SaveButton from '../ButtonSave'
 
 const ClientForm = ({
   client,
@@ -47,7 +49,7 @@ const ClientForm = ({
           <div>
             <SearchClient
               onSelectClient={(e) => {
-                setClient?.(e)
+                // setClient?.(e) //* this line close the client form modal automatically
                 setValue('id', e.id)
                 setValue('name', e.name)
                 setValue('phone', e.phone)
@@ -79,9 +81,9 @@ const ClientForm = ({
         {client?.signature && (
           <PreviewImage src={client?.signature} alt="Firma de usuario" />
         )}
-        <Box className="flex justify-evenly">
+        <Box className="flex justify-evenly my-6">
           <Button onClick={handleClear}>Limpiar</Button>
-          <Button type="submit">Enviar</Button>
+          <SaveButton type="submit" label="Guardar cliente" />
         </Box>
       </form>
     </div>

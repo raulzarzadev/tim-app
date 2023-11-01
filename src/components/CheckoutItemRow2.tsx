@@ -45,15 +45,6 @@ export const CheckoutItemRow = ({
   const [priceSelected, setPriceSelected] = useState<
     Pick<PriceType, 'unit' | 'quantity'> | undefined
   >(defaultPrice)
-  // console.log({ defaultPrice })
-  // useEffect(() => {
-  //   if (item.qty && item.unit) {
-  //     setPriceSelected({
-  //       unit: item.unit,
-  //       quantity: item.qty
-  //     })
-  //   }
-  // }, [])
 
   useEffect(() => {
     const priceExist = item?.prices?.find((p) => {
@@ -145,13 +136,15 @@ export const CheckoutItemRow = ({
         ))}
       </Grid2>
       <Grid2 xs={2}>
-        <ModalConfirm
-          label={<AppIcon icon="trash" />}
-          color="error"
-          handleConfirm={handleRemoveItem}
-        >
-          <Typography>Remover articulo</Typography>
-        </ModalConfirm>
+        {removeItem && (
+          <ModalConfirm
+            label={<AppIcon icon="trash" />}
+            color="error"
+            handleConfirm={handleRemoveItem}
+          >
+            <Typography>Remover articulo</Typography>
+          </ModalConfirm>
+        )}
 
         <CurrencySpan quantity={itemTotal} />
       </Grid2>
