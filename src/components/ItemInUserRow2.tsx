@@ -41,7 +41,7 @@ const ItemInUserRow = ({ item }: { item: ItemOrder }) => {
         </Grid2>
         {/* //* Item  */}
         <Grid2 xs={2} className=" p-1">
-          <Typography className="truncate">{item.category}</Typography>
+          <Typography className="truncate">{item?.category}</Typography>
           <Typography className="truncate">
             {item.serialNumber || item.name}
           </Typography>
@@ -50,7 +50,7 @@ const ItemInUserRow = ({ item }: { item: ItemOrder }) => {
         {/* //* Asigando  */}
         <Grid2 xs={2} className=" p-1">
           <Typography className="truncate">
-            <StaffSpan email={item.order?.shipping.assignedToEmail || ''} />
+            <StaffSpan email={item.order?.shipping?.assignedToEmail || ''} />
           </Typography>
         </Grid2>
 
