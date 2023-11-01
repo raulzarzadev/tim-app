@@ -50,6 +50,21 @@ const OrderForm = ({
   const handleClearOrder = () => {
     setOrder({})
   }
+  const handleSaveOrder = async (order: Partial<Order>) => {
+    try {
+      setSaving(true)
+      clientForm.onClose()
+      shippingForm.onClose()
+      itemsForm.onClose()
+      return await handleSave?.(order)
+    } catch (e) {
+      console.error(e)
+    } finally {
+      setTimeout(() => {
+        setSaving(false)
+      }, 1000)
+    }
+  }
   return (
     <div>
       <div className="grid gap-2">
@@ -123,7 +138,9 @@ const OrderForm = ({
               label="Pagar "
               setPayment={(payment) => {
                 const payments = [...(order.payments || []), payment]
-                setOrder({ ...order, payments })
+                const orderPaid = { ...order, payments }
+                setOrder(orderPaid)
+                handleSaveOrder(orderPaid)
               }}
             />
           </div>
@@ -133,19 +150,9 @@ const OrderForm = ({
         <div className="flex justify-evenly w-full my-4">
           <ButtonClear onClick={handleClearOrder} />
           <ButtonSave
+            disabled={saving}
             onClick={async (e) => {
-              try {
-                setSaving(true)
-                e.preventDefault()
-                clientForm.onClose()
-                shippingForm.onClose()
-                itemsForm.onClose()
-                await handleSave?.(order)
-              } catch (e) {
-                console.error(e)
-              } finally {
-                setSaving(false)
-              }
+              return handleSaveOrder(order)
             }}
           />
         </div>

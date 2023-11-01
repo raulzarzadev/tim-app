@@ -5,8 +5,12 @@ import { ButtonHTMLAttributes, MouseEventHandler } from 'react'
 const ButtonSave = ({
   onClick,
   type = 'submit',
-  label = 'Guardar'
-}: Pick<ButtonHTMLAttributes<HTMLButtonElement>, 'onClick' | 'type'> & {
+  label = 'Guardar',
+  ...rest
+}: Pick<
+  ButtonHTMLAttributes<HTMLButtonElement>,
+  'onClick' | 'type' | 'disabled'
+> & {
   label?: string
 }) => {
   return (
@@ -17,6 +21,7 @@ const ButtonSave = ({
         variant="contained"
         type={type}
         endIcon={<AppIcon icon="save" />}
+        {...rest}
       >
         {label}
       </Button>

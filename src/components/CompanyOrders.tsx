@@ -20,6 +20,7 @@ const CompanyOrders = () => {
     <div>
       <div className="flex justify-center">
         <ModalOrderForm
+          closeOnSave={false}
           handleSave={async (e) => {
             try {
               const res = await createOrder({
