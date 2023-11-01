@@ -59,6 +59,7 @@ const OrderForm = ({
       shippingForm.onClose()
       itemsForm.onClose()
       const res = await handleSave?.(order)
+      //@ts-ignore
       const orderId = res?.res?.id
       setOrder({ ...order, id: orderId })
       console.log({ orderId })
