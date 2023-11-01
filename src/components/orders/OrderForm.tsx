@@ -30,6 +30,8 @@ const OrderForm = ({
   const [saving, setSaving] = useState(false)
 
   const [order, setOrder] = useState<Partial<Order>>(defaultOrder || {})
+  const orderId = order?.id
+  console.log({ orderId })
 
   const [itemsTotal, setItemsTotal] = useState(0)
 
@@ -56,7 +58,11 @@ const OrderForm = ({
       clientForm.onClose()
       shippingForm.onClose()
       itemsForm.onClose()
-      return await handleSave?.(order)
+      const res = await handleSave?.(order)
+      const orderId = res?.res?.id
+      setOrder({ ...order, id: orderId })
+      console.log({ orderId })
+      return res
     } catch (e) {
       console.error(e)
     } finally {
@@ -65,6 +71,7 @@ const OrderForm = ({
       }, 1000)
     }
   }
+
   return (
     <div>
       <div className="grid gap-2">
@@ -150,6 +157,7 @@ const OrderForm = ({
         <div className="flex justify-evenly w-full my-4">
           <ButtonClear onClick={handleClearOrder} />
           <ButtonSave
+            label={orderId ? 'Actualizar' : 'Guardar'}
             disabled={saving}
             onClick={async (e) => {
               return handleSaveOrder(order)

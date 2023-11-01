@@ -48,8 +48,6 @@ const MyTable = ({ data, onRowClick, title, search }: MyTableProps) => {
     )
   }
 
-  console.log(filteredData)
-
   return (
     <>
       {search && <SearchInput handleSetSearch={handleSearch} />}

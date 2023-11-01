@@ -2,7 +2,7 @@ import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import OrdersTable from './OrdersTable'
 import BasicTabs from './BasicTabs'
 import ModalOrderForm from './orders/ModalOrderForm'
-import { createOrder } from '@/firebase/orders'
+import { createOrder, updateOrder } from '@/firebase/orders'
 
 const CompanyOrders = () => {
   const { orders, currentCompany } = useUserCompaniesContext()
@@ -21,14 +21,20 @@ const CompanyOrders = () => {
       <div className="flex justify-center">
         <ModalOrderForm
           closeOnSave={false}
-          handleSave={async (e) => {
+          handleSave={async (order) => {
             try {
-              const res = await createOrder({
-                ...e,
-                companyId: currentCompany?.id || ''
-              })
-              console.log({ res })
-              return res
+              if (order.id) {
+                const res = await updateOrder(order.id, order)
+                console.log({ res })
+                return res
+              } else {
+                const res = await createOrder({
+                  ...order,
+                  companyId: currentCompany?.id || ''
+                })
+                console.log({ res })
+                return res
+              }
             } catch (e) {
               console.error(e)
             }
