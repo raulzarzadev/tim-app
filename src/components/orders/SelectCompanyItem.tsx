@@ -140,16 +140,13 @@ const SelectCompanyItem = ({
       </Stack>
       <div>{itemDetails && <ArticleDetails article={itemDetails} />}</div>
 
-      <div className="flex justify-center">
+      <div className="flex justify-evenly w-full">
         <ButtonClear
           onClick={() => {
             handleClear()
           }}
         />
         <ButtonSave onClick={handleSetItems} />
-        {/* <Button onClick={handleSetItems}>
-          Seleccionar unidad{multiple && 'es'}
-        </Button> */}
       </div>
     </div>
   )

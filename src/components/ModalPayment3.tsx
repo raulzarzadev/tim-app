@@ -38,19 +38,19 @@ const ModalPayment = ({
   return (
     <>
       <Button
-        variant="outlined"
+        variant={amount === 0 ? 'outlined' : 'contained'}
         onClick={(e) => {
           e.preventDefault()
           modalPayment.onOpen()
         }}
-        size="large"
-        color="success"
+        color="primary"
         disabled={disabled}
+        endIcon={
+          <CurrencySpan quantity={amount} className="text-sm font-bold" />
+        }
+        fullWidth
       >
         {label}{' '}
-        <span className="font-bold ml-2 text-lg">
-          <CurrencySpan quantity={amount} />
-        </span>
       </Button>
       <Modal {...modalPayment}>
         <Box>

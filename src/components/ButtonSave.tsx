@@ -14,7 +14,7 @@ const ButtonSave = ({
       <Button
         onClick={onClick}
         color="success"
-        variant="outlined"
+        variant="contained"
         type={type}
         endIcon={<AppIcon icon="save" />}
       >

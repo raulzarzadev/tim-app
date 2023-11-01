@@ -13,6 +13,9 @@ import ModalPayment from '../ModalPayment3'
 import OrderPaymentsTable from '../OrderPaymentsTable'
 import asNumber from '@/lib/asNumber'
 import { ArticleType } from '@/types/article'
+import AppIcon from '../AppIcon'
+import ButtonSave from '../ButtonSave'
+import ButtonClear from '../ButtonClear'
 
 const OrderForm = ({
   handleSave,
@@ -44,7 +47,9 @@ const OrderForm = ({
   const shippingAmount = asNumber(order?.shipping?.amount) || 0
   const total = itemsTotal - orderPaymentsCharged + shippingAmount
   const itemsDisabled: ArticleType['id'][] = []
-
+  const handleClearOrder = () => {
+    setOrder({})
+  }
   return (
     <div>
       <div className="grid gap-2">
@@ -84,16 +89,6 @@ const OrderForm = ({
         </Modal>
         {/* **** Items Form section */}
         <Button onClick={itemsForm.onOpen}>Seleccionar unidades</Button>
-
-        <CheckoutItems
-          shippingAmount={shippingAmount}
-          itemsSelected={order.items || []}
-          setTotal={setItemsTotal}
-          setItemsSelected={(itemsSelected) => {
-            setOrder({ ...order, items: itemsSelected })
-          }}
-        />
-
         <Modal {...itemsForm}>
           <SelectCompanyItem
             multiple
@@ -109,41 +104,51 @@ const OrderForm = ({
             }}
           />
         </Modal>
+        <CheckoutItems
+          shippingAmount={shippingAmount}
+          itemsSelected={order.items || []}
+          setTotal={setItemsTotal}
+          setItemsSelected={(itemsSelected) => {
+            setOrder({ ...order, items: itemsSelected })
+          }}
+        />
 
         {/* **** Payment  section */}
         {order.payments && <OrderPaymentsTable payments={order.payments} />}
         {!!order?.items?.length && (
-          <ModalPayment
-            //disabled={!!paymentIsComplete}
-            amount={total}
-            label="Pagar "
-            setPayment={(payment) => {
-              const payments = [...(order.payments || []), payment]
-              setOrder({ ...order, payments })
-            }}
-          />
+          <div className="my-4 flex w-full justify-center">
+            <ModalPayment
+              //disabled={!!paymentIsComplete}
+              amount={total}
+              label="Pagar "
+              setPayment={(payment) => {
+                const payments = [...(order.payments || []), payment]
+                setOrder({ ...order, payments })
+              }}
+            />
+          </div>
         )}
 
         {/* **** Save  */}
-        <Button
-          disabled={saving}
-          onClick={async (e) => {
-            try {
-              setSaving(true)
-              e.preventDefault()
-              clientForm.onClose()
-              shippingForm.onClose()
-              itemsForm.onClose()
-              await handleSave?.(order)
-            } catch (e) {
-              console.error(e)
-            } finally {
-              setSaving(false)
-            }
-          }}
-        >
-          Guardar
-        </Button>
+        <div className="flex justify-evenly w-full my-4">
+          <ButtonClear onClick={handleClearOrder} />
+          <ButtonSave
+            onClick={async (e) => {
+              try {
+                setSaving(true)
+                e.preventDefault()
+                clientForm.onClose()
+                shippingForm.onClose()
+                itemsForm.onClose()
+                await handleSave?.(order)
+              } catch (e) {
+                console.error(e)
+              } finally {
+                setSaving(false)
+              }
+            }}
+          />
+        </div>
       </div>
     </div>
   )
