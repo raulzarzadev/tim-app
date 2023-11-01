@@ -13,12 +13,14 @@ const ModalPayment = ({
   amount,
   disabled,
   setPayment,
-  label = 'Pagar'
+  label = 'Pagar',
+  fullWidth
 }: {
   label?: string
   setPayment?: (payment: Payment) => void
   amount: number
   disabled?: boolean
+  fullWidth?: boolean
 }) => {
   const { user } = useAuthContext()
   const modalPayment = useModal({ title: 'Pagar ' })
@@ -48,7 +50,7 @@ const ModalPayment = ({
         endIcon={
           <CurrencySpan quantity={amount} className="text-sm font-bold" />
         }
-        fullWidth
+        fullWidth={fullWidth}
       >
         {label}{' '}
       </Button>

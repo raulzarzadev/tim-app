@@ -12,6 +12,7 @@ import { useState } from 'react'
 import { Order, Payment } from '@/types/order'
 import ModalPayment from '../ModalPayment3'
 import { calculateOrderTotal } from '@/lib/calculateOrderTotal'
+import ModalConfirm from '../ModalConfirm'
 
 const OrderActions = ({
   orderId,
@@ -107,9 +108,16 @@ const OrderActions = ({
       <Typography variant="h5" className="mt-4">
         Acciones de orden
       </Typography>
-      <div className="grid gap-2 my-2 sm:grid-flow-col ">
-        <ModalPayment amount={totalOrder} setPayment={handlePayOrder} />
+      <div className="my-4">
+        <ModalPayment
+          amount={totalOrder}
+          setPayment={handlePayOrder}
+          fullWidth
+        />
+      </div>
+      <div className="grid gap-2 my-6 sm:grid-flow-col ">
         <Button
+          variant="outlined"
           disabled={loading || !itemsPending}
           onClick={(e) => {
             e.preventDefault()
@@ -119,6 +127,7 @@ const OrderActions = ({
           Comenzar renta
         </Button>
         <Button
+          variant="outlined"
           disabled={loading || !itemsInUse}
           onClick={(e) => {
             e.preventDefault()
@@ -127,17 +136,18 @@ const OrderActions = ({
         >
           Finalizar renta
         </Button>
-
-        <Button
-          disabled={loading || !allItemsArePending}
-          onClick={(e) => {
-            e.preventDefault()
-            handleCancelRent()
-          }}
+      </div>
+      <div className="w-full flex grid-cols-2 gap-4 my-6">
+        <ModalConfirm
+          fullWidth
+          label="Cancelar orden"
+          color="error"
+          handleConfirm={handleCancelRent}
         >
-          Cancelar orden
-        </Button>
-
+          <Typography className="text-center">
+            ¿Desea cancelar esta orden?
+          </Typography>
+        </ModalConfirm>
         <ModalOrderForm
           label="Editar orden"
           icon="edit"

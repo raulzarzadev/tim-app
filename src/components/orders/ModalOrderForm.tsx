@@ -24,6 +24,7 @@ const ModalOrderForm = ({
   return (
     <>
       <Button
+        fullWidth
         onClick={modal.onOpen}
         endIcon={icon ? <AppIcon icon={icon} /> : undefined}
       >

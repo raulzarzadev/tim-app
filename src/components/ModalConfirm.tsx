@@ -13,7 +13,8 @@ const ModalConfirm = ({
   color = 'primary',
   acceptLabel = 'Aceptar',
   modalTitle = 'Confirmar',
-  openIcon
+  openIcon,
+  fullWidth
 }: {
   handleConfirm: () => void | Promise<any>
   children?: ReactNode
@@ -23,6 +24,7 @@ const ModalConfirm = ({
   color?: ButtonProps['color']
   modalTitle?: string
   openIcon?: IconName
+  fullWidth?: boolean
 }) => {
   const modal = useModal()
   const [loading, setLoading] = useState(false)
@@ -30,6 +32,7 @@ const ModalConfirm = ({
   return (
     <>
       <Button
+        fullWidth={fullWidth}
         onClick={(e) => {
           e.preventDefault()
           modal.onOpen()
