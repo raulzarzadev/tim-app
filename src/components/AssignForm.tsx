@@ -109,7 +109,7 @@ const OrdersByDays = ({
   assignedAt?: Date | Timestamp
 }) => {
   return (
-    <div className=" grid  gap-2 grid-cols-4 place-content-end">
+    <div className=" grid  gap-2 grid-cols-3 sm:grid-cols-7 place-content-end">
       <Day
         days={-1}
         onClickDay={onClickDay}
@@ -134,6 +134,24 @@ const OrdersByDays = ({
       />
       <Day
         days={2}
+        onClickDay={onClickDay}
+        assignedAt={assignedAt}
+        orders={orders}
+      />
+      <Day
+        days={3}
+        onClickDay={onClickDay}
+        assignedAt={assignedAt}
+        orders={orders}
+      />
+      <Day
+        days={4}
+        onClickDay={onClickDay}
+        assignedAt={assignedAt}
+        orders={orders}
+      />
+      <Day
+        days={5}
         onClickDay={onClickDay}
         assignedAt={assignedAt}
         orders={orders}
