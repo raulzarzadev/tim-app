@@ -54,7 +54,6 @@ const ShippingForm = ({
     _setShipping((shipping) => ({ ...shipping, [field]: value }))
     setShipping?.((shipping) => ({ ...shipping, [field]: value }))
   }
-  console.log({ _shipping })
 
   return (
     <Box className="flex flex-col items-center my-4">

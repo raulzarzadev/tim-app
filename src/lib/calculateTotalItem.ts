@@ -10,6 +10,7 @@ export const calculateTotal = (
 ): { total: number; price?: PriceType } => {
   let total = 0
   let price = undefined
+  if (!unit && !qty) return { total: 0 }
   const defaultPrice = pricesList?.[0]
   if (!unit || !qty) {
     const t = asNumber(defaultPrice?.price) * asNumber(defaultPrice?.quantity)

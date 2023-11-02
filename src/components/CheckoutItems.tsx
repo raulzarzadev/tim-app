@@ -42,7 +42,6 @@ const CheckoutItems = ({
       return { ...fullItem, prices: categoryPrices, ...searchItem }
     }
   )
-
   const [_total, _setTotal] = useState(0)
 
   const onSelectPrice = (itemId: string, price: PriceType) => {
@@ -80,6 +79,7 @@ const CheckoutItems = ({
   useEffect(() => {
     _setItemsSelected(itemsSelected)
   }, [itemsSelected])
+
   return (
     <div>
       {!!itemsSelected.length && (
