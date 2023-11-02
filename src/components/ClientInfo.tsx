@@ -1,7 +1,9 @@
-import { Box, Typography } from '@mui/material'
+import { Box, IconButton, Typography } from '@mui/material'
 import PreviewImage from './PreviewImage'
 import ShippingLink from './ShippingLink'
 import { Order } from '@/types/order'
+import AppIcon from './AppIcon'
+import Link from 'next/link'
 
 const ClientInfo = ({ client }: { client?: Partial<Order['client']> }) => {
   const clientData = client
@@ -15,7 +17,33 @@ const ClientInfo = ({ client }: { client?: Partial<Order['client']> }) => {
         <Box>
           <Typography variant="h5">Cliente</Typography>
           <Typography>Cliente: {clientData?.name}</Typography>
-          <Typography>Teléfono: {clientData?.phone || '-'}</Typography>
+          <Typography
+            component={'div'}
+            className="flex items-center whitespace-nowrap"
+          >
+            Teléfono: {clientData?.phone || '-'}{' '}
+            {(clientData?.phone?.length || 0) > 3 && (
+              <div className="flex items-center">
+                <IconButton
+                  color="success"
+                  LinkComponent={Link}
+                  target="_blank"
+                  href={`https://wa.me/${clientData?.phone}`}
+                >
+                  <AppIcon icon="whatsapp" />
+                </IconButton>
+                <IconButton
+                  target="_blank"
+                  color="primary"
+                  LinkComponent={Link}
+                  href={`tel:${clientData?.phone}`}
+                >
+                  <AppIcon icon="phone" />
+                </IconButton>
+              </div>
+            )}
+          </Typography>
+
           <Typography>Email: {clientData?.email || '-'}</Typography>
           <Typography>
             Dirección: <ShippingLink address={clientData?.address} />
