@@ -1,10 +1,8 @@
-import { Button } from '@mui/material'
-import StaffList from './StaffList'
+import { Button, Typography } from '@mui/material'
 import useModal from '@/hooks/useModal'
 import Modal from './Modal'
 import StaffSpan from './StaffSpan'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
-import { groupBy } from 'lodash'
 import AccordionSections from './AccordionSections'
 import { Order } from '@/types/order'
 import { addDays, getDay, isSameDay, isToday, isTomorrow } from 'date-fns'
@@ -45,7 +43,7 @@ const AssignForm = ({
           assignedTo={assignedTo}
           handleAssign={(email, date) => {
             handleAssign?.(email, date)
-            modal.onClose()
+            // modal.onClose()
           }}
         />
       </Modal>
@@ -113,15 +111,31 @@ const OrdersByDays = ({
 }) => {
   return (
     <div className=" grid  gap-2 grid-cols-4 place-content-end">
-      <Day days={-1} onClickDay={onClickDay} assignedAt={assignedAt} />
+      <Day
+        days={-1}
+        onClickDay={onClickDay}
+        assignedAt={assignedAt}
+        orders={orders}
+      />
       <Day
         days={0}
         label="Hoy"
         onClickDay={onClickDay}
         assignedAt={assignedAt}
+        orders={orders}
       />
-      <Day days={1} onClickDay={onClickDay} assignedAt={assignedAt} />
-      <Day days={2} onClickDay={onClickDay} assignedAt={assignedAt} />
+      <Day
+        days={1}
+        onClickDay={onClickDay}
+        assignedAt={assignedAt}
+        orders={orders}
+      />
+      <Day
+        days={2}
+        onClickDay={onClickDay}
+        assignedAt={assignedAt}
+        orders={orders}
+      />
     </div>
   )
 }
@@ -129,12 +143,14 @@ const Day = ({
   days,
   label,
   onClickDay,
-  assignedAt
+  assignedAt,
+  orders
 }: {
   days: number
   label?: string
   onClickDay?: (date: Date) => void
   assignedAt?: Date | Timestamp
+  orders?: Order[]
 }) => {
   const date = addDays(new Date(), days)
   return (
@@ -149,8 +165,19 @@ const Day = ({
         {dateFormat(date, 'EEEE')}{' '}
       </button>
       {assignedAt && isSameDay(date, forceAsDate(assignedAt)) && (
-        <div className="h-10 w-full bg-blue-300 "> </div>
+        <div className="h-10 w-full bg-blue-300 mt-2"></div>
       )}
+      {orders?.map((order) => (
+        <div key={order.id}>
+          {isSameDay(date, forceAsDate(order.shipping.date)) && (
+            <div className="h-10 w-full bg-green-800 mt-2 flex justify-center items-center p-1 text-white ">
+              <Typography className="text-center truncate">
+                {order.client.name}
+              </Typography>
+            </div>
+          )}
+        </div>
+      ))}
     </div>
   )
 }
