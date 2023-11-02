@@ -21,9 +21,14 @@ export type MyTableProps = {
 }
 
 const MyTable = ({ data, onRowClick, title, search }: MyTableProps) => {
-  const [filteredData, setFilteredData] = useState<MyTableData['body']>([
-    ...data.body
-  ])
+  const [filteredData, setFilteredData] = useState<MyTableData['body']>(
+    data.body || []
+  )
+
+  useEffect(() => {
+    setFilteredData(data.body || [])
+  }, [data.body])
+  console.log({ body: data.body, filteredData })
 
   const formattedData = data.body.map((row, i) => {
     let newRow: Record<string, any> = { ...row }

@@ -6,6 +6,7 @@ import { createOrder, updateOrder } from '@/firebase/orders'
 
 const CompanyOrders = () => {
   const { orders, currentCompany } = useUserCompaniesContext()
+
   const actives = orders?.filter((o) =>
     o?.items?.some((i) => i?.rentStatus === 'taken')
   )

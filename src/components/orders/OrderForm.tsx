@@ -31,7 +31,6 @@ const OrderForm = ({
 
   const [order, setOrder] = useState<Partial<Order>>(defaultOrder || {})
   const orderId = order?.id
-  console.log({ orderId })
 
   const [itemsTotal, setItemsTotal] = useState(0)
 
