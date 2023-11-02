@@ -3,7 +3,10 @@ import BasicTabs from './BasicTabs'
 import OrdersTable from './OrdersTable'
 import { isAfter, isBefore } from 'date-fns'
 import forceAsDate from '@/lib/forceAsDate'
-import { calculateFinishRentDate } from '@/context/userCompaniesContext2'
+import {
+  calculateFinishRentDate,
+  rentFinishAt
+} from '@/context/userCompaniesContext2'
 
 const OrdersTabs = ({ orders }: { orders: Partial<Order>[] }) => {
   const ordersWithFinishRent = orders?.map((o) => {
@@ -11,14 +14,16 @@ const OrdersTabs = ({ orders }: { orders: Partial<Order>[] }) => {
       ...o,
       items: o?.items?.map((i) => ({
         ...i,
-        rentFinishAt: calculateFinishRentDate(
-          forceAsDate(i?.rentStartedAt),
-          i?.qty,
-          i?.unit
-        )
+        rentFinishAt: rentFinishAt(i.rentStartedAt, i.qty, i.unit),
+        rentStatus:
+          i.rentStatus === 'taken' &&
+          isBefore(rentFinishAt(i.rentStartedAt, i.qty, i.unit), new Date())
+            ? 'expired'
+            : i.rentStatus || 'pending'
       }))
     }
   })
+
   const actives = ordersWithFinishRent?.filter((o) =>
     o?.items?.some((i) => i?.rentStatus === 'taken')
   )
@@ -29,11 +34,7 @@ const OrdersTabs = ({ orders }: { orders: Partial<Order>[] }) => {
     o?.items?.some((i) => i?.rentStatus === 'finished')
   )
   const expired = ordersWithFinishRent?.filter((o) =>
-    o?.items?.some(
-      (i) =>
-        i?.rentStatus === 'taken' &&
-        isBefore(forceAsDate(i?.rentFinishAt), new Date())
-    )
+    o?.items?.some((i) => i?.rentStatus === 'expired')
   )
 
   return (
@@ -58,7 +59,7 @@ const OrdersTabs = ({ orders }: { orders: Partial<Order>[] }) => {
           },
           {
             label: `Todas ${orders?.length}`,
-            content: <OrdersTable orders={orders || []} />
+            content: <OrdersTable orders={ordersWithFinishRent || []} />
           }
         ]}
       />

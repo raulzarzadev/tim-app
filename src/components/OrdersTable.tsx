@@ -48,7 +48,7 @@ const OrdersTable = ({ orders }: { orders: Partial<Order>[] }) => {
               format: (date) => fromNow(date)
             },
             {
-              label: 'Entregado',
+              label: 'Inicio',
               key: 'items.[0].rentStartedAt',
               format: (date) => fromNow(date)
             },

@@ -7,15 +7,15 @@ import ShippingLink from './ShippingLink'
 import ItemChanges from './ItemChanges'
 import StaffSpan from './StaffSpan'
 import ClientInfo from './ClientInfo'
+import OrderStatus from './OrderStatus'
 
 const OrderDetails = ({ order }: { order?: Partial<Order> }) => {
   return (
     <div>
-      <div className="flex   flex-col items-end sm:justify-between sm:flex-row">
+      <div className="flex   flex-col items-end sm:justify-between sm:flex-row mb-4">
         <Typography className="text-center" variant="caption">
           Id: {order?.id}
         </Typography>
-
         <Typography className="text-center" variant="caption">
           Creada: {fromNow(order?.created?.at)}
         </Typography>
@@ -87,7 +87,7 @@ const OrderDetails = ({ order }: { order?: Partial<Order> }) => {
         <ItemChanges changes={order?.changes || []} />
       </div>
       <div>
-        <Typography variant="h5">Entrega </Typography>
+        <Typography variant="h5">Inicio </Typography>
         <Typography>
           Asignado: <StaffSpan email={order?.shipping?.assignedToEmail || ''} />
         </Typography>
@@ -97,6 +97,7 @@ const OrderDetails = ({ order }: { order?: Partial<Order> }) => {
         <Typography>
           Hora: {dateFormat(order?.shipping?.date, 'dd/MMM HH:mm')}
         </Typography>
+        <OrderStatus order={order} />
       </div>
     </div>
   )

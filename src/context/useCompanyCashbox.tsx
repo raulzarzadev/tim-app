@@ -52,7 +52,7 @@ export type ItemSelected = {
   qty?: number
   unit?: PriceType['unit']
   inUse?: boolean
-  rentStatus?: 'pending' | 'taken' | 'finished'
+  rentStatus?: 'pending' | 'taken' | 'finished' | 'expired'
   rentFinishedAt?: Date | Timestamp
   rentStartedAt?: Date | Timestamp
 }

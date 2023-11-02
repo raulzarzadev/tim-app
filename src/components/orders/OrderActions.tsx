@@ -1,6 +1,9 @@
 import { Button, Typography } from '@mui/material'
 import ModalOrderForm from './ModalOrderForm'
-import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
+import {
+  rentFinishAt,
+  useUserCompaniesContext
+} from '@/context/userCompaniesContext2'
 import {
   finishOrderRent,
   onPayOrder,
@@ -13,6 +16,7 @@ import { Order, Payment } from '@/types/order'
 import ModalPayment from '../ModalPayment3'
 import { calculateOrderTotal } from '@/lib/calculateOrderTotal'
 import ModalConfirm from '../ModalConfirm'
+import { isBefore } from 'date-fns'
 
 const OrderActions = ({
   orderId,
@@ -24,16 +28,11 @@ const OrderActions = ({
   const { orders, currentCompany } = useUserCompaniesContext()
   const order = orders?.find((o) => o?.id === orderId)
 
-  const allItemsArePending = order?.items?.every(
-    (i) => i.rentStatus === 'pending' || !i.rentStatus
-  )
   const itemsPending = order?.items.some(
     (i) => i.rentStatus === 'pending' || !i.rentStatus
   )
 
   const itemsInUse = order?.items?.some((i) => i.rentStatus === 'taken')
-
-  const itemsFinished = order?.items?.some((i) => i.rentStatus === 'finished')
 
   const totalOrder = calculateOrderTotal({ company: currentCompany, order })
 

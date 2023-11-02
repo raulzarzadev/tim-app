@@ -37,6 +37,9 @@ export type ContextItem = ItemSelected & {
   order: Order
 }
 
+export const rentFinishAt = (startAt: any, qty: any, unit: any): Date =>
+  calculateFinishRentDate(forceAsDate(startAt), qty, unit) as Date
+
 export type ItemOrder = Partial<CompanyItem> &
   ItemSelected & {
     order: Order
@@ -220,16 +223,6 @@ export function UserCompaniesProvider({
       {children}
     </UserCompaniesContext.Provider>
   )
-}
-
-const rentFinishAt = (
-  qty: number,
-  unit: PriceType['unit'],
-  startAt?: Date | Timestamp
-) => {
-  if (!startAt) return null
-  const rentMinutes = rentTime(qty, unit)
-  return addMinutes(asDate(startAt) as Date, rentMinutes)
 }
 
 type UseArticleProps = { articleId?: string }
