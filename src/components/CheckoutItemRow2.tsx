@@ -13,6 +13,8 @@ import useModal from '@/hooks/useModal'
 import Modal from './Modal'
 import ChangeItem from './ChangeItem'
 import useCashboxContext, { ItemSelected } from '@/context/useCompanyCashbox'
+import ModalItemChange from './ModalItemChange'
+import ModalItemDetails from './ModalItemDetails'
 
 export const CheckoutItemRow = ({
   item,
@@ -49,34 +51,18 @@ export const CheckoutItemRow = ({
   ) => {
     return selected?.unit === p.unit && selected?.quantity === p.quantity
   }
-  const modalChangeItem = useModal({ title: 'Cambiar articulo' })
   return (
     <Grid2 container key={item?.id} spacing={1} alignItems={'center'}>
       <Grid2 xs={2}>{item?.category}</Grid2>
       <Grid2 xs={2}>
-        <button
-          onClick={(e) => {
-            e.preventDefault()
-            modalChangeItem.onOpen()
-          }}
-        >
-          {item?.serialNumber || item?.name}
-        </button>
-        <Modal {...modalChangeItem}>
-          <ChangeItem
-            item={item}
-            cashboxChange={(newItem) => {
-              addItem?.({
-                inUse: true,
-                qty: priceSelected?.quantity,
-                unit: priceSelected?.unit,
-                itemId: newItem,
-                rentStatus: 'taken'
-              })
-              removeItem?.(item.id || '')
-            }}
-          />
-        </Modal>
+        <ModalItemDetails itemId={item?.id || ''} />
+        {/* <ModalItemChange
+          addItem={addItem}
+          removeItem={removeItem}
+          item={item}
+          modalChangeItem={modalChangeItem}
+          priceSelected={priceSelected}
+        /> */}
       </Grid2>
       <Grid2 xs={6} container wrap={'nowrap'} overflow={'auto'} padding={'8px'}>
         {item.prices?.map((p, i) => (

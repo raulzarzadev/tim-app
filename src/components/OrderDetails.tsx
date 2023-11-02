@@ -39,7 +39,7 @@ const OrderDetails = ({ order }: { order?: Partial<Order> }) => {
                   format: (value) => (
                     <ModalItemDetails
                       itemId={value}
-                      hiddenCurrentStatus
+                      // hiddenCurrentStatus
                       showCat
                     />
                   )
