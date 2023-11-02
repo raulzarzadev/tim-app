@@ -79,7 +79,7 @@ const DeliveryStaffList = ({
           sections={[
             ...staffOrders?.map((staff) => ({
               title: staff?.name || '',
-              subTitle: `staff?.email (${staff.orders?.length})` || '',
+              subTitle: `${staff?.email} (${staff.orders?.length})` || '',
               content: (
                 <OrdersByDays
                   orders={staff.orders || []}
