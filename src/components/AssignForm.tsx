@@ -5,7 +5,7 @@ import StaffSpan from './StaffSpan'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import AccordionSections from './AccordionSections'
 import { Order } from '@/types/order'
-import { addDays, getDay, isSameDay, isToday, isTomorrow } from 'date-fns'
+import { addDays, addHours, isSameDay } from 'date-fns'
 import forceAsDate from '@/lib/forceAsDate'
 import { dateFormat } from '@/lib/utils-date'
 import { orderStatus } from '@/lib/orderStatus'
@@ -37,7 +37,6 @@ const AssignForm = ({
       </Button>
 
       <Modal {...modal}>
-        {/* <StaffList simple onClick={(staffEmail) => handleAssign(staffEmail)} /> */}
         <DeliveryStaffList
           assignedAt={assignedAt}
           assignedTo={assignedTo}
@@ -120,7 +119,10 @@ const OrdersByDays = ({
       <Day
         days={0}
         label="Hoy"
-        onClickDay={onClickDay}
+        onClickDay={(date) => {
+          //* this extra hours avoid that item rent status sets to taken when order is saved
+          onClickDay?.(addHours(date, 2))
+        }}
         assignedAt={assignedAt}
         orders={orders}
       />
