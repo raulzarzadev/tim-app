@@ -52,10 +52,12 @@ export type ItemSelected = {
   qty?: number
   unit?: PriceType['unit']
   inUse?: boolean
-  rentStatus?: 'pending' | 'taken' | 'finished' | 'expired'
+  rentStatus?: ItemRentStatus
   rentFinishedAt?: Date | Timestamp
   rentStartedAt?: Date | Timestamp
 }
+
+export type ItemRentStatus = 'pending' | 'taken' | 'finished' | 'expired'
 
 export const CashboxContextProvider = ({
   children

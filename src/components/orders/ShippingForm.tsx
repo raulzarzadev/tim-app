@@ -49,6 +49,17 @@ const ShippingForm = ({
 
   return (
     <Box className="flex flex-col items-center my-4">
+      {/******   SHIPPING STAFF  */}
+
+      <div className="my-4">
+        <AssignForm
+          assignTo={(e) => {
+            handleChangeShipping('assignedToEmail', e)
+          }}
+          assignedTo={_shipping?.assignedToEmail}
+        />
+      </div>
+
       {/******   SHIPPING LOCATION  */}
       <CheckboxLabel
         label="Entregar en tienda"
@@ -123,17 +134,6 @@ const ShippingForm = ({
           />
         </Box>
       )}
-
-      {/******   SHIPPING STAFF  */}
-
-      <div className="my-4">
-        <AssignForm
-          assignTo={(e) => {
-            handleChangeShipping('assignedToEmail', e)
-          }}
-          assignedTo={_shipping?.assignedToEmail}
-        />
-      </div>
 
       <div className="flex justify-evenly w-full ">
         <Button onClick={() => setShipping?.(defaultShipping)}>Limpiar</Button>
