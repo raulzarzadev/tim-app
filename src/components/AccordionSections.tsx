@@ -9,13 +9,20 @@ export type AccordionSection = {
   title: string
   subTitle: string
   content: React.ReactNode
+  expands?: number
 }
 export default function AccordionSections({
-  sections
+  sections,
+  expands
 }: {
   sections: AccordionSection[]
+  expands?: number
 }) {
-  const [expanded, setExpanded] = React.useState<string | false>(false)
+  const defaultPanelOpen =
+    typeof expands === 'number' ? `panel${expands}` : false
+  const [expanded, setExpanded] = React.useState<string | false>(
+    defaultPanelOpen
+  )
 
   const handleChange =
     (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {

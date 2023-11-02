@@ -1,5 +1,5 @@
 import { Order } from '@/types/order'
-import { Dispatch, useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import CheckboxLabel from '../Checkbox'
 import { Box, Button, TextField } from '@mui/material'
 import { inputDateFormat } from '@/lib/utils-date'
@@ -7,6 +7,7 @@ import AssignForm from '../AssignForm'
 import forceAsDate from '@/lib/forceAsDate'
 import SaveButton from '../ButtonSave'
 import { isBefore } from 'date-fns'
+import { Timestamp } from 'firebase/firestore'
 
 const ShippingForm = ({
   shipping,
@@ -14,7 +15,14 @@ const ShippingForm = ({
   handleSave
 }: {
   shipping?: Order['shipping']
-  setShipping?: Dispatch<Order['shipping']>
+  setShipping?: Dispatch<
+    SetStateAction<{
+      assignedToEmail: string
+      date: Date | Timestamp
+      address: string
+      amount?: number | undefined
+    }>
+  >
   handleSave?: (shipping: Order['shipping']) => Promise<void> | void
 }) => {
   const defaultShipping = {
@@ -42,10 +50,11 @@ const ShippingForm = ({
     field: string,
     value: string | Date | number
   ) => {
-    const shippingCopy = { ..._shipping, [field]: value }
-    _setShipping(shippingCopy)
-    setShipping?.(shippingCopy)
+    //const shippingCopy = { ..._shipping, [field]: value }
+    _setShipping((shipping) => ({ ...shipping, [field]: value }))
+    setShipping?.((shipping) => ({ ...shipping, [field]: value }))
   }
+  console.log({ _shipping })
 
   return (
     <Box className="flex flex-col items-center my-4">
@@ -53,10 +62,18 @@ const ShippingForm = ({
 
       <div className="my-4">
         <AssignForm
-          assignTo={(e) => {
-            handleChangeShipping('assignedToEmail', e)
+          // assignTo={(e) => {
+          //   handleChangeShipping('assignedToEmail', e)
+          // }}
+          handleAssign={(email, date) => {
+            if (date) {
+              handleChangeShipping('date', date)
+              handleChangeShippingMenu('pickupNow', false)
+            }
+            handleChangeShipping('assignedToEmail', email)
           }}
           assignedTo={_shipping?.assignedToEmail}
+          assignedAt={_shipping?.date}
         />
       </div>
 
