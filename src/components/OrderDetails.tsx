@@ -8,6 +8,7 @@ import ItemChanges from './ItemChanges'
 import StaffSpan from './StaffSpan'
 import ClientInfo from './ClientInfo'
 import OrderStatus from './OrderStatus'
+import dictionary from '@/CONSTS/dictionary'
 
 const OrderDetails = ({ order }: { order?: Partial<Order> }) => {
   return (
@@ -44,8 +45,9 @@ const OrderDetails = ({ order }: { order?: Partial<Order> }) => {
                   )
                 },
                 {
-                  label: 'status',
-                  key: 'rentStatus'
+                  label: 'Status',
+                  key: 'rentStatus',
+                  format: (value) => dictionary(value)
                 }
               ],
               body: order?.items || []

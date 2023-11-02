@@ -1,12 +1,8 @@
 import { Order } from '@/types/order'
 import BasicTabs from './BasicTabs'
 import OrdersTable from './OrdersTable'
-import { isAfter, isBefore } from 'date-fns'
-import forceAsDate from '@/lib/forceAsDate'
-import {
-  calculateFinishRentDate,
-  rentFinishAt
-} from '@/context/userCompaniesContext2'
+import { isBefore } from 'date-fns'
+import { rentFinishAt } from '@/context/userCompaniesContext2'
 
 const OrdersTabs = ({ orders }: { orders: Partial<Order>[] }) => {
   const ordersWithFinishRent = orders?.map((o) => {
