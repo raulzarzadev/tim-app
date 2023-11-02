@@ -1,6 +1,5 @@
-import { dateFormat, fromNow } from '@/lib/utils-date'
-import { Order, Payment } from '@/types/order'
-import CurrencySpan from './CurrencySpan'
+import { fromNow } from '@/lib/utils-date'
+import { Order } from '@/types/order'
 import Modal from './Modal'
 import OrderDetails from './OrderDetails'
 import MyTable from './MyTable'
@@ -8,13 +7,10 @@ import useModal from '@/hooks/useModal'
 import { useState } from 'react'
 import StaffSpan from './StaffSpan'
 import OrderActions from './orders/OrderActions'
-import { Tooltip } from '@mui/material'
 
 const OrdersTable = ({ orders }: { orders: Partial<Order>[] }) => {
   const [order, setOrder] = useState<Partial<Order>>()
-
   const modal = useModal({ title: 'Detalles de orden' })
-
   return (
     <div>
       <Modal {...modal}>
@@ -54,7 +50,11 @@ const OrdersTable = ({ orders }: { orders: Partial<Order>[] }) => {
             {
               label: 'Entregado',
               key: 'items.[0].rentStartedAt',
-
+              format: (date) => fromNow(date)
+            },
+            {
+              label: 'Vence',
+              key: 'items.[0].rentFinishAt',
               format: (date) => fromNow(date)
             },
             {

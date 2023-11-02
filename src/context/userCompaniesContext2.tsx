@@ -22,6 +22,17 @@ import { listenCompanyServices } from '@/firebase/services'
 import { Client } from '@/types/client'
 import { listenCompanyClients } from '@/firebase/clients'
 
+export const calculateFinishRentDate = (
+  rentDate: Date | null,
+  qty?: number | string,
+  unit?: PriceType['unit']
+): Date | null => {
+  if (!rentDate) {
+    return null
+  }
+  const rentMinutes = rentTime(asNumber(qty), unit)
+  return addMinutes(rentDate, rentMinutes)
+}
 export type ContextItem = ItemSelected & {
   order: Order
 }
@@ -46,6 +57,7 @@ export type UserCompaniesContextType = {
     inUse: ItemOrder[]
     finished: ItemOrder[]
     pending: ItemOrder[]
+    expired: ItemOrder[]
   }
   orders?: Order[]
 }
@@ -65,7 +77,8 @@ export const UserCompaniesContext = createContext<UserCompaniesContextType>({
     all: [],
     inUse: [],
     finished: [],
-    pending: []
+    pending: [],
+    expired: []
   }
 })
 
@@ -139,18 +152,6 @@ export function UserCompaniesProvider({
         : currentCompany?.categories?.find((c) => c.name === i.category)?.prices
     })) || []
 
-  const calculateFinishRentDate = (
-    rentDate: Date | null,
-    qty?: number | string,
-    unit?: PriceType['unit']
-  ): Date | null => {
-    if (!rentDate) {
-      return null
-    }
-    const rentMinutes = rentTime(asNumber(qty), unit)
-    return addMinutes(rentDate, rentMinutes)
-  }
-
   const itemsFromOrders: ItemOrder[] =
     orders
       .map((order) =>
@@ -191,6 +192,10 @@ export function UserCompaniesProvider({
   const itemsPending = itemsFromOrders?.filter(
     (i) => i?.rentStatus === 'pending'
   )
+  const itemsExpired = itemsFromOrders?.filter(
+    (i) =>
+      i?.rentStatus === 'taken' && isAfter(i?.rentFinishAt as Date, new Date())
+  )
 
   return (
     <UserCompaniesContext.Provider
@@ -204,7 +209,8 @@ export function UserCompaniesProvider({
           all: itemsFromOrders,
           inUse: itemsInUse,
           finished: itemsFinished,
-          pending: itemsPending
+          pending: itemsPending,
+          expired: itemsExpired
         },
         clients,
         orders,

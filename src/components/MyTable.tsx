@@ -28,7 +28,6 @@ const MyTable = ({ data, onRowClick, title, search }: MyTableProps) => {
   useEffect(() => {
     setFilteredData(data.body || [])
   }, [data.body])
-  console.log({ body: data.body, filteredData })
 
   const formattedData = data.body.map((row, i) => {
     let newRow: Record<string, any> = { ...row }
