@@ -5,11 +5,13 @@ import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import { ItemSelected } from '@/context/useCompanyCashbox'
 import { CompanyItem } from '@/types/article'
 import { calculateFullTotal } from '@/lib/calculateTotalItem'
-import { addMinutes } from 'date-fns'
+import { addMinutes, isBefore } from 'date-fns'
 import rentTime from '@/lib/rentTime'
 import { PriceType } from './PricesForm'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import CurrencySpan from './CurrencySpan'
+import { Timestamp } from 'firebase/firestore'
+import forceAsDate from '@/lib/forceAsDate'
 
 const CheckoutItems = ({
   itemsSelected,
@@ -25,6 +27,7 @@ const CheckoutItems = ({
   const { currentCompany } = useUserCompaniesContext()
   const categories = currentCompany?.categories
   const items = currentCompany?.articles
+
   const [_itemsSelected, _setItemsSelected] = useState(itemsSelected)
 
   const fullItems: (CompanyItem | null)[] = _itemsSelected?.map(
@@ -65,6 +68,7 @@ const CheckoutItems = ({
     const time = rentTime(qty, unit)
     return addMinutes(new Date(), time)
   }
+
   //const total = calculateFullTotal(_itemsSelected, fullItems)
   useEffect(() => {
     const t = calculateFullTotal(itemsSelected, fullItems)
@@ -84,8 +88,12 @@ const CheckoutItems = ({
             items={fullItems || []}
             onSelectPrice={onSelectPrice}
           />
+          {/* <Typography className="text-end mt-4">
+            Inicia:
+            {dateFormat(, ' dd-MMM HH:mm')}
+          </Typography> */}
           <Typography className="text-end mt-4">
-            Regreso:
+            Termina:
             {dateFormat(returnBack(), ' dd-MMM HH:mm')}
           </Typography>
         </>

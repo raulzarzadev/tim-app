@@ -36,23 +36,19 @@ const OrderStatus = ({ order }: { order?: Partial<Order> }) => {
       )}
 
       {itemsInUse && (
-        <Typography>
-          <Typography
-            className="text-center font-bold text-green-500 my-4"
-            variant="h5"
-          >
-            Unidades en uso
-          </Typography>
+        <Typography
+          className="text-center font-bold text-green-500 my-4"
+          variant="h5"
+        >
+          Unidades en uso
         </Typography>
       )}
       {itemsFinished && (
-        <Typography>
-          <Typography
-            className="text-center font-bold text-teal-600 my-4"
-            variant="h5"
-          >
-            Orden finalizada
-          </Typography>
+        <Typography
+          className="text-center font-bold text-teal-600 my-4"
+          variant="h5"
+        >
+          Orden finalizada
         </Typography>
       )}
     </div>

@@ -6,6 +6,7 @@ import { inputDateFormat } from '@/lib/utils-date'
 import AssignForm from '../AssignForm'
 import forceAsDate from '@/lib/forceAsDate'
 import SaveButton from '../ButtonSave'
+import { isBefore } from 'date-fns'
 
 const ShippingForm = ({
   shipping,
@@ -24,10 +25,7 @@ const ShippingForm = ({
   }
   const [shippingMenu, setShippingMenu] = useState({
     inStore: shipping?.address == 'store' || !shipping?.address ? true : false,
-    pickupNow:
-      forceAsDate(shipping?.date).getTime() < new Date().getTime()
-        ? false
-        : true,
+    pickupNow: isBefore(forceAsDate(shipping?.date), new Date()),
     freeShipping: !shipping?.amount
   })
 
@@ -77,9 +75,12 @@ const ShippingForm = ({
         <CheckboxLabel
           label="Entregar ahora"
           checked={shippingMenu.pickupNow}
-          onChange={(e) =>
+          onChange={(e) => {
             handleChangeShippingMenu('pickupNow', e.target.checked)
-          }
+            if (e.target.checked) {
+              handleChangeShipping('date', new Date())
+            }
+          }}
         />
       </Box>
       {!shippingMenu.pickupNow && (

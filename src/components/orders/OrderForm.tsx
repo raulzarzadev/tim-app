@@ -1,6 +1,6 @@
 import useModal from '@/hooks/useModal'
 import ClientForm from './ClientForm'
-import { Button } from '@mui/material'
+import { Button, Typography } from '@mui/material'
 import Modal from '../Modal'
 import ShippingForm from './ShippingForm'
 import { useState } from 'react'
@@ -16,6 +16,9 @@ import { ArticleType } from '@/types/article'
 import AppIcon from '../AppIcon'
 import ButtonSave from '../ButtonSave'
 import ButtonClear from '../ButtonClear'
+import { isBefore } from 'date-fns'
+import forceAsDate from '@/lib/forceAsDate'
+import { ItemSelected } from '@/context/useCompanyCashbox'
 
 const OrderForm = ({
   handleSave,
@@ -52,16 +55,26 @@ const OrderForm = ({
     setOrder({})
   }
   const handleSaveOrder = async (order: Partial<Order>) => {
+    const rentAlreadyStart =
+      order.shipping?.date &&
+      isBefore(forceAsDate(order.shipping?.date), new Date())
+
+    const items = order.items?.map((i) => ({
+      ...i,
+      rentStartedAt: rentAlreadyStart ? new Date() : order.shipping?.date,
+      rentStatus: rentAlreadyStart
+        ? 'taken'
+        : ('pending' as ItemSelected['rentStatus'])
+    }))
     try {
       setSaving(true)
       clientForm.onClose()
       shippingForm.onClose()
       itemsForm.onClose()
-      const res = await handleSave?.(order)
+      const res = await handleSave?.({ ...order, items })
       //@ts-ignore
       const orderId = res?.res?.id
-      setOrder({ ...order, id: orderId })
-      console.log({ orderId })
+      setOrder({ ...order, items, id: orderId })
       return res
     } catch (e) {
       console.error(e)
@@ -75,6 +88,11 @@ const OrderForm = ({
   return (
     <div>
       <div className="grid gap-2">
+        {order.id && (
+          <Typography variant="caption" className="text-end my-0">
+            Id:{order.id}
+          </Typography>
+        )}
         {/* **** Client Form section */}
         <Button onClick={clientForm.onOpen}>Cliente</Button>
         {order?.client && <ClientInfo client={order?.client} />}
