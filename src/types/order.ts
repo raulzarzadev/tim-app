@@ -8,6 +8,7 @@ import { PriceType } from '@/components/PricesForm'
 import { UserType } from './user'
 import { ItemSelected } from '@/context/useCompanyCashbox'
 import { StaffType } from './staff'
+import { Service } from './service'
 
 export type OrderBase = {
   shipping: Shipping
@@ -16,7 +17,8 @@ export type OrderBase = {
   payments: Payment[]
   changes: PaymentChange[]
   companyId: CompanyType['id']
-  status?: 'canceled' | 'pending' | 'finished' | 'in-progress'
+  status?: 'canceled' | 'pending' | 'finished' | 'in-progress' | 'reported'
+  reports?: Service['id'][]
 }
 
 export type Order = OrderBase & BaseType

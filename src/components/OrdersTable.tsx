@@ -7,23 +7,26 @@ import useModal from '@/hooks/useModal'
 import { useState } from 'react'
 import StaffSpan from './StaffSpan'
 import OrderActions from './orders/OrderActions'
+import ErrorBoundary from './ErrorBoundary'
 
 const OrdersTable = ({ orders }: { orders: Partial<Order>[] }) => {
   const [order, setOrder] = useState<Partial<Order>>()
   const modal = useModal({ title: 'Detalles de orden' })
   return (
     <div>
-      <Modal {...modal}>
-        <OrderDetails order={order} />
-        {order?.id && (
-          <OrderActions
-            orderId={order.id}
-            onAction={(action) => {
-              modal.onClose()
-            }}
-          />
-        )}
-      </Modal>
+      <ErrorBoundary componentName="OrdersTable Details">
+        <Modal {...modal}>
+          <OrderDetails order={order} />
+          {order?.id && (
+            <OrderActions
+              orderId={order.id}
+              onAction={(action) => {
+                modal.onClose()
+              }}
+            />
+          )}
+        </Modal>
+      </ErrorBoundary>
       <MyTable
         search
         onRowClick={(id) => {

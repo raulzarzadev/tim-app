@@ -16,7 +16,7 @@ export type ServiceBase = {
   companyId?: CompanyType['id']
   //* OrderId is the id of the client order. Its just when a client was a responsible of the damage of an article
   orderId?: Order['id']
-
+  clientId?: string
   reason: string
   date: Date | Timestamp
   description: string

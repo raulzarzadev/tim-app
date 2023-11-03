@@ -5,6 +5,7 @@ import {
   useUserCompaniesContext
 } from '@/context/userCompaniesContext2'
 import {
+  addOrderReport,
   finishOrderRent,
   onPayOrder,
   startOrderRent,
@@ -17,6 +18,8 @@ import ModalPayment from '../ModalPayment3'
 import { calculateOrderTotal } from '@/lib/calculateOrderTotal'
 import ModalConfirm from '../ModalConfirm'
 import { isBefore } from 'date-fns'
+import ServiceForm from '../ServiceForm'
+import { createService } from '@/firebase/services'
 
 const OrderActions = ({
   orderId,
@@ -112,6 +115,26 @@ const OrderActions = ({
           amount={totalOrder}
           setPayment={handlePayOrder}
           fullWidth
+        />
+      </div>
+      <div>
+        <ServiceForm
+          companyId={currentCompany?.id || ''}
+          orderId={orderId}
+          setService={async (s) => {
+            try {
+              const res = await createService({
+                ...s,
+                orderId,
+                clientId: order?.client?.id || ''
+              })
+              const rep = await addOrderReport(orderId, res.res.id)
+
+              console.log({ res, rep })
+            } catch (error) {
+              console.error({ error })
+            }
+          }}
         />
       </div>
       <div className="grid gap-2 my-6 sm:grid-flow-col ">

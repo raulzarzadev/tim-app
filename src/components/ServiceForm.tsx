@@ -1,4 +1,11 @@
-import { Button, Chip, IconButton, Stack, TextField } from '@mui/material'
+import {
+  Button,
+  Chip,
+  IconButton,
+  Stack,
+  TextField,
+  Typography
+} from '@mui/material'
 import AppIcon from './AppIcon'
 import ModalConfirm from './ModalConfirm'
 import { useForm } from 'react-hook-form'
@@ -18,16 +25,18 @@ const ServiceForm = ({
   companyId,
   item,
   setService,
-  service
+  service,
+  orderId = ''
 }: {
   itemId?: string
   companyId: string
   item?: ArticleType
   setService?: (service: Partial<Service>) => void | Promise<any>
   service?: Service
+  orderId?: string
 }) => {
   const { register, handleSubmit, setValue, watch } = useForm<Service>({
-    defaultValues: { itemId: itemId || '', companyId, ...service }
+    defaultValues: { itemId: itemId || '', companyId, orderId, ...service }
   })
   const formValues = watch()
   const modalRemove = useModal({
@@ -42,6 +51,7 @@ const ServiceForm = ({
   return (
     <div className="flex w-full justify-center my-4">
       <ModalConfirm
+        fullWidth
         color="error"
         openIcon="fix"
         label="Servicio"
@@ -55,17 +65,34 @@ const ServiceForm = ({
             : ''
         }`}
       >
-        {!itemId && (
-          <CheckboxLabel
-            label="Seleccionar unidad"
-            onChange={(e) => {
-              setSelectItem(e.target.checked)
-              console.log(e.target.checked)
-              if (e.target.checked === false) setValue('itemId', '')
-            }}
-            checked={selectItem}
-          />
+        {!!orderId && !itemId && (
+          <Typography variant="h5" className="my-4 text-center">
+            Reportar Orden
+          </Typography>
         )}
+        {!!itemId && !orderId && (
+          <Typography variant="h5" className="my-4 text-center">
+            Reportar Item
+          </Typography>
+        )}
+        {!orderId && !itemId && (
+          <Typography variant="h5" className="my-4 text-center">
+            Reporte
+          </Typography>
+        )}
+        {!orderId && !itemId && (
+          <div className="flex justify-center">
+            <CheckboxLabel
+              label="Seleccionar unidad existente"
+              onChange={(e) => {
+                setSelectItem(e.target.checked)
+                if (e.target.checked === false) setValue('itemId', '')
+              }}
+              checked={selectItem}
+            />
+          </div>
+        )}
+
         <form className="grid gap-4">
           {!!selectItem && !itemId && (
             <>
