@@ -13,7 +13,7 @@ const ServiceDetails = ({ service }: { service: Service }) => {
         <span className="font-bold">Status: </span>
         <span className="">{serviceStatusLabels[service?.status]}</span>
       </Typography>
-      <Typography>
+      <Typography component={'div'}>
         <span className="font-bold">Item: </span>
         <ModalItemDetails itemId={service.itemId || ''} showCat />
       </Typography>

@@ -13,6 +13,7 @@ const OrderReports = ({ orderId }: { orderId: string }) => {
       {reports?.length === 0 && <div>No hay reportes</div>}
 
       <MyTable
+        modalChildren={(value) => <ServiceDetails service={value} />}
         data={{
           headers: [
             {

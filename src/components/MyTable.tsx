@@ -2,6 +2,8 @@ import { get } from 'lodash'
 import { ReactNode, useEffect, useState } from 'react'
 import ErrorBoundary from './ErrorBoundary'
 import { TextField, Typography } from '@mui/material'
+import Modal from './Modal'
+import useModal from '@/hooks/useModal'
 
 export type MyTableData = {
   headers: {
@@ -18,9 +20,16 @@ export type MyTableProps = {
   onRowClick?: (id: string) => void
   title?: string
   search?: boolean
+  modalChildren?: (value: any) => ReactNode
 }
 
-const MyTable = ({ data, onRowClick, title, search }: MyTableProps) => {
+const MyTable = ({
+  data,
+  onRowClick,
+  title,
+  search,
+  modalChildren
+}: MyTableProps) => {
   const [filteredData, setFilteredData] = useState<MyTableData['body']>(
     data.body || []
   )
@@ -52,8 +61,11 @@ const MyTable = ({ data, onRowClick, title, search }: MyTableProps) => {
     )
   }
 
+  const modal = useModal({ title: 'title modal' })
+  const [rowSelected, setRowSelected] = useState<any>()
   return (
     <>
+      {modalChildren && <Modal {...modal}>{modalChildren(rowSelected)}</Modal>}
       {search && <SearchInput handleSetSearch={handleSearch} />}
       <div className="overflow-x-auto">
         {title && <Typography variant="h6">{title}</Typography>}
@@ -74,7 +86,13 @@ const MyTable = ({ data, onRowClick, title, search }: MyTableProps) => {
                   className={`${
                     onRowClick ? ' hover:bg-slate-200 cursor-pointer ' : ''
                   } `}
-                  onClick={() => onRowClick?.(b.id)}
+                  onClick={() => {
+                    onRowClick?.(b.id)
+                    if (modalChildren) {
+                      modal.onOpen()
+                      setRowSelected(b)
+                    }
+                  }}
                 >
                   {data.headers.map((h) => (
                     <td key={h.key} className="">
