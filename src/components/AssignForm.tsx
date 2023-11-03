@@ -74,6 +74,7 @@ const DeliveryStaffList = ({
   return (
     <>
       <div>
+        <Button onClick={() => handleAssign?.('')}>Sin responsable</Button>
         <AccordionSections
           expands={indexStaffSelected}
           sections={[
@@ -105,57 +106,62 @@ const OrdersByDays = ({
   assignedAt
 }: {
   orders: Order[]
-  onClickDay?: (date: Date) => void
+  onClickDay?: (date?: Date) => void
   assignedAt?: Date | Timestamp
 }) => {
   return (
-    <div className=" grid  gap-2 grid-cols-3 sm:grid-cols-7 place-content-end">
-      <Day
-        days={-1}
-        onClickDay={onClickDay}
-        assignedAt={assignedAt}
-        orders={orders}
-      />
-      <Day
-        days={0}
-        label="Hoy"
-        onClickDay={(date) => {
-          //* this extra hours avoid that item rent status sets to taken when order is saved
-          onClickDay?.(addHours(date, 2))
-        }}
-        assignedAt={assignedAt}
-        orders={orders}
-      />
-      <Day
-        days={1}
-        onClickDay={onClickDay}
-        assignedAt={assignedAt}
-        orders={orders}
-      />
-      <Day
-        days={2}
-        onClickDay={onClickDay}
-        assignedAt={assignedAt}
-        orders={orders}
-      />
-      <Day
-        days={3}
-        onClickDay={onClickDay}
-        assignedAt={assignedAt}
-        orders={orders}
-      />
-      <Day
-        days={4}
-        onClickDay={onClickDay}
-        assignedAt={assignedAt}
-        orders={orders}
-      />
-      <Day
-        days={5}
-        onClickDay={onClickDay}
-        assignedAt={assignedAt}
-        orders={orders}
-      />
+    <div>
+      <div className="flex justify-center">
+        <Button onClick={() => onClickDay?.()}>asignar sin fecha</Button>
+      </div>
+      <div className=" grid  gap-2 grid-cols-3 sm:grid-cols-7 place-content-end">
+        <Day
+          days={-1}
+          onClickDay={onClickDay}
+          assignedAt={assignedAt}
+          orders={orders}
+        />
+        <Day
+          days={0}
+          label="Hoy"
+          onClickDay={(date) => {
+            //* this extra hours avoid that item rent status sets to taken when order is saved
+            onClickDay?.(addHours(date, 2))
+          }}
+          assignedAt={assignedAt}
+          orders={orders}
+        />
+        <Day
+          days={1}
+          onClickDay={onClickDay}
+          assignedAt={assignedAt}
+          orders={orders}
+        />
+        <Day
+          days={2}
+          onClickDay={onClickDay}
+          assignedAt={assignedAt}
+          orders={orders}
+        />
+        <Day
+          days={3}
+          onClickDay={onClickDay}
+          assignedAt={assignedAt}
+          orders={orders}
+        />
+        <Day
+          days={4}
+          onClickDay={onClickDay}
+          assignedAt={assignedAt}
+          orders={orders}
+        />
+        <Day
+          days={5}
+          onClickDay={onClickDay}
+          assignedAt={assignedAt}
+          orders={orders}
+        />
+      </div>
     </div>
   )
 }

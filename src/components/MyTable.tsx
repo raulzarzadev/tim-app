@@ -21,6 +21,7 @@ export type MyTableProps = {
   title?: string
   search?: boolean
   modalChildren?: (value: any) => ReactNode
+  modalTitle?: string
 }
 
 const MyTable = ({
@@ -28,7 +29,8 @@ const MyTable = ({
   onRowClick,
   title,
   search,
-  modalChildren
+  modalChildren,
+  modalTitle = 'Detalles de elemento'
 }: MyTableProps) => {
   const [filteredData, setFilteredData] = useState<MyTableData['body']>(
     data.body || []
@@ -61,7 +63,7 @@ const MyTable = ({
     )
   }
 
-  const modal = useModal({ title: 'title modal' })
+  const modal = useModal({ title: modalTitle })
   const [rowSelected, setRowSelected] = useState<any>()
   return (
     <>
@@ -84,7 +86,9 @@ const MyTable = ({
                 <tr
                   key={b?.id || i}
                   className={`${
-                    onRowClick ? ' hover:bg-slate-200 cursor-pointer ' : ''
+                    onRowClick || modalChildren
+                      ? ' hover:bg-slate-200 cursor-pointer '
+                      : ''
                   } `}
                   onClick={() => {
                     onRowClick?.(b.id)

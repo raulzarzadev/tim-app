@@ -20,6 +20,7 @@ import ModalConfirm from '../ModalConfirm'
 import { isBefore } from 'date-fns'
 import ServiceForm from '../ServiceForm'
 import { createService } from '@/firebase/services'
+import AssignForm from '../AssignForm'
 
 const OrderActions = ({
   orderId,
@@ -104,7 +105,6 @@ const OrderActions = ({
       console.error(error)
     }
   }
-
   return (
     <div>
       <Typography variant="h5" className="mt-4">
@@ -117,7 +117,7 @@ const OrderActions = ({
           fullWidth
         />
       </div>
-      <div>
+      <div className="grid grid-cols-2">
         <ServiceForm
           companyId={currentCompany?.id || ''}
           orderId={orderId}
@@ -135,6 +135,28 @@ const OrderActions = ({
               console.error({ error })
             }
           }}
+        />
+        <AssignForm
+          handleAssign={async (email, date) => {
+            try {
+              const res = await updateOrder(orderId, {
+                // @ts-ignore
+                'shipping.assignedToEmail': email
+              })
+              console.log({ res })
+              if (date) {
+                const res = await updateOrder(orderId, {
+                  // @ts-ignore
+                  'shipping.date': date
+                })
+                console.log({ res })
+              }
+              return res
+            } catch (error) {
+              console.error(error)
+            }
+          }}
+          assignedTo={order?.shipping?.assignedToEmail}
         />
       </div>
       <div className="grid gap-2 my-6 sm:grid-flow-col ">

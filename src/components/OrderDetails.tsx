@@ -110,9 +110,9 @@ const OrderDetails = ({ order }: { order?: Partial<Order> }) => {
             },
             {
               title: 'Entrega ',
-              subTitle: `${order?.shipping?.assignedToEmail} ${fromNow(
-                order?.shipping?.date
-              )}`,
+              subTitle: ` ${fromNow(order?.shipping?.date)} ${
+                order?.shipping?.assignedToEmail || ' sin asignar '
+              }`,
               content: (
                 <div>
                   <Typography>
