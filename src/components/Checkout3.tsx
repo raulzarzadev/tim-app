@@ -4,14 +4,10 @@ import { Box, Button, Fab, TextField, Typography } from '@mui/material'
 import Modal from './Modal'
 import useModal from '@/hooks/useModal'
 import { useEffect, useState } from 'react'
-import asNumber from '@/lib/asNumber'
 import ModalPayment from './ModalPayment2'
 import ModalClientInfo from './ModalClientInfo'
-import CheckoutItemsList from './CheckoutItemsList'
 import { calculateFullTotal } from '@/lib/calculateTotalItem'
-import { dateFormat, inputDateFormat } from '@/lib/utils-date'
-import rentTime from '@/lib/rentTime'
-import { addMinutes } from 'date-fns'
+import { inputDateFormat } from '@/lib/utils-date'
 import CheckboxLabel from './Checkbox'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import asDate from '@/lib/asDate'
@@ -23,7 +19,12 @@ import CheckoutItems from './CheckoutItems'
 
 const Checkout = () => {
   const { currentCompany } = useUserCompaniesContext()
-  const { client, itemsSelected = [], onClearOrder } = useCashboxContext()
+  const {
+    client,
+    itemsSelected = [],
+    onClearOrder,
+    setItemsSelected
+  } = useCashboxContext()
   const categories = currentCompany?.categories
   const items = currentCompany?.articles
 
@@ -46,12 +47,6 @@ const Checkout = () => {
   const handleClearSearch = () => {
     onClearOrder?.()
   }
-  const returnBack = (): Date => {
-    const qty = itemsSelected?.[0].qty
-    const unit = itemsSelected?.[0].unit
-    const time = rentTime(qty, unit)
-    return addMinutes(new Date(), time)
-  }
 
   if (fullItems?.length === 0) return <></>
   return (
@@ -66,7 +61,10 @@ const Checkout = () => {
         <AppIcon icon="cashbox" />
       </Fab>
       <Modal {...modal}>
-        <CheckoutItems itemsSelected={itemsSelected} />
+        <CheckoutItems
+          itemsSelected={itemsSelected}
+          setItemsSelected={setItemsSelected}
+        />
         <Box className="my-4 text-center">
           <ModalClientInfo />
           {!client?.name && (

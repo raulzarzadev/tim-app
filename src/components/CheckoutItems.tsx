@@ -55,14 +55,15 @@ const CheckoutItems = ({
     ]
     _setItemsSelected(newItems)
     setItemsSelected?.(newItems)
-    const fullTotal = newItems.reduce((acc, curr) => {
+  }
+  const calculateTotal = () => {
+    const fullTotal = _itemsSelected.reduce((acc, curr) => {
       return (acc += asNumber(curr.price))
     }, 0)
     // const t = calculateFullTotal(newItems, fullItems)
     _setTotal(fullTotal)
     setTotal?.(fullTotal) //* to update total outside the component
   }
-
   const returnBack = (): Date => {
     //* Calculate date when item should be returned
     const qty = itemsSelected?.[0]?.qty
@@ -70,20 +71,11 @@ const CheckoutItems = ({
     const time = rentTime(qty, unit)
     return addMinutes(new Date(), time)
   }
-  console.log({ itemsSelected })
-  //const total = calculateFullTotal(_itemsSelected, fullItems)
-  useEffect(() => {
-    //const t = calculateFullTotal(itemsSelected, fullItems)
-    const fullTotal = itemsSelected.reduce((acc, curr) => {
-      return (acc += asNumber(curr.price))
-    }, 0)
-    _setTotal(fullTotal)
-    setTotal?.(fullTotal) //* to update total outside the component
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [itemsSelected])
 
   useEffect(() => {
+    calculateTotal()
     _setItemsSelected(itemsSelected)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [itemsSelected])
 
   return (

@@ -23,7 +23,7 @@ export const CheckoutItemRow = ({
   item: Partial<ArticleType & Pick<ItemSelected, 'qty' | 'unit' | 'price'>>
   onSelectPrice?: (itemId: string, price: PriceType) => void
 }) => {
-  const { removeItem, updateItem, addItem } = useCashboxContext()
+  // const { removeItem, updateItem, addItem } = useCashboxContext()
 
   const [priceSelected, setPriceSelected] = useState<
     Pick<PriceType, 'unit' | 'quantity' | 'price'> | undefined
@@ -37,15 +37,16 @@ export const CheckoutItemRow = ({
   const itemTotal = priceSelected?.price || 0
 
   const handleRemoveItem = () => {
-    item.id && removeItem?.(item.id)
+    console.log('remove item')
+    //item.id && //removeItem?.(item.id)
   }
   const handleSelectPrice = (p: PriceType) => {
     setPriceSelected(p)
-    updateItem?.(item.id, {
-      qty: p.quantity,
-      unit: p.unit,
-      price: p.price || 0
-    })
+    // updateItem?.(item.id, {
+    //   qty: p.quantity,
+    //   unit: p.unit,
+    //   price: p.price || 0
+    // })
 
     //* for the renew option
     onSelectPrice?.(item.id || '', p)
@@ -92,7 +93,7 @@ export const CheckoutItemRow = ({
         ))}
       </Grid2>
       <Grid2 xs={2}>
-        {removeItem && (
+        {/* {removeItem && (
           <ModalConfirm
             label={<AppIcon icon="trash" />}
             color="error"
@@ -100,7 +101,7 @@ export const CheckoutItemRow = ({
           >
             <Typography>Remover articulo</Typography>
           </ModalConfirm>
-        )}
+        )} */}
 
         <CurrencySpan quantity={itemTotal} />
       </Grid2>
