@@ -34,8 +34,7 @@ describe('Components Page', () => {
     //*** MODAL CLIENT CLOSED */
     //*** VERIFY INFO IS CORRECT IN ORDER DETAILS */
 
-    cy.contains('Cliente: ')
-    cy.contains('Teléfono: ')
+    cy.contains('Nombre: ')
     cy.contains('Teléfono: ')
     cy.contains('Email: ')
     cy.contains('Dirección: ')

@@ -20,36 +20,45 @@ export const CheckoutItemRow = ({
   item,
   onSelectPrice
 }: {
-  item: Partial<ArticleType & Pick<ItemSelected, 'qty' | 'unit'>>
+  item: Partial<ArticleType & Pick<ItemSelected, 'qty' | 'unit' | 'price'>>
   onSelectPrice?: (itemId: string, price: PriceType) => void
 }) => {
   const { removeItem, updateItem, addItem } = useCashboxContext()
 
   const [priceSelected, setPriceSelected] = useState<
-    Pick<PriceType, 'unit' | 'quantity'> | undefined
+    Pick<PriceType, 'unit' | 'quantity' | 'price'> | undefined
   >()
 
-  const { total: itemTotal, price } = calculateTotal(
-    priceSelected?.unit,
-    priceSelected?.quantity,
-    item.prices || []
-  )
+  // const { total: itemTotal, price } = calculateTotal(
+  //   priceSelected?.unit,
+  //   priceSelected?.quantity,
+  //   item.prices || []
+  // )
+  const itemTotal = priceSelected?.price || 0
 
   const handleRemoveItem = () => {
     item.id && removeItem?.(item.id)
   }
   const handleSelectPrice = (p: PriceType) => {
     setPriceSelected(p)
-    updateItem?.(item.id, { qty: p.quantity, unit: p.unit })
+    updateItem?.(item.id, {
+      qty: p.quantity,
+      unit: p.unit,
+      price: p.price || 0
+    })
 
     //* for the renew option
     onSelectPrice?.(item.id || '', p)
   }
   const isSelectedPrice = (
     p: PriceType,
-    selected?: Pick<PriceType, 'unit' | 'quantity'>
+    selected?: Pick<PriceType, 'unit' | 'quantity' | 'price'>
   ) => {
-    return selected?.unit === p.unit && selected?.quantity === p.quantity
+    return (
+      selected?.unit === p.unit &&
+      selected?.quantity === p.quantity &&
+      selected.price === p.price
+    )
   }
   return (
     <Grid2 container key={item?.id} spacing={1} alignItems={'center'}>

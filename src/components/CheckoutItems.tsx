@@ -12,6 +12,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import CurrencySpan from './CurrencySpan'
 import { Timestamp } from 'firebase/firestore'
 import forceAsDate from '@/lib/forceAsDate'
+import asNumber from '@/lib/asNumber'
 
 const CheckoutItems = ({
   itemsSelected,
@@ -49,30 +50,35 @@ const CheckoutItems = ({
       ..._itemsSelected.filter((i) => i.itemId !== itemId),
       {
         itemId,
-        qty: price.quantity,
-        unit: price.unit
+        ...price
       }
     ]
     _setItemsSelected(newItems)
     setItemsSelected?.(newItems)
-
-    const t = calculateFullTotal(newItems, fullItems)
-    _setTotal(t)
-    setTotal?.(t) //* to update total outside the component
+    const fullTotal = newItems.reduce((acc, curr) => {
+      return (acc += asNumber(curr.price))
+    }, 0)
+    // const t = calculateFullTotal(newItems, fullItems)
+    _setTotal(fullTotal)
+    setTotal?.(fullTotal) //* to update total outside the component
   }
 
   const returnBack = (): Date => {
+    //* Calculate date when item should be returned
     const qty = itemsSelected?.[0]?.qty
     const unit = itemsSelected?.[0]?.unit
     const time = rentTime(qty, unit)
     return addMinutes(new Date(), time)
   }
-
+  console.log({ itemsSelected })
   //const total = calculateFullTotal(_itemsSelected, fullItems)
   useEffect(() => {
-    const t = calculateFullTotal(itemsSelected, fullItems)
-    _setTotal(t)
-    setTotal?.(t) //* to update total outside the component
+    //const t = calculateFullTotal(itemsSelected, fullItems)
+    const fullTotal = itemsSelected.reduce((acc, curr) => {
+      return (acc += asNumber(curr.price))
+    }, 0)
+    _setTotal(fullTotal)
+    setTotal?.(fullTotal) //* to update total outside the component
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [itemsSelected])
 

@@ -30,7 +30,7 @@ export type CashboxContext = {
   removeItem?: (itemId: ArticleType['id']) => void
   updateItem?: (
     itemId: ItemSelected['itemId'],
-    { qty, unit }: { qty: number; unit: PriceType['unit'] }
+    { qty, unit }: { qty: number; unit: PriceType['unit']; price?: number }
   ) => void
   handleOrder?: (order: { companyId: string }) => void | Promise<unknown>
   handlePay?: (
@@ -51,6 +51,7 @@ export type ItemSelected = {
   itemId?: ArticleType['id']
   qty?: number
   unit?: PriceType['unit']
+  price?: number
   inUse?: boolean
   rentStatus?: ItemRentStatus
   rentFinishedAt?: Date | Timestamp
