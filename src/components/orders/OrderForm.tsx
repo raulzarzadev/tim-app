@@ -19,6 +19,7 @@ import ButtonClear from '../ButtonClear'
 import { isBefore } from 'date-fns'
 import forceAsDate from '@/lib/forceAsDate'
 import { ItemSelected } from '@/context/useCompanyCashbox'
+import ButtonLoading from '../ButtonLoading'
 
 const OrderForm = ({
   handleSave,
@@ -84,6 +85,8 @@ const OrderForm = ({
       }, 1000)
     }
   }
+
+  const disableSave = saving || !order?.client?.name
 
   return (
     <div>
@@ -174,13 +177,28 @@ const OrderForm = ({
         {/* **** Save  */}
         <div className="flex justify-evenly w-full my-4">
           <ButtonClear onClick={handleClearOrder} />
-          <ButtonSave
-            label={orderId ? 'Actualizar' : 'Guardar'}
-            disabled={saving}
-            onClick={async (e) => {
-              return handleSaveOrder(order)
-            }}
-          />
+          <div>
+            <ButtonSave
+              label={orderId ? 'Actualizar' : 'Guardar'}
+              disabled={disableSave}
+              onClick={async (e) => {
+                return handleSaveOrder(order)
+              }}
+            />
+            {saving && (
+              <div className="mt-2">
+                <Typography variant="caption">{`Guardando`}</Typography>
+              </div>
+            )}
+            {!order?.client?.name && (
+              <div className="mt-2">
+                <Typography
+                  color={'error'}
+                  variant="caption"
+                >{`Nombre de cliente requerido*`}</Typography>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
