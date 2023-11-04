@@ -22,6 +22,8 @@ import SelectCompanyItem from './SelectCompanyItem'
 import ClientForm from './ClientForm'
 import { updateClient } from '@/firebase/clients'
 import { Client } from '@/types/client'
+import ModalItemDetails from '../ModalItemDetails'
+import dictionary from '@/CONSTS/dictionary'
 
 const OrderActions = ({
   orderId,
@@ -250,7 +252,30 @@ const ModalStartRent = ({
           setItems={(items) => {}}
           multiple
         /> */}
+        <div className="text-center">
+          <Typography variant="h5" className="my-4">
+            Unidades entregadas:{' '}
+          </Typography>
+          {order?.items.map((item) => {
+            return (
+              <div key={item.itemId} className="flex justify-center my-2 ">
+                <ModalItemDetails
+                  itemId={item.itemId || ''}
+                  hiddenCurrentStatus
+                  showCat
+                />{' '}
+                <span>
+                  {item.qty}x {dictionary(item.unit || '')}
+                </span>
+              </div>
+            )
+          })}
+        </div>
+        <Typography variant="h5" className="my-4 text-center">
+          Datos de cliente
+        </Typography>
         <ClientForm
+          searchClient={false}
           client={order?.client}
           setClient={(newClient) => {
             if (newClient) return handleUpdateClient(newClient)

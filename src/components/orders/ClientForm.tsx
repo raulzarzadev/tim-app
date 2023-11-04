@@ -10,10 +10,12 @@ import SaveButton from '../ButtonSave'
 
 const ClientForm = ({
   client,
-  setClient
+  setClient,
+  searchClient = true
 }: {
   client?: Partial<Client>
   setClient?: (client?: Partial<Client>) => void | Promise<any>
+  searchClient?: boolean
 }) => {
   const {
     register,
@@ -21,7 +23,8 @@ const ClientForm = ({
     control,
     setValue,
     reset,
-    formState: { isSubmitted, isSubmitSuccessful, isSubmitting, isDirty }
+    watch,
+    formState: { isSubmitting, isDirty }
   } = useForm({
     defaultValues: {
       phone: '',
@@ -35,6 +38,7 @@ const ClientForm = ({
     } as Partial<Client>
   })
   const disabledSave = isSubmitting || !isDirty
+  const formValues = watch()
   const onSubmit = async (data?: Partial<Client>) => {
     await setClient?.(data)
     reset(data)
@@ -44,6 +48,7 @@ const ClientForm = ({
     reset()
     await setClient?.({})
   }
+
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)} className="grid gap-2">
@@ -55,20 +60,22 @@ const ClientForm = ({
             required
             className="w-full"
           />{' '}
-          <div>
-            <SearchClient
-              onSelectClient={(e) => {
-                // setClient?.(e) //* this line close the client form modal automatically
-                setValue('id', e.id)
-                setValue('name', e.name)
-                setValue('phone', e.phone)
-                setValue('email', e.email)
-                setValue('address', e.address)
-                setValue('imageID', e.imageID)
-                setValue('signature', e.signature)
-              }}
-            />
-          </div>
+          {searchClient && (
+            <div>
+              <SearchClient
+                onSelectClient={(e) => {
+                  // setClient?.(e) //* this line close the client form modal automatically
+                  setValue('id', e.id)
+                  setValue('name', e.name)
+                  setValue('phone', e.phone)
+                  setValue('email', e.email)
+                  setValue('address', e.address)
+                  setValue('imageID', e.imageID)
+                  setValue('signature', e.signature)
+                }}
+              />
+            </div>
+          )}
         </div>
         <TextField {...register('email')} label="Email" />
         <PhoneInput {...register('phone')} label="Teléfono" control={control} />
@@ -83,18 +90,26 @@ const ClientForm = ({
         {/* Identificación */}
         <InputUploadFile
           label="Identificación"
-          setURL={(url) => setValue('imageID', url)}
+          setURL={(url) => setValue('imageID', url, { shouldDirty: true })}
         />
-        {client?.imageID && (
-          <PreviewImage src={client?.imageID} alt="Identificación de usuario" />
+        {formValues?.imageID && (
+          <PreviewImage
+            src={formValues?.imageID || ''}
+            alt="Identificación de usuario"
+          />
         )}
         {/*
          Firma */}
         <ModalSignature
-          setSignature={(signature) => setValue('signature', signature || '')}
+          setSignature={(signature) =>
+            setValue('signature', signature || '', { shouldDirty: true })
+          }
         />
-        {client?.signature && (
-          <PreviewImage src={client?.signature} alt="Firma de usuario" />
+        {formValues?.signature && (
+          <PreviewImage
+            src={formValues?.signature || ''}
+            alt="Firma de usuario"
+          />
         )}
         <Box className="flex justify-evenly my-6">
           <Button onClick={handleClear}>Limpiar</Button>
