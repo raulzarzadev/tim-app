@@ -13,9 +13,16 @@ const ClientForm = ({
   setClient
 }: {
   client?: Partial<Client>
-  setClient?: (client?: Partial<Client>) => void
+  setClient?: (client?: Partial<Client>) => void | Promise<any>
 }) => {
-  const { register, handleSubmit, control, setValue, reset } = useForm({
+  const {
+    register,
+    handleSubmit,
+    control,
+    setValue,
+    reset,
+    formState: { isSubmitted, isSubmitSuccessful, isSubmitting, isDirty }
+  } = useForm({
     defaultValues: {
       phone: '',
       name: '',
@@ -27,13 +34,15 @@ const ClientForm = ({
       ...client
     } as Partial<Client>
   })
-  const onSubmit = (data?: Partial<Client>) => {
-    setClient?.(data)
+  const disabledSave = isSubmitting || !isDirty
+  const onSubmit = async (data?: Partial<Client>) => {
+    await setClient?.(data)
+    reset(data)
   }
 
-  const handleClear = () => {
+  const handleClear = async () => {
     reset()
-    setClient?.({})
+    await setClient?.({})
   }
   return (
     <div>
@@ -89,7 +98,11 @@ const ClientForm = ({
         )}
         <Box className="flex justify-evenly my-6">
           <Button onClick={handleClear}>Limpiar</Button>
-          <SaveButton type="submit" label="Guardar cliente" />
+          <SaveButton
+            disabled={disabledSave}
+            type="submit"
+            label="Guardar cliente"
+          />
         </Box>
       </form>
     </div>

@@ -14,7 +14,8 @@ const ModalConfirm = ({
   acceptLabel = 'Aceptar',
   modalTitle = 'Confirmar',
   openIcon,
-  fullWidth
+  fullWidth,
+  disabledAccept
 }: {
   handleConfirm: () => void | Promise<any>
   children?: ReactNode
@@ -25,10 +26,12 @@ const ModalConfirm = ({
   modalTitle?: string
   openIcon?: IconName
   fullWidth?: boolean
+  disabledAccept?: boolean
 }) => {
   const modal = useModal()
   const [loading, setLoading] = useState(false)
   const [done, setDone] = useState(false)
+  const acceptDisabled = done || disabledAccept
   return (
     <>
       <Button
@@ -60,7 +63,7 @@ const ModalConfirm = ({
               }, 400)
             }}
             loading={loading}
-            disabled={done}
+            disabled={acceptDisabled}
             label={done ? 'Hecho' : acceptLabel}
           />
         </Box>

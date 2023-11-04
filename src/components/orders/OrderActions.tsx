@@ -1,9 +1,6 @@
 import { Button, Typography } from '@mui/material'
 import ModalOrderForm from './ModalOrderForm'
-import {
-  rentFinishAt,
-  useUserCompaniesContext
-} from '@/context/userCompaniesContext2'
+import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import {
   addOrderReport,
   finishOrderRent,
@@ -21,6 +18,10 @@ import { isBefore } from 'date-fns'
 import ServiceForm from '../ServiceForm'
 import { createService } from '@/firebase/services'
 import AssignForm from '../AssignForm'
+import SelectCompanyItem from './SelectCompanyItem'
+import ClientForm from './ClientForm'
+import { updateClient } from '@/firebase/clients'
+import { Client } from '@/types/client'
 
 const OrderActions = ({
   orderId,
@@ -31,10 +32,6 @@ const OrderActions = ({
 }) => {
   const { orders, currentCompany } = useUserCompaniesContext()
   const order = orders?.find((o) => o?.id === orderId)
-
-  const itemsPending = order?.items.some(
-    (i) => i.rentStatus === 'pending' || !i.rentStatus
-  )
 
   const itemsInUse = order?.items?.some((i) => i.rentStatus === 'taken')
 
@@ -160,7 +157,7 @@ const OrderActions = ({
         />
       </div>
       <div className="grid gap-2 my-6 sm:grid-flow-col ">
-        <Button
+        {/* <Button
           variant="outlined"
           disabled={loading || !itemsPending}
           onClick={(e) => {
@@ -169,7 +166,8 @@ const OrderActions = ({
           }}
         >
           Comenzar renta
-        </Button>
+        </Button> */}
+        <ModalStartRent orderId={orderId} handleStartRent={handleStartRent} />
         <Button
           variant="outlined"
           disabled={loading || !itemsInUse}
@@ -199,6 +197,78 @@ const OrderActions = ({
           handleSave={handleSaveOrder}
         />
       </div>
+    </div>
+  )
+}
+
+const ModalStartRent = ({
+  orderId,
+  handleStartRent
+}: {
+  orderId: string
+  handleStartRent: () => void
+}) => {
+  const { orders } = useUserCompaniesContext()
+  const order = orders?.find((o) => o?.id === orderId)
+  const [items, setItems] = useState(order?.items || [])
+  console.log()
+  //* should be disabled in this seccion if identification and signature are not added
+  const handleUpdateClient = async (client: Partial<Client>) => {
+    try {
+      const clientRes = await updateClient(client.id || '', {
+        imageID: order?.client?.imageID || '',
+        signature: order?.client?.signature || '',
+        ...client
+      })
+      const orderRes = await updateOrder(orderId, {
+        client: {
+          ...order?.client,
+          ...client
+        }
+      })
+      console.log({ clientRes, orderRes })
+      return true
+    } catch (error) {
+      console.error(error)
+      return false
+    }
+  }
+
+  const disabledConfirm = !order?.client.imageID || !order?.client.signature
+  return (
+    <div>
+      <ModalConfirm
+        label="Comenzar renta"
+        color="primary"
+        handleConfirm={handleStartRent}
+        fullWidth
+        acceptLabel="Comenzar renta"
+        disabledAccept={disabledConfirm}
+      >
+        {/* <SelectCompanyItem
+          itemsSelected={items?.map((i) => i.itemId || '') || []}
+          setItems={(items) => {}}
+          multiple
+        /> */}
+        <ClientForm
+          client={order?.client}
+          setClient={(newClient) => {
+            if (newClient) return handleUpdateClient(newClient)
+          }}
+        />
+        <div className="grid place-content-center">
+          {!order?.client.imageID && (
+            <Typography className="" variant="caption">
+              *Imagen de identificación es necesaria
+            </Typography>
+          )}
+          {!order?.client.signature && (
+            <Typography className="" variant="caption">
+              * Firma de cliente es necesaria
+            </Typography>
+          )}
+        </div>
+      </ModalConfirm>
     </div>
   )
 }
