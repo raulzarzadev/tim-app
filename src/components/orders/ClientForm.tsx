@@ -6,7 +6,6 @@ import PreviewImage from '../PreviewImage'
 import ModalSignature from '../ModalSignature'
 import PhoneInput from '../PhoneInput'
 import SearchClient from '../SearchClient'
-import AppIcon from '../AppIcon'
 import SaveButton from '../ButtonSave'
 
 const ClientForm = ({

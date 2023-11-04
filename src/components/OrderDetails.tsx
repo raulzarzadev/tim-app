@@ -11,10 +11,7 @@ import OrderStatus from './OrderStatus'
 import dictionary from '@/CONSTS/dictionary'
 import AccordionSections from './AccordionSections'
 import OrderReports from './OrderReports'
-import {
-  calculateOrderBalance,
-  totalCharged
-} from './cashboxBalances/calculateBalance.lib'
+import { totalCharged } from './cashboxBalances/calculateBalance.lib'
 
 const OrderDetails = ({ order }: { order?: Partial<Order> }) => {
   return (

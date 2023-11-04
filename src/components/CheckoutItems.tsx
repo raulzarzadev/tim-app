@@ -4,14 +4,11 @@ import { dateFormat } from '@/lib/utils-date'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import { ItemSelected } from '@/context/useCompanyCashbox'
 import { CompanyItem } from '@/types/article'
-import { calculateFullTotal } from '@/lib/calculateTotalItem'
 import { addMinutes, isBefore } from 'date-fns'
 import rentTime from '@/lib/rentTime'
 import { PriceType } from './PricesForm'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import CurrencySpan from './CurrencySpan'
-import { Timestamp } from 'firebase/firestore'
-import forceAsDate from '@/lib/forceAsDate'
 import asNumber from '@/lib/asNumber'
 
 const CheckoutItems = ({
@@ -86,10 +83,7 @@ const CheckoutItems = ({
             items={fullItems || []}
             onSelectPrice={onSelectPrice}
           />
-          {/* <Typography className="text-end mt-4">
-            Inicia:
-            {dateFormat(, ' dd-MMM HH:mm')}
-          </Typography> */}
+
           <Typography className="text-end mt-4">
             Termina:
             {dateFormat(returnBack(), ' dd-MMM HH:mm')}

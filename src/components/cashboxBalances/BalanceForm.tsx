@@ -3,7 +3,6 @@ import Select from '../Select'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import { useForm } from 'react-hook-form'
 import { dateFormat, inputDateFormat } from '@/lib/utils-date'
-import { Timestamp } from 'firebase/firestore'
 import { Balance } from '@/types/balance'
 
 const nowDate = new Date()
