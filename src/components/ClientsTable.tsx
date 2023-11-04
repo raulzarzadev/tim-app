@@ -1,13 +1,28 @@
 import { Client } from '@/types/client'
 import MyTable from './MyTable'
 import ClientInfo from './ClientInfo'
+import ClientOrders from './ClientOrders'
+import AccordionSections from './AccordionSections'
 
 const ClientsTable = ({ clients }: { clients: Client[] }) => {
   return (
     <div>
       <MyTable
         search
-        modalChildren={(value) => <ClientInfo client={value} />}
+        modalChildren={(value) => (
+          <>
+            <ClientInfo client={value} />
+            <AccordionSections
+              sections={[
+                {
+                  title: 'Historial de ordenes',
+                  subTitle: '',
+                  content: <ClientOrders clientId={value?.id} />
+                }
+              ]}
+            />
+          </>
+        )}
         modalTitle="Detalle de cliente"
         data={{
           headers: [

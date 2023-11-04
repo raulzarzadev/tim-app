@@ -137,7 +137,6 @@ const OrderForm = ({
             itemsDisabled={itemsDisabled}
             itemsSelected={order?.items?.map((i) => i.itemId || '') || []}
             setItems={(items) => {
-              console.log({ items })
               setOrder({
                 ...order,
                 items: items.map((itemId) => ({ itemId }))
