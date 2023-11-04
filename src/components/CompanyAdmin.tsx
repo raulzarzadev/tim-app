@@ -13,7 +13,7 @@ const CompanyAdmin = () => {
       <BasicTabs
         tabs={[
           //  { label: 'Clientes ', content: <></> }, //CompanyPayments
-          { label: 'Clients', content: <CompanyClients /> },
+          { label: 'Clientes', content: <CompanyClients /> },
           { label: 'Ordenes', content: <CompanyOrders /> },
           { label: 'Unidades', content: <CompanyItems /> },
           { label: 'Staff', content: <CompanyStaff /> },

@@ -22,7 +22,7 @@ export const splitPaymentsByMethods = (
   payments: Partial<Payment>[]
 ): Record<PaymentMethods & 'total', number> =>
   payments?.reduce(
-    (acc, { method = 'mxn', charged = 0, usdPrice = 1, rest = 0 }) => {
+    (acc, { method = 'mxn', charged = 0, usdPrice = 1, rest = 0 } = {}) => {
       if (method === 'usd') {
         let totalSum = acc.total + charged * usdPrice
         //* should rest from mxn because the rest cant be in dollars
@@ -112,20 +112,20 @@ export const calculateBalance = (
     (allPayments as Payment[]) || []
   )
   const balancePayments =
-    !(balance.cashier === 'all') || !balance.cashier
-      ? matchDatePayments.filter((p) => p.created?.by === balance.cashier)
+    !(balance?.cashier === 'all') || !balance?.cashier
+      ? matchDatePayments?.filter((p) => p?.created?.by === balance?.cashier)
       : matchDatePayments
 
   let balanceOrders: Order[] = []
   balancePayments.forEach((payment) => {
-    if (!balanceOrders.find((o) => o.id === payment.orderId)) {
+    if (!balanceOrders?.find((o) => o?.id === payment?.orderId)) {
       balanceOrders.push(
-        companyOrders?.find((o) => o.id === payment.orderId) as Order
+        companyOrders?.find((o) => o?.id === payment?.orderId) as Order
       )
     }
   })
   const items: any[] =
-    balanceOrders?.map((o) => o.items?.map((i) => ({ ...i })) || []).flat() ||
+    balanceOrders?.map((o) => o?.items?.map((i) => ({ ...i })) || []).flat() ||
     []
 
   const paymentsMethods = splitPaymentsByMethods(balancePayments)

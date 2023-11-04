@@ -2,7 +2,7 @@ import { Box, Button, TextField } from '@mui/material'
 import Select from '../Select'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import { useForm } from 'react-hook-form'
-import { inputDateFormat } from '@/lib/utils-date'
+import { dateFormat, inputDateFormat } from '@/lib/utils-date'
 import { Timestamp } from 'firebase/firestore'
 import { Balance } from '@/types/balance'
 
@@ -41,12 +41,19 @@ const BalanceForm = ({
             value={inputDateFormat(formValues.from || nowDate)}
             type="datetime-local"
             label="Desde"
+            inputProps={{
+              max: dateFormat(formValues.to, "yyyy-MM-dd'T'HH:mm")
+            }}
           />
           <TextField
             value={inputDateFormat(formValues.to || nowDate)}
             {...register('to', { valueAsDate: true })}
             type="datetime-local"
             label="Hasta"
+            // max={dateFormat(nowDate, "yyyy-MM-dd'T'HH:mm")}
+            inputProps={{
+              max: dateFormat(nowDate, "yyyy-MM-dd'T'HH:mm")
+            }}
           />
         </Box>
         <Box className="my-4">

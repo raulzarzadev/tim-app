@@ -59,7 +59,9 @@ const MyTable = ({
       return !!itemContainSearchValue.length
     })
     setFilteredData(
-      data?.body?.filter(({ id }) => !!res?.find((res) => res?.id === id)) || []
+      data?.body?.filter(
+        ({ id } = {}) => !!res?.find((res) => res?.id === id)
+      ) || []
     )
   }
 
