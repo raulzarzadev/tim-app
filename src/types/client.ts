@@ -8,6 +8,7 @@ export type ClientBase = Pick<
   signature: string
   address: string
   companyId: string
+  extraInfo?: string
 }
 
 import { BaseType } from './base'

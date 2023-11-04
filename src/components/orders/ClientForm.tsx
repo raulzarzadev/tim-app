@@ -24,6 +24,7 @@ const ClientForm = ({
       email: '',
       imageID: '',
       signature: '',
+      extraInfo: '',
       ...client
     } as Partial<Client>
   })
@@ -64,6 +65,12 @@ const ClientForm = ({
         <TextField {...register('email')} label="Email" />
         <PhoneInput {...register('phone')} label="Teléfono" control={control} />
         <TextField {...register('address')} label="Dirección" />
+        <TextField
+          {...register('extraInfo')}
+          placeholder="Instrucciones de entrega o referencias del domicilo"
+          multiline
+          rows={2}
+        />
 
         {/* Identificación */}
         <InputUploadFile

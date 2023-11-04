@@ -22,14 +22,17 @@ const ShippingLink = ({
           {address === 'store' || !address ? (
             'En tienda'
           ) : (
-            <IconButton
-              size="small"
-              LinkComponent={Link}
-              target="_blank"
-              href={formatted || ''}
-            >
-              <AppIcon icon="location" fontSize="small" />
-            </IconButton>
+            <>
+              {address}
+              <IconButton
+                size="small"
+                LinkComponent={Link}
+                target="_blank"
+                href={formatted || ''}
+              >
+                <AppIcon icon="location" fontSize="small" />
+              </IconButton>
+            </>
           )}
         </>
       </span>

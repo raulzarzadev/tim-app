@@ -15,13 +15,16 @@ const ClientInfo = ({ client }: { client?: Partial<Order['client']> }) => {
       </div> */}
       <Box className="flex items-center justify-between">
         <Box>
-          <Typography variant="h5">Cliente</Typography>
-          <Typography>Cliente: {clientData?.name}</Typography>
+          {/* <Typography variant="h5">Cliente</Typography> */}
+          <Typography>
+            <span className="font-bold">Nombre:</span> {clientData?.name}
+          </Typography>
           <Typography
             component={'div'}
             className="flex items-center whitespace-nowrap"
           >
-            Teléfono: {clientData?.phone || '-'}{' '}
+            <span className="font-bold"> Teléfono:</span>{' '}
+            {clientData?.phone || '-'}{' '}
             {(clientData?.phone?.length || 0) > 3 && (
               <div className="flex items-center">
                 <IconButton
@@ -44,9 +47,16 @@ const ClientInfo = ({ client }: { client?: Partial<Order['client']> }) => {
             )}
           </Typography>
 
-          <Typography>Email: {clientData?.email || '-'}</Typography>
           <Typography>
-            Dirección: <ShippingLink address={clientData?.address} />
+            <span className="font-bold">Email:</span> {clientData?.email || '-'}
+          </Typography>
+          <Typography>
+            <span className="font-bold"> Dirección: </span>
+            <ShippingLink address={clientData?.address} />
+          </Typography>
+          <Typography>
+            <span className="font-bold"> Instrucciónes de entrega: </span>
+            {clientData?.extraInfo || ''}
           </Typography>
         </Box>
         <Box className="flex justify-center w-1/2 flex-wrap">
