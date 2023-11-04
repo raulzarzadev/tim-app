@@ -156,7 +156,7 @@ export default function BottomNavigation() {
             onChange={(event, newValue) => {
               setValue(newValue)
             }}
-            className="overflow-x-auto justify-start sm:justify-center  "
+            className="overflow-x-auto justify-start sm:justify-center whitespace-nowrap "
           >
             {pages?.map((page) =>
               page.visible ? (
