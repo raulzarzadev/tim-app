@@ -3,6 +3,7 @@ import ModalOrderForm from './ModalOrderForm'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import {
   addOrderReport,
+  changeItem,
   finishOrderRent,
   onPayOrder,
   startOrderRent,
@@ -14,16 +15,13 @@ import { Order, Payment } from '@/types/order'
 import ModalPayment from '../ModalPayment3'
 import { calculateOrderTotal } from '@/lib/calculateOrderTotal'
 import ModalConfirm from '../ModalConfirm'
-import { isBefore } from 'date-fns'
 import ServiceForm from '../ServiceForm'
 import { createService } from '@/firebase/services'
 import AssignForm from '../AssignForm'
-import SelectCompanyItem from './SelectCompanyItem'
 import ClientForm from './ClientForm'
 import { updateClient } from '@/firebase/clients'
 import { Client } from '@/types/client'
-import ModalItemDetails from '../ModalItemDetails'
-import dictionary from '@/CONSTS/dictionary'
+import ModalItemChange from '../ModalItemChange'
 
 const OrderActions = ({
   orderId,
@@ -212,8 +210,6 @@ const ModalStartRent = ({
 }) => {
   const { orders } = useUserCompaniesContext()
   const order = orders?.find((o) => o?.id === orderId)
-  const [items, setItems] = useState(order?.items || [])
-  console.log()
   //* should be disabled in this seccion if identification and signature are not added
   const handleUpdateClient = async (client: Partial<Client>) => {
     try {
@@ -228,7 +224,6 @@ const ModalStartRent = ({
           ...client
         }
       })
-      console.log({ clientRes, orderRes })
       return true
     } catch (error) {
       console.error(error)
@@ -243,6 +238,7 @@ const ModalStartRent = ({
         label="Comenzar renta"
         color="primary"
         handleConfirm={handleStartRent}
+        modalTitle="Confirmar datos "
         fullWidth
         acceptLabel="Comenzar renta"
         disabledAccept={disabledConfirm}
@@ -259,14 +255,28 @@ const ModalStartRent = ({
           {order?.items.map((item) => {
             return (
               <div key={item.itemId} className="flex justify-center my-2 ">
-                <ModalItemDetails
-                  itemId={item.itemId || ''}
-                  hiddenCurrentStatus
-                  showCat
-                />{' '}
-                <span>
-                  {item.qty}x {dictionary(item.unit || '')}
-                </span>
+                <ModalItemChange
+                  // @ts-ignore FIXME: quantity should don't exist
+                  itemSelected={{ ...item, qty: item.qty || item?.quantity }}
+                  handleChangeItem={async (newItem) => {
+                    try {
+                      const res = await changeItem(orderId, {
+                        //* It will change just the id of the item, it  don't change category or prices  */
+                        amount: 0,
+                        newItemId: newItem.itemId || '',
+                        oldItemId: item.itemId || '',
+                        resolved: true,
+                        newPrice: {
+                          price: item.price || 0,
+                          quantity: item.qty || 1,
+                          unit: item.unit
+                        }
+                      })
+                    } catch (error) {
+                      console.error(error)
+                    }
+                  }}
+                />
               </div>
             )
           })}

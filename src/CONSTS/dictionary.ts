@@ -20,10 +20,11 @@ const labels = {
   weeks: 'semanas',
   months: 'meses',
   years: 'años',
-  '': '***'
+  '': ''
 } as const
 export type Labels = keyof typeof labels
 const dictionary = (value: Labels) => {
+  if (!labels[value]) return value
   return labels[value]
 }
 

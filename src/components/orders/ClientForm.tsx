@@ -83,8 +83,6 @@ const ClientForm = ({
         <TextField
           {...register('extraInfo')}
           placeholder="Instrucciones de entrega o referencias del domicilo"
-          multiline
-          rows={2}
         />
 
         {/* Identificación */}

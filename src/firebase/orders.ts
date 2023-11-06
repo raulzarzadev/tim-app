@@ -134,6 +134,10 @@ export const changeItem = async (
   const order: Order = await itemCRUD.getItem(OrderId)
   const items = order?.items
 
+  const pastRentState = items.find(
+    (i) => i.itemId === newChange.oldItemId
+  )?.rentStatus
+
   const removedItem = items.filter(
     (item) => item.itemId !== newChange.oldItemId
   )
@@ -142,7 +146,7 @@ export const changeItem = async (
     inUse: true,
     qty: newChange.newPrice?.quantity,
     unit: newChange.newPrice?.unit,
-    rentStatus: 'taken'
+    rentStatus: pastRentState
   }
   return await updateOrder(OrderId, {
     items: [...removedItem, newItem],

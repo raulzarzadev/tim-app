@@ -33,7 +33,7 @@ import AddCommentIcon from '@mui/icons-material/AddComment'
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong'
 // https://mui.com/material-ui/material-icons/
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd'
-
+import ChangeCircleIcon from '@mui/icons-material/ChangeCircle'
 const icons = {
   myOrder: AssignmentIndIcon,
   add: AddIcon,
@@ -68,7 +68,8 @@ const icons = {
   whatsapp: WhatsAppIcon,
   location: LocationOnIcon,
   addComment: AddCommentIcon,
-  order: ReceiptLongIcon
+  order: ReceiptLongIcon,
+  change: ChangeCircleIcon
 } as const
 
 // https://mui.com/material-ui/material-icons/
