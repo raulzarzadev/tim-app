@@ -102,6 +102,14 @@ const BalanceCard = ({ balance }: { balance: BalanceData }) => {
                         format: (value) => {
                           return <StaffSpan email={value} />
                         }
+                      },
+                      {
+                        label: 'Cliente',
+                        key: 'orderId',
+                        format: (value) => {
+                          return balance.orders?.find((o) => o.id === value)
+                            ?.client?.name
+                        }
                       }
                     ],
                     body: balance?.payments || []
