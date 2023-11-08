@@ -3,7 +3,6 @@ import { calculateFullTotal } from './calculateTotalItem'
 import { Order } from '@/types/order'
 import { CompanyType } from '@/types/company'
 import asNumber from './asNumber'
-import { calculateBalance } from '@/components/cashboxBalances/balance.lib'
 import { totalCharged } from '@/components/cashboxBalances/calculateBalance.lib'
 
 export const calculateOrderTotal = ({
