@@ -46,11 +46,9 @@ const BalanceCard = ({ balance }: { balance: BalanceData }) => {
         </Box>
         <Typography>Ordenes: {balance?.orders?.length || 0}</Typography>
         <Typography>Pagos: {balance?.payments?.length || 0}</Typography>
-        <Typography>Cambios: {balance?.changes?.length}</Typography>
-        <Typography>
-          Unidades rentadas: {balance?.itemsStats?.length}
-        </Typography>
-
+        {/* TODO: Calcular cambios realizados en dicho periodo */}
+        {/* <Typography>Cambios: {balance?.changes?.length || 0}</Typography> */}
+        <div className="mt-6"></div>
         {paymentMethods.map((method) => (
           <Typography key={method.type} component={'div'} className="flex ">
             <div className="text-end w-48 capitalize">{method.label}: </div>
@@ -63,7 +61,6 @@ const BalanceCard = ({ balance }: { balance: BalanceData }) => {
             </div>
           </Typography>
         ))}
-
         <AccordionSections
           sections={[
             {
@@ -117,12 +114,13 @@ const BalanceCard = ({ balance }: { balance: BalanceData }) => {
               title: 'Detalle de ordenes',
               subTitle: `${balance?.orders?.length || 0}`,
               content: <OrdersTable orders={balance?.orders || []} />
-            },
-            {
-              title: 'Detalle de unidades',
-              subTitle: `${balance.itemsStats?.length || 0}`,
-              content: <OrderItemsStats itemsStats={balance.itemsStats || []} />
             }
+            // TODO: Calcular detalle de unidades
+            // {
+            //   title: 'Detalle de unidades',
+            //   subTitle: `${balance.itemsStats?.length || 0}`,
+            //   content: <OrderItemsStats itemsStats={balance.itemsStats || []} />
+            // }
           ]}
         />
       </ErrorBoundary>

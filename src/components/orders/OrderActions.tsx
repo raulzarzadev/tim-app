@@ -103,7 +103,6 @@ const OrderActions = ({
   }
 
   const status = orderStatus(order)
-  console.log(status)
   const disabledStartRent =
     status === 'expired' || status === 'taken' || status === 'finished'
   return (

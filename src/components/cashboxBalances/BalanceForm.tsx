@@ -51,7 +51,7 @@ const BalanceForm = ({
             label="Hasta"
             // max={dateFormat(nowDate, "yyyy-MM-dd'T'HH:mm")}
             inputProps={{
-              max: dateFormat(nowDate, "yyyy-MM-dd'T'HH:mm")
+              max: dateFormat(new Date(), "yyyy-MM-dd'T'HH:mm")
             }}
           />
         </Box>

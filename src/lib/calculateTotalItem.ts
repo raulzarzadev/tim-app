@@ -57,7 +57,6 @@ export const calculateFullTotal = (
     if (!unit || !(qty || quantity)) return 0
     const pricesList = fullItems?.find((item) => item?.id == itemId)?.prices
     const defaultUnit = unit || pricesList?.[0].unit
-    console.log({ defaultUnit, q: asNumber(qty || quantity), qty, quantity })
     const { total: itemTotal } = calculateTotal(
       defaultUnit,
       asNumber(qty || quantity),

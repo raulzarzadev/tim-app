@@ -117,7 +117,7 @@ export const calculateBalance = (
     if (!balance.cashier) return true
     if (balance.cashier === 'all') return true
     if (balance.cashier === p?.created?.by) return true
-    return true
+    return false
   })
 
   let balanceOrders: Order[] = []
