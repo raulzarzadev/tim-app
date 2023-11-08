@@ -48,6 +48,7 @@ export type CashboxContext = {
 export const CashboxContext = createContext<CashboxContext>({})
 
 export type ItemSelected = {
+  duration?: string
   itemId?: ArticleType['id']
   qty?: number
   unit?: PriceType['unit']

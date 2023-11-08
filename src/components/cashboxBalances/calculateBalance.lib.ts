@@ -118,7 +118,10 @@ export const calculateBalance = (
 
   let balanceOrders: Order[] = []
   balancePayments.forEach((payment) => {
-    if (!balanceOrders?.find((o) => o?.id === payment?.orderId)) {
+    if (
+      payment?.orderId &&
+      !balanceOrders?.find((o) => o?.id === payment?.orderId)
+    ) {
       balanceOrders.push(
         companyOrders?.find((o) => o?.id === payment?.orderId) as Order
       )

@@ -14,11 +14,14 @@ import OrderReports from './OrderReports'
 import { totalCharged } from './cashboxBalances/calculateBalance.lib'
 
 const OrderDetails = ({ order }: { order?: Partial<Order> }) => {
-  const items = order?.items?.map((i) => ({
-    ...i,
+  const items = order?.items?.map((i) => {
     // @ts-ignore FIXME: quantity should not be in item
-    duration: `${i.qty || i.quantity}x ${i.unit && dictionary(i.unit)}`
-  }))
+    if (i.qty || i.quantity) {
+      // @ts-ignore FIXME: quantity should not be in item
+      i.duration = `${i.qty || i.quantity} ${dictionary(i.unit)}`
+    }
+    return i
+  })
   return (
     <div>
       <div className="flex   flex-col items-end sm:justify-between sm:flex-row mb-4">

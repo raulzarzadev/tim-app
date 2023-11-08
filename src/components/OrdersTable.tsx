@@ -5,8 +5,24 @@ import MyTable from './MyTable'
 import StaffSpan from './StaffSpan'
 import OrderActions from './orders/OrderActions'
 import ErrorBoundary from './ErrorBoundary'
+import { calculateOrderTotal } from '@/lib/calculateOrderTotal'
+import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
+import CurrencySpan from './CurrencySpan'
 
 const OrdersTable = ({ orders }: { orders: Partial<Order>[] }) => {
+  const { currentCompany } = useUserCompaniesContext()
+
+  orders?.map((o = {}) => {
+    const totalOrder =
+      calculateOrderTotal({
+        company: currentCompany,
+        order: o as Order
+      }) || 0
+    //@ts-ignore Just add this prop for this table
+    o.totalOrder = totalOrder
+    return o
+  })
+
   if (!orders.length) return <>Cargando...</>
   return (
     <div>
@@ -59,6 +75,21 @@ const OrdersTable = ({ orders }: { orders: Partial<Order>[] }) => {
                 key: 'items.length'
               },
               { label: 'Cliente', key: 'client.name' },
+              {
+                label: 'Adeudo',
+                key: 'totalOrder',
+                format: (value) => (
+                  <span
+                    className={`
+                    ${value > 0 && 'bg-red-400 text-white'} 
+                    ${value === 0 && 'bg-green-600 text-white'}
+                    ${value < 0 && 'bg-yellow-400 text-white'}
+                    p-1 rounded-md font-bold`}
+                  >
+                    <CurrencySpan quantity={value} />
+                  </span>
+                )
+              },
               // {
               //   label: 'Total',
               //   key: 'payments',

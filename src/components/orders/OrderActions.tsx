@@ -22,6 +22,7 @@ import ClientForm from './ClientForm'
 import { updateClient } from '@/firebase/clients'
 import { Client } from '@/types/client'
 import ModalItemChange from '../ModalItemChange'
+import { orderStatus } from '@/lib/orderStatus'
 
 const OrderActions = ({
   orderId,
@@ -100,6 +101,11 @@ const OrderActions = ({
       console.error(error)
     }
   }
+
+  const status = orderStatus(order)
+  console.log(status)
+  const disabledStartRent =
+    status === 'expired' || status === 'taken' || status === 'finished'
   return (
     <div>
       <Typography variant="h5" className="mt-4">
@@ -165,7 +171,11 @@ const OrderActions = ({
         >
           Comenzar renta
         </Button> */}
-        <ModalStartRent orderId={orderId} handleStartRent={handleStartRent} />
+        <ModalStartRent
+          disabled={disabledStartRent}
+          orderId={orderId}
+          handleStartRent={handleStartRent}
+        />
         <Button
           variant="outlined"
           disabled={loading || !itemsInUse}
@@ -201,10 +211,12 @@ const OrderActions = ({
 
 const ModalStartRent = ({
   orderId,
-  handleStartRent
+  handleStartRent,
+  disabled
 }: {
   orderId: string
   handleStartRent: () => void
+  disabled: boolean
 }) => {
   const { orders } = useUserCompaniesContext()
   const order = orders?.find((o) => o?.id === orderId)
@@ -227,11 +239,14 @@ const ModalStartRent = ({
       .then((res) => console.log(res))
       .catch((e) => console.error(e))
   }
+  const isCanceled = order?.status === 'canceled'
 
-  const disabledConfirm = !order?.client.imageID || !order?.client.signature
+  const disabledConfirm =
+    !order?.client.imageID || !order?.client.signature || isCanceled
   return (
     <div>
       <ModalConfirm
+        disabled={disabled}
         label="Comenzar renta"
         color="primary"
         handleConfirm={handleStartRent}

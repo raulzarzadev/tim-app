@@ -1,9 +1,7 @@
 import { ItemRentStatus, ItemSelected } from '@/context/useCompanyCashbox'
-import { rentFinishAt } from '@/context/userCompaniesContext2'
 import { orderStatus } from '@/lib/orderStatus'
 import { Order } from '@/types/order'
 import { Typography } from '@mui/material'
-import { isBefore } from 'date-fns'
 
 const OrderStatus = ({ order }: { order?: Partial<Order> }) => {
   const ComponentStatus: Record<
