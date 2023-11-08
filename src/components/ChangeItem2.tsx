@@ -1,6 +1,6 @@
 import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import { useEffect, useState } from 'react'
-import { Box, Button, Chip, Stack, Typography } from '@mui/material'
+import { Box, Button, Chip, Stack, Tooltip, Typography } from '@mui/material'
 import { ArticleType } from '@/types/article'
 import Select from './Select'
 import ErrorBoundary from './ErrorBoundary'
@@ -40,7 +40,6 @@ const ChangeItem = ({
 
   const [changed, setChanged] = useState(false)
 
-  const handleChange = () => {}
   const disabled = changed
   return (
     <ErrorBoundary>
@@ -62,18 +61,26 @@ const ChangeItem = ({
         <div className="mt-8" />
         <Stack direction="row" flexWrap={'wrap'} className="justify-center ">
           {_categoryItems?.map((item) => (
-            <Chip
-              disabled={!!itemsInUse?.find(({ itemId }) => itemId === item.id)}
-              color={_selected === item.id ? 'primary' : 'default'}
-              className="p-1 m-1"
+            <Tooltip
               key={item.id}
-              label={item.serialNumber || item.name}
-              onClick={() => {
-                setChanged(true)
-                if (item.id !== itemId) setChanged(false)
-                _setSelected(item.id)
-              }}
-            />
+              title={`${item.category} - ${item.serialNumber || 's/s'}, ${
+                item.name || 's/n'
+              }`}
+            >
+              <Chip
+                disabled={
+                  !!itemsInUse?.find(({ itemId }) => itemId === item.id)
+                }
+                color={_selected === item.id ? 'primary' : 'default'}
+                className="p-1 m-1"
+                label={item.serialNumber || item.name}
+                onClick={() => {
+                  setChanged(true)
+                  if (item.id !== itemId) setChanged(false)
+                  _setSelected(item.id)
+                }}
+              />
+            </Tooltip>
           ))}
         </Stack>
       </Box>

@@ -115,7 +115,6 @@ export default function BottomNavigation() {
           currentCompany?.staff?.find((staff) => staff?.email === user?.email)
             ?.permissions?.ORDERS || false
       },
-
       {
         href: `/dashboard/${currentCompany?.id}/MY_ORDERS`,
         label: 'Mis Ordenes',
@@ -123,6 +122,15 @@ export default function BottomNavigation() {
         visible:
           currentCompany?.staff?.find((staff) => staff?.email === user?.email)
             ?.permissions?.MY_ORDERS || false
+      },
+
+      {
+        href: `/dashboard/${currentCompany?.id}/NEW_ITEM`,
+        label: 'Nueva Unidad',
+        icon: <AppIcon icon="add" />,
+        visible:
+          currentCompany?.staff?.find((staff) => staff?.email === user?.email)
+            ?.permissions?.NEW_ITEM || false
       }
     ]
 

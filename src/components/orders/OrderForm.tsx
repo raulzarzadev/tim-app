@@ -18,6 +18,7 @@ import ButtonClear from '../ButtonClear'
 import { isBefore } from 'date-fns'
 import forceAsDate from '@/lib/forceAsDate'
 import { ItemSelected } from '@/context/useCompanyCashbox'
+import { find, isUndefined, some } from 'lodash'
 
 const OrderForm = ({
   handleSave,
@@ -31,7 +32,15 @@ const OrderForm = ({
   const itemsForm = useModal({ title: 'Unidades' })
   const [saving, setSaving] = useState(false)
 
-  const [order, setOrder] = useState<Partial<Order>>(defaultOrder || {})
+  const [order, setOrder] = useState<Partial<Order>>({
+    items: [],
+    client: {},
+    shipping: {},
+    payments: [],
+    changes: [],
+
+    ...defaultOrder
+  })
   const orderId = order?.id
 
   const [itemsTotal, setItemsTotal] = useState(0)
@@ -58,13 +67,15 @@ const OrderForm = ({
       order.shipping?.date &&
       isBefore(forceAsDate(order.shipping?.date), new Date())
 
-    const items = order.items?.map((i) => ({
-      ...i,
-      rentStartedAt: rentAlreadyStart ? new Date() : order.shipping?.date,
-      rentStatus: rentAlreadyStart
-        ? 'taken'
-        : ('pending' as ItemSelected['rentStatus'])
-    }))
+    const items = order.items?.map((i) => {
+      if (rentAlreadyStart) i.rentStartedAt = forceAsDate(order.shipping?.date)
+      return {
+        ...i,
+        rentStatus: rentAlreadyStart
+          ? 'taken'
+          : ('pending' as ItemSelected['rentStatus'])
+      }
+    })
     try {
       setSaving(true)
       clientForm.onClose()

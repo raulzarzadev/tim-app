@@ -1,4 +1,5 @@
 'use client'
+import ArticleForm from '@/components/ArticleForm'
 import CompanyAdmin from '@/components/CompanyAdmin'
 import CompanyCashbox2 from '@/components/CompanyCashbox2'
 import CompanyDelivery from '@/components/CompanyDelivery'
@@ -7,6 +8,7 @@ import CompanyOrders from '@/components/CompanyOrders'
 import CompanyReception from '@/components/CompanyReception'
 import CompanyStore from '@/components/CompanyStore'
 import ErrorBoundary from '@/components/ErrorBoundary'
+import ModalItemForm from '@/components/ModalItemForm'
 import StaffOrders from '@/components/StaffOrders'
 import { StaffPermission, StaffPermissionLabels } from '@/types/staff'
 import { Typography } from '@mui/material'
@@ -32,6 +34,7 @@ const Page = ({
         {area === 'SALES' && <CompanyStore />}
         {area === 'ORDERS' && <CompanyOrders />}
         {area === 'MY_ORDERS' && <StaffOrders />}
+        {area === 'NEW_ITEM' && <ArticleForm />}
       </>
     </ErrorBoundary>
   )

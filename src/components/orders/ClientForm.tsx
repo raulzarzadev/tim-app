@@ -40,8 +40,13 @@ const ClientForm = ({
   const disabledSave = isSubmitting || !isDirty
   const formValues = watch()
   const onSubmit = async (data?: Partial<Client>) => {
-    await setClient?.(data)
-    reset(data)
+    try {
+      const res = await setClient?.(data)
+      reset(data)
+      return res
+    } catch (e) {
+      console.error(e)
+    }
   }
 
   const handleClear = async () => {

@@ -8,7 +8,8 @@ export enum StaffPermissionLabels {
   MY_ORDERS = 'Mis Ordenes',
   SALES = 'Ventas',
   DELIVERY = 'Reparto',
-  RECEPTION = 'Recepción'
+  RECEPTION = 'Recepción',
+  NEW_ITEM = 'Nueva Unidad'
 }
 export const areaIcon: Record<StaffPermission, IconName> = {
   CASHBOX: 'cashbox',
@@ -18,7 +19,8 @@ export const areaIcon: Record<StaffPermission, IconName> = {
   ADMIN: 'person',
   RECEPTION: 'store',
   ORDERS: 'order',
-  MY_ORDERS: 'myOrder'
+  MY_ORDERS: 'myOrder',
+  NEW_ITEM: 'add'
 }
 export type StaffPermission = keyof typeof StaffPermissionLabels
 export type StaffPermissions = {

@@ -32,7 +32,7 @@ const OrderActions = ({
 }) => {
   const { orders, currentCompany } = useUserCompaniesContext()
   const order = orders?.find((o) => o?.id === orderId)
-
+  console.log({ order })
   const itemsInUse = order?.items?.some((i) => i.rentStatus === 'taken')
 
   const totalOrder = calculateOrderTotal({ company: currentCompany, order })
@@ -212,23 +212,24 @@ const ModalStartRent = ({
   const order = orders?.find((o) => o?.id === orderId)
   //* should be disabled in this seccion if identification and signature are not added
   const handleUpdateClient = async (client: Partial<Client>) => {
-    try {
-      const clientRes = await updateClient(client.id || '', {
-        imageID: order?.client?.imageID || '',
-        signature: order?.client?.signature || '',
+    console.log({ client })
+
+    await updateClient(client.id || '', {
+      imageID: order?.client?.imageID || '',
+      signature: order?.client?.signature || '',
+      ...client
+    })
+      .then((res) => console.log(res))
+      .catch((e) => console.error(e))
+
+    await updateOrder(orderId, {
+      client: {
+        ...order?.client,
         ...client
-      })
-      const orderRes = await updateOrder(orderId, {
-        client: {
-          ...order?.client,
-          ...client
-        }
-      })
-      return true
-    } catch (error) {
-      console.error(error)
-      return false
-    }
+      }
+    })
+      .then((res) => console.log(res))
+      .catch((e) => console.error(e))
   }
 
   const disabledConfirm = !order?.client.imageID || !order?.client.signature
