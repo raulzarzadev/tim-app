@@ -12,9 +12,9 @@ const OrdersTable = ({ orders }: { orders: Partial<Order>[] }) => {
     <div>
       <ErrorBoundary componentName="OrdersTable ">
         <MyTable
+          modalTitle="Detalles de orden"
           modalChildren={(value) => (
             <>
-              {' '}
               <OrderDetails order={value} />
               {value?.id && (
                 <OrderActions

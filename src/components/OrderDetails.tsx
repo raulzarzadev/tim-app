@@ -14,6 +14,11 @@ import OrderReports from './OrderReports'
 import { totalCharged } from './cashboxBalances/calculateBalance.lib'
 
 const OrderDetails = ({ order }: { order?: Partial<Order> }) => {
+  const items = order?.items?.map((i) => ({
+    ...i,
+    // @ts-ignore FIXME: quantity should not be in item
+    duration: `${i.qty || i.quantity}x ${i.unit && dictionary(i.unit)}`
+  }))
   return (
     <div>
       <div className="flex   flex-col items-end sm:justify-between sm:flex-row mb-4">
@@ -38,10 +43,10 @@ const OrderDetails = ({ order }: { order?: Partial<Order> }) => {
             },
             {
               title: 'Items',
-              subTitle: `${order?.items?.length || 0}`,
+              subTitle: `${items?.length || 0}`,
               content: (
                 <>
-                  {!!order?.items?.length ? (
+                  {!!items?.length ? (
                     <MyTable
                       data={{
                         headers: [
@@ -57,12 +62,16 @@ const OrderDetails = ({ order }: { order?: Partial<Order> }) => {
                             )
                           },
                           {
+                            label: 'Tiempo',
+                            key: 'duration'
+                          },
+                          {
                             label: 'Status',
                             key: 'rentStatus',
                             format: (value) => dictionary(value)
                           }
                         ],
-                        body: order?.items || []
+                        body: items || []
                       }}
                     />
                   ) : (

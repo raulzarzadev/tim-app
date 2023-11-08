@@ -52,12 +52,13 @@ export const calculateFullTotal = (
   fullItems?: Partial<(ArticleType | null)[]>
 ) => {
   let total = 0
-  selectedItems?.forEach(({ qty, unit, itemId }) => {
+  // @ts-ignore FIXME: quantity should don´t be defined
+  selectedItems?.forEach(({ qty, quantity, unit, itemId }) => {
     const pricesList = fullItems?.find((item) => item?.id == itemId)?.prices
     const defaultUnit = unit || pricesList?.[0].unit
     const { total: itemTotal } = calculateTotal(
       defaultUnit,
-      asNumber(qty),
+      asNumber(qty || quantity),
       pricesList || []
     )
     total += asNumber(itemTotal)

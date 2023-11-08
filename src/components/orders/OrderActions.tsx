@@ -32,11 +32,9 @@ const OrderActions = ({
 }) => {
   const { orders, currentCompany } = useUserCompaniesContext()
   const order = orders?.find((o) => o?.id === orderId)
-  console.log({ order })
   const itemsInUse = order?.items?.some((i) => i.rentStatus === 'taken')
 
   const totalOrder = calculateOrderTotal({ company: currentCompany, order })
-
   const [loading, setLoading] = useState(false)
   const handleStartRent = async () => {
     try {
@@ -212,8 +210,6 @@ const ModalStartRent = ({
   const order = orders?.find((o) => o?.id === orderId)
   //* should be disabled in this seccion if identification and signature are not added
   const handleUpdateClient = async (client: Partial<Client>) => {
-    console.log({ client })
-
     await updateClient(client.id || '', {
       imageID: order?.client?.imageID || '',
       signature: order?.client?.signature || '',

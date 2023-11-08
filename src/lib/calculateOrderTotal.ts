@@ -17,7 +17,6 @@ export const calculateOrderTotal = ({
   const itemsSelected = order?.items || []
   const companyItems = company?.articles || []
   const companyCategories = company?.categories || []
-
   const fullItems: (CompanyItem | null)[] = itemsSelected?.map(
     (searchItem: { itemId?: string }) => {
       const fullItem = companyItems?.find(
@@ -32,6 +31,7 @@ export const calculateOrderTotal = ({
       return { ...fullItem, prices: categoryPrices, ...searchItem }
     }
   )
+
   const itemsTotal = calculateFullTotal(itemsSelected, fullItems)
   const shippingAmount = asNumber(order?.shipping?.amount) || 0
   const totalPayments = totalCharged(order?.payments || [])

@@ -160,6 +160,7 @@ const OrderForm = ({
           itemsSelected={order.items || []}
           setTotal={setItemsTotal}
           setItemsSelected={(itemsSelected) => {
+            console.log({ itemsSelected })
             setOrder({ ...order, items: itemsSelected })
           }}
         />
