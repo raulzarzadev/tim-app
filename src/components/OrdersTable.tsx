@@ -23,7 +23,8 @@ const OrdersTable = ({ orders }: { orders: Partial<Order>[] }) => {
     return o
   })
 
-  if (!orders.length) return <>Cargando...</>
+  if (!orders) return <>Cargando...</>
+  if (orders?.length === 0) return <>No hay ordenes </>
   return (
     <div>
       <ErrorBoundary componentName="OrdersTable ">

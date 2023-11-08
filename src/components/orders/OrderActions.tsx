@@ -271,19 +271,22 @@ const ModalStartRent = ({
                   // @ts-ignore FIXME: quantity should don't exist
                   itemSelected={{ ...item, qty: item.qty || item?.quantity }}
                   handleChangeItem={async (newItem) => {
+                    console.log({ newItem })
+                    const changedItem = {
+                      //* It will change just the id of the item, it  don't change category or prices  */
+                      amount: 0,
+                      newItemId: newItem.itemId || '',
+                      oldItemId: item.itemId || '',
+                      resolved: true,
+                      newPrice: {
+                        price: item.price || 0,
+                        quantity: item.qty || 1,
+                        unit: item.unit || 'hour'
+                      }
+                    }
+                    console.log({ changedItem })
                     try {
-                      const res = await changeItem(orderId, {
-                        //* It will change just the id of the item, it  don't change category or prices  */
-                        amount: 0,
-                        newItemId: newItem.itemId || '',
-                        oldItemId: item.itemId || '',
-                        resolved: true,
-                        newPrice: {
-                          price: item.price || 0,
-                          quantity: item.qty || 1,
-                          unit: item.unit
-                        }
-                      })
+                      const res = await changeItem(orderId, changedItem)
                     } catch (error) {
                       console.error(error)
                     }

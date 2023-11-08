@@ -20,6 +20,10 @@ const labels = {
   weeks: 'semanas',
   months: 'meses',
   years: 'años',
+  mxn: 'efectivo',
+  usd: 'dolar',
+  card: 'tarjeta',
+  deposit: 'depósito',
   '': ''
 } as const
 export type Labels = keyof typeof labels

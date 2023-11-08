@@ -10,6 +10,8 @@ import OrdersTable from '../OrdersTable'
 import { PaymentMethods, paymentMethods } from '@/CONSTS/paymentMethods'
 import MyTable from '../MyTable'
 import OrderDetails from '../OrderDetails'
+import dictionary from '@/CONSTS/dictionary'
+import StaffSpan from '../StaffSpan'
 
 const BalanceCard = ({ balance }: { balance: BalanceData }) => {
   return (
@@ -92,6 +94,18 @@ const BalanceCard = ({ balance }: { balance: BalanceData }) => {
                         label: 'Monto',
                         key: 'amount',
                         format: (value) => <CurrencySpan quantity={value} />
+                      },
+                      {
+                        label: 'Metodo',
+                        key: 'method',
+                        format: (value) => dictionary(value)
+                      },
+                      {
+                        label: 'Cobrado por',
+                        key: 'created.by',
+                        format: (value) => {
+                          return <StaffSpan email={value} />
+                        }
                       }
                     ],
                     body: balance?.payments || []
