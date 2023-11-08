@@ -104,24 +104,27 @@ export const calculateBalance = (
   balance: Balance,
   companyOrders?: Partial<Order>[]
 ): BalanceData => {
+  //* Should take company orders and get the payments whit the order id, if order have not payments should return empty array
   const allPayments = companyOrders
-    ?.map((o) => o.payments?.map((p) => ({ ...p, orderId: o.id })))
+    ?.map((o) => o.payments?.map((p) => ({ ...p, orderId: o.id })) || [])
     .flat()
+
   const matchDatePayments = getPaymentsBetweenDates(
     balance,
     (allPayments as Payment[]) || []
   )
-  const balancePayments =
-    !(balance?.cashier === 'all') || !balance?.cashier
-      ? matchDatePayments?.filter((p) => p?.created?.by === balance?.cashier)
-      : matchDatePayments
+  const balancePayments = matchDatePayments.filter((p) => {
+    if (!balance.cashier) return true
+    if (balance.cashier === 'all') return true
+    if (balance.cashier === p?.created?.by) return true
+    return true
+  })
 
+  console.log({ balancePayments })
   let balanceOrders: Order[] = []
   balancePayments.forEach((payment) => {
-    if (
-      payment?.orderId &&
-      !balanceOrders?.find((o) => o?.id === payment?.orderId)
-    ) {
+    if (!payment || !payment?.orderId) return
+    if (!balanceOrders?.find((o) => o?.id === payment?.orderId)) {
       balanceOrders.push(
         companyOrders?.find((o) => o?.id === payment?.orderId) as Order
       )

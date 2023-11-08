@@ -25,6 +25,7 @@ const ModalBalanceForm = () => {
     setBalanceProps(balance)
 
     const b = calculateBalance(balance, orders)
+    console.log({ b })
     setBalance(b)
   }
   const handleSave = async () => {

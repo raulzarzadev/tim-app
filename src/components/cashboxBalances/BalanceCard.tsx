@@ -8,6 +8,8 @@ import AccordionSections from '../AccordionSections'
 import OrderItemsStats from '../OrderItemsStats'
 import OrdersTable from '../OrdersTable'
 import { PaymentMethods, paymentMethods } from '@/CONSTS/paymentMethods'
+import MyTable from '../MyTable'
+import OrderDetails from '../OrderDetails'
 
 const BalanceCard = ({ balance }: { balance: BalanceData }) => {
   return (
@@ -62,6 +64,41 @@ const BalanceCard = ({ balance }: { balance: BalanceData }) => {
 
         <AccordionSections
           sections={[
+            {
+              title: 'Lista de pagos',
+              subTitle: `${balance?.payments?.length || 0}`,
+              content: (
+                <MyTable
+                  modalChildren={(value) => {
+                    if (value === undefined)
+                      return <Typography>Sin información</Typography>
+                    return (
+                      <OrderDetails
+                        order={balance.orders?.find(
+                          (o) => o?.id === value?.orderId
+                        )}
+                      />
+                    )
+                  }}
+                  data={{
+                    headers: [
+                      {
+                        label: 'Fecha',
+                        key: 'created.at',
+                        format: (value) =>
+                          dateFormat(forceAsDate(value), 'dd/MM/yy HH:mm')
+                      },
+                      {
+                        label: 'Monto',
+                        key: 'amount',
+                        format: (value) => <CurrencySpan quantity={value} />
+                      }
+                    ],
+                    body: balance?.payments || []
+                  }}
+                />
+              )
+            },
             {
               title: 'Detalle de ordenes',
               subTitle: `${balance?.orders?.length || 0}`,
