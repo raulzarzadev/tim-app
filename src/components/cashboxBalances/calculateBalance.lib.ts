@@ -120,7 +120,6 @@ export const calculateBalance = (
     return true
   })
 
-  console.log({ balancePayments })
   let balanceOrders: Order[] = []
   balancePayments.forEach((payment) => {
     if (!payment || !payment?.orderId) return
