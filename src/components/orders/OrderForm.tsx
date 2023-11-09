@@ -113,7 +113,6 @@ const OrderForm = ({
           <ClientForm
             client={order?.client}
             setClient={(client) => {
-              console.log({ ...order })
               setOrder({
                 ...order,
                 client

@@ -1,11 +1,9 @@
-import { IconButton, TextField, Typography } from '@mui/material'
+import { IconButton } from '@mui/material'
 import AppIcon from './AppIcon'
 import Modal from './Modal'
 import useModal from '@/hooks/useModal'
 import MyTable from './MyTable'
-import { useEffect, useState } from 'react'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
-import { listenCompanyClients } from '@/firebase/clients'
 import { Client } from '@/types/client'
 
 const SearchClient = ({
@@ -15,11 +13,7 @@ const SearchClient = ({
 }) => {
   const modal = useModal({ title: 'Buscar cliente' })
   const { clients } = useUserCompaniesContext()
-  const [search, setSearch] = useState('')
 
-  const filteredClients = clients?.filter((c) =>
-    c?.name.toLowerCase().includes(search.toLowerCase())
-  )
   const handleSelect = (clientId: string) => {
     const client = clients?.find((c) => c?.id === clientId)
     onSelectClient?.({
@@ -39,17 +33,16 @@ const SearchClient = ({
         <AppIcon icon="search" />
       </IconButton>
       <Modal {...modal}>
-        <Typography>Buscar cliente</Typography>
-        <TextField
-          onChange={(e) => setSearch(e.target.value)}
-          label="Nombre de cliente"
-          fullWidth
-        />
         <MyTable
+          search
           onRowClick={handleSelect}
           data={{
-            headers: [{ label: 'Nombre', key: 'name' }],
-            body: filteredClients || []
+            headers: [
+              { label: 'Nombre', key: 'name' },
+              { label: 'Telefono', key: 'phone' },
+              { label: 'Dirección', key: 'address' }
+            ],
+            body: clients || []
           }}
         />
       </Modal>
