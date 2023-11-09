@@ -107,7 +107,9 @@ const OrderForm = ({
           </Typography>
         )}
         {/* **** Client Form section */}
-        <Button onClick={clientForm.onOpen}>1. Cliente</Button>
+        <Button onClick={clientForm.onOpen} variant="outlined">
+          1. Cliente
+        </Button>
         {order?.client && <ClientInfo client={order?.client} />}
         <Modal {...clientForm}>
           <ClientForm
@@ -122,7 +124,9 @@ const OrderForm = ({
           />
         </Modal>
         {/* **** Shipping Form section */}
-        <Button onClick={shippingForm.onOpen}>2. Entrega</Button>
+        <Button onClick={shippingForm.onOpen} variant="outlined">
+          2. Entrega
+        </Button>
         {order.shipping && <ShippingDetails shipping={order.shipping} />}
         <Modal {...shippingForm}>
           <ShippingForm
@@ -141,7 +145,9 @@ const OrderForm = ({
           />
         </Modal>
         {/* **** Items Form section */}
-        <Button onClick={itemsForm.onOpen}>3. Seleccionar unidades</Button>
+        <Button onClick={itemsForm.onOpen} variant="outlined">
+          3. Seleccionar unidades
+        </Button>
         <Modal {...itemsForm}>
           <SelectCompanyItem
             multiple
@@ -162,7 +168,6 @@ const OrderForm = ({
             itemsSelected={order.items || []}
             setTotal={setItemsTotal}
             setItemsSelected={(itemsSelected) => {
-              console.log({ itemsSelected })
               setOrder({ ...order, items: itemsSelected })
             }}
           />

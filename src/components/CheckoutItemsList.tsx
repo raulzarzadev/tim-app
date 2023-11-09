@@ -23,8 +23,12 @@ const CheckoutItemsList = ({
   return (
     <Box>
       <Grid2 container spacing={1} className=" font-bold ">
-        <Grid2 xs={2}>Categoria</Grid2>
-        <Grid2 xs={2}>No.Serie</Grid2>
+        <Grid2 xs={2} className="truncate">
+          Categoria
+        </Grid2>
+        <Grid2 xs={2} className="truncate">
+          No.Serie
+        </Grid2>
         <Grid2 className="text-center" xs={6}>
           Tiempo
         </Grid2>

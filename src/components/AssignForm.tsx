@@ -26,7 +26,7 @@ const AssignForm = ({
 
   return (
     <>
-      <Button onClick={modal.onOpen}>
+      <Button onClick={modal.onOpen} variant="contained">
         {assignedTo ? (
           <span>
             Asignado a: <StaffSpan email={assignedTo || ''} />
@@ -45,6 +45,11 @@ const AssignForm = ({
             // modal.onClose()
           }}
         />
+        <div className="flex justify-center mt-6">
+          <Button onClick={modal.onClose} variant="outlined">
+            Listo
+          </Button>
+        </div>
       </Modal>
     </>
   )

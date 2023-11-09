@@ -32,6 +32,7 @@ const ModalItemDetails = ({
   return (
     <span>
       <button
+        className=" grid"
         onClick={(e) => {
           e.preventDefault()
           e.stopPropagation()
@@ -39,7 +40,7 @@ const ModalItemDetails = ({
         }}
       >
         {showCat && `${item?.category} `}
-        {item?.serialNumber}
+        <span className="truncate">{item?.serialNumber}</span>
         <span className="font-bold text-gray-900 text-xs">{item?.name} </span>
         {!hiddenCurrentStatus && <ItemCurrentStatus itemId={itemId} />}
       </button>

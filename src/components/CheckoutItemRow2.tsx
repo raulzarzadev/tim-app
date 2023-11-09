@@ -50,7 +50,7 @@ export const CheckoutItemRow = ({
               onClick={() => handleSelectPrice(p)}
               className={`${
                 isSelectedPrice(p, priceSelected) ? 'bg-blue-300' : ''
-              } shadow-md rounded-md p-2 text-center flex flex-col justify-center `}
+              } shadow-gray-500 cursor-pointer shadow-md rounded-md p-2 text-center flex flex-col justify-center hover:bg-blue-100  border-gray-50 active:bg-blue-300`}
             >
               <p className="text-center w-full ">
                 {p?.quantity} {p?.unit && timeUnitsLabels[p?.unit]}
