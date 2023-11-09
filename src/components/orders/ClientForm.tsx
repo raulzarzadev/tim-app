@@ -77,6 +77,7 @@ const ClientForm = ({
                   setValue('address', e.address)
                   setValue('imageID', e.imageID)
                   setValue('signature', e.signature)
+                  setValue('extraInfo', e.extraInfo)
                 }}
               />
             </div>
