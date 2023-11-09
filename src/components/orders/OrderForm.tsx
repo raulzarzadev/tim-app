@@ -18,7 +18,6 @@ import ButtonClear from '../ButtonClear'
 import { isBefore } from 'date-fns'
 import forceAsDate from '@/lib/forceAsDate'
 import { ItemSelected } from '@/context/useCompanyCashbox'
-import { find, isUndefined, some } from 'lodash'
 
 const OrderForm = ({
   handleSave,
@@ -31,17 +30,15 @@ const OrderForm = ({
   const shippingForm = useModal({ title: 'Detalles de entrega' })
   const itemsForm = useModal({ title: 'Unidades' })
   const [saving, setSaving] = useState(false)
-
   const [order, setOrder] = useState<Partial<Order>>({
-    items: [],
-    client: {},
-    shipping: {},
-    payments: [],
-    changes: [],
-
+    // items: [],
+    // client: {},
+    // shipping: {},
+    // payments: [],
+    // changes: [],
     ...defaultOrder
   })
-  const orderId = order?.id
+  const orderId = order?.id || ''
 
   const [itemsTotal, setItemsTotal] = useState(0)
 
@@ -82,9 +79,13 @@ const OrderForm = ({
       shippingForm.onClose()
       itemsForm.onClose()
       const res = await handleSave?.({ ...order, items })
+      console.log({ res })
       //@ts-ignore
-      const orderId = res?.res?.id
-      setOrder({ ...order, items, id: orderId })
+      if (res?.ok) {
+        //@ts-ignore
+        const orderId = res?.res?.id || ''
+        setOrder({ ...order, items, id: orderId })
+      }
       return res
     } catch (e) {
       console.error(e)
@@ -106,12 +107,13 @@ const OrderForm = ({
           </Typography>
         )}
         {/* **** Client Form section */}
-        <Button onClick={clientForm.onOpen}>Cliente</Button>
+        <Button onClick={clientForm.onOpen}>1. Cliente</Button>
         {order?.client && <ClientInfo client={order?.client} />}
         <Modal {...clientForm}>
           <ClientForm
             client={order?.client}
             setClient={(client) => {
+              console.log({ ...order })
               setOrder({
                 ...order,
                 client
@@ -121,7 +123,7 @@ const OrderForm = ({
           />
         </Modal>
         {/* **** Shipping Form section */}
-        <Button onClick={shippingForm.onOpen}>Entrega</Button>
+        <Button onClick={shippingForm.onOpen}>2. Entrega</Button>
         {order.shipping && <ShippingDetails shipping={order.shipping} />}
         <Modal {...shippingForm}>
           <ShippingForm
@@ -140,7 +142,7 @@ const OrderForm = ({
           />
         </Modal>
         {/* **** Items Form section */}
-        <Button onClick={itemsForm.onOpen}>Seleccionar unidades</Button>
+        <Button onClick={itemsForm.onOpen}>3. Seleccionar unidades</Button>
         <Modal {...itemsForm}>
           <SelectCompanyItem
             multiple
@@ -155,15 +157,17 @@ const OrderForm = ({
             }}
           />
         </Modal>
-        <CheckoutItems
-          shippingAmount={shippingAmount}
-          itemsSelected={order.items || []}
-          setTotal={setItemsTotal}
-          setItemsSelected={(itemsSelected) => {
-            console.log({ itemsSelected })
-            setOrder({ ...order, items: itemsSelected })
-          }}
-        />
+        {(shippingAmount > 0 || asNumber(order.items?.length) > 0) && (
+          <CheckoutItems
+            shippingAmount={shippingAmount}
+            itemsSelected={order.items || []}
+            setTotal={setItemsTotal}
+            setItemsSelected={(itemsSelected) => {
+              console.log({ itemsSelected })
+              setOrder({ ...order, items: itemsSelected })
+            }}
+          />
+        )}
 
         {/* **** Payment  section */}
         {order.payments && <OrderPaymentsTable payments={order.payments} />}
