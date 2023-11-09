@@ -31,7 +31,7 @@ const OrderForm = ({
   const itemsForm = useModal({ title: 'Unidades' })
   const [saving, setSaving] = useState(false)
   const [order, setOrder] = useState<Partial<Order>>({
-    // items: [],
+    items: [],
     // client: {},
     // shipping: {},
     // payments: [],
