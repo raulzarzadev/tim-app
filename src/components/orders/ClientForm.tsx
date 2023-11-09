@@ -61,6 +61,7 @@ const ClientForm = ({
         <div className="flex">
           <TextField
             {...register('name')}
+            InputLabelProps={{ shrink: !!formValues.name }}
             label="Nombre"
             required
             className="w-full"
@@ -70,23 +71,53 @@ const ClientForm = ({
               <SearchClient
                 onSelectClient={(e) => {
                   // setClient?.(e) //* this line close the client form modal automatically
-                  setValue('id', e.id)
-                  setValue('name', e.name)
-                  setValue('phone', e.phone)
-                  setValue('email', e.email)
-                  setValue('address', e.address)
-                  setValue('imageID', e.imageID)
-                  setValue('signature', e.signature)
-                  setValue('extraInfo', e.extraInfo)
+                  setValue('id', e.id, { shouldDirty: true, shouldTouch: true })
+                  setValue('name', e.name, {
+                    shouldDirty: true,
+                    shouldTouch: true
+                  })
+                  setValue('phone', e.phone, {
+                    shouldDirty: true,
+                    shouldTouch: true
+                  })
+                  setValue('email', e.email, {
+                    shouldDirty: true,
+                    shouldTouch: true
+                  })
+                  setValue('address', e.address, {
+                    shouldDirty: true,
+                    shouldTouch: true
+                  })
+                  setValue('imageID', e.imageID, {
+                    shouldDirty: true,
+                    shouldTouch: true
+                  })
+                  setValue('signature', e.signature, {
+                    shouldDirty: true,
+                    shouldTouch: true
+                  })
+                  setValue('extraInfo', e.extraInfo, {
+                    shouldDirty: true,
+                    shouldTouch: true
+                  })
                 }}
               />
             </div>
           )}
         </div>
-        <TextField {...register('email')} label="Email" />
-        <PhoneInput {...register('phone')} label="Teléfono" control={control} />
-        <TextField {...register('address')} label="Dirección" />
         <TextField
+          InputLabelProps={{ shrink: !!formValues.email }}
+          {...register('email')}
+          label="Email"
+        />
+        <PhoneInput {...register('phone')} label="Teléfono" control={control} />
+        <TextField
+          InputLabelProps={{ shrink: !!formValues.address }}
+          {...register('address')}
+          label="Dirección"
+        />
+        <TextField
+          InputLabelProps={{ shrink: !!formValues.extraInfo }}
           {...register('extraInfo')}
           placeholder="Instrucciones de entrega o referencias del domicilo"
         />
