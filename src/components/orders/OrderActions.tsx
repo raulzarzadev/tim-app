@@ -1,9 +1,13 @@
 import { Button, Typography } from '@mui/material'
 import ModalOrderForm from './ModalOrderForm'
-import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
+import {
+  rentFinishAt,
+  useUserCompaniesContext
+} from '@/context/userCompaniesContext2'
 import {
   addOrderReport,
   changeItem,
+  createOrder,
   finishOrderRent,
   onPayOrder,
   startOrderRent,
@@ -23,13 +27,14 @@ import { updateClient } from '@/firebase/clients'
 import { Client } from '@/types/client'
 import ModalItemChange from '../ModalItemChange'
 import { orderStatus } from '@/lib/orderStatus'
+import OrderDetails from '../OrderDetails'
 
 const OrderActions = ({
   orderId,
   onAction
 }: {
   orderId: string
-  onAction?: (action: 'start' | 'finish' | 'edit' | 'error') => void
+  onAction?: (action: 'start' | 'finish' | 'edit' | 'error' | 'renew') => void
 }) => {
   const { orders, currentCompany } = useUserCompaniesContext()
   const order = orders?.find((o) => o?.id === orderId)
@@ -101,6 +106,38 @@ const OrderActions = ({
       console.error(error)
     }
   }
+  const handleRenewRent = async () => {
+    //* 1. finish rent
+    //* 2. update status
+    //* 3. update items with start rent (is when las order supoust be finished)
+    //* 4. start new rent
+
+    try {
+      setLoading(true)
+      const resFinish = await finishOrderRent(orderId)
+      const resRenew = await updateOrder(orderId, { status: 'renewed' })
+      const updatedItems = order?.items?.map((i) => {
+        const rentFinishedAt = rentFinishAt(i.rentStartedAt, i.qty || 0, i.unit)
+        if (i.rentStatus === 'taken') i.rentStartedAt = rentFinishedAt
+        return i
+      })
+      const resCreateRent = await createOrder({
+        changes: order?.changes || [],
+        companyId: currentCompany?.id || '',
+        items: updatedItems || [],
+        payments: [],
+        shipping: order?.shipping || {},
+        client: order?.client || {}
+      })
+      console.log([resRenew, resFinish, resCreateRent])
+      onAction?.('renew')
+    } catch (e) {
+      onAction?.('error')
+      console.error(e)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const status = orderStatus(order)
   const disabledStartRent =
@@ -110,6 +147,23 @@ const OrderActions = ({
       <Typography variant="h5" className="mt-4">
         Acciones de orden
       </Typography>
+      {status === 'expired' && (
+        <div className="my-4">
+          <ModalConfirm
+            modalTitle="Renovar orden"
+            fullWidth
+            handleConfirm={() => {
+              console.log('renovar', { order })
+
+              handleRenewRent()
+            }}
+            label="Renovar"
+            acceptLabel="Renovar orden"
+          >
+            <OrderDetails order={order} />
+          </ModalConfirm>
+        </div>
+      )}
       <div className="my-4">
         <ModalPayment
           amount={totalOrder}

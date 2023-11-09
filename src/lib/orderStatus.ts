@@ -8,7 +8,7 @@ export const orderStatus = (order?: Partial<Order>): ItemRentStatus => {
     return (
       i.rentStatus === 'expired' ||
       (i.rentStatus === 'taken' &&
-        isBefore(rentFinishAt(i.rentStartedAt, i.qty, i.unit), new Date()))
+        isBefore(rentFinishAt(i.rentStartedAt, i.qty || 0, i.unit), new Date()))
     )
   })
   if (someItemAlreadyExpire) return 'expired'

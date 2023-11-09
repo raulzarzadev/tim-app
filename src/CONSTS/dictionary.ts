@@ -24,6 +24,8 @@ const labels = {
   usd: 'dolar',
   card: 'tarjeta',
   deposit: 'depósito',
+  renewed: 'Renovada',
+  renew: 'Renovar',
   '': ''
 } as const
 export type Labels = keyof typeof labels

@@ -10,10 +10,13 @@ const OrdersTabs = ({ orders }: { orders: Partial<Order>[] }) => {
       ...o,
       items: o?.items?.map((i) => ({
         ...i,
-        rentFinishAt: rentFinishAt(i.rentStartedAt, i.qty, i.unit),
+        rentFinishAt: rentFinishAt(i.rentStartedAt, i.qty || 0, i.unit),
         rentStatus:
           i.rentStatus === 'taken' &&
-          isBefore(rentFinishAt(i.rentStartedAt, i.qty, i.unit), new Date())
+          isBefore(
+            rentFinishAt(i.rentStartedAt, i.qty || 0, i.unit),
+            new Date()
+          )
             ? 'expired'
             : i.rentStatus || 'pending'
       }))
