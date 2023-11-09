@@ -17,11 +17,6 @@ import { PriceType } from '@/components/PricesForm'
 import { Payment } from '@/types/order'
 import { useUserCompaniesContext } from './userCompaniesContext2'
 import { Timestamp } from 'firebase/firestore'
-import {
-  createClient,
-  getAndUpdateClientData,
-  updateClient
-} from '@/firebase/clients'
 
 export type CashboxContext = {
   itemsSelected?: ItemSelected[]
