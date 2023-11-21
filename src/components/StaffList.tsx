@@ -40,7 +40,6 @@ const StaffCard = ({
   onClick?: (email: string) => void
 }) => {
   const modal = useModal({ title: 'Editar empleado' })
-  console.log(staff.permissions, staff.email)
   return (
     <Card
       onClick={() => onClick?.(staff?.email || '')}

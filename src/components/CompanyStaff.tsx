@@ -3,7 +3,7 @@ import useModal from '@/hooks/useModal'
 import Modal from './Modal'
 import StaffForm from './StaffForm'
 import StaffList from './StaffList'
-import { Button, Typography } from '@mui/material'
+import { Button } from '@mui/material'
 import AppIcon from './AppIcon'
 import ErrorBoundary from './ErrorBoundary'
 

@@ -34,7 +34,6 @@ const CompanyClients = () => {
           />
         </ModalConfirm>
       </div>
-      a
       <ClientsTable clients={clients || []} />
     </div>
   )
