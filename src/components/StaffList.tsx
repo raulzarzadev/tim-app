@@ -7,6 +7,7 @@ import AppIcon from './AppIcon'
 import useModal from '@/hooks/useModal'
 import Modal from './Modal'
 import StaffForm from './StaffForm'
+import ErrorBoundary from './ErrorBoundary'
 
 const StaffList = ({
   simple,
@@ -17,11 +18,15 @@ const StaffList = ({
 }) => {
   const { currentCompany } = useUserCompaniesContext()
   return (
-    <Box className="grid gap-4 my-4">
-      {currentCompany?.staff?.map((staff, i) => (
-        <StaffCard staff={staff} key={i} simple={simple} onClick={onClick} />
-      ))}
-    </Box>
+    <ErrorBoundary componentName="StaffList ">
+      <Box className="grid gap-4 my-4">
+        {currentCompany?.staff?.map((staff, i) => (
+          <ErrorBoundary componentName="StaffList card" key={i}>
+            <StaffCard staff={staff} simple={simple} onClick={onClick} />
+          </ErrorBoundary>
+        ))}
+      </Box>
+    </ErrorBoundary>
   )
 }
 
@@ -35,6 +40,7 @@ const StaffCard = ({
   onClick?: (email: string) => void
 }) => {
   const modal = useModal({ title: 'Editar empleado' })
+  console.log(staff.permissions, staff.email)
   return (
     <Card
       onClick={() => onClick?.(staff?.email || '')}
@@ -56,13 +62,15 @@ const StaffCard = ({
         </Typography>
         <Typography>{staff.email}</Typography>
       </CardContent>
-      {!simple && (
-        <Box className="flex gap-2 p-2">
-          {Object.entries(staff.permissions).map(([key, value]) =>
-            value ? <StaffBadge badge={key} key={key} /> : null
-          )}
-        </Box>
-      )}
+      <ErrorBoundary>
+        {!simple && (
+          <Box className="flex gap-2 p-2">
+            {Object.entries(staff.permissions || {}).map(([key, value]) =>
+              value ? <StaffBadge badge={key} key={key} /> : null
+            )}
+          </Box>
+        )}
+      </ErrorBoundary>
     </Card>
   )
 }

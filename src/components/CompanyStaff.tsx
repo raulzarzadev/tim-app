@@ -5,20 +5,23 @@ import StaffForm from './StaffForm'
 import StaffList from './StaffList'
 import { Button, Typography } from '@mui/material'
 import AppIcon from './AppIcon'
+import ErrorBoundary from './ErrorBoundary'
 
 const CompanyStaff = () => {
   const modal = useModal({ title: 'Nuevo empleado' })
   return (
-    <div>
-      <Button onClick={() => modal.onOpen()}>
-        Nuevo empleado
-        <AppIcon icon="add" />
-      </Button>
-      <Modal {...modal}>
-        <StaffForm newStaff />
-      </Modal>
-      <StaffList />
-    </div>
+    <ErrorBoundary componentName="CompanyStaff">
+      <div>
+        <Button onClick={() => modal.onOpen()}>
+          Nuevo empleado
+          <AppIcon icon="add" />
+        </Button>
+        <Modal {...modal}>
+          <StaffForm newStaff />
+        </Modal>
+        <StaffList />
+      </div>
+    </ErrorBoundary>
   )
 }
 
