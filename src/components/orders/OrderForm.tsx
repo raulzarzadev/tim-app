@@ -79,7 +79,6 @@ const OrderForm = ({
       shippingForm.onClose()
       itemsForm.onClose()
       const res = await handleSave?.({ ...order, items })
-      console.log({ res })
       //@ts-ignore
       if (res?.ok) {
         //@ts-ignore

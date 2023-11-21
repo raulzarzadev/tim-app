@@ -96,7 +96,7 @@ const ClientForm = ({
                     shouldDirty: true,
                     shouldTouch: true
                   })
-                  setValue('extraInfo', e.extraInfo, {
+                  setValue('extraInfo', e.extraInfo || '', {
                     shouldDirty: true,
                     shouldTouch: true
                   })
