@@ -19,7 +19,6 @@ const ModalOrderForm = ({
   order?: Partial<Order>
 }) => {
   const modal = useModal({ title: 'Nueva orden' })
-
   return (
     <>
       <Button

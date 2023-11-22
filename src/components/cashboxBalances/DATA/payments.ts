@@ -14,6 +14,20 @@ export const simpleOrderPayments: Payment[] = [
   }
 ]
 
+export const simpleOrderPaymentsWitRest: Payment[] = [
+  {
+    created: {
+      at: new Date(2023, 10, 21),
+      by: 'test'
+    },
+    method: 'usd',
+    charged: 50,
+    rest: 200,
+    // amount: 600,
+    usdPrice: 16
+  }
+]
+
 export const usdSimpleOrderPayments: Payment[] = [
   {
     created: {
@@ -95,7 +109,7 @@ export const multipleOrderPayments: Payment[] = [
     method: 'deposit',
     charged: 500,
     rest: 100,
-    amount: 600,
+    // amount: 600,
     usdPrice: 1
   }
 ]

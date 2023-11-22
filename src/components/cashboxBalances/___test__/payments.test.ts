@@ -4,6 +4,7 @@ import {
   multiplePaymentsWithRest,
   multiplePaymentsWithRetried,
   simpleOrderPayments,
+  simpleOrderPaymentsWitRest,
   usdMultipleOrderPayments,
   usdSimpleOrderPayments,
   withNegativePayment,
@@ -14,6 +15,10 @@ import { splitPaymentsByMethods, totalCharged } from '../calculateBalance.lib'
 describe('payments should be calculated correctly', () => {
   test('simple payment', () => {
     expect(totalCharged(simpleOrderPayments)).toBe(600)
+  })
+
+  test('simple payment with rest', () => {
+    expect(totalCharged(simpleOrderPaymentsWitRest)).toBe(600)
   })
 
   test('usd simple payment', () => {
@@ -27,7 +32,7 @@ describe('payments should be calculated correctly', () => {
 
   test('multiple payment', () => {
     //** should be the total of charges in the order */
-    expect(totalCharged(multipleOrderPayments)).toBe(730)
+    expect(totalCharged(multipleOrderPayments)).toBe(630)
   })
 
   test('with negative charged payment', () => {

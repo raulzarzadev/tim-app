@@ -179,7 +179,7 @@ const OrderForm = ({
             <ModalPayment
               //disabled={!!paymentIsComplete}
               amount={total}
-              label="Pagar "
+              label="Pagar"
               setPayment={(payment) => {
                 const payments = [...(order.payments || []), payment]
                 const orderPaid = { ...order, payments }

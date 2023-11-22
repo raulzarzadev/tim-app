@@ -21,7 +21,7 @@ const ModalPayment = ({
   disabled?: boolean
   onCloseParent?: () => void
 }) => {
-  const modalPayment = useModal({ title: 'Pagar ' })
+  const modalPayment = useModal({ title: 'Pagar' })
   const { handlePay, onClearOrder } = useCashboxContext()
   const { currentCompany } = useUserCompaniesContext()
   const USD_PRICE = currentCompany?.usdPrice || 1

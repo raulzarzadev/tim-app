@@ -13,6 +13,8 @@ export const totalCharged = (payments: Partial<Payment>[]) => {
       } else {
         total += charged
       }
+
+      total -= rest
     }
   )
   return total
