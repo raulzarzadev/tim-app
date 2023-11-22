@@ -5,18 +5,20 @@ import { useForm } from 'react-hook-form'
 import { dateFormat, inputDateFormat } from '@/lib/utils-date'
 import { Balance } from '@/types/balance'
 
-const nowDate = new Date()
-const defaultBalance: Balance = {
-  from: nowDate,
-  to: nowDate,
-  cashier: 'all'
-}
+//const nowDate = new Date()
 
 const BalanceForm = ({
   onCalculateBalance
 }: {
   onCalculateBalance: (balance: Balance) => void
 }) => {
+  const nowDate = new Date()
+
+  const defaultBalance: Balance = {
+    from: nowDate,
+    to: nowDate,
+    cashier: 'all'
+  }
   const { register, handleSubmit, watch, setValue } = useForm({
     defaultValues: defaultBalance
   })
