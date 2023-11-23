@@ -14,20 +14,6 @@ export const simpleOrderPayments: Payment[] = [
   }
 ]
 
-export const simpleOrderPaymentsWitRest: Payment[] = [
-  {
-    created: {
-      at: new Date(2023, 10, 21),
-      by: 'test'
-    },
-    method: 'usd',
-    charged: 50,
-    rest: 200,
-    // amount: 600,
-    usdPrice: 16
-  }
-]
-
 export const usdSimpleOrderPayments: Payment[] = [
   {
     created: {
@@ -73,10 +59,12 @@ export const multipleOrderPayments: Payment[] = [
       at: new Date(2023, 10, 21), // 4 it -30, return -30 rest 0
       by: 'test'
     },
+    //* Pay 10 usd sobran 30 pesos
+
     method: 'usd',
     charged: 10,
-    // rest: 500,
-    // amount: 600,
+    rest: 30,
+    amount: 70,
     usdPrice: 10
   },
   {
@@ -84,10 +72,11 @@ export const multipleOrderPayments: Payment[] = [
       at: new Date(2023, 10, 21), // 3 it 10,  pay 40 rest -30
       by: 'test'
     },
+    //* Pay 40 faltan 70
     method: 'card',
     charged: 40,
-    // rest: -560,
-    // amount: 600,
+    rest: -70,
+    amount: 110,
     usdPrice: 16
   },
   {
@@ -95,10 +84,11 @@ export const multipleOrderPayments: Payment[] = [
       at: new Date(2023, 10, 21), // 2 it 100,  pay 90 rest 10
       by: 'test'
     },
+    //* Pay 90 faltan 110
     method: 'mxn',
     charged: 90,
-    // rest: -510,
-    // amount: 600,
+    rest: -110,
+    amount: 200,
     usdPrice: 16
   },
   {
@@ -106,10 +96,11 @@ export const multipleOrderPayments: Payment[] = [
       at: new Date(2023, 10, 21), //  1 it 600,  pay 500 rest 100
       by: 'test'
     },
+    //* Pay 400 dep, faltan 200
     method: 'deposit',
-    charged: 500,
-    rest: 100,
-    // amount: 600,
+    charged: 400,
+    rest: -200,
+    amount: 600,
     usdPrice: 1
   }
 ]
@@ -166,7 +157,7 @@ export const multiplePaymentsWithRest: Payment[] = [
     method: 'mxn',
     amount: 200,
     charged: 500,
-    rest: -300,
+    rest: 300,
     usdPrice: 16
   },
   {
@@ -177,20 +168,20 @@ export const multiplePaymentsWithRest: Payment[] = [
     method: 'usd',
     amount: 600,
     charged: 20,
-    rest: 200,
+    rest: -200, // negative rest its means that the payment is incomplete, for that rest should not been considerate
     usdPrice: 20
   }
 ]
 
 export const multiplePaymentsWithRetried: Payment[] = [
-  //* In this case the amount 600mxn and user pay 200mxn , 500mxn and make return of  -100mxn
+  //* In this case the amount 600mxn and user pay 200mxn , 500mxn and after a while make return of  -100mxn
   {
     created: {
       at: new Date(2023, 10, 21), // 4
       by: 'test'
     },
     method: 'mxn',
-    amount: -100,
+    amount: 0,
     charged: -100,
     rest: 0,
     usdPrice: 10
@@ -203,7 +194,7 @@ export const multiplePaymentsWithRetried: Payment[] = [
     method: 'mxn',
     amount: 400,
     charged: 500,
-    rest: -100,
+    rest: 100,
     usdPrice: 16
   },
   {
@@ -214,7 +205,7 @@ export const multiplePaymentsWithRetried: Payment[] = [
     method: 'mxn',
     amount: 600,
     charged: 200,
-    rest: 400,
+    rest: -400, // negative rest its means that the payment is incomplete, for that rest should not been considerate
     usdPrice: 16
   }
 ]

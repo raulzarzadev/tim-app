@@ -45,8 +45,11 @@ export type Payment = {
   discount?: number
   charged?: number
   amount?: number //** this should be not necessary */
-  rest?: number //** this should be not necesary */
+  // // ** rest this should be not necessary * /
+  //** rest now its necessary to calculate balance. and for show the correct value in order details.   */
+  rest?: number
   ref?: string
+  totalPaid?: number
   created: {
     by: UserType['id']
     at: Date | Timestamp

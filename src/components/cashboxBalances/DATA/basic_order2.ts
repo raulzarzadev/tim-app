@@ -51,7 +51,7 @@ export const basic_order2: Order = {
       },
       method: 'usd',
       charged: 50, //50*16.5=825
-      rest: -125,
+      rest: 125,
       amount: 700,
       usdPrice: 16.5,
       id: '1'
@@ -65,7 +65,8 @@ export const basic_order2: Order = {
       },
       method: 'mxn',
       charged: 500,
-      rest: 700,
+      //* negative quantities means that the payment is incomplete, for that rest should not been considerate
+      rest: -700,
       amount: 1200,
       usdPrice: 1
     }

@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material'
+import { Box, IconButton, Tooltip, Typography } from '@mui/material'
 import CurrencySpan from '../CurrencySpan'
 import { BalanceData } from '@/types/balance'
 import ErrorBoundary from '../ErrorBoundary'
@@ -11,8 +11,10 @@ import MyTable from '../MyTable'
 import OrderDetails from '../OrderDetails'
 import dictionary from '@/CONSTS/dictionary'
 import StaffSpan from '../StaffSpan'
+import AppIcon from '../AppIcon'
 
 const BalanceCard = ({ balance }: { balance: BalanceData }) => {
+  console.log({ balance })
   return (
     <Box>
       <ErrorBoundary componentName="BalanceCard">
@@ -60,6 +62,17 @@ const BalanceCard = ({ balance }: { balance: BalanceData }) => {
             </div>
           </Typography>
         ))}
+        <Typography
+          variant="h5"
+          className="text-center mt-4 place-items-start flex justify-center"
+        >
+          Total: <CurrencySpan quantity={balance.paymentsMethods?.total} />
+          <Tooltip title="Este monto puede variar, según el precio del dólar en cada transacción.">
+            <IconButton size="small">
+              <AppIcon icon="info" className="text-sm text-blue-400" />
+            </IconButton>
+          </Tooltip>
+        </Typography>
         <AccordionSections
           sections={[
             {
@@ -88,7 +101,7 @@ const BalanceCard = ({ balance }: { balance: BalanceData }) => {
                       },
                       {
                         label: 'Monto',
-                        key: 'amount',
+                        key: 'totalPaid',
                         format: (value) => <CurrencySpan quantity={value} />
                       },
                       {

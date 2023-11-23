@@ -1,4 +1,5 @@
 import { PaymentMethods } from '@/CONSTS/paymentMethods'
+import asNumber from '@/lib/asNumber'
 import forceAsDate from '@/lib/forceAsDate'
 import { Balance, BalanceData } from '@/types/balance'
 import { Order, Payment } from '@/types/order'
@@ -13,8 +14,9 @@ export const totalCharged = (payments: Partial<Payment>[]) => {
       } else {
         total += charged
       }
-
-      total -= rest
+      if (rest > 0) {
+        total -= rest
+      }
     }
   )
   return total
@@ -27,12 +29,14 @@ export const splitPaymentsByMethods = (
     (acc, { method = 'mxn', charged = 0, usdPrice = 1, rest = 0 } = {}) => {
       if (method === 'usd') {
         let totalSum = acc.total + charged * usdPrice
-        //* should rest from mxn because the rest cant be in dollars
-
         let mxnTotal = acc['mxn']
-        if (rest < 0) {
-          totalSum += rest
-          mxnTotal += rest
+
+        //* should rest from mxn because the rest cant be in dollars
+        //* negative rest means that the payment is incomplete, for that rest should not been considerate
+
+        if (rest > 0) {
+          totalSum -= rest
+          mxnTotal -= rest
         }
         return {
           ...acc,
@@ -44,9 +48,9 @@ export const splitPaymentsByMethods = (
 
       let total = acc.total + charged
       let methodSum = acc[method] + charged
-      if (rest < 0) {
-        total += rest
-        methodSum += rest
+      if (rest > 0) {
+        total -= rest
+        methodSum -= rest
       }
       const res = {
         ...acc,
@@ -102,6 +106,15 @@ export const getPaymentsCreatedBy = (
   return filteredByDate
 }
 
+export const totalPaid = (p: Partial<Payment>) => {
+  if (p.method === 'usd') {
+    p.totalPaid = asNumber(p.amount) * asNumber(p.usdPrice) - asNumber(p.rest)
+  } else {
+    p.totalPaid = asNumber(p.amount) - asNumber(p.rest)
+  }
+  return p.totalPaid
+}
+
 export const calculateBalance = (
   balance: Balance,
   companyOrders?: Partial<Order>[]
@@ -131,6 +144,13 @@ export const calculateBalance = (
       )
     }
   })
+
+  //* Calculate and add totalPaid property to show easier the amount in tables and info
+  balancePayments.map((p) => {
+    p.totalPaid = totalPaid(p)
+    return p
+  })
+
   const items: any[] =
     balanceOrders?.map((o) => o?.items?.map((i) => ({ ...i })) || []).flat() ||
     []

@@ -7,13 +7,14 @@ import { dateFormat } from '@/lib/utils-date'
 import forceAsDate from '@/lib/forceAsDate'
 import Modal from '../Modal'
 import useModal from '@/hooks/useModal'
-import { balanceItemsData, calculateBalance } from './balance.lib'
+import { balanceItemsData } from './balance.lib'
 import BalanceCard from './BalanceCard'
 import { Typography } from '@mui/material'
 import ErrorBoundary from '../ErrorBoundary'
+import { calculateBalance } from './calculateBalance.lib'
 
 const BalancesTable = () => {
-  const { currentCompany } = useUserCompaniesContext()
+  const { currentCompany, orders } = useUserCompaniesContext()
   const [balances, setBalances] = useState<BalanceType[]>()
   useEffect(() => {
     listenCompanyBalances(currentCompany?.id || '', setBalances)
@@ -45,38 +46,27 @@ const BalancesTable = () => {
     ],
     body: balances || []
   }
-  const modal = useModal({ title: 'Detalle de corte' })
-  const [balanceDetails, setBalanceDetails] = useState<BalanceData>()
-  const onRowClick = (balanceId: string) => {
-    modal.onOpen()
-    const balance = balances?.find((b) => b.id === balanceId)
-    const balanceData = calculateBalance(
-      {
-        from: forceAsDate(balance?.from),
-        to: forceAsDate(balance?.to),
-        cashier: balance?.cashier || ''
-      },
-      balance?.orders
-    )
-    const itemsData = balanceItemsData(
-      balanceData?.items || [],
-      currentCompany?.articles || []
-    )
-    setBalanceDetails({ ...balanceData, ...balance, itemsStats: itemsData })
-  }
+
   if (balances === undefined) return <div>Cargando...</div>
   if (table.body.length === 0) return <div>No hay balances aún</div>
   return (
     <div>
       <ErrorBoundary componentName="BalancesTable">
-        <MyTable data={table} onRowClick={onRowClick} />
-        <Modal {...modal}>
+        <MyTable
+          modalTitle="Detalles de corte"
+          modalChildren={(value) => {
+            const b = calculateBalance(value, value?.orders || [])
+            return <BalanceCard balance={b} />
+          }}
+          data={table}
+        />
+        {/* <Modal {...modal}>
           {balanceDetails ? (
             <BalanceCard balance={balanceDetails} />
           ) : (
             <Typography>No hay detalles de este corte</Typography>
           )}
-        </Modal>
+        </Modal> */}
       </ErrorBoundary>
     </div>
   )

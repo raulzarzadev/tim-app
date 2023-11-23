@@ -11,9 +11,14 @@ import OrderStatus from './OrderStatus'
 import dictionary from '@/CONSTS/dictionary'
 import AccordionSections from './AccordionSections'
 import OrderReports from './OrderReports'
-import { totalCharged } from './cashboxBalances/calculateBalance.lib'
+import { totalCharged, totalPaid } from './cashboxBalances/calculateBalance.lib'
+import CurrencySpan from './CurrencySpan'
 
 const OrderDetails = ({ order }: { order?: Partial<Order> }) => {
+  order?.payments?.map((p) => {
+    p.totalPaid = totalPaid(p)
+    return p
+  })
   const items = order?.items?.map((i) => {
     // @ts-ignore FIXME: quantity should not be in item
     if (i.qty || i.quantity) {
@@ -101,7 +106,8 @@ const OrderDetails = ({ order }: { order?: Partial<Order> }) => {
                           },
                           {
                             label: 'Monto',
-                            key: 'amount'
+                            key: 'totalPaid',
+                            format: (value) => <CurrencySpan quantity={value} />
                           },
                           {
                             label: 'Metodo',

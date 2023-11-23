@@ -52,7 +52,7 @@ export const basic_order3: Order = {
       },
       method: 'card',
       charged: 64.5,
-      rest: 64.5,
+      rest: 0,
       amount: 64.5,
       usdPrice: 16.5
     },
@@ -65,7 +65,7 @@ export const basic_order3: Order = {
       },
       method: 'deposit',
       charged: 50,
-      rest: 64.5,
+      rest: -64.5,
       amount: 114.5,
       usdPrice: 16.5
     },
@@ -77,8 +77,8 @@ export const basic_order3: Order = {
         by: 'test-3'
       },
       method: 'usd',
-      charged: 10,
-      rest: 114.5,
+      charged: 10, //* 165 mxn
+      rest: -114.5,
       amount: 279.5,
       usdPrice: 16.5
     },
@@ -91,7 +91,7 @@ export const basic_order3: Order = {
       },
       method: 'mxn',
       charged: 20.5,
-      rest: 279.5,
+      rest: -279.5,
       amount: 300,
       usdPrice: 16.5
     }

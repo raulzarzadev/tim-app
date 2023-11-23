@@ -58,7 +58,7 @@ export const basic_order: Order = {
       },
       method: 'mxn',
       charged: 100,
-      rest: 100,
+      rest: 0,
       amount: 200,
       usdPrice: 1
     }
