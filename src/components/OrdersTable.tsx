@@ -25,6 +25,7 @@ const OrdersTable = ({ orders }: { orders: Partial<Order>[] }) => {
 
   if (!orders) return <>Cargando...</>
   if (orders?.length === 0) return <>No hay ordenes </>
+
   return (
     <div>
       <ErrorBoundary componentName="OrdersTable ">
@@ -111,7 +112,13 @@ const OrdersTable = ({ orders }: { orders: Partial<Order>[] }) => {
               {
                 label: 'Asignado',
                 key: 'shipping.assignedToEmail',
-                value: (v) => v,
+                value: (v) => {
+                  const staffName =
+                    currentCompany?.staff?.find((s) => s.email === v)?.name ||
+                    ''
+
+                  return staffName || v
+                },
                 format: (email) => <StaffSpan email={email} />
               }
             ],

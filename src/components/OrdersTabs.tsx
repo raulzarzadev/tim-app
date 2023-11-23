@@ -3,9 +3,14 @@ import BasicTabs from './BasicTabs'
 import OrdersTable from './OrdersTable'
 import { isBefore } from 'date-fns'
 import { rentFinishAt } from '@/context/userCompaniesContext2'
+import { TextField } from '@mui/material'
+import SearchInput from './SearchInput'
+import _, { flatMap, flatten } from 'lodash'
+import searchValueInObject from '@/lib/searchValueInObject'
+import { useEffect, useState } from 'react'
 
 const OrdersTabs = ({ orders }: { orders: Partial<Order>[] }) => {
-  const ordersWithFinishRent = orders?.map((o) => {
+  const ordersWithFinishRentAt = orders?.map((o) => {
     return {
       ...o,
       items: o?.items?.map((i) => ({
@@ -23,21 +28,43 @@ const OrdersTabs = ({ orders }: { orders: Partial<Order>[] }) => {
     }
   })
 
-  const actives = ordersWithFinishRent?.filter((o) =>
+  const handleSearch = (search: string) => {
+    const r = ordersWithFinishRentAt.filter((o) =>
+      searchValueInObject(o, search)
+    )
+    console.log({ r })
+    if (search === '') {
+      setFiltered(ordersWithFinishRentAt || [])
+    } else {
+      setFiltered(r)
+    }
+  }
+
+  const [filtered, setFiltered] = useState<Partial<Order>[]>(
+    ordersWithFinishRentAt
+  )
+
+  const actives = filtered?.filter((o) =>
     o?.items?.some((i) => i?.rentStatus === 'taken')
   )
-  const pending = ordersWithFinishRent?.filter((o) =>
+  const pending = filtered?.filter((o) =>
     o?.items?.some((i) => i?.rentStatus === 'pending' || !i.rentStatus)
   )
-  const finished = ordersWithFinishRent?.filter((o) =>
+  const finished = filtered?.filter((o) =>
     o?.items?.some((i) => i?.rentStatus === 'finished')
   )
-  const expired = ordersWithFinishRent?.filter((o) =>
+  const expired = filtered?.filter((o) =>
     o?.items?.some((i) => i?.rentStatus === 'expired')
   )
 
+  //console.log({ filtered })
+
   return (
     <div>
+      <SearchInput
+        placeholder="Buscar en todas las pestañas (nombre, teléfono, email)"
+        handleSetSearch={handleSearch}
+      />
       <BasicTabs
         tabs={[
           {
@@ -57,8 +84,8 @@ const OrdersTabs = ({ orders }: { orders: Partial<Order>[] }) => {
             content: <OrdersTable orders={finished || []} />
           },
           {
-            label: `Todas ${orders?.length}`,
-            content: <OrdersTable orders={ordersWithFinishRent || []} />
+            label: `Todas ${filtered?.length}`,
+            content: <OrdersTable orders={filtered || []} />
           }
         ]}
       />

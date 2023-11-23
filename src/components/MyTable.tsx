@@ -4,6 +4,7 @@ import ErrorBoundary from './ErrorBoundary'
 import { TextField, Typography } from '@mui/material'
 import Modal from './Modal'
 import useModal from '@/hooks/useModal'
+import SearchInput from './SearchInput'
 
 export type MyTableData = {
   headers: {
@@ -70,7 +71,12 @@ const MyTable = ({
   return (
     <>
       {modalChildren && <Modal {...modal}>{modalChildren(rowSelected)}</Modal>}
-      {search && <SearchInput handleSetSearch={handleSearch} />}
+      {search && (
+        <SearchInput
+          handleSetSearch={handleSearch}
+          placeholder="Buscar en esta tabla"
+        />
+      )}
       <div className="overflow-x-auto">
         {title && <Typography variant="h6">{title}</Typography>}
 
@@ -115,36 +121,6 @@ const MyTable = ({
           </table>
         </ErrorBoundary>
       </div>
-    </>
-  )
-}
-
-const SearchInput = ({
-  handleSetSearch
-}: {
-  handleSetSearch?: (value: string) => void
-}) => {
-  const [inputValue, setInputValue] = useState('')
-
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      handleSetSearch?.(inputValue)
-    }, 800)
-    return () => clearTimeout(timeoutId)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [inputValue])
-
-  return (
-    <>
-      <TextField
-        size="small"
-        fullWidth
-        placeholder="Buscar"
-        value={inputValue}
-        onChange={(e) => {
-          setInputValue(e.target.value)
-        }}
-      />
     </>
   )
 }
