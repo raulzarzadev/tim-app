@@ -3,11 +3,9 @@ import BasicTabs from './BasicTabs'
 import OrdersTable from './OrdersTable'
 import { isBefore } from 'date-fns'
 import { rentFinishAt } from '@/context/userCompaniesContext2'
-import { TextField } from '@mui/material'
 import SearchInput from './SearchInput'
-import _, { flatMap, flatten } from 'lodash'
 import searchValueInObject from '@/lib/searchValueInObject'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 const OrdersTabs = ({ orders }: { orders: Partial<Order>[] }) => {
   const ordersWithFinishRentAt = orders?.map((o) => {
@@ -32,7 +30,6 @@ const OrdersTabs = ({ orders }: { orders: Partial<Order>[] }) => {
     const r = ordersWithFinishRentAt.filter((o) =>
       searchValueInObject(o, search)
     )
-    console.log({ r })
     if (search === '') {
       setFiltered(ordersWithFinishRentAt || [])
     } else {
@@ -40,9 +37,7 @@ const OrdersTabs = ({ orders }: { orders: Partial<Order>[] }) => {
     }
   }
 
-  const [filtered, setFiltered] = useState<Partial<Order>[]>(
-    ordersWithFinishRentAt
-  )
+  const [filtered, setFiltered] = useState<Partial<Order>[]>([])
 
   const actives = filtered?.filter((o) =>
     o?.items?.some((i) => i?.rentStatus === 'taken')
@@ -56,8 +51,6 @@ const OrdersTabs = ({ orders }: { orders: Partial<Order>[] }) => {
   const expired = filtered?.filter((o) =>
     o?.items?.some((i) => i?.rentStatus === 'expired')
   )
-
-  //console.log({ filtered })
 
   return (
     <div>

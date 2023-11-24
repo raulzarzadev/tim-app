@@ -37,7 +37,6 @@ const ModalBalanceForm = () => {
     }
     try {
       const res = await createBalance(newBalance)
-      console.log({ res })
     } catch (error) {
       setSaved(false)
       console.error(error)

@@ -14,7 +14,6 @@ import StaffSpan from '../StaffSpan'
 import AppIcon from '../AppIcon'
 
 const BalanceCard = ({ balance }: { balance: BalanceData }) => {
-  console.log({ balance })
   return (
     <Box>
       <ErrorBoundary componentName="BalanceCard">
