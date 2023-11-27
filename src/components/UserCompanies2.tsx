@@ -7,7 +7,7 @@ import ModalConfirm from './ModalConfirm'
 
 const UserCompanies = () => {
   const { userCompanies } = useUserCompaniesContext()
-
+  console.log({ userCompanies })
   if (userCompanies.length === 0) {
     return <p>Aun no tienes una empresa.</p>
   }

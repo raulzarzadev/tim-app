@@ -1,7 +1,11 @@
 import {
+  confirmPasswordReset,
+  createUserWithEmailAndPassword,
   getAuth,
   GoogleAuthProvider,
   onAuthStateChanged,
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
   signInWithPopup,
   signOut
 } from 'firebase/auth'
@@ -83,6 +87,75 @@ export async function googleLogin() {
       throw new Error('error in google login')
       return null
     })
+}
+
+export async function createUserWithPassword({
+  email,
+  password,
+  name
+}: {
+  email: string
+  password: string
+  name: string
+}) {
+  return createUserWithEmailAndPassword(auth, email, password)
+    .then(async (userCredential) => {
+      // Signed in
+      const user = userCredential.user
+
+      if (user) {
+        const dbUser = await findUserByEmail({ email: user.email || '' })
+        if (dbUser) return dbUser
+
+        const newUser = await setUser(user.uid, {
+          name: user.displayName || name || '',
+          email: user.email || '',
+          rol: 'CLIENT',
+          image: user.photoURL || ''
+        })
+
+        return newUser
+      }
+      // ...
+    })
+    .catch((error) => {
+      const errorCode = error.code
+      const errorMessage = error.message
+      console.error({ errorCode, errorMessage })
+      // ..
+    })
+}
+
+export const passwordReset = async (email: string) => {
+  return await sendPasswordResetEmail(auth, email)
+}
+
+export const confirmThePasswordReset = async (
+  oobCode: string,
+  newPassword: string
+) => {
+  if (!oobCode && !newPassword) return
+  return await confirmPasswordReset(auth, oobCode, newPassword)
+}
+
+export async function signInWithPassword({
+  email,
+  password
+}: {
+  email: string
+  password: string
+}) {
+  return signInWithEmailAndPassword(auth, email, password)
+  // .then((userCredential) => {
+  //   // Signed in
+  //   const user = userCredential.user
+  //   // ...
+  // })
+  // .catch((error) => {
+  //   const errorCode = error.code
+  //   const errorMessage = error.message
+  //   console.error({ errorCode, errorMessage })
+  // })
 }
 
 export async function logout() {
