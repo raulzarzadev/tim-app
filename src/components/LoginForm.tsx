@@ -53,7 +53,7 @@ export default function LoginForm({
 
     signInWithPassword(loginData)
       .then((res) => {
-        console.log(res)
+        //console.log(res)
       })
       .catch((err) => {
         console.log('login error')

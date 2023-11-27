@@ -48,7 +48,7 @@ export default function SignUpForm({ onLogin }: { onLogin?: () => void }) {
     }
     await createUserWithPassword(userData)
       .then((res) => {
-        console.log(res)
+        //console.log(res)
       })
       .catch((err) => {
         console.log('sign-up error')

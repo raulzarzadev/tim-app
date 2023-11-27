@@ -34,6 +34,8 @@ import ReceiptLongIcon from '@mui/icons-material/ReceiptLong'
 // https://mui.com/material-ui/material-icons/
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd'
 import ChangeCircleIcon from '@mui/icons-material/ChangeCircle'
+import GoogleIcon from '@mui/icons-material/Google'
+
 const icons = {
   myOrder: AssignmentIndIcon,
   add: AddIcon,
@@ -69,7 +71,8 @@ const icons = {
   location: LocationOnIcon,
   addComment: AddCommentIcon,
   order: ReceiptLongIcon,
-  change: ChangeCircleIcon
+  change: ChangeCircleIcon,
+  google: GoogleIcon
 } as const
 
 // https://mui.com/material-ui/material-icons/

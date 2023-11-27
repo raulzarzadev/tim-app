@@ -11,6 +11,7 @@ import LoginForm from './LoginForm'
 import { useState } from 'react'
 import SignUpForm from './SignUpForm'
 import ForgotPasswordForm from './ForgotPasswordForm'
+import AppIcon from './AppIcon'
 const LoginButton = () => {
   const modal = useModal({ title: 'Ingresar' })
 
@@ -59,6 +60,7 @@ const LoginButton = () => {
               style={{
                 backgroundColor: '#4285F4'
               }}
+              endIcon={<AppIcon icon="google" />}
             >
               <span className="truncate">Google</span>
             </Button>
