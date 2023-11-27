@@ -115,19 +115,28 @@ const OrderActions = ({
 
     try {
       setLoading(true)
+      //* 1. finish rent
       const resFinish = await finishOrderRent(orderId)
+      //* 2. update status
       const resRenew = await updateOrder(orderId, { status: 'renewed' })
+      //* 3. update items with start rent (is when last order should  finished)
       const updatedItems = order?.items?.map((i) => {
         const rentFinishedAt = rentFinishAt(i.rentStartedAt, i.qty || 0, i.unit)
         if (i.rentStatus === 'taken') i.rentStartedAt = rentFinishedAt
         return i
       })
+      //* 4. start new rent
       const resCreateRent = await createOrder({
         changes: order?.changes || [],
         companyId: currentCompany?.id || '',
         items: updatedItems || [],
         payments: [],
-        shipping: order?.shipping || {},
+        shipping: {
+          address: order?.shipping?.address || '',
+          amount: order?.shipping?.amount || 0,
+          assignedToEmail: order?.shipping?.assignedToEmail || ''
+          // date: order?.shipping?.date || new Date()
+        },
         client: order?.client || {}
       })
       console.log([resRenew, resFinish, resCreateRent])
@@ -148,31 +157,33 @@ const OrderActions = ({
       <Typography variant="h5" className="mt-4">
         Acciones de orden
       </Typography>
-      {status === 'expired' && (
-        <div className="my-4">
-          <ModalConfirm
-            modalTitle="Renovar orden"
-            fullWidth
-            handleConfirm={() => {
-              console.log('renovar', { order })
+      <div className="grid grid-cols-2 gap-2 my-2">
+        {status === 'expired' && (
+          <div className="col-span-2">
+            <ModalConfirm
+              modalTitle="Renovar orden"
+              fullWidth
+              handleConfirm={() => {
+                console.log('renovar', { order })
 
-              handleRenewRent()
-            }}
-            label="Renovar"
-            acceptLabel="Renovar orden"
-          >
-            <OrderDetails order={order} />
-          </ModalConfirm>
+                handleRenewRent()
+              }}
+              label="Renovar"
+              acceptLabel="Renovar orden"
+            >
+              <OrderDetails order={order} />
+            </ModalConfirm>
+          </div>
+        )}
+        <div className="col-span-2">
+          <ModalPayment
+            amount={totalOrder}
+            setPayment={handlePayOrder}
+            fullWidth
+          />
         </div>
-      )}
-      <div className="my-4">
-        <ModalPayment
-          amount={totalOrder}
-          setPayment={handlePayOrder}
-          fullWidth
-        />
-      </div>
-      <div className="grid grid-cols-2">
+
+        {/* BUTTONS AREA */}
         <ServiceForm
           companyId={currentCompany?.id || ''}
           orderId={orderId}
@@ -191,6 +202,7 @@ const OrderActions = ({
             }
           }}
         />
+
         <AssignForm
           handleAssign={async (email, date) => {
             try {
@@ -213,18 +225,6 @@ const OrderActions = ({
           }}
           assignedTo={order?.shipping?.assignedToEmail}
         />
-      </div>
-      <div className="grid gap-2 my-6 sm:grid-flow-col ">
-        {/* <Button
-          variant="outlined"
-          disabled={loading || !itemsPending}
-          onClick={(e) => {
-            e.preventDefault()
-            handleStartRent()
-          }}
-        >
-          Comenzar renta
-        </Button> */}
         <ModalStartRent
           disabled={disabledStartRent}
           orderId={orderId}
@@ -237,11 +237,10 @@ const OrderActions = ({
             e.preventDefault()
             handleFinishRent()
           }}
+          fullWidth
         >
           Finalizar renta
         </Button>
-      </div>
-      <div className="w-full flex grid-cols-2 gap-4 my-6">
         <ModalConfirm
           fullWidth
           label="Cancelar orden"

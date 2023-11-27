@@ -5,7 +5,7 @@ import { isBefore } from 'date-fns'
 import { rentFinishAt } from '@/context/userCompaniesContext2'
 import SearchInput from './SearchInput'
 import searchValueInObject from '@/lib/searchValueInObject'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const OrdersTabs = ({ orders }: { orders: Partial<Order>[] }) => {
   const ordersWithFinishRentAt = orders?.map((o) => {
@@ -38,6 +38,11 @@ const OrdersTabs = ({ orders }: { orders: Partial<Order>[] }) => {
   }
 
   const [filtered, setFiltered] = useState<Partial<Order>[]>([])
+
+  useEffect(() => {
+    setFiltered(ordersWithFinishRentAt)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [orders])
 
   const actives = filtered?.filter((o) =>
     o?.items?.some((i) => i?.rentStatus === 'taken')

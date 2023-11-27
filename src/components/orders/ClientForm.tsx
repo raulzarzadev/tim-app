@@ -65,7 +65,8 @@ const ClientForm = ({
             label="Nombre"
             required
             className="w-full"
-          />{' '}
+          />
+
           {searchClient && (
             <div>
               <SearchClient

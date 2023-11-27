@@ -10,6 +10,7 @@ import forceAsDate from '@/lib/forceAsDate'
 import { dateFormat } from '@/lib/utils-date'
 import { orderStatus } from '@/lib/orderStatus'
 import { Timestamp } from 'firebase/firestore'
+import { useState } from 'react'
 
 const AssignForm = ({
   assignTo,
@@ -25,8 +26,8 @@ const AssignForm = ({
   const modal = useModal({ title: 'Asignar responsable' })
 
   return (
-    <>
-      <Button onClick={modal.onOpen} variant="contained">
+    <div className="flex w-full justify-center ">
+      <Button onClick={modal.onOpen} variant="contained" fullWidth>
         {assignedTo ? (
           <span>
             Asignado a: <StaffSpan email={assignedTo || ''} />
@@ -51,7 +52,7 @@ const AssignForm = ({
           </Button>
         </div>
       </Modal>
-    </>
+    </div>
   )
 }
 
@@ -184,11 +185,20 @@ const Day = ({
   orders?: Order[]
 }) => {
   const date = addDays(new Date(), days)
+  // const assigning = <div>Asignando</div>
+  const [assigning, setAssigning] = useState(false)
+  const handleAssign = () => {
+    onClickDay?.(date)
+    setAssigning(true)
+    setTimeout(() => {
+      setAssigning(false)
+    }, 500)
+  }
   return (
     <div>
       <button
         onClick={() => {
-          onClickDay?.(date)
+          handleAssign()
         }}
         className="flex flex-col justify-center items-center cursor-pointer hover:font-bold h-10"
       >
@@ -198,6 +208,10 @@ const Day = ({
       {assignedAt && isSameDay(date, forceAsDate(assignedAt)) && (
         <div className="h-10 w-full bg-blue-300 mt-2"></div>
       )}
+      <div className="h-2  ">
+        <span className="text-xs ">{assigning && 'Asingando...'}</span>
+      </div>
+
       {orders?.map((order) => (
         <div key={order.id}>
           {isSameDay(date, forceAsDate(order.shipping.date)) && (

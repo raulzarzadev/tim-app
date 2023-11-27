@@ -49,7 +49,7 @@ const ServiceForm = ({
   }
 
   return (
-    <div className="flex w-full justify-center my-4">
+    <div className="flex w-full justify-center">
       <ModalConfirm
         fullWidth
         color="error"
