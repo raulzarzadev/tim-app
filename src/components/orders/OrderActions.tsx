@@ -41,7 +41,6 @@ const OrderActions = ({
   const itemsInUse = order?.items?.some((i) => i.rentStatus === 'taken')
 
   const totalOrder = calculateOrderTotal({ company: currentCompany, order })
-
   const [loading, setLoading] = useState(false)
   const handleStartRent = async () => {
     try {
