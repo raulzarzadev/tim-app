@@ -35,7 +35,14 @@ class ErrorBoundary extends Component<Props, State> {
   render() {
     if (this.state.hasError) {
       // You can render any custom fallback UI
-      return this.props.fallback || <>¡Ups! Hubo un problema.</>
+      return (
+        this.props.fallback || (
+          <div className="text-center">
+            <p>¡Ups! Hubo un problema.</p>
+            <button onClick={() => window.location.reload()}>Recargar</button>
+          </div>
+        )
+      )
     }
 
     return this.props.children || <>No component</>
