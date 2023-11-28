@@ -209,10 +209,17 @@ export function UserCompaniesProvider({
       i?.rentStatus === 'taken' && isAfter(i?.rentFinishAt as Date, new Date())
   )
 
+  //* get user companies but clear duplicates
+  const userCompanies = [...userOwnCompanies, ...staffCompanies].filter(
+    (o, i, self) => {
+      return self.findIndex((t) => t.id === o.id) === i
+    }
+  )
+
   return (
     <UserCompaniesContext.Provider
       value={{
-        userCompanies: [...userOwnCompanies, ...staffCompanies],
+        userCompanies,
         companySelected,
         setCompanySelected: handleSetCompanySelected,
         currentCompany,
