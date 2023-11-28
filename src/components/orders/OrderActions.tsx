@@ -70,6 +70,7 @@ const OrderActions = ({
   }
 
   const handleSaveOrder = async (order: Partial<Order>) => {
+    console.log({ order })
     try {
       setLoading(true)
       const res = await updateOrder(orderId, order)

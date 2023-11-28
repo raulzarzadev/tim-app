@@ -8,7 +8,6 @@ import searchValueInObject from '@/lib/searchValueInObject'
 import { useEffect, useState } from 'react'
 
 const OrdersTabs = ({ orders }: { orders: Partial<Order>[] }) => {
-  console.log({ orders })
   const ordersWithFinishRentAt = orders?.map((o) => {
     return {
       ...o,

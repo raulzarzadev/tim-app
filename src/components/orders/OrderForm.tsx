@@ -73,6 +73,8 @@ const OrderForm = ({
           : ('pending' as ItemSelected['rentStatus'])
       }
     })
+    console.log({ items })
+
     try {
       setSaving(true)
       clientForm.onClose()

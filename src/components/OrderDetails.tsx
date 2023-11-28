@@ -19,6 +19,7 @@ const OrderDetails = ({ order }: { order?: Partial<Order> }) => {
     p.totalPaid = totalPaid(p)
     return p
   })
+
   const items = order?.items?.map((i) => {
     // @ts-ignore FIXME: quantity should not be in item
     if (i.qty || i.quantity) {
@@ -77,6 +78,11 @@ const OrderDetails = ({ order }: { order?: Partial<Order> }) => {
                             label: 'Status',
                             key: 'rentStatus',
                             format: (value) => dictionary(value)
+                          },
+                          {
+                            label: 'Total',
+                            key: 'price',
+                            format: (value) => <CurrencySpan quantity={value} />
                           }
                         ],
                         body: items || []
