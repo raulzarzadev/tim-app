@@ -41,28 +41,44 @@ function a11yProps(index: number) {
 }
 
 function BasicTabs({
+  title = '',
   tabs = []
 }: {
+  title?: string
   tabs: { label: string; content: React.ReactNode }[]
 }) {
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
   const [value, setValue] = React.useState(0)
+  //debugger
+  const tabName = `tab-${title}`
   React.useEffect(() => {
-    searchParams.get('tab') &&
-      setValue(JSON.parse(searchParams.get('tab') || '0'))
+    searchParams.get(tabName) &&
+      setValue(JSON.parse(searchParams.get(tabName) || '0'))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  React.useEffect(() => {
-    const params = new URLSearchParams()
-    params.set('tab', JSON.stringify(value))
-    router.replace(pathname + '?' + params, { scroll: false })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value])
+  // React.useEffect(() => {
+  //   const params = new URLSearchParams()
+  //   params.set(tabName, JSON.stringify(value))
+  //   router.replace(pathname + '?' + params, { scroll: false })
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [value])
+
+  const createQueryString = React.useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams)
+      params.set(name, value)
+      return params.toString()
+    },
+    [searchParams]
+  )
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    router.push(
+      pathname + '?' + createQueryString(tabName, JSON.stringify(newValue))
+    )
     setValue(newValue)
   }
 

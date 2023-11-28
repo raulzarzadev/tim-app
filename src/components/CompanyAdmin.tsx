@@ -38,6 +38,7 @@ const CompanyAdmin = () => {
         </Button>
       </div>
       <BasicTabs
+        title="dashboard"
         tabs={[
           //  { label: 'Clientes ', content: <></> }, //CompanyPayments
           { label: 'Clientes', content: <CompanyClients /> },

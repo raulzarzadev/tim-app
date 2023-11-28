@@ -64,6 +64,7 @@ const OrdersTabs = ({ orders }: { orders: Partial<Order>[] }) => {
         handleSetSearch={handleSearch}
       />
       <BasicTabs
+        title="orders"
         tabs={[
           {
             label: `Pendientes ${pending?.length}`,
