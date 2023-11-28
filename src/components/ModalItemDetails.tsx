@@ -32,7 +32,7 @@ const ModalItemDetails = ({
   return (
     <span>
       <button
-        className=" grid"
+        className=" "
         onClick={(e) => {
           e.preventDefault()
           e.stopPropagation()

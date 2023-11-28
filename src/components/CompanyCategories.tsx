@@ -35,6 +35,9 @@ const CompanyCategories = () => {
 
 const Category = ({ category }: { category: CategoryType }) => {
   const { currentCompany } = useUserCompaniesContext()
+  const categoryItems = currentCompany?.articles?.filter(
+    (article) => article.category === category.name
+  )
   return (
     <Card sx={{ minWidth: 125 }}>
       <CardContent>
@@ -42,8 +45,10 @@ const Category = ({ category }: { category: CategoryType }) => {
           Word of the Day
         </Typography> */}
         <Typography variant="h5" component="div">
-          {category.name}
+          {category.name}{' '}
+          <span className="text-md"> ({categoryItems?.length})</span>
         </Typography>
+
         {/* <Typography sx={{ mb: 0.5 }} color="text.secondary">
           adjective
         </Typography> */}

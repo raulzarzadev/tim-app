@@ -9,9 +9,12 @@ import ModalItemForm from './ModalItemForm'
 
 const CategoryDetails = ({ category }: { category?: CategoryType }) => {
   const { currentCompany } = useUserCompaniesContext()
+  const categoryItems = currentCompany?.articles?.filter(
+    (article) => article.category === category.name
+  )
   if (!currentCompany) return <div>Cargando...</div>
   return (
-    <div>
+    <div className="max-w-md mx-auto">
       <Typography
         component={'h2'}
         className="text-center text-xl font-bold my-4"
@@ -29,8 +32,13 @@ const CategoryDetails = ({ category }: { category?: CategoryType }) => {
         <ModalItemForm label="Nueva unidad" categoryName={category?.name} />
       </div>
       <Typography className="text-center">{category?.description}</Typography>
-      <Typography variant="h5">Precios</Typography>
+      <Typography variant="h5" className="mt-4">
+        Precios
+      </Typography>
       <PricesList prices={category?.prices || []} />
+      <Typography variant="h5" className="mt-4">
+        Unidades <span className="">({categoryItems?.length || 0})</span>
+      </Typography>
 
       {/* <ArticlesList articles={articles || []} companyId={currentCompany?.id} /> */}
       <CategoryItems categoryName={category?.name || ''} />

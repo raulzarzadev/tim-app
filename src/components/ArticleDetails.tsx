@@ -16,22 +16,8 @@ import ItemOrders from './ItemOrders'
 const ArticleDetails = ({ article }: { article?: ItemOrder | ArticleType }) => {
   return (
     <Box className="my-4 text-center">
-      <Typography variant="h6" color="text.primary">
-        {article?.status}
-        {article?.category || ''}
-      </Typography>
-      <Typography
-        variant="h5"
-        component="div"
-        className="items-center flex justify-center mb-2"
-      >
-        {article?.serialNumber}
-        <Typography component={'span'} color="text.secondary">
-          {article?.name}
-        </Typography>{' '}
-      </Typography>
-      <Typography color="text.secondary">{article?.color}</Typography>
       <Box>
+        <ArticleInfo article={article} />
         <AccordionSections
           sections={[
             {
@@ -52,6 +38,33 @@ const ArticleDetails = ({ article }: { article?: ItemOrder | ArticleType }) => {
           ]}
         />
       </Box>
+    </Box>
+  )
+}
+
+export const ArticleInfo = ({
+  article
+}: {
+  article?: ItemOrder | ArticleType
+}) => {
+  console.log({ article })
+  return (
+    <Box className="max-w-md mx-auto text-center">
+      <Typography variant="h6" color="text.primary">
+        {article?.status}
+        {article?.category || ''}
+      </Typography>
+      <Typography
+        variant="h5"
+        component="div"
+        className="items-center flex justify-center mb-2"
+      >
+        {article?.serialNumber}
+        <Typography component={'span'} color="text.secondary">
+          {article?.name}
+        </Typography>{' '}
+      </Typography>
+      <Typography color="text.secondary">{article?.color}</Typography>
     </Box>
   )
 }

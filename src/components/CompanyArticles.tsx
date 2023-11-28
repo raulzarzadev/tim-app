@@ -8,7 +8,7 @@ const CompanyArticles = () => {
   if (!currentCompany) return <div>Cargando...</div>
   return (
     <div>
-      <ModalItemForm label="Unidades" />
+      <ModalItemForm label={`Unidades (${currentCompany.articles?.length})`} />
       <ItemsTable items={currentCompany.articles || []} />
     </div>
   )
