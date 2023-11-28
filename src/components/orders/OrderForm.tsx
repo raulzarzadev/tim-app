@@ -18,6 +18,7 @@ import ButtonClear from '../ButtonClear'
 import { isBefore } from 'date-fns'
 import forceAsDate from '@/lib/forceAsDate'
 import { ItemSelected } from '@/context/useCompanyCashbox'
+import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 
 const OrderForm = ({
   handleSave,
@@ -26,10 +27,12 @@ const OrderForm = ({
   defaultOrder?: Partial<Order>
   handleSave?: (order: Partial<Order>) => Promise<void> | void
 }) => {
+  const { currentCompany } = useUserCompaniesContext()
   const clientForm = useModal({ title: 'Detalles de cliente' })
   const shippingForm = useModal({ title: 'Detalles de entrega' })
   const itemsForm = useModal({ title: 'Unidades' })
   const [saving, setSaving] = useState(false)
+  const [itemsTotal, setItemsTotal] = useState(0)
   const [order, setOrder] = useState<Partial<Order>>({
     items: [],
     // client: {},
@@ -38,27 +41,13 @@ const OrderForm = ({
     // changes: [],
     ...defaultOrder
   })
-  const orderId = order?.id || ''
-
-  const [itemsTotal, setItemsTotal] = useState(0)
-
-  const orderPaymentsCharged =
-    order.payments?.reduce(
-      (acc, { amount = 0, method = 'mxn', usdPrice = 1 }) => {
-        if (method === 'usd') return acc + amount * usdPrice
-        return acc + amount
-      },
-      0
-    ) || 0
 
   // const paymentIsComplete = orderPaymentsCharged >= itemsTotal
 
-  const shippingAmount = asNumber(order?.shipping?.amount) || 0
-  const total = itemsTotal - orderPaymentsCharged + shippingAmount
-  const itemsDisabled: ArticleType['id'][] = []
   const handleClearOrder = () => {
     setOrder({})
   }
+
   const handleSaveOrder = async (order: Partial<Order>) => {
     const rentAlreadyStart =
       order.shipping?.date &&
@@ -95,8 +84,21 @@ const OrderForm = ({
     }
   }
 
-  const disableSave = saving || !order?.client?.name
+  const orderId = order?.id || ''
+  const orderPaymentsCharged =
+    order.payments?.reduce(
+      (acc, { amount = 0, method = 'mxn', usdPrice = 1 }) => {
+        if (method === 'usd') return acc + amount * usdPrice
+        return acc + amount
+      },
+      0
+    ) || 0
 
+  const disableSave = saving || !order?.client?.name
+  const shippingAmount = asNumber(order?.shipping?.amount) || 0
+  const total = itemsTotal - orderPaymentsCharged + shippingAmount
+  const itemsDisabled: ArticleType['id'][] = []
+  const shippingEnabled = currentCompany?.shippingEnabled
   return (
     <div>
       <div className="grid gap-2">
@@ -123,7 +125,11 @@ const OrderForm = ({
           />
         </Modal>
         {/* **** Shipping Form section */}
-        <Button onClick={shippingForm.onOpen} variant="outlined">
+        <Button
+          onClick={shippingForm.onOpen}
+          variant="outlined"
+          disabled={!shippingEnabled}
+        >
           2. Entrega
         </Button>
         {order.shipping && <ShippingDetails shipping={order.shipping} />}

@@ -55,6 +55,7 @@ export default function InputUploadFile({
         <VisuallyHiddenInput
           type="file"
           onChange={(e) => onUploadFile(e.target.files)}
+          accept="image/*"
         />
       </Button>
     </>

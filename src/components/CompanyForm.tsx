@@ -12,6 +12,7 @@ import ErrorBoundary from './ErrorBoundary'
 import useWindowSize from '@/hooks/useWindowSize'
 import InputUploadFile from './InputUploadFile'
 import PreviewImage from './PreviewImage'
+import CheckboxLabel from './Checkbox'
 
 interface IFormInput {
   name: string
@@ -118,6 +119,24 @@ const CompanyForm = ({ company }: { company?: Partial<CompanyType> }) => {
           {...register('contract')}
           label="Contrato"
         />
+        <div
+          className="p-2  !border-gray-400 shadow-sm rounded-md my-4"
+          style={{ border: '1px solid ' }}
+        >
+          <Typography className="mb-4">Configuraciones </Typography>
+          <div>
+            <CheckboxLabel
+              checked={!!formValues?.shippingEnabled}
+              label="Habilitar entregas"
+              // {...register('shippingEnabled')}
+              onChange={(e) => {
+                setValue('shippingEnabled', e.target.checked, {
+                  shouldDirty: true
+                })
+              }}
+            />
+          </div>
+        </div>
         {/* <Controller
         name="iceCreamType"
         control={control}
