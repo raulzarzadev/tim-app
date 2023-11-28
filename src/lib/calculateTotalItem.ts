@@ -53,7 +53,8 @@ export const calculateFullTotal = (
 ) => {
   let total = 0
   // @ts-ignore FIXME: quantity should don´t be defined
-  selectedItems?.forEach(({ qty, quantity, unit, itemId }) => {
+  selectedItems?.forEach(({ qty, quantity, unit, itemId, price }) => {
+    if (price) return (total += asNumber(price))
     if (!unit || !(qty || quantity)) return 0
     const pricesList = fullItems?.find((item) => item?.id == itemId)?.prices
     const defaultUnit = unit || pricesList?.[0].unit

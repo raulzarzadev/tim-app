@@ -17,6 +17,7 @@ export type CompanyBase = {
   contract?: string
   image?: string
   shippingEnabled?: boolean
+  confirmClientData?: boolean
 }
 
 export type CompanyType = BaseType & CompanyBase

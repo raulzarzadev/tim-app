@@ -298,7 +298,7 @@ const ModalStartRent = ({
   handleStartRent: () => void
   disabled: boolean
 }) => {
-  const { orders } = useUserCompaniesContext()
+  const { orders, currentCompany } = useUserCompaniesContext()
   const order = orders?.find((o) => o?.id === orderId)
   //* should be disabled in this seccion if identification and signature are not added
   const handleUpdateClient = async (client: Partial<Client>) => {
@@ -323,6 +323,7 @@ const ModalStartRent = ({
 
   const disabledConfirm =
     !order?.client.imageID || !order?.client.signature || isCanceled
+  const confirmClientData = !!currentCompany?.confirmClientData
   return (
     <div>
       <ModalConfirm
@@ -333,7 +334,7 @@ const ModalStartRent = ({
         modalTitle="Confirmar datos "
         fullWidth
         acceptLabel="Comenzar renta"
-        disabledAccept={disabledConfirm}
+        disabledAccept={confirmClientData ?? disabledConfirm}
       >
         {/* <SelectCompanyItem
           itemsSelected={items?.map((i) => i.itemId || '') || []}
@@ -364,7 +365,7 @@ const ModalStartRent = ({
                         unit: item.unit || 'hour'
                       }
                     }
-                    console.log({ changedItem })
+                    // console.log({ changedItem })
                     try {
                       const res = await changeItem(orderId, changedItem)
                     } catch (error) {
@@ -386,18 +387,20 @@ const ModalStartRent = ({
             if (newClient) return handleUpdateClient(newClient)
           }}
         />
-        <div className="grid place-content-center">
-          {!order?.client.imageID && (
-            <Typography className="" variant="caption">
-              *Imagen de identificación es necesaria
-            </Typography>
-          )}
-          {!order?.client.signature && (
-            <Typography className="" variant="caption">
-              * Firma de cliente es necesaria
-            </Typography>
-          )}
-        </div>
+        {confirmClientData && (
+          <div className="grid place-content-center">
+            {!order?.client.imageID && (
+              <Typography className="" variant="caption">
+                *Imagen de identificación es necesaria
+              </Typography>
+            )}
+            {!order?.client.signature && (
+              <Typography className="" variant="caption">
+                * Firma de cliente es necesaria
+              </Typography>
+            )}
+          </div>
+        )}
       </ModalConfirm>
     </div>
   )

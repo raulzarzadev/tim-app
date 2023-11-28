@@ -66,12 +66,12 @@ const OrderForm = ({
       }
 
       return i
-      // return {
-      //   ...i,
-      //   rentStatus: rentAlreadyStart
-      //     ? 'taken'
-      //     : ('pending' as ItemSelected['rentStatus'])
-      // }
+      return {
+        ...i,
+        rentStatus: rentAlreadyStart
+          ? 'taken'
+          : ('pending' as ItemSelected['rentStatus'])
+      }
     })
     try {
       setSaving(true)
