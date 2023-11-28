@@ -4,6 +4,7 @@ import { Order } from '@/types/order'
 import { isBefore } from 'date-fns'
 
 export const orderStatus = (order?: Partial<Order>): ItemRentStatus => {
+  if (order?.status === 'canceled') return 'canceled'
   const someItemAlreadyExpire = order?.items?.some((i) => {
     return (
       i.rentStatus === 'expired' ||

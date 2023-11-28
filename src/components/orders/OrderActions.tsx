@@ -98,6 +98,20 @@ const OrderActions = ({
     }
   }
 
+  const handleResumeOrder = async () => {
+    try {
+      setLoading(true)
+      const res = await updateOrder(orderId, { status: 'pending' })
+      console.log(res)
+      onAction?.('edit')
+    } catch (e) {
+      onAction?.('error')
+      console.error(e)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const handlePayOrder = async (payment: Payment) => {
     try {
       const res = await onPayOrder(orderId, payment)
@@ -241,16 +255,30 @@ const OrderActions = ({
         >
           Finalizar renta
         </Button>
-        <ModalConfirm
-          fullWidth
-          label="Cancelar orden"
-          color="error"
-          handleConfirm={handleCancelRent}
-        >
-          <Typography className="text-center">
-            ¿Desea cancelar esta orden?
-          </Typography>
-        </ModalConfirm>
+        {status === 'canceled' ? (
+          <ModalConfirm
+            fullWidth
+            color="primary"
+            label="Restaurar orden"
+            handleConfirm={handleResumeOrder}
+          >
+            <Typography className="text-center">
+              ¿Desea restaurar esta orden?
+            </Typography>
+          </ModalConfirm>
+        ) : (
+          <ModalConfirm
+            fullWidth
+            label="Cancelar orden"
+            color="error"
+            handleConfirm={handleCancelRent}
+          >
+            <Typography className="text-center">
+              {` Se restaurara esta orden como 'pendiente'`}
+            </Typography>
+            <Typography className="text-center">¿Esta de acuerdo?</Typography>
+          </ModalConfirm>
+        )}
         <ModalOrderForm
           label="Editar orden"
           icon="edit"

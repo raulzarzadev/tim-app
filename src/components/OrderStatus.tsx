@@ -11,7 +11,11 @@ const OrderStatus = ({ order }: { order?: Partial<Order> }) => {
     pending: { label: 'Pendiente', color: 'text-blue-500' },
     expired: { label: 'Vencida', color: 'text-red-500' },
     taken: { label: 'Activa', color: 'text-green-500' },
-    finished: { label: 'Terminada', color: 'text-teal-500' }
+    finished: { label: 'Terminada', color: 'text-teal-500' },
+    canceled: {
+      label: 'Cancelada',
+      color: 'text-red-500'
+    }
   }
   return (
     <div>

@@ -54,7 +54,12 @@ export type ItemSelected = {
   rentStartedAt?: Date | Timestamp
 }
 
-export type ItemRentStatus = 'pending' | 'taken' | 'finished' | 'expired'
+export type ItemRentStatus =
+  | 'pending'
+  | 'taken'
+  | 'finished'
+  | 'expired'
+  | 'canceled'
 
 export const CashboxContextProvider = ({
   children

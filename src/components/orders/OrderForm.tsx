@@ -55,12 +55,23 @@ const OrderForm = ({
 
     const items = order.items?.map((i) => {
       if (rentAlreadyStart) i.rentStartedAt = forceAsDate(order.shipping?.date)
-      return {
-        ...i,
-        rentStatus: rentAlreadyStart
-          ? 'taken'
-          : ('pending' as ItemSelected['rentStatus'])
+      //default rent status is pending
+      i.rentStatus = 'pending'
+
+      // if rent already start o shipping is enabled rent status is taken
+      if (rentAlreadyStart || currentCompany?.shippingEnabled) {
+        i.rentStatus = 'taken'
+      } else {
+        i.rentStatus = 'pending'
       }
+
+      return i
+      // return {
+      //   ...i,
+      //   rentStatus: rentAlreadyStart
+      //     ? 'taken'
+      //     : ('pending' as ItemSelected['rentStatus'])
+      // }
     })
     try {
       setSaving(true)
