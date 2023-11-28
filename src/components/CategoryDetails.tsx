@@ -10,7 +10,7 @@ import ModalItemForm from './ModalItemForm'
 const CategoryDetails = ({ category }: { category?: CategoryType }) => {
   const { currentCompany } = useUserCompaniesContext()
   const categoryItems = currentCompany?.articles?.filter(
-    (article) => article.category === category.name
+    (article) => article.category === category?.name
   )
   if (!currentCompany) return <div>Cargando...</div>
   return (

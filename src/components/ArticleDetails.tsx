@@ -47,7 +47,6 @@ export const ArticleInfo = ({
 }: {
   article?: ItemOrder | ArticleType
 }) => {
-  console.log({ article })
   return (
     <Box className="max-w-md mx-auto text-center">
       <Typography variant="h6" color="text.primary">

@@ -4,7 +4,6 @@ import ModalItemDetails from './ModalItemDetails'
 import ArticleDetails, { ArticleInfo } from './ArticleDetails'
 
 const ItemsTable = ({ items }: { items: ArticleType[] }) => {
-  console.log({ items })
   return (
     <div className="max-w-md mx-auto">
       <MyTable
