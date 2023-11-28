@@ -15,6 +15,7 @@ export type CompanyBase = {
   phone?: string
   usdPrice?: number
   contract?: string
+  image?: string
 }
 
 export type CompanyType = BaseType & CompanyBase

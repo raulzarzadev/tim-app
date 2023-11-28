@@ -10,6 +10,8 @@ import { CompanyType } from '@/types/company'
 import PhoneInput from './PhoneInput'
 import ErrorBoundary from './ErrorBoundary'
 import useWindowSize from '@/hooks/useWindowSize'
+import InputUploadFile from './InputUploadFile'
+import PreviewImage from './PreviewImage'
 
 interface IFormInput {
   name: string
@@ -18,7 +20,7 @@ interface IFormInput {
 const CompanyForm = ({ company }: { company?: Partial<CompanyType> }) => {
   const router = useRouter()
   const { user } = useAuthContext()
-  const { handleSubmit, register, watch, control } = useForm({
+  const { handleSubmit, register, watch, control, setValue } = useForm({
     defaultValues: {
       phone: '',
       name: '',
@@ -74,6 +76,18 @@ const CompanyForm = ({ company }: { company?: Partial<CompanyType> }) => {
   return (
     <ErrorBoundary componentName="CompanyForm">
       <form className="grid gap-4">
+        <InputUploadFile
+          label="Imagen principal"
+          setURL={(url) => setValue('image', url, { shouldDirty: true })}
+        />
+        {formValues?.image && (
+          <PreviewImage
+            fullWidth
+            src={formValues?.image || ''}
+            alt="Identificación de usuario"
+          />
+        )}
+
         <TextField
           id="outlined-basic"
           label="Nombre de la empresa"
@@ -97,6 +111,7 @@ const CompanyForm = ({ company }: { company?: Partial<CompanyType> }) => {
           {...register('usdPrice')}
           label="Precio del dolar (usd)"
         />
+
         <TextField
           rows={contractRows}
           multiline

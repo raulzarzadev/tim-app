@@ -56,17 +56,23 @@ function ResponsiveAppBar() {
 
   const { user } = React.useContext(AuthContext)
 
+  const { currentCompany } = useUserCompaniesContext()
+
+  const companyName = currentCompany?.name || 'BajaRent'
+  const companyLogo = currentCompany?.image || '/images/icons/icon-384x384.png'
+
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           {/* <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} /> */}
           <Image
-            src="/images/icons/icon-384x384.png"
+            src={companyLogo}
             width={60}
             height={60}
             alt="logo"
             className="rounded-full hidden md:flex"
+            blurDataURL="/images/icons/icon-384x384.png"
           />
           <Typography
             variant="h6"
@@ -75,6 +81,7 @@ function ResponsiveAppBar() {
             href="/"
             sx={{
               mr: 2,
+              ml: 1,
               display: { xs: 'none', md: 'flex' },
               fontFamily: 'monospace',
               fontWeight: 700,
@@ -83,7 +90,7 @@ function ResponsiveAppBar() {
               textDecoration: 'none'
             }}
           >
-            BajaRent
+            {companyName}
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -125,7 +132,7 @@ function ResponsiveAppBar() {
             </Menu>
           </Box>
           <Image
-            src="/images/icons/icon-384x384.png"
+            src={companyLogo}
             width={50}
             height={50}
             alt="logo"
@@ -138,6 +145,7 @@ function ResponsiveAppBar() {
             href="/"
             sx={{
               mr: 2,
+              ml: 1,
               display: { xs: 'flex', md: 'none' },
               flexGrow: 1,
               fontFamily: 'monospace',
@@ -147,7 +155,7 @@ function ResponsiveAppBar() {
               textDecoration: 'none'
             }}
           >
-            BajaRent
+            {companyName}
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (

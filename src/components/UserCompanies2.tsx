@@ -1,9 +1,10 @@
 'use client'
-import { Typography } from '@mui/material'
+import { Avatar, Typography } from '@mui/material'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2'
 import { CompanyType } from '@/types/company'
 import ModalConfirm from './ModalConfirm'
+import Image from 'next/image'
 
 const UserCompanies = () => {
   const { userCompanies } = useUserCompaniesContext()
@@ -35,8 +36,10 @@ const CompanyCard = ({ company }: { company: CompanyType }) => {
     <div
       className={`${
         isSelected ? 'bg-blue-300' : 'bg-blue-100'
-      } rounded-md p-2 shadow-md grid grid-cols-2 items-center  place-items-center `}
+      } rounded-md p-2 shadow-md grid grid-cols-3 items-center  place-items-center `}
     >
+      <Avatar src={company.image || ''}>{company.name[0]}</Avatar>
+
       <Typography variant="h6">{company.name}</Typography>
       {isSelected ? (
         <ModalConfirm

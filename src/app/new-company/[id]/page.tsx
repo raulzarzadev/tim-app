@@ -23,8 +23,9 @@ const Page = () => {
       >
         Editar empresa
       </Typography>
-
-      <CompanyForm company={currentCompany} />
+      <div className="max-w-md mx-auto">
+        <CompanyForm company={currentCompany} />
+      </div>
       <div className="flex justify-center mt-20">
         <ModalConfirm
           label="Eliminar empresa"
