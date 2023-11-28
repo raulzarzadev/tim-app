@@ -6,10 +6,37 @@ import CompanyBalances from './cashboxBalances/CompanyBalances'
 import CompanyOrders from './CompanyOrders'
 import CompanyItems from './CompanyItems'
 import CompanyClients from './CompanyClients'
+import Select from './Select'
+import { Button } from '@mui/material'
+import Link from 'next/link'
+import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
+import AppIcon from './AppIcon'
 
 const CompanyAdmin = () => {
+  const { companySelected, setCompanySelected, userCompanies } =
+    useUserCompaniesContext()
   return (
     <div>
+      <div className="flex w-full my-4 ">
+        <Select
+          fullWidth
+          selected={companySelected}
+          label="Empresa"
+          onSelect={(value) => setCompanySelected(value)}
+          options={userCompanies.map((company) => ({
+            value: company?.id,
+            label: company?.name
+          }))}
+        />
+
+        <Button
+          size="small"
+          LinkComponent={Link}
+          href={`/new-company/${companySelected}`}
+        >
+          <AppIcon icon="edit" />
+        </Button>
+      </div>
       <BasicTabs
         tabs={[
           //  { label: 'Clientes ', content: <></> }, //CompanyPayments

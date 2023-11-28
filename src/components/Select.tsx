@@ -36,6 +36,7 @@ export default function Select({
     <FormControl fullWidth={fullWidth}>
       <InputLabel id={`simple-select-${label}`}>{label}</InputLabel>
       <MUISelect
+        className="text-center"
         variant={variant}
         labelId={`simple-select-${label}`}
         id={`select-${label}`}

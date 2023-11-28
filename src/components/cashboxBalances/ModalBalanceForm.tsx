@@ -17,6 +17,7 @@ import { calculateBalance } from './calculateBalance.lib'
 const ModalBalanceForm = () => {
   const modal = useModal({ title: 'Nuevo corte' })
   const { orders, currentCompany } = useUserCompaniesContext()
+  console.log({ orders })
   const [saved, setSaved] = useState(false)
   const [balance, setBalance] = useState<BalanceData>()
   const [balanceProps, setBalanceProps] = useState<Balance>()
@@ -24,6 +25,7 @@ const ModalBalanceForm = () => {
     setSaved(false)
     setBalanceProps(balance)
     const b = calculateBalance(balance, orders)
+    console.log(b)
     setBalance(b)
   }
   const handleSave = async () => {

@@ -42,7 +42,7 @@ const UserCard = () => {
         {userCompanies.length === 0 && (
           <div className="flex w-full justify-center">
             <Button LinkComponent={Link} href="/new-company">
-              ¿Tienes algo que rentar?
+              Crea una nueva empresa!
             </Button>
           </div>
         )}

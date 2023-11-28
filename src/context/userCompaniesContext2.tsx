@@ -115,7 +115,7 @@ export function UserCompaniesProvider({
   )
   useEffect(() => {
     if (user) {
-      listenCompanyServices(companySelected, setServices)
+      if (companySelected) listenCompanyServices(companySelected, setServices)
     }
   }, [companySelected, user])
 

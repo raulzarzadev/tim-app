@@ -68,7 +68,7 @@ export default function BottomNavigation() {
         visible: true
       },
       {
-        href: '/dashboard',
+        href: `/dashboard/${currentCompany?.id}/ADMIN`,
         label: 'Dashboard',
         icon: <AppIcon icon="dashboard" />,
         visible:
