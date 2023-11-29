@@ -108,7 +108,15 @@ export const ContactsList = ({
       icon: IconName
       href: string
       value?: string
-      color?: string
+      color?:
+        | 'info'
+        | 'primary'
+        | 'success'
+        | 'default'
+        | 'inherit'
+        | 'secondary'
+        | 'error'
+        | 'warning'
     }
   > = {
     mail: {
@@ -156,7 +164,7 @@ export const ContactsList = ({
               <Grid2 key={key} xs={'auto'}>
                 <Tooltip title={value.label} data-testid={`tooltip-${key}`}>
                   <IconButton
-                    color={value.color}
+                    color={value.color || 'default'}
                     onClick={(e) => {}}
                     LinkComponent={Link}
                     href={`${value.href}${value.value}`}
