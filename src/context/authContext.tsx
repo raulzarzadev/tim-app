@@ -28,7 +28,6 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
   const router = useRouter()
   const pathname = usePathname()
   const params = useParams()
-  console.log({ params })
   useEffect(() => {
     authStateChanged((user: SetStateAction<UserType | null | undefined>) => {
       console.log({ pathname })

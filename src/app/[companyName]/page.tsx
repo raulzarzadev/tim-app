@@ -1,11 +1,16 @@
 'use client'
 
+import AppIcon from '@/components/AppIcon'
+import Modal from '@/components/Modal'
 import { ContactsList } from '@/components/ModalContactClient'
+import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import { findCompanyByName, getCompany } from '@/firebase/companies'
+import useModal from '@/hooks/useModal'
 import { CategoryType } from '@/types/category'
 import { CompanyType } from '@/types/company'
-import { Avatar, Button, Typography } from '@mui/material'
+import { Avatar, Button, TextField, Typography } from '@mui/material'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
@@ -57,7 +62,7 @@ const Page = (props: { params: { companyName: string } }) => {
         <div className="flex justify-evenly flex-wrap ">
           {company?.categories?.map((category) => (
             <div className="my-2" key={category.name}>
-              <CategoryCard category={category} />
+              <CategoryCard category={category} company={company} />
             </div>
           ))}
         </div>
@@ -66,13 +71,55 @@ const Page = (props: { params: { companyName: string } }) => {
   )
 }
 
-const CategoryCard = ({ category }: { category: CategoryType }) => {
+const CategoryCard = ({
+  category,
+  company
+}: {
+  category: CategoryType
+  company: CompanyType
+}) => {
+  const modal = useModal({ title: 'Preguntar por disponibilidad' })
+  const [form, setForm] = useState<{ [key: string]: string }>({})
+  const handleChange = (field: string, value: string) => {
+    setForm((form) => ({ ...form, [field]: value }))
+  }
+
   return (
     <div
       // style={{ backgroundImage: `url(${category.image})` }}
-      className="w-44 aspect-square  relative  rounded-md shadow-md"
+      className="w-44 aspect-square  relative  rounded-md shadow-md "
     >
-      <div className="relative flex flex-col h-full justify-end bg-gradient-to-t from-slate-900 to-transparent p-2 rounded-md text-white  ">
+      <Modal {...modal}>
+        <div className="grid gap-2">
+          <TextField
+            label="Nombre"
+            onChange={(e) => handleChange('name', e.target.value)}
+          />
+          <TextField
+            label="Dirección"
+            onChange={(e) => handleChange('address', e.target.value)}
+          />
+          <TextField
+            label="Descripción (entre calles, color de casa, etc)"
+            onChange={(e) => handleChange('description', e.target.value)}
+          />
+
+          <Button
+            variant="outlined"
+            endIcon={<AppIcon color="success" icon="whatsapp" />}
+            LinkComponent={Link}
+            target="_blank"
+            href={`
+            https://wa.me/${company?.phone}?text=Nombre: ${form.name || ''}, \n
+            Dirección: ${form.address || ''}, \n
+            Descripción: ${form.description || ''}. \n 
+            Me interesa la categoria ${category.name}. `}
+          >
+            Preguntar por disponibilidad
+          </Button>
+        </div>
+      </Modal>
+      <div className="group  relative flex flex-col h-full justify-end bg-gradient-to-t from-slate-900 to-transparent p-2 rounded-md text-white  ">
         <Typography className="text-white" variant="h5">
           {category.name}
         </Typography>
@@ -83,6 +130,16 @@ const CategoryCard = ({ category }: { category: CategoryType }) => {
           fill
           className="object-contain rounded-md opacity-25 hover:opacity-90 transition-all duration-500 hover:scale-105"
         />
+        {company?.phone && (
+          <Button
+            className="hidden group-hover:block "
+            variant="contained"
+            color="success"
+            onClick={modal.onOpen}
+          >
+            Pedir
+          </Button>
+        )}
       </div>
     </div>
   )
