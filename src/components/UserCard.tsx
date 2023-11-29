@@ -16,9 +16,9 @@ const UserCard = () => {
   if (!user)
     return (
       <div>
-        <Typography component={'p'} className="text-center w-full text-xl my-4">
+        {/* <Typography component={'p'} className="text-center w-full text-xl my-4">
           Comienza a rentar
-        </Typography>
+        </Typography> */}
       </div>
     )
   if (user === null) {

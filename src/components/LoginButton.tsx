@@ -1,9 +1,5 @@
 'use client'
-import {
-  createUserWithPassword,
-  googleLogin,
-  signInWithPassword
-} from '@/firebase/auth'
+import { googleLogin } from '@/firebase/auth'
 import useModal from '@/hooks/useModal'
 import { Box, Button, Divider, Typography } from '@mui/material'
 import Modal from './Modal'
@@ -31,6 +27,10 @@ const LoginButton = () => {
       >
         Ingresar
       </Button>
+      {/* <div className="bg-white p-2 rounded-md shadow-md text-center w-32 aspect-[2/3] m-1 flex flex-col justify-center">
+        <Typography className="font-bold">Ingresa </Typography>{' '}
+        <Typography>para comezar rentar</Typography>
+      </div> */}
       <Modal {...modal}>
         <Box className="sm:flex ">
           <div>

@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  background: #fce2e2;
+}
 button {
   background-color: transparent;
   border: none;

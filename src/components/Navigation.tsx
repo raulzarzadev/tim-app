@@ -63,7 +63,7 @@ function ResponsiveAppBar() {
 
   return (
     <AppBar position="static">
-      <Container maxWidth="xl">
+      <Container maxWidth="xl" className="p-1">
         <Toolbar disableGutters>
           {/* <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} /> */}
           <Image
@@ -92,8 +92,21 @@ function ResponsiveAppBar() {
           >
             {companyName}
           </Typography>
-
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+          <Link href={'/'}>
+            <Image
+              src={companyLogo}
+              width={50}
+              height={50}
+              alt="logo"
+              className="rounded-sm flex md:hidden "
+            />
+          </Link>
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: { xs: 'flex', md: 'none', justifyContent: 'end' }
+            }}
+          >
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -131,14 +144,7 @@ function ResponsiveAppBar() {
               ))}
             </Menu>
           </Box>
-          <Image
-            src={companyLogo}
-            width={50}
-            height={50}
-            alt="logo"
-            className="rounded-sm flex md:hidden mx-2"
-          />
-          <Typography
+          {/* <Typography
             variant="h5"
             noWrap
             component={Link}
@@ -156,7 +162,8 @@ function ResponsiveAppBar() {
             }}
           >
             {companyName}
-          </Typography>
+          </Typography> */}
+
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
               <Button
@@ -173,7 +180,7 @@ function ResponsiveAppBar() {
           {user === undefined && (
             <Skeleton variant="circular" width={50} height={50} />
           )}
-          {user === null && <LoginButton />}
+          {/* {user === null && <LoginButton />} */}
           {user && <UserNavMenu user={user} />}
         </Toolbar>
       </Container>

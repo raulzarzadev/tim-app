@@ -17,7 +17,7 @@ const UserCompanies = () => {
     useUserCompaniesContext()
 
   if (!user) return <div>Cargando...</div>
-  if (!userCompanies.length) {
+  if (user && !userCompanies.length) {
     return <p>Aun no tienes una empresa.</p>
   }
   return (

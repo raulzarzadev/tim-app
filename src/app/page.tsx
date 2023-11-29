@@ -13,9 +13,11 @@ export default function Home() {
 
   return (
     <main>
+      <div className="flex justify-center my-2">
+        {user === null && <LoginButton />}
+      </div>
       <Grid
         container
-        height="100vh"
         alignItems="center"
         justifyContent="center"
         direction="column"
@@ -49,12 +51,6 @@ export default function Home() {
         >
           Visita el mercado
         </Button>
-
-        {user === null && (
-          <div className="my-4">
-            <LoginButton />
-          </div>
-        )}
       </Grid>
     </main>
   )

@@ -48,6 +48,51 @@ const OrdersTable = ({ orders }: { orders: Partial<Order>[] }) => {
           data={{
             headers: [
               {
+                label: 'Cliente',
+                key: 'client.name',
+                format: (value) => (
+                  <div className="truncate">
+                    <span>{`${value}`.substring(0, 12)}</span>
+                  </div>
+                )
+              },
+              {
+                label: 'Adeudo',
+                key: 'totalOrder',
+                format: (value) => (
+                  <span
+                    className={`
+                    ${value > 0 && 'bg-red-400 text-white'} 
+                    ${value === 0 && 'bg-green-600 text-white'}
+                    ${value < 0 && 'bg-yellow-400 text-white'}
+                    p-1 rounded-md font-bold`}
+                  >
+                    <CurrencySpan quantity={value} />
+                  </span>
+                )
+              },
+              {
+                label: 'Asignado',
+                key: 'shipping.assignedToEmail',
+                value: (v) => {
+                  const staffName =
+                    currentCompany?.staff?.find((s) => s.email === v)?.name ||
+                    ''
+
+                  return staffName || v
+                },
+                format: (email) => <StaffSpan email={email} />
+              },
+              {
+                label: 'Unidades',
+                key: 'items.length'
+              },
+              {
+                label: 'Vence',
+                key: 'items.[0].rentFinishAt',
+                format: (date) => fromNow(date)
+              },
+              {
                 label: 'Actualizado',
                 key: 'updated.at',
                 format: (date) => fromNow(date)
@@ -66,32 +111,8 @@ const OrdersTable = ({ orders }: { orders: Partial<Order>[] }) => {
                 label: 'Inicio',
                 key: 'items.[0].rentStartedAt',
                 format: (date) => fromNow(date)
-              },
-              {
-                label: 'Vence',
-                key: 'items.[0].rentFinishAt',
-                format: (date) => fromNow(date)
-              },
-              {
-                label: 'Unidades',
-                key: 'items.length'
-              },
-              { label: 'Cliente', key: 'client.name' },
-              {
-                label: 'Adeudo',
-                key: 'totalOrder',
-                format: (value) => (
-                  <span
-                    className={`
-                    ${value > 0 && 'bg-red-400 text-white'} 
-                    ${value === 0 && 'bg-green-600 text-white'}
-                    ${value < 0 && 'bg-yellow-400 text-white'}
-                    p-1 rounded-md font-bold`}
-                  >
-                    <CurrencySpan quantity={value} />
-                  </span>
-                )
-              },
+              }
+
               // {
               //   label: 'Total',
               //   key: 'payments',
@@ -109,18 +130,6 @@ const OrdersTable = ({ orders }: { orders: Partial<Order>[] }) => {
               //     />
               //   )
               // },
-              {
-                label: 'Asignado',
-                key: 'shipping.assignedToEmail',
-                value: (v) => {
-                  const staffName =
-                    currentCompany?.staff?.find((s) => s.email === v)?.name ||
-                    ''
-
-                  return staffName || v
-                },
-                format: (email) => <StaffSpan email={email} />
-              }
             ],
             body: orders
           }}

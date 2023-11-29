@@ -45,9 +45,11 @@ const StaffCard = ({
       onClick={() => onClick?.(staff?.email || '')}
       className={`${
         onClick ? 'cursor-pointer hover:bg-blue-300 active:shadow-none' : ''
-      }`}
+      }
+      sm:flex 
+      `}
     >
-      <CardContent>
+      <CardContent className="sm:w-2/3">
         <Typography>
           {staff.name}{' '}
           {!simple && (
@@ -59,11 +61,11 @@ const StaffCard = ({
             <StaffForm staff={staff} />
           </Modal>
         </Typography>
-        <Typography>{staff.email}</Typography>
+        <Typography className="truncate">{staff.email}</Typography>
       </CardContent>
       <ErrorBoundary>
         {!simple && (
-          <Box className="flex gap-2 p-2">
+          <Box className="flex gap-2 p-2 sm:flex-wrap sm:w-1/3 sm:items-start">
             {Object.entries(staff.permissions || {}).map(([key, value]) =>
               value ? <StaffBadge badge={key} key={key} /> : null
             )}

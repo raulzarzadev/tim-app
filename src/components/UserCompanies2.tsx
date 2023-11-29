@@ -5,9 +5,13 @@ import Grid2 from '@mui/material/Unstable_Grid2/Grid2'
 import { CompanyType } from '@/types/company'
 import ModalConfirm from './ModalConfirm'
 import Image from 'next/image'
+import { useAuthContext } from '@/context/authContext'
 
 const UserCompanies = () => {
+  const { user } = useAuthContext()
+
   const { userCompanies } = useUserCompaniesContext()
+  if (!user) return <div>Cargando...</div>
   if (userCompanies.length === 0) {
     return <p>Aun no tienes una empresa.</p>
   }
