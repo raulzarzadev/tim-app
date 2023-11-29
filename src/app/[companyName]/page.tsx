@@ -6,6 +6,7 @@ import { ContactsList } from '@/components/ModalContactClient'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import { findCompanyByName, getCompany } from '@/firebase/companies'
 import useModal from '@/hooks/useModal'
+import asNumber from '@/lib/asNumber'
 import { CategoryType } from '@/types/category'
 import { CompanyType } from '@/types/company'
 import { Avatar, Button, TextField, Typography } from '@mui/material'
@@ -83,7 +84,16 @@ const CategoryCard = ({
   const handleChange = (field: string, value: string) => {
     setForm((form) => ({ ...form, [field]: value }))
   }
+  // Encontre tu negocio en https://bajarent.app. \n
+  const askText = `Hola, soy ${form.name || ''}. \n
+ ¿Aún tienes ${category.name}?`
 
+  const infoText = `
+  
+  Dirección: ${form.address || ''}, \n
+  Descripción: ${form.description || ''}. \n `
+  const text = company.shippingEnabled ? askText + infoText : askText
+  const disabled = !!(asNumber(form?.name?.length) < 3)
   return (
     <div
       // style={{ backgroundImage: `url(${category.image})` }}
@@ -94,26 +104,37 @@ const CategoryCard = ({
           <TextField
             label="Nombre"
             onChange={(e) => handleChange('name', e.target.value)}
+            helperText={disabled && 'Ingresa tu nombre'}
           />
-          <TextField
-            label="Dirección"
-            onChange={(e) => handleChange('address', e.target.value)}
-          />
-          <TextField
-            label="Descripción (entre calles, color de casa, etc)"
-            onChange={(e) => handleChange('description', e.target.value)}
-          />
+          {company.shippingEnabled && (
+            <div>
+              <Typography>
+                Este negocio cuenta con entregas a domicilio.{' '}
+              </Typography>
+              <Typography variant="caption">
+                Por favor agrega estos datos para faclilitar la entrega.
+              </Typography>
+              <TextField
+                label="Dirección"
+                onChange={(e) => handleChange('address', e.target.value)}
+              />
+              <TextField
+                label="Descripción (entre calles, color de casa, etc)"
+                onChange={(e) => handleChange('description', e.target.value)}
+              />
+            </div>
+          )}
 
           <Button
+            disabled={disabled}
             variant="outlined"
             endIcon={<AppIcon color="success" icon="whatsapp" />}
             LinkComponent={Link}
             target="_blank"
             href={`
-            https://wa.me/${company?.phone}?text=Nombre: ${form.name || ''}, \n
-            Dirección: ${form.address || ''}, \n
-            Descripción: ${form.description || ''}. \n 
-            Me interesa la categoria ${category.name}. `}
+            https://wa.me/${company?.phone
+              ?.replaceAll('+', '')
+              .replaceAll(' ', '')}?text=${text}`}
           >
             Preguntar por disponibilidad
           </Button>
