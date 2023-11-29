@@ -33,7 +33,6 @@ const ModalOrderForm = ({
           defaultOrder={order}
           handleSave={async (data) => {
             const res = await handleSave?.(data)
-
             closeOnSave && modal.onClose()
             return res
           }}

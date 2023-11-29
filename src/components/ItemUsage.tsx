@@ -101,7 +101,7 @@ const ItemUsage = ({
       </Box>
       <Typography className="text-center mt-4" component={'div'}>
         <span>
-          Lugar : <ShippingLink address={item.order.shipping.address} />{' '}
+          Lugar : <ShippingLink address={item.order?.shipping?.address} />{' '}
         </span>
       </Typography>
       <Typography className="text-center mt-4" component={'div'}>

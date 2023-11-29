@@ -49,23 +49,40 @@ const OrderForm = ({
   }
 
   const handleSaveOrder = async (order: Partial<Order>) => {
+    // console.log({ defaultOrder })
+    // console.log({ order })
+    // return
     const rentAlreadyStart =
       order.shipping?.date &&
       isBefore(forceAsDate(order.shipping?.date), new Date())
-
+    const updatingOrder = !!defaultOrder?.id
     const items = order.items?.map((i) => {
-      if (rentAlreadyStart) i.rentStartedAt = forceAsDate(order.shipping?.date)
-      //default rent status is pending
-      i.rentStatus = 'pending'
+      const defaultItem = defaultOrder?.items?.find(
+        (d) => d?.itemId === i?.itemId
+      )
 
-      // if rent already start o shipping is enabled rent status is taken
-      if (rentAlreadyStart || currentCompany?.shippingEnabled) {
-        i.rentStatus = 'taken'
-      } else {
+      if (!updatingOrder) {
+        if (rentAlreadyStart)
+          i.rentStartedAt = forceAsDate(order.shipping?.date)
+        //default rent status is pending
         i.rentStatus = 'pending'
+        // if rent already start o shipping is enabled rent status is taken
+        if (rentAlreadyStart || currentCompany?.shippingEnabled) {
+          i.rentStatus = 'taken'
+        } else {
+          i.rentStatus = 'pending'
+        }
       }
 
-      return i
+      if (!currentCompany?.shippingEnabled) {
+        i.rentStatus = 'taken'
+        i.rentStartedAt = new Date()
+      }
+
+      return {
+        ...defaultItem,
+        ...i
+      }
       return {
         ...i,
         rentStatus: rentAlreadyStart

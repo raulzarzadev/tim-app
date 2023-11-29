@@ -10,6 +10,8 @@ const CompanyOrders = () => {
     <div>
       <div className="flex justify-center">
         <ModalOrderForm
+          label="Nueva orden"
+          icon="order"
           closeOnSave={false}
           handleSave={async (order) => {
             try {
@@ -29,8 +31,6 @@ const CompanyOrders = () => {
               console.error(e)
             }
           }}
-          label="Nueva orden"
-          icon="order"
         />
       </div>
       <OrdersTabs orders={orders || []} />
