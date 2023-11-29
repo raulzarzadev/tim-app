@@ -19,7 +19,7 @@ const Page = () => {
     <div>
       <div className="text-center">
         <Typography variant="h4">Mercado</Typography>
-        <Typography variant="caption">
+        <Typography color={'text.primary'}>
           Aquí encontraras todas las tiendas y algunos de sus productos que
           ofrecen
         </Typography>

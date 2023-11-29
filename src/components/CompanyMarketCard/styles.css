@@ -3,20 +3,50 @@
 :root {
   /* Colors */
   --brand-color: hsl(46, 100%, 50%);
-  --black: hsl(0, 0%, 0%);
-  --white: hsl(0, 0%, 100%);
+  --card-black: hsl(0, 0%, 0%);
+  --card-white: hsl(0, 0%, 100%);
   /* Fonts */
   --font-title: 'Montserrat', sans-serif;
   --font-text: 'Lato', sans-serif;
 }
 
+/* RESET */
+
+/* Box sizing rules */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Remove default margin */
+body,
+h2,
+p {
+  margin: 0;
+}
+
+/* GLOBAL STYLES */
+/* body {
+  display: grid;
+  place-items: center;
+  height: 100vh;
+} */
+
+.flow > * + * {
+  margin-top: var(--flow-space, 1em);
+}
+
+/* CARD COMPONENT */
+
 .card {
   display: grid;
   place-items: center;
+  width: 80vw;
   max-width: 21.875rem;
+  height: 28.125rem;
   overflow: hidden;
   border-radius: 0.625rem;
-  color: var(--white);
   box-shadow: 0.25rem 0.25rem 0.5rem rgba(0, 0, 0, 0.25);
 }
 
@@ -31,6 +61,20 @@
   height: 100%;
 }
 
+.card > * {
+  font-size: 2.25rem;
+  font-family: var(--font-title);
+  color: var(--card-white);
+  line-height: 1.1;
+}
+
+.card > * {
+  font-family: var(--font-text);
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--card-white);
+}
+
 .card__content {
   --flow-space: 0.9375rem;
   display: flex;
@@ -39,14 +83,13 @@
   align-self: flex-end;
   height: 55%;
   padding: 12% 1.25rem 1.875rem;
-  width: 100%;
-
   background: linear-gradient(
     180deg,
     hsla(0, 0%, 0%, 0) 0%,
     hsla(0, 0%, 0%, 0.3) 10%,
     hsl(0, 0%, 0%) 100%
   );
+  width: 100%;
 }
 
 .card__content--container {
@@ -56,8 +99,6 @@
 .card__title {
   position: relative;
   width: fit-content;
-  width: 100%;
-  text-align: center;
   width: -moz-fit-content; /* Prefijo necesario para Firefox  */
 }
 
@@ -82,7 +123,7 @@
   background-color: var(--brand-color);
   font-family: var(--font-title);
   font-size: 1.125rem;
-  color: var(--black);
+  color: var(--card-black);
 }
 
 .card__button:focus {

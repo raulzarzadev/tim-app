@@ -1,6 +1,6 @@
 'use client'
 import { Inter } from 'next/font/google'
-import { Button, Grid } from '@mui/material'
+import { Button, Grid, Typography } from '@mui/material'
 import LoginButton from '@/components/LoginButton'
 import { useAuthContext } from '@/context/authContext'
 import Link from 'next/link'
@@ -20,13 +20,27 @@ export default function Home() {
         justifyContent="center"
         direction="column"
       >
-        <h1 className="text-4xl mb-4 text-center">Renta lo que sea!.</h1>
-        <p>Bicicletas</p>
-        <p>Patines</p>
-        <p>Motos</p>
-        <p>Autos</p>
-        <p>Lavadoras</p>
-        <p>y mas...</p>
+        <Typography variant="h4" className="text-4xl mb-4 text-center">
+          Renta lo que sea!.
+        </Typography>
+        <Typography variant="h5" sx={{ my: 1 }}>
+          Bicicletas
+        </Typography>
+        <Typography variant="h5" sx={{ my: 1 }}>
+          Patines
+        </Typography>
+        <Typography variant="h5" sx={{ my: 1 }}>
+          Motos
+        </Typography>
+        <Typography variant="h5" sx={{ my: 1 }}>
+          Autos
+        </Typography>
+        <Typography variant="h5" sx={{ my: 1 }}>
+          Lavadoras
+        </Typography>
+        <Typography variant="h5" sx={{ my: 1 }}>
+          y mas...
+        </Typography>
         <Button
           variant="outlined"
           href="/market"

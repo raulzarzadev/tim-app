@@ -4,12 +4,14 @@ import { ContactsList } from '@/components/ModalContactClient'
 import { findCompanyByName, getCompany } from '@/firebase/companies'
 import { CategoryType } from '@/types/category'
 import { CompanyType } from '@/types/company'
-import { Avatar, Typography } from '@mui/material'
+import { Avatar, Button, Typography } from '@mui/material'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 const Page = (props: { params: { companyName: string } }) => {
   const companyName = decodeURIComponent(props.params.companyName)
+  const router = useRouter()
   const [company, setCompany] = useState<undefined | null | CompanyType>(
     undefined
   )
@@ -21,7 +23,17 @@ const Page = (props: { params: { companyName: string } }) => {
 
   if (company === undefined) return <div>Buscando empresa</div>
 
-  if (company === null) return <div>No encontramos esta empresa</div>
+  if (company === null)
+    return (
+      <>
+        <div className="text-center my-6">No encontramos esta empresa</div>
+        <div className="flex justify-center">
+          <Button onClick={() => router.push('/market')}>
+            Volver al mercado
+          </Button>
+        </div>
+      </>
+    )
 
   return (
     <div className="text-center flex flex-col">
