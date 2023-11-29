@@ -1,8 +1,10 @@
 'use client'
 import { Inter } from 'next/font/google'
-import { Grid } from '@mui/material'
+import { Button, Grid } from '@mui/material'
 import LoginButton from '@/components/LoginButton'
 import { useAuthContext } from '@/context/authContext'
+import Link from 'next/link'
+import AppIcon from '@/components/AppIcon'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -25,6 +27,15 @@ export default function Home() {
         <p>Autos</p>
         <p>Lavadoras</p>
         <p>y mas...</p>
+        <Button
+          variant="outlined"
+          href="/market"
+          LinkComponent={Link}
+          endIcon={<AppIcon icon="store" />}
+        >
+          Visita el mercado
+        </Button>
+
         {user === null && (
           <div className="my-4">
             <LoginButton />

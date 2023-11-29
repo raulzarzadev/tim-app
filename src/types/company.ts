@@ -18,6 +18,7 @@ export type CompanyBase = {
   image?: string
   shippingEnabled?: boolean
   confirmClientData?: boolean
+  visible?: boolean
 }
 
 export type CompanyType = BaseType & CompanyBase

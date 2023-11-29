@@ -29,7 +29,8 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
   const pathname = usePathname()
   useEffect(() => {
     authStateChanged((user: SetStateAction<UserType | null | undefined>) => {
-      if (user === null && !(pathname === '/components')) {
+      const alowVisitPages = ['/components', '/market']
+      if (user === null && !alowVisitPages.includes(pathname)) {
         router.replace('/')
       }
       setUser(user)

@@ -8,6 +8,8 @@ import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import { CategoryType } from '@/types/category'
 import { addCategory, updateCategory } from '@/firebase/categories'
 import PricesForm from './PricesForm'
+import InputUploadFile from './InputUploadFile'
+import PreviewImage from './PreviewImage'
 
 interface IFormInput {
   name: string
@@ -47,7 +49,18 @@ const CategoryForm = ({ category }: { category?: CategoryType }) => {
   }
 
   return (
-    <form className="grid gap-4">
+    <form className="grid gap-4 max-w-md mx-auto">
+      <InputUploadFile
+        label="Imagen "
+        setURL={(url) => setValue('image', url, { shouldDirty: true })}
+      />
+      {formValues?.image && (
+        <PreviewImage
+          fullWidth
+          src={formValues?.image || ''}
+          alt="Identificación de categoria"
+        />
+      )}
       <TextField
         id="outlined-basic"
         label="Nombre de la categoria"

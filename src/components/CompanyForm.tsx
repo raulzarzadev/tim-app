@@ -145,6 +145,16 @@ const CompanyForm = ({ company }: { company?: Partial<CompanyType> }) => {
                 })
               }}
             />
+            <CheckboxLabel
+              checked={!!formValues?.visible}
+              label="Empresa visible en el mercado"
+              // {...register('shippingEnabled')}
+              onChange={(e) => {
+                setValue('visible', e.target.checked, {
+                  shouldDirty: true
+                })
+              }}
+            />
           </div>
         </div>
         {/* <Controller
