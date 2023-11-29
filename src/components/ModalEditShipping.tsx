@@ -18,7 +18,7 @@ const ModalEditShipping = ({ order }: { order: Order }) => {
   const handleSave = async () => {
     try {
       setLoading(true)
-      console.log({ shipping })
+      // console.log({ shipping })
       await updateOrder(order.id, { shipping })
       setLoading(false)
       setTimeout(() => {
@@ -30,7 +30,7 @@ const ModalEditShipping = ({ order }: { order: Order }) => {
     }
   }
   const nowDate = new Date()
-  const itsNow = forceAsDate(shipping.date).getTime() === nowDate.getTime()
+  const itsNow = forceAsDate(shipping?.date).getTime() === nowDate.getTime()
 
   return (
     <div className="flex justify-center  ">
@@ -47,17 +47,17 @@ const ModalEditShipping = ({ order }: { order: Order }) => {
         <div className="grid gap-4">
           <CheckboxLabel
             label="Entregar en tienda"
-            checked={shipping.address === 'store'}
+            checked={shipping?.address === 'store'}
             onChange={(e) =>
               setShipping((shipping) => ({
                 ...shipping,
-                address: shipping.address === 'store' ? '' : 'store'
+                address: shipping?.address === 'store' ? '' : 'store'
               }))
             }
           />
-          {shipping.address !== 'store' && (
+          {shipping?.address !== 'store' && (
             <TextField
-              value={shipping.address}
+              value={shipping?.address}
               onChange={(e) =>
                 setShipping((shipping) => ({
                   ...shipping,
@@ -73,7 +73,7 @@ const ModalEditShipping = ({ order }: { order: Order }) => {
             onChange={(e) => {
               setShipping((shipping) => ({
                 ...shipping,
-                date: e.target.checked ? new Date() : order.shipping.date
+                date: e.target.checked ? new Date() : order?.shipping?.date
               }))
             }}
           />
@@ -81,7 +81,7 @@ const ModalEditShipping = ({ order }: { order: Order }) => {
           {!itsNow && (
             <TextField
               type="datetime-local"
-              value={inputDateFormat(shipping.date)}
+              value={inputDateFormat(shipping?.date)}
               onChange={(e) =>
                 setShipping((shipping) => ({
                   ...shipping,
@@ -98,7 +98,7 @@ const ModalEditShipping = ({ order }: { order: Order }) => {
                 assignedToEmail: email
               }))
             }
-            assignedTo={shipping.assignedToEmail}
+            assignedTo={shipping?.assignedToEmail}
           />
 
           <Button onClick={() => handleSave()} variant="outlined" fullWidth>
