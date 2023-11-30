@@ -218,25 +218,17 @@ const OrderActions = ({
         />
 
         <AssignForm
+          disabled={!currentCompany?.shippingEnabled}
           handleAssign={async (email, date) => {
-            try {
-              const res = await updateOrder(orderId, {
-                // @ts-ignore
-                'shipping.assignedToEmail': email
-              })
-              console.log({ res })
-              if (date) {
-                const res = await updateOrder(orderId, {
-                  // @ts-ignore
-                  'shipping.date': date
-                })
-                console.log({ res })
-              }
-              return res
-            } catch (error) {
-              console.error(error)
-            }
+            updateOrder(orderId, {
+              //@ts-ignore
+              'shipping.assignedToEmail': email,
+              'shipping.date': date || null
+            })
+              .then(console.log)
+              .catch(console.error)
           }}
+          assignedAt={order?.shipping?.date}
           assignedTo={order?.shipping?.assignedToEmail}
         />
         <ModalStartRent

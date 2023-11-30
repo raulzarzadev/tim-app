@@ -56,6 +56,7 @@ const OrderForm = ({
       order.shipping?.date &&
       isBefore(forceAsDate(order.shipping?.date), new Date())
     const updatingOrder = !!defaultOrder?.id
+
     const items = order.items?.map((i) => {
       const defaultItem = defaultOrder?.items?.find(
         (d) => d?.itemId === i?.itemId
@@ -77,6 +78,15 @@ const OrderForm = ({
       if (!currentCompany?.shippingEnabled) {
         i.rentStatus = 'taken'
         i.rentStartedAt = new Date()
+      }
+
+      if (!order.shipping || rentAlreadyStart) {
+        i.rentStatus = 'taken'
+        i.rentStartedAt = new Date()
+      }
+
+      if (!rentAlreadyStart) {
+        i.rentStatus = 'pending'
       }
 
       return {

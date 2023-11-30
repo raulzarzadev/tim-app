@@ -136,7 +136,7 @@ const CompanyForm = ({ company }: { company?: Partial<CompanyType> }) => {
               }}
             />
             <CheckboxLabel
-              checked={!!formValues?.shippingEnabled}
+              checked={!!formValues?.confirmClientData}
               label="Confirmar datos del cliente antes de comenzar renta"
               // {...register('shippingEnabled')}
               onChange={(e) => {

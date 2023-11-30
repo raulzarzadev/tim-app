@@ -3,7 +3,6 @@ import {
   useUserCompaniesContext
 } from '@/context/userCompaniesContext2'
 import asDate from '@/lib/asDate'
-import { calculateFullTotal } from '@/lib/calculateTotalItem'
 import { isAfter } from 'date-fns'
 import Modal from './Modal'
 import useModal from '@/hooks/useModal'
@@ -11,8 +10,6 @@ import { Box, Button, Typography } from '@mui/material'
 import React, { ReactNode } from 'react'
 import { finishItemRent, resumeRent, startItemRent } from '@/firebase/orders'
 import ModalPayment from './ModalPayment2'
-import asNumber from '@/lib/asNumber'
-import OrderDetails from './OrderDetails'
 import { calculateOrderTotal } from '@/lib/calculateOrderTotal'
 
 const ItemRentStatus = ({ item }: { item: ItemOrder }) => {

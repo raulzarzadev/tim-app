@@ -61,9 +61,6 @@ const ShippingForm = ({
 
       <div className="my-4">
         <AssignForm
-          // assignTo={(e) => {
-          //   handleChangeShipping('assignedToEmail', e)
-          // }}
           handleAssign={(email, date) => {
             if (date) {
               handleChangeShipping('date', date)

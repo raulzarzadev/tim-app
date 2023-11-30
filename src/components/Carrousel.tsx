@@ -2,8 +2,6 @@ import * as React from 'react'
 import { useTheme } from '@mui/material/styles'
 import Box from '@mui/material/Box'
 import MobileStepper from '@mui/material/MobileStepper'
-import Paper from '@mui/material/Paper'
-import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft'
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight'
@@ -14,24 +12,24 @@ const AutoPlaySwipeableViews = autoPlay(SwipeableViews)
 
 const images = [
   {
-    label: 'San Francisco – Oakland Bay Bridge, United States',
+    label: 'Bike at the beach',
     imgPath:
-      'https://images.unsplash.com/photo-1537944434965-cf4679d1a598?auto=format&fit=crop&w=400&h=250&q=60'
+      'https://images.unsplash.com/photo-1583227122027-d2d360c66d3c?q=80&&w=400&h=250&q=60&fit=crop&fp-y=0.8&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
   },
   {
-    label: 'Bird',
+    label: 'Lavadoras',
     imgPath:
-      'https://images.unsplash.com/photo-1538032746644-0212e812a9e7?auto=format&fit=crop&w=400&h=250&q=60'
+      'https://images.unsplash.com/photo-1577553698923-17f1a80ce5bc?q=80&&w=400&h=250&q=60&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
   },
   {
-    label: 'Bali, Indonesia',
+    label: 'Tablas de surf',
     imgPath:
-      'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=400&h=250'
+      'https://images.unsplash.com/photo-1493224725672-62b2cfff0780?q=80&w=400&h=250&q=60&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
   },
   {
-    label: 'Goč, Serbia',
+    label: 'Scooters',
     imgPath:
-      'https://images.unsplash.com/photo-1512341689857-198e7e2f3ca8?auto=format&fit=crop&w=400&h=250&q=60'
+      'https://images.unsplash.com/photo-1554223789-df81106a45ed?q=80&w=400&h=250&q=60&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
   }
 ]
 

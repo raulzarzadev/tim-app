@@ -11,23 +11,31 @@ import { dateFormat } from '@/lib/utils-date'
 import { orderStatus } from '@/lib/orderStatus'
 import { Timestamp } from 'firebase/firestore'
 import { useState } from 'react'
+import dictionary from '@/CONSTS/dictionary'
 
 const AssignForm = ({
   assignTo,
   assignedTo,
   assignedAt,
-  handleAssign
+  handleAssign,
+  disabled
 }: {
   assignTo?: (email: string) => void | Promise<any>
   assignedTo?: string
   assignedAt?: Date | Timestamp
   handleAssign?: (email: string, date?: Date) => void
+  disabled?: boolean
 }) => {
   const modal = useModal({ title: 'Asignar responsable' })
 
   return (
     <div className="flex w-full justify-center ">
-      <Button onClick={modal.onOpen} variant="contained" fullWidth>
+      <Button
+        onClick={modal.onOpen}
+        variant="contained"
+        fullWidth
+        disabled={disabled}
+      >
         {assignedTo ? (
           <span>
             Asignado a: <StaffSpan email={assignedTo || ''} />
@@ -46,9 +54,10 @@ const AssignForm = ({
             // modal.onClose()
           }}
         />
-        <div className="flex justify-center mt-6">
-          <Button onClick={modal.onClose} variant="outlined">
-            Listo
+        <div className="flex justify-evenly mt-6">
+          <Button onClick={() => handleAssign?.('')}>Sin responsable</Button>
+          <Button onClick={modal.onClose} variant="contained" color="success">
+            Cerrar
           </Button>
         </div>
       </Modal>
@@ -71,16 +80,22 @@ const DeliveryStaffList = ({
     staff?.map((staff) => {
       const staffOrders = orders
         ?.filter((order) => order?.shipping?.assignedToEmail === staff?.email)
+        //* should show all orders or just pending and expired
+
+        //* in case of show expired order this should show the expired date no the start rent
+
+        //* show active order can help to view the activity?
+
         .filter((order) => orderStatus(order) === 'pending')
       return { ...staff, orders: staffOrders }
     }) || []
   const indexStaffSelected = staffOrders?.findIndex(
     (staff) => staff?.email === assignedTo
   )
+  //console.log({ staffOrders })
   return (
     <>
       <div>
-        <Button onClick={() => handleAssign?.('')}>Sin responsable</Button>
         <AccordionSections
           expands={indexStaffSelected}
           sections={[
@@ -118,7 +133,9 @@ const OrdersByDays = ({
   return (
     <div>
       <div className="flex justify-center">
-        <Button onClick={() => onClickDay?.()}>asignar sin fecha</Button>
+        <Button onClick={() => onClickDay?.()} variant="outlined">
+          asignar sin fecha
+        </Button>
       </div>
       <div className=" grid  gap-2 grid-cols-3 sm:grid-cols-7 place-content-end">
         <Day
@@ -194,6 +211,7 @@ const Day = ({
       setAssigning(false)
     }, 500)
   }
+
   return (
     <div>
       <button
@@ -213,16 +231,31 @@ const Day = ({
       </div>
 
       {orders?.map((order) => (
-        <div key={order.id}>
-          {isSameDay(date, forceAsDate(order.shipping.date)) && (
-            <div className="h-10 w-full bg-green-800 mt-2 flex justify-center items-center p-1 text-white ">
-              <Typography className="text-center truncate">
-                {order.client.name}
-              </Typography>
-            </div>
-          )}
-        </div>
+        <Order order={order} key={order.id} date={date} />
       ))}
+    </div>
+  )
+}
+const Order = ({ order, date }: { order: Order; date: Date }) => {
+  const status = orderStatus(order)
+  return (
+    <div>
+      {isSameDay(date, forceAsDate(order.shipping.date)) && (
+        <div
+          className={`
+        ${status === 'pending' && 'bg-blue-800'}
+        ${status === 'taken' && 'bg-green-800'}
+        ${status === 'expired' && 'bg-red-500'}
+        ${status === 'finished' && 'bg-blue-200 text-gray-950'}
+        
+        h-10 w-full  mt-2 flex flex-col truncate justify-center items-center p-1 text-white `}
+        >
+          <Typography className="text-center  text-xs">
+            {order.client.name}
+          </Typography>
+          <Typography className="text-xs">{dictionary(status)}</Typography>
+        </div>
+      )}
     </div>
   )
 }

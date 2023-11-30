@@ -99,6 +99,7 @@ const ModalEditShipping = ({ order }: { order: Order }) => {
               }))
             }
             assignedTo={shipping?.assignedToEmail}
+            assignedAt={shipping?.date}
           />
 
           <Button onClick={() => handleSave()} variant="outlined" fullWidth>
