@@ -99,14 +99,14 @@ export default function BottomNavigation() {
           currentCompany?.staff?.find((staff) => staff?.email === user?.email)
             ?.permissions?.MAINTENANCE || false
       },
-      {
-        href: `/dashboard/${currentCompany?.id}/DELIVERY`,
-        label: 'Reparto',
-        icon: <AppIcon icon="delivery" />,
-        visible:
-          currentCompany?.staff?.find((staff) => staff?.email === user?.email)
-            ?.permissions?.DELIVERY || false
-      },
+      // {
+      //   href: `/dashboard/${currentCompany?.id}/DELIVERY`,
+      //   label: 'Reparto',
+      //   icon: <AppIcon icon="delivery" />,
+      //   visible:
+      //     currentCompany?.staff?.find((staff) => staff?.email === user?.email)
+      //       ?.permissions?.DELIVERY || false
+      // },
       {
         href: `/dashboard/${currentCompany?.id}/ORDERS`,
         label: 'Ordenes',

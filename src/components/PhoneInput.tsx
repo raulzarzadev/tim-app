@@ -33,7 +33,7 @@ const PhoneInput = forwardRef(
               }}
               inputProps={{
                 className:
-                  'w-full rounded-[4px] pl-12 py-1 border-black border-opacity-25 border h-14',
+                  'w-full rounded-[4px] pl-12 py-1 border-black border-opacity-25 border h-14 bg-transparent',
                 name
               }}
               {...field}

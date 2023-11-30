@@ -13,7 +13,9 @@ const StaffOrders = () => {
     (o) => o?.shipping?.assignedToEmail === user?.email
   )
   if (userOrders === undefined) return <Typography>Cargando ....</Typography>
-  return <OrdersTabs orders={userOrders || []} />
+  return (
+    <OrdersTabs orders={userOrders || []} hideFinished hideAlls hideActives />
+  )
 }
 
 export default StaffOrders

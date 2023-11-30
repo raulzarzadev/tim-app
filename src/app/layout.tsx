@@ -3,9 +3,9 @@ import BottomNavigation from '@/components/BottomNavigation'
 import Navigation from '@/components/Navigation'
 import { AuthContextProvider } from '@/context/authContext'
 import { UserCompaniesProvider as UserCompaniesProvider2 } from '@/context/userCompaniesContext2'
-import './globals.css'
 import { StyledEngineProvider } from '@mui/material/styles'
 import { CssBaseline } from '@mui/material'
+import './globals.css'
 
 export const metadata = {
   title: 'baja-rent app',
@@ -29,7 +29,6 @@ export default async function RootLayout({
       </head>
       <body className="pb-16">
         <CssBaseline />
-
         <StyledEngineProvider injectFirst>
           <ErrorBoundary componentName="RootLayout auth">
             <AuthContextProvider>

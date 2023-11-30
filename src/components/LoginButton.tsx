@@ -8,6 +8,7 @@ import { useState } from 'react'
 import SignUpForm from './SignUpForm'
 import ForgotPasswordForm from './ForgotPasswordForm'
 import AppIcon from './AppIcon'
+import CallToActionCard from './Home/CallToActionCard'
 const LoginButton = () => {
   const modal = useModal({ title: 'Ingresar' })
 
@@ -17,20 +18,12 @@ const LoginButton = () => {
 
   return (
     <>
-      <Button
+      <CallToActionCard
+        subTitle="comenzar a rentar"
+        title="Ingresa"
+        label="Ingresar"
         onClick={modal.onOpen}
-        aria-label="sign-in-button"
-        variant="contained"
-        style={{
-          backgroundColor: '#4285F4'
-        }}
-      >
-        Ingresar
-      </Button>
-      {/* <div className="bg-white p-2 rounded-md shadow-md text-center w-32 aspect-[2/3] m-1 flex flex-col justify-center">
-        <Typography className="font-bold">Ingresa </Typography>{' '}
-        <Typography>para comezar rentar</Typography>
-      </div> */}
+      />
       <Modal {...modal}>
         <Box className="sm:flex ">
           <div>

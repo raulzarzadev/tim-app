@@ -1,21 +1,16 @@
 'use client'
 import { Inter } from 'next/font/google'
 import { Button, Grid, Typography } from '@mui/material'
-import LoginButton from '@/components/LoginButton'
-import { useAuthContext } from '@/context/authContext'
 import Link from 'next/link'
 import AppIcon from '@/components/AppIcon'
+import Header from '@/components/Home/Header'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
-  const { user } = useAuthContext()
-
   return (
     <main>
-      <div className="flex justify-center my-2">
-        {user === null && <LoginButton />}
-      </div>
+      <Header />
       <Grid
         container
         alignItems="center"
@@ -23,7 +18,7 @@ export default function Home() {
         direction="column"
       >
         <Typography variant="h4" className="text-4xl mb-4 text-center">
-          Renta lo que sea!.
+          Renta de todo!
         </Typography>
         <Typography variant="h5" sx={{ my: 1 }}>
           Bicicletas

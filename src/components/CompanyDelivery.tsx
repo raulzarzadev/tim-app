@@ -44,4 +44,5 @@ const CompanyDelivery = () => {
   )
 }
 
-export default validatePermissions(CompanyDelivery, 'DELIVERY')
+// export default validatePermissions(CompanyDelivery, 'DELIVERY')
+export default CompanyDelivery

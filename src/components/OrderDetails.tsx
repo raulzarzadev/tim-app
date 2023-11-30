@@ -13,6 +13,7 @@ import AccordionSections from './AccordionSections'
 import OrderReports from './OrderReports'
 import { totalCharged, totalPaid } from './cashboxBalances/calculateBalance.lib'
 import CurrencySpan from './CurrencySpan'
+import asNumber from '@/lib/asNumber'
 
 const OrderDetails = ({ order }: { order?: Partial<Order> }) => {
   order?.payments?.map((p) => {
@@ -52,7 +53,9 @@ const OrderDetails = ({ order }: { order?: Partial<Order> }) => {
             },
             {
               title: 'Items',
-              subTitle: `${items?.length || 0}`,
+              subTitle: `(${items?.length || 0}) $${items
+                ?.reduce((acc, curr) => (acc += asNumber(curr.price)), 0)
+                .toFixed(2)}`,
               content: (
                 <>
                   {!!items?.length ? (
@@ -94,6 +97,31 @@ const OrderDetails = ({ order }: { order?: Partial<Order> }) => {
                 </>
               )
             },
+
+            // ${fromNow(order?.shipping?.date)} ${
+            //  order?.shipping?.assignedToEmail || ' sin asignar '
+            // }
+            {
+              title: `Entrega `,
+              subTitle: ` $${asNumber(order?.shipping?.amount)?.toFixed(2)}`,
+              content: (
+                <div>
+                  <Typography>
+                    Asignado:{' '}
+                    <StaffSpan email={order?.shipping?.assignedToEmail || ''} />
+                  </Typography>
+                  <Typography>
+                    Lugar: <ShippingLink address={order?.shipping?.address} />
+                  </Typography>
+                  <Typography>
+                    Hora: {dateFormat(order?.shipping?.date, 'dd/MMM HH:mm')}
+                  </Typography>
+                  <Typography>
+                    Costo: <CurrencySpan quantity={order?.shipping?.amount} />
+                  </Typography>
+                </div>
+              )
+            },
             {
               title: 'Pagos',
               subTitle: `(${order?.payments?.length || 0}) $${totalCharged(
@@ -127,26 +155,6 @@ const OrderDetails = ({ order }: { order?: Partial<Order> }) => {
                     <Typography>No hay pagos</Typography>
                   )}
                 </>
-              )
-            },
-            {
-              title: 'Entrega ',
-              subTitle: ` ${fromNow(order?.shipping?.date)} ${
-                order?.shipping?.assignedToEmail || ' sin asignar '
-              }`,
-              content: (
-                <div>
-                  <Typography>
-                    Asignado:{' '}
-                    <StaffSpan email={order?.shipping?.assignedToEmail || ''} />
-                  </Typography>
-                  <Typography>
-                    Lugar: <ShippingLink address={order?.shipping?.address} />
-                  </Typography>
-                  <Typography>
-                    Hora: {dateFormat(order?.shipping?.date, 'dd/MMM HH:mm')}
-                  </Typography>
-                </div>
               )
             },
             {

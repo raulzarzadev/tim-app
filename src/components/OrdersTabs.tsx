@@ -7,7 +7,17 @@ import SearchInput from './SearchInput'
 import searchValueInObject from '@/lib/searchValueInObject'
 import { useEffect, useState } from 'react'
 
-const OrdersTabs = ({ orders }: { orders: Partial<Order>[] }) => {
+const OrdersTabs = ({
+  orders,
+  hideActives,
+  hideAlls,
+  hideFinished
+}: {
+  orders: Partial<Order>[]
+  hideActives?: boolean
+  hideAlls?: boolean
+  hideFinished?: boolean
+}) => {
   const ordersWithFinishRentAt = orders?.map((o) => {
     return {
       ...o,
@@ -71,20 +81,23 @@ const OrdersTabs = ({ orders }: { orders: Partial<Order>[] }) => {
             content: <OrdersTable orders={pending || []} />
           },
           {
-            label: `Activas ${actives?.length}`,
-            content: <OrdersTable orders={actives || []} />
-          },
-          {
             label: `Vencidas ${expired?.length}`,
             content: <OrdersTable orders={expired || []} />
           },
           {
+            label: `Activas ${actives?.length}`,
+            content: <OrdersTable orders={actives || []} />,
+            hidden: hideActives
+          },
+          {
             label: `Terminadas ${finished?.length}`,
-            content: <OrdersTable orders={finished || []} />
+            content: <OrdersTable orders={finished || []} />,
+            hidden: hideFinished
           },
           {
             label: `Todas ${filtered?.length}`,
-            content: <OrdersTable orders={filtered || []} />
+            content: <OrdersTable orders={filtered || []} />,
+            hidden: hideAlls
           }
         ]}
       />

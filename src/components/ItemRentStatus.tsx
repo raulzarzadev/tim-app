@@ -11,23 +11,27 @@ import { Box, Button, Typography } from '@mui/material'
 import React, { ReactNode } from 'react'
 import { finishItemRent, resumeRent, startItemRent } from '@/firebase/orders'
 import ModalPayment from './ModalPayment2'
+import asNumber from '@/lib/asNumber'
+import OrderDetails from './OrderDetails'
+import { calculateOrderTotal } from '@/lib/calculateOrderTotal'
 
 const ItemRentStatus = ({ item }: { item: ItemOrder }) => {
-  const { companyItems } = useUserCompaniesContext()
+  const { currentCompany } = useUserCompaniesContext()
+
   const pending = item.rentStatus === 'pending'
   const inUse = item.rentStatus === 'taken'
   const finished = item.rentStatus === 'finished'
 
   const onTime = isAfter(asDate(item.rentFinishAt) || new Date(), new Date())
-  const orderTotal = calculateFullTotal(
-    item.order.items,
-    item.order.items?.map((i) => companyItems.find((c) => c.id === i.itemId))
-  )
 
-  const paymentsAmount =
-    item?.order?.payments?.reduce((a, { amount = 0 }) => a + amount, 0) || 0
+  const totalOrder = calculateOrderTotal({
+    order: item.order,
+    company: currentCompany
+  })
 
-  const total = orderTotal - paymentsAmount
+  const total = totalOrder
+
+  // console.log({ t, paymentsAmount, total })
 
   const handleStartItemRent = async () => {
     return await startItemRent(item?.order?.id, item?.id || '')
@@ -44,6 +48,7 @@ const ItemRentStatus = ({ item }: { item: ItemOrder }) => {
 
   return (
     <div className="grid gap-4 ">
+      {/* <OrderDetails order={item.order} /> */}
       {total !== 0 && (
         <ModalItemStatus
           label={`${total < 0 ? 'Devolver ' : 'Cobrar'} pendiente $${Math.abs(
@@ -96,7 +101,6 @@ const ItemRentStatus = ({ item }: { item: ItemOrder }) => {
           <Typography className="text-center">Unidad en uso</Typography>
         </ModalItemStatus>
       )}
-
       {finished && onTime && (
         <ModalItemStatus
           label="Terminado"

@@ -45,7 +45,7 @@ function BasicTabs({
   tabs = []
 }: {
   title?: string
-  tabs: { label: string; content: React.ReactNode }[]
+  tabs: { label: string; content: React.ReactNode; hidden?: boolean }[]
 }) {
   const searchParams = useSearchParams()
   const router = useRouter()
@@ -97,9 +97,11 @@ function BasicTabs({
               className: 'w-[25px]'
             }}
           >
-            {tabs.map((tab, i) => (
-              <Tab key={i} label={tab.label} {...a11yProps(i)} />
-            ))}
+            {tabs.map((tab, i) =>
+              tab.hidden ? null : (
+                <Tab key={i} label={tab.label} {...a11yProps(i)} />
+              )
+            )}
           </Tabs>
         </ErrorBoundary>
       </Box>

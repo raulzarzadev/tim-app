@@ -27,7 +27,7 @@ const Page = ({
       <>
         {area === 'ADMIN' && <CompanyAdmin />}
         {area === 'CASHBOX' && <CompanyCashbox2 />}
-        {area === 'DELIVERY' && <CompanyDelivery />}
+        {/* {area === 'DELIVERY' && <CompanyDelivery />} */}
         {area === 'MAINTENANCE' && <CompanyMaintenance />}
         {area === 'RECEPTION' && <CompanyReception />}
         {area === 'SALES' && <CompanyStore />}

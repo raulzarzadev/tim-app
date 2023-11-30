@@ -31,15 +31,12 @@ export const calculateOrderTotal = ({
     }
   )
 
-  // const itemsTotal = itemsSelected.reduce((acc, curr) => {
-  //   return (acc += asNumber(curr.price))
-  // }, 0)
-  // console.log({ itemsSelected, itemsTotal })
   const itemsTotal = calculateFullTotal(itemsSelected, fullItems)
   const shippingAmount = asNumber(order?.shipping?.amount) || 0
   const totalPayments = totalCharged(order?.payments || [])
   total += itemsTotal
   total += shippingAmount
   total -= totalPayments
+
   return total
 }
