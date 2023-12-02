@@ -276,6 +276,7 @@ const OrderActions = ({
           icon="edit"
           order={order}
           handleSave={handleSaveOrder}
+          shippingEnabled={currentCompany?.shippingEnabled}
         />
       </div>
     </div>

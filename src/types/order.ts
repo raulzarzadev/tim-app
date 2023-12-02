@@ -31,7 +31,7 @@ export type Order = OrderBase & BaseType
 
 export type Shipping = {
   assignedToEmail?: StaffType['email']
-  date?: Timestamp | Date
+  date?: Timestamp | Date | null
   address?: string | 'store'
   amount?: number
 }

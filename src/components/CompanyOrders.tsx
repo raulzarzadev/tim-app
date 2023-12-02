@@ -10,6 +10,7 @@ const CompanyOrders = () => {
     <div>
       <div className="flex justify-center">
         <ModalOrderForm
+          shippingEnabled={currentCompany?.shippingEnabled}
           label="Nueva orden"
           icon="order"
           closeOnSave={false}

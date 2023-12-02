@@ -6,8 +6,11 @@ import { ArticleType } from '@/types/article'
 import ArticleDetails from '../ArticleDetails'
 import ButtonSave from '../ButtonSave'
 import ButtonClear from '../ButtonClear'
+import { CategoryType } from '@/types/category'
 
 export type SelectItemsProps = {
+  companyItems?: Partial<ArticleType>[]
+  companyCategories?: Partial<CategoryType>[]
   itemsDisabled?: string[]
   showItemDetails?: boolean
 } & (
@@ -35,31 +38,33 @@ const SelectCompanyItem = ({
   //@ts-ignore
   setItems,
   //@ts-ignore
-  setItem
+  setItem,
+  itemsDisabled,
+  companyItems,
+  companyCategories
 }: SelectItemsProps) => {
-  const {
-    currentCompany,
-    ordersItems: { inUse: itemsTaken }
-  } = useUserCompaniesContext()
+  // const {
+  //   currentCompany,
+  //   ordersItems: { inUse: itemsTaken }
+  // } = useUserCompaniesContext()
 
-  const itemsDisabled = itemsTaken.map((i) => i.itemId)
+  // const itemsDisabled = itemsTaken.map((i) => i.itemId)
+  // const companyItems = currentCompany?.articles
+  // const companyCategories = currentCompany?.categories
 
-  const categories: { label: string; value: string }[] =
-    currentCompany?.categories?.map((cat) => ({
+  const categories: { label?: string; value?: string }[] =
+    companyCategories?.map((cat) => ({
       label: cat.name,
       value: cat.name
     })) || []
 
-  const companyItems = currentCompany?.articles
-
   const [_categoryName, _setCategoryName] = useState('')
-  const [_items, _setItems] = useState<ArticleType[]>([])
+  const [_items, _setItems] = useState<Partial<ArticleType>[]>([])
   // const [_selected, _setSelected] = useState('')
-  const [itemDetails, setItemDetails] = useState<ArticleType>()
+  const [itemDetails, setItemDetails] = useState<Partial<ArticleType>>()
   const handleSelectCat = (cat: string) => {
     _setCategoryName(cat)
-    const catItems =
-      currentCompany?.articles?.filter((i) => i.category === cat) || []
+    const catItems = companyItems?.filter((i) => i.category === cat) || []
     _setItems(catItems)
   }
   const [_itemsSelected, _setItemsSelected] = useState<string[]>(
@@ -68,7 +73,7 @@ const SelectCompanyItem = ({
   const [_itemSelected, _setItemSelected] = useState(itemSelected || '')
 
   const handleClickItem = (itemId?: ArticleType['id']) => {
-    showItemDetails && setItemDetails(_items.find((i) => i.id === itemId))
+    showItemDetails && setItemDetails(_items?.find((i) => i.id === itemId))
     if (multiple) {
       //* multiple selected
       _itemsSelected?.includes(itemId || '')
@@ -138,7 +143,9 @@ const SelectCompanyItem = ({
           />
         ))}
       </Stack>
-      <div>{itemDetails && <ArticleDetails article={itemDetails} />}</div>
+      <div>
+        {itemDetails && <ArticleDetails article={itemDetails as ArticleType} />}
+      </div>
 
       <div className="flex justify-evenly w-full">
         <ButtonClear

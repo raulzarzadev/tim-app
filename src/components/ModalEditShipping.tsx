@@ -1,6 +1,6 @@
 import useModal from '@/hooks/useModal'
 import Modal from './Modal'
-import { Button, IconButton, TextField, Typography } from '@mui/material'
+import { Button, TextField } from '@mui/material'
 import AppIcon from './AppIcon'
 import { useState } from 'react'
 import { Order } from '@/types/order'
@@ -46,7 +46,7 @@ const ModalEditShipping = ({ order }: { order: Order }) => {
       <Modal {...modal}>
         <div className="grid gap-4">
           <CheckboxLabel
-            label="Entregar en tienda"
+            label="Entregar en tiendas"
             checked={shipping?.address === 'store'}
             onChange={(e) =>
               setShipping((shipping) => ({
@@ -78,7 +78,9 @@ const ModalEditShipping = ({ order }: { order: Order }) => {
             }}
           />
 
-          {!itsNow && (
+          {!shipping.date && <span>Sin fecha</span>}
+
+          {!itsNow && shipping.date && (
             <TextField
               type="datetime-local"
               value={inputDateFormat(shipping?.date)}

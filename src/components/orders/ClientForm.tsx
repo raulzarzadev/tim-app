@@ -150,6 +150,7 @@ const ClientForm = ({
         <Box className="flex justify-evenly my-6">
           <Button onClick={handleClear}>Limpiar</Button>
           <SaveButton
+            test-id="save-client"
             disabled={disabledSave}
             type="submit"
             label="Guardar cliente"

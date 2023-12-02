@@ -22,7 +22,7 @@ const AssignForm = ({
 }: {
   assignTo?: (email: string) => void | Promise<any>
   assignedTo?: string
-  assignedAt?: Date | Timestamp
+  assignedAt?: Order['shipping']['date']
   handleAssign?: (email: string, date?: Date) => void
   disabled?: boolean
 }) => {
@@ -31,6 +31,7 @@ const AssignForm = ({
   return (
     <div className="flex w-full justify-center ">
       <Button
+        test-id="assign-shipping"
         onClick={modal.onOpen}
         variant="contained"
         fullWidth
@@ -72,7 +73,7 @@ const DeliveryStaffList = ({
 }: {
   handleAssign?: (email: string, date?: Date) => void
   assignedTo?: string
-  assignedAt?: Date | Timestamp
+  assignedAt?: Order['shipping']['date']
 }) => {
   const { currentCompany, orders } = useUserCompaniesContext()
   const staff = currentCompany?.staff
@@ -128,7 +129,7 @@ const OrdersByDays = ({
 }: {
   orders: Order[]
   onClickDay?: (date?: Date) => void
-  assignedAt?: Date | Timestamp
+  assignedAt?: Order['shipping']['date']
 }) => {
   return (
     <div>
@@ -198,7 +199,7 @@ const Day = ({
   days: number
   label?: string
   onClickDay?: (date: Date) => void
-  assignedAt?: Date | Timestamp
+  assignedAt?: Order['shipping']['date']
   orders?: Order[]
 }) => {
   const date = addDays(new Date(), days)

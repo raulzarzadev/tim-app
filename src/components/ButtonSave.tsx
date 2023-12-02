@@ -16,7 +16,6 @@ const ButtonSave = ({
   return (
     <>
       <Button
-        test-id="save-client"
         onClick={onClick}
         color="success"
         variant="contained"

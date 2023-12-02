@@ -10,8 +10,15 @@ const ShippingDetails = ({ shipping }: { shipping: Order['shipping'] }) => {
   return (
     <div>
       <Typography>
-        Fecha: {dateFormat(shipping.date, 'dd/MMM')}{' '}
-        {fromNow(asDate(shipping.date))}
+        Fecha:
+        {shipping?.date === null
+          ? ' Ahora '
+          : dateFormat(shipping.date, 'dd/MMM HH:mm')}
+        {/* {fromNow(asDate(shipping.date))} */}
+      </Typography>
+
+      <Typography>
+        Lugar: <ShippingLink address={shipping.address} />
       </Typography>
       <Typography>
         Asignado:{' '}
@@ -20,9 +27,6 @@ const ShippingDetails = ({ shipping }: { shipping: Order['shipping'] }) => {
         ) : (
           'Sin asignar'
         )}
-      </Typography>
-      <Typography>
-        Lugar: <ShippingLink address={shipping.address} />
       </Typography>
       <Typography>
         Costo: <CurrencySpan quantity={shipping.amount || 0} />

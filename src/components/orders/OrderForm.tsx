@@ -15,19 +15,26 @@ import asNumber from '@/lib/asNumber'
 import { ArticleType } from '@/types/article'
 import ButtonSave from '../ButtonSave'
 import ButtonClear from '../ButtonClear'
-import { isBefore } from 'date-fns'
-import forceAsDate from '@/lib/forceAsDate'
-import { ItemSelected } from '@/context/useCompanyCashbox'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
+import onSaveOrder from './lib/onSaveOrder'
+import { CategoryType } from '@/types/category'
 
 const OrderForm = ({
   handleSave,
-  defaultOrder
+  defaultOrder,
+  shippingEnabled,
+  companyItems,
+  companyCategories
 }: {
   defaultOrder?: Partial<Order>
   handleSave?: (order: Partial<Order>) => Promise<void> | void
+  shippingEnabled?: boolean
+  companyItems?: Partial<ArticleType>[]
+  companyCategories?: Partial<CategoryType>[]
 }) => {
-  const { currentCompany } = useUserCompaniesContext()
+  //const { currentCompany } = useUserCompaniesContext()
+  //const shippingEnabled = currentCompany?.shippingEnabled
+
   const clientForm = useModal({ title: 'Detalles de cliente' })
   const shippingForm = useModal({ title: 'Detalles de entrega' })
   const itemsForm = useModal({ title: 'Unidades' })
@@ -48,80 +55,91 @@ const OrderForm = ({
     setOrder({})
   }
 
-  const handleSaveOrder = async (order: Partial<Order>) => {
-    // console.log({ defaultOrder })
-    // console.log({ order })
-    // return
-    const rentAlreadyStart =
-      order.shipping?.date &&
-      isBefore(forceAsDate(order.shipping?.date), new Date())
-    const updatingOrder = !!defaultOrder?.id
+  // const handleSaveOrder = async (order: Partial<Order>) => {
+  //   // console.log({ defaultOrder })
+  //   // console.log({ order })
+  //   // return
+  //   const rentAlreadyStart =
+  //     order.shipping?.date &&
+  //     isBefore(forceAsDate(order.shipping?.date), new Date())
+  //   const updatingOrder = !!defaultOrder?.id
 
-    const items = order.items?.map((i) => {
-      const defaultItem = defaultOrder?.items?.find(
-        (d) => d?.itemId === i?.itemId
-      )
+  //   const items = order.items?.map((i) => {
+  //     const defaultItem = defaultOrder?.items?.find(
+  //       (d) => d?.itemId === i?.itemId
+  //     )
 
-      if (!updatingOrder) {
-        if (rentAlreadyStart)
-          i.rentStartedAt = forceAsDate(order.shipping?.date)
-        //default rent status is pending
-        i.rentStatus = 'pending'
-        // if rent already start o shipping is enabled rent status is taken
-        if (rentAlreadyStart || currentCompany?.shippingEnabled) {
-          i.rentStatus = 'taken'
-        } else {
-          i.rentStatus = 'pending'
-        }
-      }
+  //     if (!updatingOrder) {
+  //       if (rentAlreadyStart)
+  //         i.rentStartedAt = forceAsDate(order.shipping?.date)
+  //       //default rent status is pending
+  //       i.rentStatus = 'pending'
+  //       // if rent already start o shipping is enabled rent status is taken
+  //       if (rentAlreadyStart || currentCompany?.shippingEnabled) {
+  //         i.rentStatus = 'taken'
+  //       } else {
+  //         i.rentStatus = 'pending'
+  //       }
+  //     }
 
-      if (!currentCompany?.shippingEnabled) {
-        i.rentStatus = 'taken'
-        i.rentStartedAt = new Date()
-      }
+  //     if (!currentCompany?.shippingEnabled) {
+  //       i.rentStatus = 'taken'
+  //       i.rentStartedAt = new Date()
+  //     }
 
-      if (!order.shipping || rentAlreadyStart) {
-        i.rentStatus = 'taken'
-        i.rentStartedAt = new Date()
-      }
+  //     if (!order.shipping || rentAlreadyStart) {
+  //       i.rentStatus = 'taken'
+  //       i.rentStartedAt = new Date()
+  //     }
 
-      if (!rentAlreadyStart) {
-        i.rentStatus = 'pending'
-      }
+  //     if (!rentAlreadyStart) {
+  //       i.rentStatus = 'pending'
+  //     }
 
-      return {
-        ...defaultItem,
-        ...i
-      }
-      return {
-        ...i,
-        rentStatus: rentAlreadyStart
-          ? 'taken'
-          : ('pending' as ItemSelected['rentStatus'])
-      }
+  //     return {
+  //       ...defaultItem,
+  //       ...i
+  //     }
+  //     return {
+  //       ...i,
+  //       rentStatus: rentAlreadyStart
+  //         ? 'taken'
+  //         : ('pending' as ItemSelected['rentStatus'])
+  //     }
+  //   })
+  //   console.log({ items })
+
+  //   try {
+  //     setSaving(true)
+  //     clientForm.onClose()
+  //     shippingForm.onClose()
+  //     itemsForm.onClose()
+  //     const res = await handleSave?.({ ...order, items })
+  //     //@ts-ignore
+  //     if (res?.ok) {
+  //       //@ts-ignore
+  //       const orderId = res?.res?.id || ''
+  //       setOrder({ ...order, items, id: orderId })
+  //     }
+  //     return res
+  //   } catch (e) {
+  //     console.error(e)
+  //   } finally {
+  //     setTimeout(() => {
+  //       setSaving(false)
+  //     }, 1000)
+  //   }
+  // }
+
+  const handleSaveOrder = (order: Partial<Order>) => {
+    onSaveOrder(order, {
+      alreadyStart: false,
+      shippingEnabled: shippingEnabled
     })
-    console.log({ items })
-
-    try {
-      setSaving(true)
-      clientForm.onClose()
-      shippingForm.onClose()
-      itemsForm.onClose()
-      const res = await handleSave?.({ ...order, items })
-      //@ts-ignore
-      if (res?.ok) {
-        //@ts-ignore
-        const orderId = res?.res?.id || ''
-        setOrder({ ...order, items, id: orderId })
-      }
-      return res
-    } catch (e) {
-      console.error(e)
-    } finally {
-      setTimeout(() => {
-        setSaving(false)
-      }, 1000)
-    }
+      .then((res) => {
+        console.log({ res })
+      })
+      .catch((e) => {})
   }
 
   const orderId = order?.id || ''
@@ -138,7 +156,6 @@ const OrderForm = ({
   const shippingAmount = asNumber(order?.shipping?.amount) || 0
   const total = itemsTotal - orderPaymentsCharged + shippingAmount
   const itemsDisabled: ArticleType['id'][] = []
-  const shippingEnabled = currentCompany?.shippingEnabled
   return (
     <div>
       <div className="grid gap-2">
@@ -197,6 +214,8 @@ const OrderForm = ({
           <SelectCompanyItem
             multiple
             itemsDisabled={itemsDisabled}
+            companyItems={companyItems}
+            companyCategories={companyCategories}
             itemsSelected={order?.items?.map((i) => i.itemId || '') || []}
             setItems={(items) => {
               setOrder({

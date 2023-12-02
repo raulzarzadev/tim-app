@@ -7,7 +7,6 @@ import AssignForm from '../AssignForm'
 import forceAsDate from '@/lib/forceAsDate'
 import SaveButton from '../ButtonSave'
 import { isBefore } from 'date-fns'
-import { Timestamp } from 'firebase/firestore'
 
 const ShippingForm = ({
   shipping,
@@ -15,30 +14,22 @@ const ShippingForm = ({
   handleSave
 }: {
   shipping?: Order['shipping']
-  setShipping?: Dispatch<
-    SetStateAction<{
-      assignedToEmail: string
-      date: Date | Timestamp
-      address: string
-      amount?: number | undefined
-    }>
-  >
+  setShipping?: Dispatch<SetStateAction<Order['shipping']>>
   handleSave?: (shipping: Order['shipping']) => Promise<void> | void
 }) => {
-  const defaultShipping = {
+  const defaultShipping: Order['shipping'] = {
     address: '',
-    date: new Date(),
+    date: null,
     assignedToEmail: '',
     ...shipping
   }
   const [shippingMenu, setShippingMenu] = useState({
     inStore: shipping?.address == 'store' || !shipping?.address ? true : false,
-    pickupNow: isBefore(forceAsDate(shipping?.date), new Date()),
+    pickupNow: !shipping?.date,
     freeShipping: !shipping?.amount
   })
 
   const [_shipping, _setShipping] = useState(defaultShipping)
-
   const handleChangeShippingMenu = (field: string, value: boolean) => {
     setShippingMenu((menu) => ({
       ...menu,
@@ -48,12 +39,13 @@ const ShippingForm = ({
 
   const handleChangeShipping = (
     field: string,
-    value: string | Date | number
+    value: string | Date | number | null
   ) => {
     //const shippingCopy = { ..._shipping, [field]: value }
     _setShipping((shipping) => ({ ...shipping, [field]: value }))
     setShipping?.((shipping) => ({ ...shipping, [field]: value }))
   }
+  console.log(shipping?.date)
 
   return (
     <Box className="flex flex-col items-center my-4">
@@ -75,6 +67,7 @@ const ShippingForm = ({
 
       {/******   SHIPPING LOCATION  */}
       <CheckboxLabel
+        test-id="shipping-in-store"
         label="Entregar en tienda"
         checked={shippingMenu.inStore}
         onChange={(e) => {
@@ -97,11 +90,14 @@ const ShippingForm = ({
       {/******   SHIPPING DATE  */}
       <Box className="flex justify-start ">
         <CheckboxLabel
+          test-id="shipping-now"
           label="Entregar ahora"
           checked={shippingMenu.pickupNow}
           onChange={(e) => {
             handleChangeShippingMenu('pickupNow', e.target.checked)
             if (e.target.checked) {
+              handleChangeShipping('date', null)
+            } else {
               handleChangeShipping('date', new Date())
             }
           }}
@@ -124,6 +120,7 @@ const ShippingForm = ({
 
       <Box className="flex justify-start ">
         <CheckboxLabel
+          test-id="shipping-free-cost"
           label="Sin costo $"
           checked={shippingMenu.freeShipping}
           onChange={(e) => {
@@ -150,7 +147,11 @@ const ShippingForm = ({
 
       <div className="flex justify-evenly w-full ">
         <Button onClick={() => setShipping?.(defaultShipping)}>Limpiar</Button>
-        <SaveButton type="submit" onClick={() => handleSave?.(_shipping)} />
+        <SaveButton
+          test-id="save-shipping"
+          type="submit"
+          onClick={() => handleSave?.(_shipping)}
+        />
       </div>
     </Box>
   )
