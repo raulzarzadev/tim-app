@@ -1,12 +1,7 @@
-'use client'
-import ModalOrderForm from '@/components/orders/ModalOrderForm'
+import TestOrderForm from './TestOrderForm'
 
 const Page = () => {
-  return (
-    <div>
-      <ModalOrderForm label="Nueva orden" shippingEnabled />
-    </div>
-  )
+  return <div></div>
 }
 
 export default Page

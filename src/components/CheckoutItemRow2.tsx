@@ -38,7 +38,13 @@ export const CheckoutItemRow = ({
     )
   }
   return (
-    <Grid2 container key={item?.id} spacing={1} alignItems={'center'}>
+    <Grid2
+      test-id={`selected-item-row-${item?.id}`}
+      container
+      key={item?.id}
+      spacing={1}
+      alignItems={'center'}
+    >
       <Grid2 xs={2}>{item?.category}</Grid2>
       <Grid2 xs={2}>
         <ModalItemDetails itemId={item?.id || ''} />
@@ -47,6 +53,7 @@ export const CheckoutItemRow = ({
         {item.prices?.map((p, i) => (
           <Grid2 key={i} xs={'auto'}>
             <button
+              test-id={`select-item-price-${i}`}
               onClick={() => handleSelectPrice(p)}
               className={`${
                 isSelectedPrice(p, priceSelected) ? 'bg-blue-300' : ''
@@ -62,7 +69,7 @@ export const CheckoutItemRow = ({
         ))}
       </Grid2>
       <Grid2 xs={2}>
-        <CurrencySpan quantity={itemTotal} />
+        <CurrencySpan test-id="item-total" quantity={itemTotal} />
       </Grid2>
     </Grid2>
   )

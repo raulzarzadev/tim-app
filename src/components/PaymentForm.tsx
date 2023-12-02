@@ -61,8 +61,9 @@ const PaymentForm = ({
       ? formValues.amount * USD_PRICE
       : formValues.amount
   )
-
-  const disableOnPay = exactAmount && amountInMXN < amount
+  const inputEmpty = !formValues.amount
+  //console.log({ inputEmpty })
+  const disableOnPay = (exactAmount && amountInMXN < amount) || inputEmpty
 
   return (
     <div>
@@ -118,6 +119,7 @@ const PaymentForm = ({
         />
 
         <ModalConfirm
+          test-id="confirm-payment"
           disabled={disableOnPay}
           handleConfirm={async () => {
             return handlePay()

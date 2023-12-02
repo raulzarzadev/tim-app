@@ -13,9 +13,7 @@ const ModalOrderForm = ({
   handleSave,
   closeOnSave = true,
   order,
-  shippingEnabled,
-  companyItems,
-  companyCategories
+  shippingEnabled
 }: {
   label: string
   icon?: IconName
@@ -23,8 +21,6 @@ const ModalOrderForm = ({
   closeOnSave?: boolean
   order?: Partial<Order>
   shippingEnabled?: boolean
-  companyItems?: Partial<ArticleType>[]
-  companyCategories?: Partial<CategoryType>[]
 }) => {
   const modal = useModal({ title: 'Nueva orden' })
   return (
@@ -38,8 +34,6 @@ const ModalOrderForm = ({
       </Button>
       <Modal {...modal}>
         <OrderForm
-          companyItems={companyItems}
-          companyCategories={companyCategories}
           shippingEnabled={shippingEnabled}
           defaultOrder={order}
           handleSave={async (data) => {

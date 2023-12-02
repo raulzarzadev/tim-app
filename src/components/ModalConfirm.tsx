@@ -15,7 +15,8 @@ const ModalConfirm = ({
   modalTitle = 'Confirmar',
   openIcon,
   fullWidth,
-  disabledAccept
+  disabledAccept,
+  ...rest
 }: {
   handleConfirm: () => void | Promise<any>
   children?: ReactNode
@@ -45,6 +46,7 @@ const ModalConfirm = ({
         variant="outlined"
         color={color}
         endIcon={openIcon ? <AppIcon icon={openIcon} /> : undefined}
+        {...rest}
       >
         {label}
       </Button>

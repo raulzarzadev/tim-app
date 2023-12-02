@@ -15,26 +15,17 @@ import asNumber from '@/lib/asNumber'
 import { ArticleType } from '@/types/article'
 import ButtonSave from '../ButtonSave'
 import ButtonClear from '../ButtonClear'
-import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import onSaveOrder from './lib/onSaveOrder'
-import { CategoryType } from '@/types/category'
 
 const OrderForm = ({
   handleSave,
   defaultOrder,
-  shippingEnabled,
-  companyItems,
-  companyCategories
+  shippingEnabled
 }: {
   defaultOrder?: Partial<Order>
   handleSave?: (order: Partial<Order>) => Promise<void> | void
   shippingEnabled?: boolean
-  companyItems?: Partial<ArticleType>[]
-  companyCategories?: Partial<CategoryType>[]
 }) => {
-  //const { currentCompany } = useUserCompaniesContext()
-  //const shippingEnabled = currentCompany?.shippingEnabled
-
   const clientForm = useModal({ title: 'Detalles de cliente' })
   const shippingForm = useModal({ title: 'Detalles de entrega' })
   const itemsForm = useModal({ title: 'Unidades' })
@@ -132,6 +123,7 @@ const OrderForm = ({
   // }
 
   const handleSaveOrder = (order: Partial<Order>) => {
+    setSaving(true)
     onSaveOrder(order, {
       alreadyStart: false,
       shippingEnabled: shippingEnabled
@@ -214,8 +206,6 @@ const OrderForm = ({
           <SelectCompanyItem
             multiple
             itemsDisabled={itemsDisabled}
-            companyItems={companyItems}
-            companyCategories={companyCategories}
             itemsSelected={order?.items?.map((i) => i.itemId || '') || []}
             setItems={(items) => {
               setOrder({

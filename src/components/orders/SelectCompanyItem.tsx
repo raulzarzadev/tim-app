@@ -6,11 +6,8 @@ import { ArticleType } from '@/types/article'
 import ArticleDetails from '../ArticleDetails'
 import ButtonSave from '../ButtonSave'
 import ButtonClear from '../ButtonClear'
-import { CategoryType } from '@/types/category'
 
 export type SelectItemsProps = {
-  companyItems?: Partial<ArticleType>[]
-  companyCategories?: Partial<CategoryType>[]
   itemsDisabled?: string[]
   showItemDetails?: boolean
 } & (
@@ -38,19 +35,19 @@ const SelectCompanyItem = ({
   //@ts-ignore
   setItems,
   //@ts-ignore
-  setItem,
-  itemsDisabled,
-  companyItems,
-  companyCategories
-}: SelectItemsProps) => {
-  // const {
-  //   currentCompany,
-  //   ordersItems: { inUse: itemsTaken }
-  // } = useUserCompaniesContext()
+  setItem
+}: // itemsDisabled,
+// companyItems,
+// companyCategories
+SelectItemsProps) => {
+  const {
+    currentCompany,
+    ordersItems: { inUse: itemsTaken }
+  } = useUserCompaniesContext()
 
-  // const itemsDisabled = itemsTaken.map((i) => i.itemId)
-  // const companyItems = currentCompany?.articles
-  // const companyCategories = currentCompany?.categories
+  const itemsDisabled = itemsTaken.map((i) => i.itemId)
+  const companyItems = currentCompany?.articles
+  const companyCategories = currentCompany?.categories
 
   const categories: { label?: string; value?: string }[] =
     companyCategories?.map((cat) => ({
@@ -111,6 +108,7 @@ const SelectCompanyItem = ({
             .map((i) => companyItems?.find((item) => item.id === i))
             ?.map((item) => (
               <Chip
+                test-id={`selected-item-chip-${item?.id}`}
                 disabled={
                   !!itemsDisabled?.find?.((itemId) => itemId === item?.id)
                 }
@@ -124,6 +122,7 @@ const SelectCompanyItem = ({
         </Stack>
       </div>
       <Select
+        test-id="select-category"
         options={categories}
         onSelect={handleSelectCat}
         selected={_categoryName}
@@ -134,6 +133,7 @@ const SelectCompanyItem = ({
       <Stack direction="row" flexWrap={'wrap'} className="justify-center ">
         {_items?.map((item) => (
           <Chip
+            test-id={`item-chip-${item.id}`}
             disabled={!!itemsDisabled?.find?.((itemId) => itemId === item.id)}
             color={isSelected(item.id) ? 'primary' : 'default'}
             className="p-1 m-1"
@@ -153,7 +153,7 @@ const SelectCompanyItem = ({
             handleClear()
           }}
         />
-        <ButtonSave onClick={handleSetItems} />
+        <ButtonSave test-id="save-selected-items" onClick={handleSetItems} />
       </div>
     </div>
   )

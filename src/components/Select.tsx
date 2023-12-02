@@ -11,7 +11,8 @@ export default function Select({
   selected = '',
   label,
   fullWidth = false,
-  variant = 'standard'
+  variant = 'standard',
+  ...rest
 }: {
   options: { value?: string | number; label?: string }[]
   onSelect?: (value: string) => void
@@ -43,6 +44,7 @@ export default function Select({
         value={selected ?? _value}
         label={label}
         onChange={handleChange}
+        {...rest}
       >
         {options.sort(sortByLabel).map((option) => (
           <MenuItem key={option.value} value={option.value}>

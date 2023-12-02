@@ -34,6 +34,7 @@ const Modal = ({
       onClose={onClose}
       aria-labelledby={`modal-modal-${title}`}
       aria-describedby={`modal-modal-description-${title}`}
+      test-id={`modal-${title}`}
     >
       <Box
         sx={{ ...style }}
@@ -63,7 +64,9 @@ const Modal = ({
         <Typography id={`modal-modal-description-${title}`} sx={{ mt: 2 }}>
           {description}
         </Typography>
-        <Container sx={{ p: 2 }}>{children}</Container>
+        <Container sx={{ p: 2 }} test-id={`modal-${title}`}>
+          {children}
+        </Container>
       </Box>
     </MUIModal>
   )
