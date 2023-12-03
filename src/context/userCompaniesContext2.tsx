@@ -23,15 +23,18 @@ import { Client } from '@/types/client'
 import { listenCompanyClients } from '@/firebase/clients'
 
 export const calculateFinishRentDate = (
-  rentDate: Date | null,
+  rentDate: Date | null | Timestamp,
   qty?: number | string,
   unit?: PriceType['unit']
 ): Date | null => {
   if (!rentDate) {
     return null
   }
+  const date = asDate(rentDate)
+  if (!date) return null
+
   const rentMinutes = rentTime(asNumber(qty), unit)
-  return addMinutes(rentDate, rentMinutes)
+  return addMinutes(date, rentMinutes)
 }
 export type ContextItem = ItemSelected & {
   order: Order
@@ -44,10 +47,10 @@ export type ContextItem = ItemSelected & {
  * @returns
  */
 export const rentFinishAt = (
-  startAt: any,
+  startAt: Date | Timestamp | null,
   qty: number,
   unit: PriceType['unit']
-): Date => calculateFinishRentDate(forceAsDate(startAt), qty, unit) as Date
+): Date | null => calculateFinishRentDate(startAt, qty, unit) as Date
 
 export type ItemOrder = Partial<CompanyItem> &
   ItemSelected & {

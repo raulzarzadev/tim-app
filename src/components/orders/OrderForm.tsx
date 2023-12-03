@@ -122,16 +122,32 @@ const OrderForm = ({
   //   }
   // }
 
-  const handleSaveOrder = (order: Partial<Order>) => {
+  const handleSaveOrder = async (order: Partial<Order>) => {
     setSaving(true)
-    onSaveOrder(order, {
+    const res = await onSaveOrder(order, {
       alreadyStart: false,
       shippingEnabled: shippingEnabled
     })
       .then((res) => {
-        console.log({ res })
+        const validOrder = typeof res === 'object'
+        if (validOrder) {
+          setOrder({ ...order })
+          return handleSave?.(res)
+        }
+        console.log('res', res)
       })
-      .catch((e) => {})
+      .catch(console.error)
+      .finally(() => {
+        setTimeout(() => {
+          setSaving(false)
+        }, 1000)
+      })
+    //@ts-ignore
+    if (res?.ok) {
+      //@ts-ignore
+      const orderId = res?.res?.id || ''
+      setOrder({ ...order, id: orderId })
+    }
   }
 
   const orderId = order?.id || ''

@@ -6,10 +6,17 @@ import { isBefore } from 'date-fns'
 export const orderStatus = (order?: Partial<Order>): ItemRentStatus => {
   if (order?.status === 'canceled') return 'canceled'
   const someItemAlreadyExpire = order?.items?.some((i) => {
+    const rentFinish = i.rentStartedAt
+      ? rentFinishAt(i.rentStartedAt, i.qty || 0, i.unit)
+      : null
+
+    if (!rentFinish) return false
+
+    const rentAlreadyFinish =
+      i.rentStartedAt && isBefore(new Date(), new Date())
     return (
       i.rentStatus === 'expired' ||
-      (i.rentStatus === 'taken' &&
-        isBefore(rentFinishAt(i.rentStartedAt, i.qty || 0, i.unit), new Date()))
+      (i.rentStatus === 'taken' && rentAlreadyFinish)
     )
   })
   if (someItemAlreadyExpire) return 'expired'

@@ -21,18 +21,22 @@ const OrdersTabs = ({
   const ordersWithFinishRentAt = orders?.map((o) => {
     return {
       ...o,
-      items: o?.items?.map((i) => ({
-        ...i,
-        rentFinishAt: rentFinishAt(i.rentStartedAt, i.qty || 0, i.unit),
-        rentStatus:
-          i.rentStatus === 'taken' &&
-          isBefore(
-            rentFinishAt(i.rentStartedAt, i.qty || 0, i.unit),
-            new Date()
-          )
-            ? 'expired'
-            : i.rentStatus || 'pending'
-      }))
+      items: o?.items?.map((i) => {
+        const finishAt = i.rentStartedAt
+          ? rentFinishAt(i.rentStartedAt, i.qty || 0, i.unit)
+          : null
+
+        return {
+          ...i,
+          rentFinishAt: finishAt,
+          rentStatus:
+            i.rentStatus === 'taken' &&
+            finishAt &&
+            isBefore(finishAt, new Date())
+              ? 'expired'
+              : i.rentStatus || 'pending'
+        }
+      })
     }
   })
 

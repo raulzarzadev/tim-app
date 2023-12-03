@@ -4,8 +4,6 @@ import Modal from '../Modal'
 import OrderForm from './OrderForm'
 import AppIcon, { IconName } from '../AppIcon'
 import { Order } from '@/types/order'
-import { ArticleType } from '@/types/article'
-import { CategoryType } from '@/types/category'
 
 const ModalOrderForm = ({
   label = 'Nueva orden',

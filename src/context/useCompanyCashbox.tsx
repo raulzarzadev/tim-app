@@ -50,8 +50,8 @@ export type ItemSelected = {
   price?: number
   inUse?: boolean
   rentStatus?: ItemRentStatus
-  rentFinishedAt?: Date | Timestamp
-  rentStartedAt?: Date | Timestamp
+  rentFinishedAt?: Date | Timestamp | null
+  rentStartedAt?: Date | Timestamp | null
 }
 
 export type ItemRentStatus =

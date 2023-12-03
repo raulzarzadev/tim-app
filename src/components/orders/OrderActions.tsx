@@ -135,8 +135,14 @@ const OrderActions = ({
       const resRenew = await updateOrder(orderId, { status: 'renewed' })
       //* 3. update items with start rent (is when last order should  finished)
       const updatedItems = order?.items?.map((i) => {
-        const rentFinishedAt = rentFinishAt(i.rentStartedAt, i.qty || 0, i.unit)
-        if (i.rentStatus === 'taken') i.rentStartedAt = rentFinishedAt
+        if (i.rentStartedAt === null) return i
+        if (i.rentStartedAt && i.rentStatus === 'taken')
+          i.rentStartedAt = rentFinishAt(i.rentStartedAt, i.qty || 0, i.unit)
+        // const rentFinishedAt = i.rentStartedAt
+        //   ? rentFinishAt(i.rentStartedAt, i.qty || 0, i.unit)
+        //   : null
+
+        // if (i.rentStatus === 'taken') i.rentStartedAt = rentFinishedAt
         return i
       })
       //* 4. start new rent
