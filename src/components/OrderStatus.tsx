@@ -1,4 +1,4 @@
-import { ItemRentStatus, ItemSelected } from '@/context/useCompanyCashbox'
+import { ItemRentStatus } from '@/context/useCompanyCashbox'
 import { orderStatus } from '@/lib/orderStatus'
 import { Order } from '@/types/order'
 import { Typography } from '@mui/material'
@@ -15,6 +15,14 @@ const OrderStatus = ({ order }: { order?: Partial<Order> }) => {
     canceled: {
       label: 'Cancelada',
       color: 'text-red-500'
+    },
+    'in-progress': {
+      label: 'Activa',
+      color: 'text-green-500'
+    },
+    renewed: {
+      label: 'Renovada',
+      color: 'text-pink-500'
     }
   }
   return (

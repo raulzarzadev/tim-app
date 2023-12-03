@@ -6,21 +6,27 @@ import SearchInput from './SearchInput'
 import searchValueInObject from '@/lib/searchValueInObject'
 import { useEffect, useState } from 'react'
 import { rentFinishAt } from '@/context/lib'
+import { orderStatus } from '@/lib/orderStatus'
 
 const OrdersTabs = ({
   orders,
   hideActives,
   hideAlls,
-  hideFinished
+  hideFinished,
+  hideCanceled
 }: {
   orders: Partial<Order>[]
   hideActives?: boolean
   hideAlls?: boolean
   hideFinished?: boolean
+  hideCanceled?: boolean
 }) => {
   const ordersWithFinishRentAt = orders?.map((o) => {
+    const status = orderStatus(o)
+    console.log({ status })
     return {
       ...o,
+      status,
       items: o?.items?.map((i) => {
         const finishAt = i.rentStartedAt
           ? rentFinishAt(i.rentStartedAt, i.qty || 0, i.unit)
@@ -58,18 +64,11 @@ const OrdersTabs = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orders])
 
-  const actives = filtered?.filter((o) =>
-    o?.items?.some((i) => i?.rentStatus === 'taken')
-  )
-  const pending = filtered?.filter((o) =>
-    o?.items?.some((i) => i?.rentStatus === 'pending' || !i.rentStatus)
-  )
-  const finished = filtered?.filter((o) =>
-    o?.items?.some((i) => i?.rentStatus === 'finished')
-  )
-  const expired = filtered?.filter((o) =>
-    o?.items?.some((i) => i?.rentStatus === 'expired')
-  )
+  const actives = filtered?.filter((o) => o.status === 'taken')
+  const pending = filtered?.filter((o) => o.status === 'pending')
+  const finished = filtered?.filter((o) => o.status === 'finished')
+  const expired = filtered?.filter((o) => o.status === 'expired')
+  const canceled = filtered?.filter((o) => o.status === 'canceled')
 
   return (
     <div>
@@ -97,6 +96,11 @@ const OrdersTabs = ({
             label: `Terminadas ${finished?.length}`,
             content: <OrdersTable orders={finished || []} />,
             hidden: hideFinished
+          },
+          {
+            label: `Canceladas ${canceled?.length}`,
+            content: <OrdersTable orders={canceled || []} />,
+            hidden: hideCanceled
           },
           {
             label: `Todas ${filtered?.length}`,

@@ -6,7 +6,7 @@ import { PaymentMethods } from '@/CONSTS/paymentMethods'
 import { Client } from './client'
 import { PriceType } from '@/components/PricesForm'
 import { UserType } from './user'
-import { ItemSelected } from '@/context/useCompanyCashbox'
+import { ItemRentStatus, ItemSelected } from '@/context/useCompanyCashbox'
 import { StaffType } from './staff'
 import { Service } from './service'
 
@@ -17,13 +17,14 @@ export type OrderBase = {
   payments: Payment[]
   changes: PaymentChange[]
   companyId: CompanyType['id']
-  status?:
-    | 'canceled'
-    | 'pending'
-    | 'finished'
-    | 'in-progress'
-    | 'reported'
-    | 'renewed'
+  // status?:
+  //   | 'canceled'
+  //   | 'pending'
+  //   | 'finished'
+  //   | 'in-progress'
+  //   | 'reported'
+  //   | 'renewed'
+  status: ItemRentStatus
   reports?: Service['id'][]
 }
 

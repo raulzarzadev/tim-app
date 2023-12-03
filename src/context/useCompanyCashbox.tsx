@@ -60,6 +60,8 @@ export type ItemRentStatus =
   | 'finished'
   | 'expired'
   | 'canceled'
+  | 'in-progress'
+  | 'renewed'
 
 export const CashboxContextProvider = ({
   children
