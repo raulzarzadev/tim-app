@@ -1,9 +1,6 @@
 import { Button, Typography } from '@mui/material'
 import ModalOrderForm from './ModalOrderForm'
-import {
-  rentFinishAt,
-  useUserCompaniesContext
-} from '@/context/userCompaniesContext2'
+import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import {
   addOrderReport,
   changeItem,
@@ -28,6 +25,7 @@ import { Client } from '@/types/client'
 import ModalItemChange from '../ModalItemChange'
 import { orderStatus } from '@/lib/orderStatus'
 import OrderDetails from '../OrderDetails'
+import { rentFinishAt } from '@/context/lib'
 
 const OrderActions = ({
   orderId,

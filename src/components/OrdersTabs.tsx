@@ -2,10 +2,10 @@ import { Order } from '@/types/order'
 import BasicTabs from './BasicTabs'
 import OrdersTable from './OrdersTable'
 import { isBefore } from 'date-fns'
-import { rentFinishAt } from '@/context/userCompaniesContext2'
 import SearchInput from './SearchInput'
 import searchValueInObject from '@/lib/searchValueInObject'
 import { useEffect, useState } from 'react'
+import { rentFinishAt } from '@/context/lib'
 
 const OrdersTabs = ({
   orders,

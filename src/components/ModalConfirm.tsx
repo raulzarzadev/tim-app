@@ -39,6 +39,7 @@ const ModalConfirm = ({
         fullWidth={fullWidth}
         onClick={(e) => {
           e.preventDefault()
+
           modal.onOpen()
         }}
         disabled={disabled}

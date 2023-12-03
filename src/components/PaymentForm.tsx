@@ -47,14 +47,15 @@ const PaymentForm = ({
     }
   })
   const formValues = watch()
-  const handlePay = () => {
-    onPay?.({
+  const handlePay = async () => {
+    const res = await onPay?.({
       amount,
       method: formValues.paymentMethod,
       charged: asNumber(formValues.amount),
       usdPrice: USD_PRICE,
       rest: amountInMXN - amount > 0 ? amountInMXN - amount : 0
     })
+    console.log({ res })
   }
   const amountInMXN = asNumber(
     formValues.paymentMethod === 'usd'

@@ -6,39 +6,19 @@ import { createContext, useContext, useEffect, useState } from 'react'
 import { useAuthContext } from './authContext'
 import { StaffPermission } from '@/types/staff'
 
-import { PriceType } from '@/components/PricesForm'
 import { Timestamp } from 'firebase/firestore'
-import rentTime from '@/lib/rentTime'
-import { addMinutes, isAfter } from 'date-fns'
-import asDate from '@/lib/asDate'
+import { isAfter } from 'date-fns'
 import { Order } from '@/types/order'
 import { listenCompanyOrders } from '@/firebase/orders'
 import { CompanyItem } from '@/types/article'
-import asNumber from '@/lib/asNumber'
 import { ItemSelected } from './useCompanyCashbox'
 import forceAsDate from '@/lib/forceAsDate'
 import { Service } from '@/types/service'
 import { listenCompanyServices } from '@/firebase/services'
 import { Client } from '@/types/client'
 import { listenCompanyClients } from '@/firebase/clients'
+import { calculateFinishRentDate } from './lib'
 
-export const calculateFinishRentDate = (
-  rentDate: Date | null | Timestamp,
-  qty?: number | string,
-  unit?: PriceType['unit']
-): Date | null => {
-  if (!rentDate) {
-    return null
-  }
-  const date = asDate(rentDate)
-  if (!date) return null
-
-  const rentMinutes = rentTime(asNumber(qty), unit)
-  return addMinutes(date, rentMinutes)
-}
-export type ContextItem = ItemSelected & {
-  order: Order
-}
 /**
  *
  * @param startAt started date
@@ -46,11 +26,6 @@ export type ContextItem = ItemSelected & {
  * @param unit unit of time minutes, hour
  * @returns
  */
-export const rentFinishAt = (
-  startAt: Date | Timestamp | null,
-  qty: number,
-  unit: PriceType['unit']
-): Date | null => calculateFinishRentDate(startAt, qty, unit) as Date
 
 export type ItemOrder = Partial<CompanyItem> &
   ItemSelected & {

@@ -29,6 +29,7 @@ const TestOrderForm = ({ company }: { company: CompanyType }) => {
         <ModalOrderForm
           label="Nueva orden"
           shippingEnabled={company.shippingEnabled}
+          closeOnSave={false}
         />
       </UserCompaniesContext.Provider>
     </div>

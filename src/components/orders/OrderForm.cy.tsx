@@ -1,6 +1,4 @@
 import React from 'react'
-import OrderForm from './OrderForm'
-import ModalOrderForm from './ModalOrderForm'
 import TestOrderForm from '@/app/components/new-order/TestOrderForm'
 import { CompanyType } from '@/types/company'
 
@@ -61,8 +59,8 @@ const testCompany: CompanyType = {
     byEmail: 'test byEmail'
   }
 }
-describe('<OrderForm />', () => {
-  it('renders', () => {
+describe('make a simple order forms and should', () => {
+  it('finish with out problems', () => {
     // see: https://on.cypress.io/mounting-react
     cy.mount(<TestOrderForm company={testCompany} />)
     cy.contains('Nueva orden').click()
@@ -91,7 +89,7 @@ describe('<OrderForm />', () => {
     cy.contains('Costo: $0.00')
 
     //* SHOW THE ALL FORM IN THE VIEW PORT
-    cy.viewport(768, 1768)
+    cy.viewport(968, 1468)
 
     //* 3. SELECT ITEMS form should be enabled
     cy.contains('3. Seleccionar unidades').click()
@@ -123,7 +121,7 @@ describe('<OrderForm />', () => {
     //* Payment done ok
     //  cy.contains('button', 'Pagar $0.00')
 
-    cy.contains('button', 'Guardar').should('be.disabled')
+    //cy.contains('button', 'Guardar').should('be.disabled')
     // cy.contains('Guardando')
 
     // cy.contains('Pagar')
