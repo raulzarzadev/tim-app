@@ -1,6 +1,7 @@
 import { describe, test, expect } from 'vitest'
 import { orderStatus } from './orderStatus'
 import { Order } from '@/types/order'
+import { addHours, subHours } from 'date-fns'
 
 describe('orderStatus', () => {
   test('First', () => {
@@ -123,5 +124,30 @@ describe('orderStatus', () => {
 
     expect(orderStatus(order)).equal('finished')
     expect(orderStatus(order2)).equal('finished')
+  })
+  test('should return correct status ', () => {
+    const order: Partial<Order> = {
+      items: [
+        //* Items start two hours ago, should finish one hour later
+        {
+          itemId: '1',
+          rentStatus: 'taken',
+          qty: 1,
+          unit: 'hour',
+          rentStartedAt: subHours(new Date(), 2)
+          // rentFinishedAt: addHours(new Date(), 1)
+        },
+        {
+          itemId: '1',
+          rentStatus: 'taken',
+          qty: 3,
+          unit: 'hour',
+          rentStartedAt: subHours(new Date(), 2)
+          // rentFinishedAt: addHours(new Date(), 1)
+        }
+      ]
+    }
+
+    expect(orderStatus(order)).equal('expired')
   })
 })

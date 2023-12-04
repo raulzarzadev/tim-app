@@ -1,7 +1,6 @@
 import { Order } from '@/types/order'
 import BasicTabs from './BasicTabs'
 import OrdersTable from './OrdersTable'
-import { isBefore } from 'date-fns'
 import SearchInput from './SearchInput'
 import searchValueInObject from '@/lib/searchValueInObject'
 import { useEffect, useState } from 'react'
@@ -23,7 +22,6 @@ const OrdersTabs = ({
 }) => {
   const ordersWithFinishRentAt = orders?.map((o) => {
     const status = orderStatus(o)
-    console.log({ status })
     return {
       ...o,
       status,
@@ -34,13 +32,7 @@ const OrdersTabs = ({
 
         return {
           ...i,
-          rentFinishAt: finishAt,
-          rentStatus:
-            i.rentStatus === 'taken' &&
-            finishAt &&
-            isBefore(finishAt, new Date())
-              ? 'expired'
-              : i.rentStatus || 'pending'
+          rentFinishAt: finishAt
         }
       })
     }
@@ -69,7 +61,6 @@ const OrdersTabs = ({
   const finished = filtered?.filter((o) => o.status === 'finished')
   const expired = filtered?.filter((o) => o.status === 'expired')
   const canceled = filtered?.filter((o) => o.status === 'canceled')
-
   return (
     <div>
       <SearchInput

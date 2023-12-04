@@ -11,19 +11,15 @@ export const orderStatus = (order?: Partial<Order>): ItemRentStatus => {
   //* 4. If all items are taken should return taken order
   //* 5. If all items are finished should return finished order
 
+  //* 6. If items finishAt is before than now, should return expired
+
   const someItemAlreadyExpire = order?.items?.some((i) => {
-    const rentFinish = i.rentStartedAt
-      ? rentFinishAt(i.rentStartedAt, i.qty || 0, i.unit)
-      : null
-
-    if (!rentFinish) return false
-
-    const rentAlreadyFinish =
-      i.rentStartedAt && isBefore(new Date(), new Date())
-    return (
-      i.rentStatus === 'expired' ||
-      (i.rentStatus === 'taken' && rentAlreadyFinish)
-    )
+    const startAt = i.rentStartedAt
+    if (!startAt) return false
+    const finishAt = rentFinishAt(startAt, i.qty || 0, i.unit)
+    if (!finishAt) return false
+    if (i.rentStatus === 'expired') return true
+    if (isBefore(finishAt, new Date()) && i.rentStatus === 'taken') return true
   })
   if (someItemAlreadyExpire) return 'expired'
   const someItemIsPending = order?.items?.some(

@@ -30,7 +30,6 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
   const params = useParams()
   useEffect(() => {
     authStateChanged((user: SetStateAction<UserType | null | undefined>) => {
-      console.log({ pathname })
       const alowVisitPages = ['/components', '/market']
       const isAStorePage = !!params.companyName
       if (
