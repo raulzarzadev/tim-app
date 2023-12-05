@@ -5,13 +5,14 @@ import { isBefore } from 'date-fns'
 
 export const orderStatus = (order?: Partial<Order>): ItemRentStatus => {
   if (order?.status === 'canceled') return 'canceled'
+
   //* 1. if order is cancel return canceled
   //* 2. If some items already expire should return expired order
   //* 3. If some item is pending should return pending order
   //* 4. If all items are taken should return taken order
   //* 5. If all items are finished should return finished order
-
   //* 6. If items finishAt is before than now, should return expired
+  //* 7. If some item is expired return expired
 
   const someItemAlreadyExpire = order?.items?.some((i) => {
     const startAt = i.rentStartedAt

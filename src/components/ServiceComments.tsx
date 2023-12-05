@@ -42,16 +42,18 @@ const ServiceComments = ({
         <div key={i}>
           <Divider className="my-4" />
           <div className="flex justify-between">
-            <Typography>{comment.content}</Typography>
+            <Typography>{comment?.content}</Typography>
             <div className="grid text-end">
-              <Typography variant="caption">{fromNow(comment.date)}</Typography>
+              <Typography variant="caption">
+                {fromNow(comment?.date)}
+              </Typography>
               <Typography variant="caption">
                 <StaffSpan email={comment?.createdBy || ''} />
               </Typography>
             </div>
           </div>
           <div>
-            {comment.images.map((url) => (
+            {comment?.images?.map((url) => (
               <PreviewImage src={url} key={url} alt="image comment" />
             ))}
           </div>

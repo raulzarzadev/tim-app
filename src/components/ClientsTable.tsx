@@ -3,6 +3,8 @@ import MyTable from './MyTable'
 import ClientInfo from './ClientInfo'
 import ClientOrders from './ClientOrders'
 import AccordionSections from './AccordionSections'
+import ClientActions from './Client/ClientActions'
+import ClientComments from './Client/ClientComments'
 
 const ClientsTable = ({ clients }: { clients: Client[] }) => {
   return (
@@ -12,6 +14,8 @@ const ClientsTable = ({ clients }: { clients: Client[] }) => {
         modalChildren={(value) => (
           <>
             <ClientInfo client={value} />
+            <ClientActions clientId={value?.id} />
+            <ClientComments clientId={value?.id} />
             <AccordionSections
               sections={[
                 {

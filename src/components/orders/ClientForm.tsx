@@ -11,11 +11,13 @@ import SaveButton from '../ButtonSave'
 const ClientForm = ({
   client,
   setClient,
-  searchClient = true
+  searchClient = true,
+  labelSave = 'Guardar cliente'
 }: {
   client?: Partial<Client>
   setClient?: (client?: Partial<Client>) => void | Promise<any>
   searchClient?: boolean
+  labelSave?: string
 }) => {
   const {
     register,
@@ -153,7 +155,7 @@ const ClientForm = ({
             test-id="save-client"
             disabled={disabledSave}
             type="submit"
-            label="Guardar cliente"
+            label={labelSave}
           />
         </Box>
       </form>

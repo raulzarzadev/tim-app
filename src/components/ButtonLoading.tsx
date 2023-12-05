@@ -1,6 +1,7 @@
 import LoadingButton, {
   LoadingButtonProps as MUILoadingButtonProps
 } from '@mui/lab/LoadingButton'
+import { ButtonProps } from '@mui/material'
 
 export type LoadingButtonProps = MUILoadingButtonProps & {
   loading: boolean
@@ -11,7 +12,15 @@ const ButtonLoading = ({
   loading = false,
   loadingIndicator = 'Loading...',
   onClick = () => {},
-  label = 'Aceptar'
+  label = 'Aceptar',
+  color = 'primary'
+}: {
+  disabled?: boolean
+  loading?: boolean
+  loadingIndicator?: string
+  onClick?: () => void | Promise<any>
+  label?: string
+  color?: ButtonProps['color']
 }) => {
   return (
     <LoadingButton
@@ -20,6 +29,7 @@ const ButtonLoading = ({
       loadingIndicator={loadingIndicator}
       onClick={onClick}
       variant="outlined"
+      color={color}
     >
       {label}
     </LoadingButton>

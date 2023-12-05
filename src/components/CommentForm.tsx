@@ -10,11 +10,23 @@ const CommentForm = ({
 }: {
   setComment: (comment: ServiceComment) => Promise<any> | void
 }) => {
-  const { register, setValue, watch, handleSubmit } = useForm()
+  const {
+    register,
+    setValue,
+    watch,
+    handleSubmit,
+    reset,
+    formState: { isSubmitting, isDirty }
+  } = useForm()
+  const formValues = watch()
   const onSubmit = async (data: any) => {
     await setComment(data)
+    reset(formValues, { keepDirty: false })
+    return
   }
   const images = watch('images') || []
+  const disabled = isSubmitting || !isDirty
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="grid gap-2">
       <TextField
@@ -34,7 +46,11 @@ const CommentForm = ({
         label="Adjuntar imagen"
         setURL={(url) => setValue(`images.${images?.length}`, url)}
       />
-      <Button type="submit" endIcon={<AppIcon icon="save" />}>
+      <Button
+        type="submit"
+        endIcon={<AppIcon icon="save" />}
+        disabled={disabled}
+      >
         Guardar
       </Button>
     </form>

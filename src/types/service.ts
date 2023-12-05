@@ -3,6 +3,7 @@ import { ArticleType } from './article'
 import { CompanyType } from './company'
 import { Order } from './order'
 import { BaseType } from './base'
+import { Comment } from './comment'
 
 export const serviceStatusLabels: Record<Service['status'], string> = {
   pending: 'Pendiente',
@@ -33,10 +34,7 @@ export type ServiceImage = {
   url: string
 }
 
-export type ServiceComment = {
+export type ServiceComment = Comment & {
   id?: string
-  content: string
-  images: string[]
-  date: Date | Timestamp
   createdBy?: string
 }
