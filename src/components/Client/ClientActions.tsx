@@ -36,8 +36,13 @@ const ClientActions = ({ clientId }: { clientId: string }) => {
     }
   }
   return (
-    <div>
-      <ModalConfirm label="Editar" disabled={!client?.id}>
+    <div className="flex justify-evenly my-4">
+      <ModalConfirm
+        justIcon
+        openIcon="edit"
+        label="Editar"
+        disabled={!client?.id}
+      >
         <ClientForm
           client={client}
           setClient={(client) => {
@@ -48,6 +53,8 @@ const ClientActions = ({ clientId }: { clientId: string }) => {
         />
       </ModalConfirm>
       <ModalConfirm
+        justIcon
+        openIcon="trash"
         disabled={!client?.id}
         color="error"
         acceptLabel="Eliminar"
@@ -67,6 +74,8 @@ const ClientActions = ({ clientId }: { clientId: string }) => {
         </div>
       </ModalConfirm>
       <ModalConfirm
+        justIcon
+        openIcon="addComment"
         disabled={!client?.id}
         color="info"
         acceptLabel="Comentar"

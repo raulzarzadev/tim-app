@@ -13,8 +13,8 @@ const ClientsTable = ({ clients }: { clients: Client[] }) => {
         search
         modalChildren={(value) => (
           <>
-            <ClientInfo client={value} />
             <ClientActions clientId={value?.id} />
+            <ClientInfo client={value} />
             <ClientComments clientId={value?.id} />
             <AccordionSections
               sections={[
