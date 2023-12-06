@@ -8,7 +8,6 @@ const ClientComments = ({ clientId }: { clientId: string }) => {
   const [comments, setComments] = useState<Comment[]>([])
   useEffect(() => {
     listenClientComments(clientId, setComments)
-    console.log('comments')
   }, [clientId])
   return (
     <div>

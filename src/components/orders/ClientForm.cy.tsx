@@ -34,7 +34,7 @@ describe('<ClientForm />', () => {
     cy.contains('Limpiar').should('exist')
 
     // Verifica que el botón "Guardar cliente" esté presente
-    cy.contains('Guardar cliente').should('exist')
+    cy.contains('Guardar ').should('exist')
   })
   it('save client just with name', () => {
     cy.mount(

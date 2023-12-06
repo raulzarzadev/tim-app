@@ -76,7 +76,7 @@ describe('make a simple order forms and should', () => {
 
     //* 2. SHIPPING form should be enabled
     cy.contains('2. Entrega').click()
-    cy.contains('Detalles de entrega')
+    cy.contains('Datos de entrega')
     cy.get('button[test-id="assign-shipping"]').contains('Asignar')
     cy.get('[test-id="shipping-in-store"] input').should('be.checked')
     cy.get('[test-id="shipping-now"] input').should('be.checked')

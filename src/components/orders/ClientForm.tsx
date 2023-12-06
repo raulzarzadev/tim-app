@@ -1,5 +1,5 @@
 import { Client } from '@/types/client'
-import { Box, Button, TextField } from '@mui/material'
+import { Autocomplete, Box, Button, TextField } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import InputUploadFile from '../InputUploadFile'
 import PreviewImage from '../PreviewImage'
@@ -7,12 +7,14 @@ import ModalSignature from '../ModalSignature'
 import PhoneInput from '../PhoneInput'
 import SearchClient from '../SearchClient'
 import SaveButton from '../ButtonSave'
+import { useEffect, useState } from 'react'
+import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 
 const ClientForm = ({
   client,
   setClient,
   searchClient = true,
-  labelSave = 'Guardar cliente'
+  labelSave = 'Guardar'
 }: {
   client?: Partial<Client>
   setClient?: (client?: Partial<Client>) => void | Promise<any>
@@ -39,11 +41,13 @@ const ClientForm = ({
       ...client
     } as Partial<Client>
   })
+  const { clients: companyClients } = useUserCompaniesContext()
   const disabledSave = isSubmitting || !isDirty
   const formValues = watch()
   const onSubmit = async (data?: Partial<Client>) => {
     try {
       const res = await setClient?.(data)
+      setValue('id', res?.res?.id)
       reset(data)
       return res
     } catch (e) {
@@ -56,53 +60,125 @@ const ClientForm = ({
     await setClient?.({})
   }
 
+  const [clients, setClients] = useState<Partial<Client>[]>([])
+
+  useEffect(() => {
+    const clientsFound =
+      companyClients?.filter(
+        (c) =>
+          c.name
+            ?.toLowerCase()
+            .includes(formValues.name?.toLowerCase() || '') ||
+          c.phone?.toLowerCase().includes(formValues.phone?.toLowerCase() || '')
+      ) || []
+    setClients(clientsFound)
+  }, [companyClients, formValues.name, formValues.phone])
+
+  const handleSelectClient = (client: Partial<Client>) => {
+    // setClient?.(e) //* this line close the client form modal automatically
+    setValue('id', client.id, {
+      shouldDirty: true,
+      shouldTouch: true
+    })
+    setValue('name', client.name, {
+      shouldDirty: true,
+      shouldTouch: true
+    })
+    setValue('phone', client.phone, {
+      shouldDirty: true,
+      shouldTouch: true
+    })
+    setValue('email', client.email, {
+      shouldDirty: true,
+      shouldTouch: true
+    })
+    setValue('address', client.address, {
+      shouldDirty: true,
+      shouldTouch: true
+    })
+    setValue('imageID', client.imageID, {
+      shouldDirty: true,
+      shouldTouch: true
+    })
+    setValue('signature', client.signature, {
+      shouldDirty: true,
+      shouldTouch: true
+    })
+    setValue('extraInfo', client.extraInfo || '', {
+      shouldDirty: true,
+      shouldTouch: true
+    })
+  }
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)} className="grid gap-2">
         {/* <TextField {...register('name')} label="Nombre" required /> */}
         <div className="flex">
-          <TextField
-            {...register('name')}
-            InputLabelProps={{ shrink: !!formValues.name }}
-            label="Nombre"
-            required
+          <Autocomplete
+            freeSolo
             className="w-full"
+            disablePortal
+            id="combo-box-demo"
+            isOptionEqualToValue={(a, b) => a.id === b.id}
+            options={clients.map((c) => ({
+              label: c.name,
+              id: c.id
+            }))}
+            sx={{ width: 300 }}
+            renderInput={(params) => (
+              <TextField {...params} label="Clientes" {...register('name')} />
+            )}
+            inputValue={formValues.name || ''}
+            value={{ id: formValues.id || '', label: formValues.name || '' }}
+            renderOption={(props, option) => {
+              return (
+                <li
+                  {...props}
+                  key={option.id}
+                  onClick={() => {
+                    const client = clients.find((c) => c.id === option.id)
+                    if (client) {
+                      handleSelectClient(client)
+                    } else {
+                      console.log('no client found')
+                    }
+                  }}
+                >
+                  {option.label}
+                </li>
+              )
+            }}
+            // renderTags={(tagValue, getTagProps) => {
+            //   return tagValue.map((option, index) => (
+            //     <Chip {...getTagProps({ index })} key={option} label={option} />
+            //   ))
+            // }}
           />
+
+          {/* <datalist
+            id="clientes"
+            onChange={(e) => {
+              console.log(e, 'e')
+            }}
+          >
+            {clients?.map((c) => (
+              <option
+                key={c.id}
+                onInput={() => {
+                  console.log('click', c)
+                  handleSelectClient(c)
+                }}
+              >
+                {c.name}
+              </option>
+            ))}
+          </datalist> */}
 
           {searchClient && (
             <div>
               <SearchClient
-                onSelectClient={(e) => {
-                  // setClient?.(e) //* this line close the client form modal automatically
-                  setValue('id', e.id, { shouldDirty: true, shouldTouch: true })
-                  setValue('name', e.name, {
-                    shouldDirty: true,
-                    shouldTouch: true
-                  })
-                  setValue('phone', e.phone, {
-                    shouldDirty: true,
-                    shouldTouch: true
-                  })
-                  setValue('email', e.email, {
-                    shouldDirty: true,
-                    shouldTouch: true
-                  })
-                  setValue('address', e.address, {
-                    shouldDirty: true,
-                    shouldTouch: true
-                  })
-                  setValue('imageID', e.imageID, {
-                    shouldDirty: true,
-                    shouldTouch: true
-                  })
-                  setValue('signature', e.signature, {
-                    shouldDirty: true,
-                    shouldTouch: true
-                  })
-                  setValue('extraInfo', e.extraInfo || '', {
-                    shouldDirty: true,
-                    shouldTouch: true
-                  })
+                onSelectClient={(client) => {
+                  handleSelectClient(client)
                 }}
               />
             </div>
@@ -155,7 +231,7 @@ const ClientForm = ({
             test-id="save-client"
             disabled={disabledSave}
             type="submit"
-            label={labelSave}
+            label={!!formValues?.id ? 'Editar' : labelSave}
           />
         </Box>
       </form>

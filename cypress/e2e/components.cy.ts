@@ -29,7 +29,7 @@ describe('Components Page', () => {
     //** close signature modal */
     cy.contains('Listo').click()
     //** send client info and close modal */
-    cy.contains('Guardar cliente').click()
+    cy.get('button[test-id="save-client"]').click()
 
     //*** MODAL CLIENT CLOSED */
     //*** VERIFY INFO IS CORRECT IN ORDER DETAILS */
