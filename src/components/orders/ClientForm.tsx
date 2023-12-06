@@ -14,12 +14,16 @@ const ClientForm = ({
   client,
   setClient,
   searchClient = true,
-  labelSave = 'Guardar'
+  labelSave = 'Guardar',
+  isClientOrder,
+  canClearForm
 }: {
   client?: Partial<Client>
   setClient?: (client?: Partial<Client>) => void | Promise<any>
   searchClient?: boolean
   labelSave?: string
+  isClientOrder?: boolean
+  canClearForm?: boolean
 }) => {
   const {
     register,
@@ -112,67 +116,51 @@ const ClientForm = ({
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)} className="grid gap-2">
-        {/* <TextField {...register('name')} label="Nombre" required /> */}
         <div className="flex">
-          <Autocomplete
-            freeSolo
-            className="w-full"
-            disablePortal
-            id="combo-box-demo"
-            isOptionEqualToValue={(a, b) => a.id === b.id}
-            options={clients.map((c) => ({
-              label: c.name,
-              id: c.id
-            }))}
-            sx={{ width: 300 }}
-            renderInput={(params) => (
-              <TextField {...params} label="Clientes" {...register('name')} />
-            )}
-            inputValue={formValues.name || ''}
-            value={{ id: formValues.id || '', label: formValues.name || '' }}
-            renderOption={(props, option) => {
-              return (
-                <li
-                  {...props}
-                  key={option.id}
-                  onClick={() => {
-                    const client = clients.find((c) => c.id === option.id)
-                    if (client) {
-                      handleSelectClient(client)
-                    } else {
-                      console.log('no client found')
-                    }
-                  }}
-                >
-                  {option.label}
-                </li>
-              )
-            }}
-            // renderTags={(tagValue, getTagProps) => {
-            //   return tagValue.map((option, index) => (
-            //     <Chip {...getTagProps({ index })} key={option} label={option} />
-            //   ))
-            // }}
-          />
-
-          {/* <datalist
-            id="clientes"
-            onChange={(e) => {
-              console.log(e, 'e')
-            }}
-          >
-            {clients?.map((c) => (
-              <option
-                key={c.id}
-                onInput={() => {
-                  console.log('click', c)
-                  handleSelectClient(c)
-                }}
-              >
-                {c.name}
-              </option>
-            ))}
-          </datalist> */}
+          {searchClient ? (
+            <Autocomplete
+              freeSolo
+              className="w-full"
+              disablePortal
+              id="combo-box-demo"
+              isOptionEqualToValue={(a, b) => a.id === b.id}
+              options={clients.map((c) => ({
+                label: c.name,
+                id: c.id
+              }))}
+              sx={{ width: 300 }}
+              renderInput={(params) => (
+                <TextField {...params} label="Nombre" {...register('name')} />
+              )}
+              inputValue={formValues.name || ''}
+              value={{ id: formValues.id || '', label: formValues.name || '' }}
+              renderOption={(props, option) => {
+                return (
+                  <li
+                    {...props}
+                    key={option.id}
+                    onClick={() => {
+                      const client = clients.find((c) => c.id === option.id)
+                      if (client) {
+                        handleSelectClient(client)
+                      } else {
+                        console.log('no client found')
+                      }
+                    }}
+                  >
+                    {option.label}
+                  </li>
+                )
+              }}
+            />
+          ) : (
+            <TextField
+              {...register('name')}
+              label="Nombre"
+              required
+              fullWidth
+            />
+          )}
 
           {searchClient && (
             <div>
@@ -226,12 +214,12 @@ const ClientForm = ({
           />
         )}
         <Box className="flex justify-evenly my-6">
-          <Button onClick={handleClear}>Limpiar</Button>
+          {canClearForm && <Button onClick={handleClear}>Limpiar</Button>}
           <SaveButton
             test-id="save-client"
             disabled={disabledSave}
             type="submit"
-            label={!!formValues?.id ? 'Editar' : labelSave}
+            label={!!formValues?.id && !isClientOrder ? 'Editar' : labelSave}
           />
         </Box>
       </form>

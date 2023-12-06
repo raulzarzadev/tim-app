@@ -18,6 +18,7 @@ import { listenCompanyServices } from '@/firebase/services'
 import { Client } from '@/types/client'
 import { listenCompanyClients } from '@/firebase/clients'
 import { calculateFinishRentDate } from './lib'
+import { itemStatus } from '@/lib/itemStatus'
 
 /**
  *
@@ -135,12 +136,16 @@ export function UserCompaniesProvider({
     setCompanySelected(companySelectedId)
   }
   const companyItems =
-    currentCompany?.articles?.map((i) => ({
-      ...i,
-      prices: i.ownPrice
+    currentCompany?.articles?.map((i) => {
+      //* set STATUS for each item
+      const status = itemStatus(i.id, { companyOrders: orders })
+      i.rentStatus = status
+      //* set PRICE for each item
+      i.prices = i.ownPrice
         ? i.prices
         : currentCompany?.categories?.find((c) => c.name === i.category)?.prices
-    })) || []
+      return i
+    }) || []
 
   const itemsFromOrders: ItemOrder[] =
     orders

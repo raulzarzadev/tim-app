@@ -322,6 +322,8 @@ const ModalStartRent = ({
   const disabledConfirm =
     !order?.client.imageID || !order?.client.signature || isCanceled
   const confirmClientData = !!currentCompany?.confirmClientData
+  const itemBusy = order?.items?.some((i) => i.rentStatus === 'taken')
+  console.log({ itemBusy })
   return (
     <div>
       <ModalConfirm
@@ -339,6 +341,18 @@ const ModalStartRent = ({
           setItems={(items) => {}}
           multiple
         /> */}
+
+        <Typography variant="h5" className="my-4 text-center">
+          Datos de cliente
+        </Typography>
+        <ClientForm
+          searchClient={false}
+          client={order?.client}
+          setClient={(newClient) => {
+            if (newClient) return handleUpdateClient(newClient)
+          }}
+          canClearForm={false}
+        />
         <div className="text-center">
           <Typography variant="h5" className="my-4">
             Unidades entregadas:{' '}
@@ -375,16 +389,6 @@ const ModalStartRent = ({
             )
           })}
         </div>
-        <Typography variant="h5" className="my-4 text-center">
-          Datos de cliente
-        </Typography>
-        <ClientForm
-          searchClient={false}
-          client={order?.client}
-          setClient={(newClient) => {
-            if (newClient) return handleUpdateClient(newClient)
-          }}
-        />
         {confirmClientData && (
           <div className="grid place-content-center">
             {!order?.client.imageID && (

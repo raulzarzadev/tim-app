@@ -10,7 +10,7 @@ const client_data = {
 describe('<ClientForm />', () => {
   beforeEach(() => {})
   it('render properly', () => {
-    cy.mount(<ClientForm client={client_data} />)
+    cy.mount(<ClientForm client={client_data} canClearForm />)
     cy.get('input[name="name"]')
       .should('exist')
       .should('have.value', client_data.name)

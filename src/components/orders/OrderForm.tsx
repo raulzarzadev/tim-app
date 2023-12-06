@@ -103,6 +103,7 @@ const OrderForm = ({
         {order?.client && <ClientInfo client={order?.client} />}
         <Modal {...clientForm}>
           <ClientForm
+            isClientOrder
             client={order?.client}
             setClient={(client) => {
               setOrder({
