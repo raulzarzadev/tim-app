@@ -83,15 +83,16 @@ const OrdersTabs = ({
             label: `Vencidas ${expired?.length}`,
             content: <OrdersTable orders={expired || []} />
           },
-          {
-            label: `Pagos pendientes ${pendingPayments?.length}`,
-            content: <OrdersTable orders={pendingPayments || []} />
-            // hidden: hideActives
-          },
+
           {
             label: `Activas ${actives?.length}`,
             content: <OrdersTable orders={actives || []} />,
             hidden: hideActives
+          },
+          {
+            label: `Pagos pendientes ${pendingPayments?.length}`,
+            content: <OrdersTable orders={pendingPayments || []} />
+            // hidden: hideActives
           },
           {
             label: `Terminadas ${finished?.length}`,

@@ -26,6 +26,7 @@ import ModalItemChange from '../ModalItemChange'
 import { orderStatus } from '@/lib/orderStatus'
 import OrderDetails from '../OrderDetails'
 import { rentFinishAt } from '@/context/lib'
+import { itemStatus } from '@/lib/itemStatus'
 
 const OrderActions = ({
   orderId,
@@ -37,7 +38,6 @@ const OrderActions = ({
   const { orders, currentCompany } = useUserCompaniesContext()
   const order = orders?.find((o) => o?.id === orderId)
   const itemsInUse = order?.items?.some((i) => i.rentStatus === 'taken')
-
   const totalOrder = calculateOrderTotal({ company: currentCompany, order })
   const [loading, setLoading] = useState(false)
   const handleStartRent = async () => {
@@ -68,7 +68,6 @@ const OrderActions = ({
   }
 
   const handleSaveOrder = async (order: Partial<Order>) => {
-    console.log({ order })
     try {
       setLoading(true)
       const res = await updateOrder(orderId, order)
@@ -136,11 +135,7 @@ const OrderActions = ({
         if (i.rentStartedAt === null) return i
         if (i.rentStartedAt && i.rentStatus === 'taken')
           i.rentStartedAt = rentFinishAt(i.rentStartedAt, i.qty || 0, i.unit)
-        // const rentFinishedAt = i.rentStartedAt
-        //   ? rentFinishAt(i.rentStartedAt, i.qty || 0, i.unit)
-        //   : null
 
-        // if (i.rentStatus === 'taken') i.rentStartedAt = rentFinishedAt
         return i
       })
       //* 4. start new rent
@@ -157,7 +152,6 @@ const OrderActions = ({
         },
         client: order?.client || {}
       })
-      console.log([resRenew, resFinish, resCreateRent])
       onAction?.('renew')
     } catch (e) {
       onAction?.('error')
@@ -323,6 +317,13 @@ const ModalStartRent = ({
     !order?.client.imageID || !order?.client.signature || isCanceled
   const confirmClientData = !!currentCompany?.confirmClientData
 
+  const someItemAlreadyInUse = order?.items.some((i) => {
+    const currentStatus = itemStatus(i.itemId || '', {
+      companyOrders: orders
+    }).status
+    return currentStatus === 'taken'
+  })
+
   return (
     <div>
       <ModalConfirm
@@ -333,7 +334,9 @@ const ModalStartRent = ({
         modalTitle="Confirmar datos "
         fullWidth
         acceptLabel="Comenzar renta"
-        disabledAccept={confirmClientData ?? disabledConfirm}
+        disabledAccept={
+          (confirmClientData ?? disabledConfirm) || someItemAlreadyInUse
+        }
       >
         {/* <SelectCompanyItem
           itemsSelected={items?.map((i) => i.itemId || '') || []}
@@ -354,7 +357,7 @@ const ModalStartRent = ({
         />
         <div className="text-center">
           <Typography variant="h5" className="my-4">
-            Unidades entregadas:{' '}
+            Entregar unidades:{' '}
           </Typography>
           {order?.items.map((item) => {
             return (
@@ -363,7 +366,6 @@ const ModalStartRent = ({
                   // @ts-ignore FIXME: quantity should don't exist
                   itemSelected={{ ...item, qty: item.qty || item?.quantity }}
                   handleChangeItem={async (newItem) => {
-                    console.log({ newItem })
                     const changedItem = {
                       //* It will change just the id of the item, it  don't change category or prices  */
                       amount: 0,
@@ -376,9 +378,11 @@ const ModalStartRent = ({
                         unit: item.unit || 'hour'
                       }
                     }
-                    // console.log({ changedItem })
+                    console.log({ changedItem })
                     try {
-                      const res = await changeItem(orderId, changedItem)
+                      await changeItem(orderId, changedItem)
+                        .then(console.log)
+                        .catch(console.error)
                     } catch (error) {
                       console.error(error)
                     }
@@ -400,6 +404,14 @@ const ModalStartRent = ({
                 * Firma de cliente es necesaria
               </Typography>
             )}
+          </div>
+        )}
+
+        {someItemAlreadyInUse && (
+          <div className="text-center">
+            <Typography variant="caption">
+              * Las unidades ya estan en uso
+            </Typography>
           </div>
         )}
       </ModalConfirm>

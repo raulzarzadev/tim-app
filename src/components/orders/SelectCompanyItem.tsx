@@ -41,12 +41,15 @@ const SelectCompanyItem = ({
 // companyCategories
 SelectItemsProps) => {
   const {
-    currentCompany,
-    ordersItems: { inUse: itemsTaken }
+    currentCompany
+    //ordersItems: { inUse: itemsTaken }
   } = useUserCompaniesContext()
-
-  const itemsDisabled = itemsTaken.map((i) => i.itemId)
   const companyItems = currentCompany?.articles
+  const itemsTaken =
+    companyItems?.filter(
+      (i) => i.rentStatus === 'taken' || i.rentStatus === 'expired'
+    ) || []
+  const itemsDisabled = itemsTaken.map((i) => i.id)
   const companyCategories = currentCompany?.categories
 
   const categories: { label?: string; value?: string }[] =

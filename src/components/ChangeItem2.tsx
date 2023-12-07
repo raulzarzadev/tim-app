@@ -5,6 +5,7 @@ import { ArticleType } from '@/types/article'
 import Select from './Select'
 import ErrorBoundary from './ErrorBoundary'
 import { ItemSelected } from '@/context/useCompanyCashbox'
+import { itemStatus } from '@/lib/itemStatus'
 
 export type ChangeItemProps = {
   itemId: string
@@ -16,10 +17,7 @@ const ChangeItem = ({
   handleChangeItem,
   categoryName
 }: ChangeItemProps) => {
-  const {
-    currentCompany,
-    ordersItems: { inUse: itemsInUse }
-  } = useUserCompaniesContext()
+  const { currentCompany, orders } = useUserCompaniesContext()
   const [_categoryName, _setCategoryName] = useState(categoryName)
   const [_categoryItems, _setCategoryItems] = useState<ArticleType[]>([])
   const [_selected, _setSelected] = useState(itemId)
@@ -41,6 +39,7 @@ const ChangeItem = ({
   const [changed, setChanged] = useState(false)
 
   const disabled = changed
+
   return (
     <ErrorBoundary>
       <Box>
@@ -69,7 +68,9 @@ const ChangeItem = ({
             >
               <Chip
                 disabled={
-                  !!itemsInUse?.find(({ itemId }) => itemId === item.id)
+                  //* item to change can´t be taken
+                  itemStatus(item.id, { companyOrders: orders }).status ===
+                  'taken'
                 }
                 color={_selected === item.id ? 'primary' : 'default'}
                 className="p-1 m-1"
@@ -88,7 +89,9 @@ const ChangeItem = ({
         <Button
           disabled={disabled}
           variant="contained"
-          onClick={() => handleChangeItem({ itemId: _selected })}
+          onClick={() => {
+            handleChangeItem({ itemId: _selected })
+          }}
         >
           Cambiar
         </Button>

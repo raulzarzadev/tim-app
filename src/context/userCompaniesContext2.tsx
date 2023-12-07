@@ -48,7 +48,7 @@ export type UserCompaniesContextType = {
   clients?: Client[]
   ordersItems: {
     all: ItemOrder[]
-    inUse: ItemOrder[]
+    inUse: ItemOrder[] //***! Should avoid
     finished: ItemOrder[]
     pending: ItemOrder[]
     expired: ItemOrder[]

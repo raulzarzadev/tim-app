@@ -30,7 +30,8 @@ const ModalChangeItem = ({
           sx={{ border: '1px solid' }}
           className="ml-2 border border-gray-200 rounded-full shadow-md p-1 px-2 "
         >
-          {item.category} {item.name} {item.serialNumber}
+          {item.rentStatus === 'taken' && '*'} {item.category} {item.name}{' '}
+          {item.serialNumber}
         </Box>
         <Box
           sx={{
@@ -45,7 +46,9 @@ const ModalChangeItem = ({
         <ChangeItem
           itemId={itemId}
           categoryName={item?.category}
-          handleChangeItem={handleChangeItem}
+          handleChangeItem={(newItem) => {
+            handleChangeItem({ ...newItem, ...itemSelected })
+          }}
         />
       </Modal>
     </div>
