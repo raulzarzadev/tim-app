@@ -57,8 +57,6 @@ const OrdersTabs = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orders])
 
-  console.log(filtered)
-
   const actives = filtered?.filter((o) => o.status === 'taken')
   const pending = filtered?.filter((o) => o.status === 'pending')
   const finished = filtered?.filter((o) => o.status === 'finished')
