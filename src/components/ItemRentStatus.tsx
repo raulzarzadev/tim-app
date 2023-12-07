@@ -11,9 +11,11 @@ import React, { ReactNode } from 'react'
 import { finishItemRent, resumeRent, startItemRent } from '@/firebase/orders'
 import ModalPayment from './ModalPayment2'
 import { calculateOrderTotal } from '@/lib/calculateOrderTotal'
+import dictionary from '@/CONSTS/dictionary'
 
 const ItemRentStatus = ({ item }: { item: ItemOrder }) => {
-  const { currentCompany } = useUserCompaniesContext()
+  return <>{dictionary(item.rentStatus || '')}</>
+  // const { currentCompany } = useUserCompaniesContext()
 
   const pending = item.rentStatus === 'pending'
   const inUse = item.rentStatus === 'taken'
@@ -22,8 +24,8 @@ const ItemRentStatus = ({ item }: { item: ItemOrder }) => {
   const onTime = isAfter(asDate(item.rentFinishAt) || new Date(), new Date())
 
   const totalOrder = calculateOrderTotal({
-    order: item.order,
-    company: currentCompany
+    order: item.order
+    // company: currentCompany
   })
 
   const total = totalOrder
@@ -45,6 +47,7 @@ const ItemRentStatus = ({ item }: { item: ItemOrder }) => {
 
   return (
     <div className="grid gap-4 ">
+      item rent status
       {/* <OrderDetails order={item.order} /> */}
       {total !== 0 && (
         <ModalItemStatus

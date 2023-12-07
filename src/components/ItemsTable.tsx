@@ -1,14 +1,14 @@
 import { ArticleType } from '@/types/article'
 import MyTable from './MyTable'
-import ModalItemDetails from './ModalItemDetails'
-import ArticleDetails, { ArticleInfo } from './ArticleDetails'
+import ArticleDetails from './ArticleDetails'
+import dictionary from '@/CONSTS/dictionary'
 
 const ItemsTable = ({ items }: { items: ArticleType[] }) => {
   return (
     <div className="max-w-md mx-auto">
       <MyTable
         modalTitle="Detalles de Item"
-        modalChildren={(value) => <ArticleInfo article={value} />}
+        modalChildren={(value) => <ArticleDetails article={value} />}
         data={{
           headers: [
             {
@@ -28,6 +28,14 @@ const ItemsTable = ({ items }: { items: ArticleType[] }) => {
             {
               label: 'Color',
               key: 'color'
+            },
+
+            {
+              label: 'Status',
+              key: 'rentStatus',
+              format: (value) => (
+                <span className="capitalize">{dictionary(value)}</span>
+              )
             }
           ],
           body: items || []

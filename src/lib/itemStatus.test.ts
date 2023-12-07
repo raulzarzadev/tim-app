@@ -3,6 +3,22 @@ import { itemStatus } from './itemStatus'
 
 describe('itemStatus', () => {
   test('return pending', () => {
+    //* orders with out rent status defined
+    expect(
+      itemStatus('1', {
+        companyOrders: [
+          {
+            items: [
+              {
+                itemId: '1'
+              }
+            ]
+          }
+        ]
+      }).status
+    ).toBe('pending')
+    //* orders with at least one item  rent status pending
+
     expect(
       itemStatus('1', {
         companyOrders: [
@@ -23,21 +39,7 @@ describe('itemStatus', () => {
             ]
           }
         ]
-      })
-    ).toBe('pending')
-
-    expect(
-      itemStatus('1', {
-        companyOrders: [
-          {
-            items: [
-              {
-                itemId: '1'
-              }
-            ]
-          }
-        ]
-      })
+      }).status
     ).toBe('pending')
   })
 
@@ -58,7 +60,7 @@ describe('itemStatus', () => {
             ]
           }
         ]
-      })
+      }).status
     ).toBe('taken')
   })
 
@@ -75,8 +77,24 @@ describe('itemStatus', () => {
             ]
           }
         ]
-      })
-    ).toBe('finished')
+      }).status
+    ).toBe('available')
+
+    expect(
+      itemStatus('1', {
+        companyOrders: [
+          {
+            status: 'canceled',
+            items: [
+              {
+                itemId: '1',
+                rentStatus: 'pending'
+              }
+            ]
+          }
+        ]
+      }).status
+    ).toBe('available')
   })
   test('return expired', () => {
     expect(
@@ -91,7 +109,7 @@ describe('itemStatus', () => {
             ]
           }
         ]
-      })
+      }).status
     ).toBe('expired')
 
     expect(
@@ -119,7 +137,24 @@ describe('itemStatus', () => {
             ]
           }
         ]
-      })
+      }).status
+    ).toBe('expired')
+
+    //* orders canceled with at least one item  rent status taken
+    expect(
+      itemStatus('1', {
+        companyOrders: [
+          {
+            status: 'canceled',
+            items: [
+              {
+                itemId: '1',
+                rentStatus: 'taken'
+              }
+            ]
+          }
+        ]
+      }).status
     ).toBe('expired')
   })
 })

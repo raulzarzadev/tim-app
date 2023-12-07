@@ -17,6 +17,8 @@ export type OrderBase = {
   payments: Payment[]
   changes: PaymentChange[]
   companyId: CompanyType['id']
+  itemsAmount?: number
+  paymentsAmount?: number
   // status?:
   //   | 'canceled'
   //   | 'pending'

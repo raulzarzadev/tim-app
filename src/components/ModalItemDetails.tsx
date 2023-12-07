@@ -3,7 +3,6 @@ import Modal from './Modal'
 import useModal from '@/hooks/useModal'
 import ArticleDetails from './ArticleDetails'
 import { Typography } from '@mui/material'
-import ItemCurrentStatus from './ItemCurrentStatus'
 import ItemActions from './ItemActions'
 
 const ModalItemDetails = ({
@@ -42,7 +41,9 @@ const ModalItemDetails = ({
         {showCat && `${item?.category} `}
         <span className="truncate">{item?.serialNumber}</span>
         <span className="font-bold text-gray-900 text-xs">{item?.name} </span>
-        {!hiddenCurrentStatus && <ItemCurrentStatus itemId={itemId} />}
+        <span>{item.rentStatus}</span>
+
+        {/* {!hiddenCurrentStatus && <ItemCurrentStatus itemId={itemId} />} */}
       </button>
       <Modal {...modal}>
         {item ? (

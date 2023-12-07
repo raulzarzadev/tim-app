@@ -322,8 +322,7 @@ const ModalStartRent = ({
   const disabledConfirm =
     !order?.client.imageID || !order?.client.signature || isCanceled
   const confirmClientData = !!currentCompany?.confirmClientData
-  const itemBusy = order?.items?.some((i) => i.rentStatus === 'taken')
-  console.log({ itemBusy })
+
   return (
     <div>
       <ModalConfirm

@@ -5,19 +5,19 @@ import MyTable from './MyTable'
 import StaffSpan from './StaffSpan'
 import OrderActions from './orders/OrderActions'
 import ErrorBoundary from './ErrorBoundary'
-import { calculateOrderTotal } from '@/lib/calculateOrderTotal'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import CurrencySpan from './CurrencySpan'
+import asNumber from '@/lib/asNumber'
 
 const OrdersTable = ({ orders }: { orders: Partial<Order>[] }) => {
   const { currentCompany } = useUserCompaniesContext()
 
   orders?.map((o = {}) => {
     const totalOrder =
-      calculateOrderTotal({
-        company: currentCompany,
-        order: o as Order
-      }) || 0
+      asNumber(o.itemsAmount) +
+      asNumber(o.shipping?.amount) -
+      asNumber(o.paymentsAmount)
+
     //@ts-ignore Just add this prop for this table
     o.totalOrder = totalOrder
     return o

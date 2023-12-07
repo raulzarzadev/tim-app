@@ -4,9 +4,6 @@ import { Order } from '@/types/order'
 import { addHours, subHours } from 'date-fns'
 
 describe('orderStatus', () => {
-  test('First', () => {
-    expect(1).toBe(1)
-  })
   test('should return canceled', () => {
     const order: Partial<Order> = {
       status: 'canceled',

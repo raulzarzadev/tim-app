@@ -1,6 +1,9 @@
 import { Box, Typography } from '@mui/material'
 import PricesList from './PricesList'
-import { ItemOrder } from '@/context/userCompaniesContext2'
+import {
+  ItemOrder,
+  useUserCompaniesContext
+} from '@/context/userCompaniesContext2'
 import { ArticleType } from '@/types/article'
 import AccordionSections from './AccordionSections'
 import MyTable from './MyTable'
@@ -12,12 +15,15 @@ import useModal from '@/hooks/useModal'
 import Modal from './Modal'
 import ServiceCard from './ServiceCard'
 import ItemOrders from './ItemOrders'
+import { itemStatus } from '@/lib/itemStatus'
+import ItemRentStatus from './ItemRentStatus2'
 
 const ArticleDetails = ({ article }: { article?: ItemOrder | ArticleType }) => {
   return (
     <Box className="my-4 text-center">
       <Box>
         <ArticleInfo article={article} />
+        <ItemRentStatus itemId={article?.id || ''} />
         <AccordionSections
           sections={[
             {

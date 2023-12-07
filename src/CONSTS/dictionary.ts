@@ -26,6 +26,8 @@ const labels = {
   deposit: 'depósito',
   renewed: 'Renovada',
   renew: 'Renovar',
+  free: 'libre',
+  available: 'disponible',
   '': ''
 } as const
 export type Labels = keyof typeof labels

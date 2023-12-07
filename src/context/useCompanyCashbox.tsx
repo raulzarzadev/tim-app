@@ -43,6 +43,7 @@ export type CashboxContext = {
 export const CashboxContext = createContext<CashboxContext>({})
 
 export type ItemSelected = {
+  order?: Partial<Order>
   duration?: string
   itemId?: ArticleType['id']
   qty?: number
@@ -62,6 +63,7 @@ export type ItemRentStatus =
   | 'canceled'
   | 'in-progress'
   | 'renewed'
+  | 'available'
 
 export const CashboxContextProvider = ({
   children

@@ -23,6 +23,10 @@ const OrderStatus = ({ order }: { order?: Partial<Order> }) => {
     renewed: {
       label: 'Renovada',
       color: 'text-pink-500'
+    },
+    available: {
+      label: 'Disponible',
+      color: 'text-green-500'
     }
   }
   return (

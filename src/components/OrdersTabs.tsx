@@ -6,6 +6,7 @@ import searchValueInObject from '@/lib/searchValueInObject'
 import { useEffect, useState } from 'react'
 import { rentFinishAt } from '@/context/lib'
 import { orderStatus } from '@/lib/orderStatus'
+import asNumber from '@/lib/asNumber'
 
 const OrdersTabs = ({
   orders,
@@ -56,11 +57,17 @@ const OrdersTabs = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orders])
 
+  console.log(filtered)
+
   const actives = filtered?.filter((o) => o.status === 'taken')
   const pending = filtered?.filter((o) => o.status === 'pending')
   const finished = filtered?.filter((o) => o.status === 'finished')
   const expired = filtered?.filter((o) => o.status === 'expired')
   const canceled = filtered?.filter((o) => o.status === 'canceled')
+
+  const pendingPayments = filtered.filter(
+    (o) => asNumber(o.itemsAmount) > asNumber(o?.paymentsAmount)
+  )
   return (
     <div>
       <SearchInput
@@ -77,6 +84,11 @@ const OrdersTabs = ({
           {
             label: `Vencidas ${expired?.length}`,
             content: <OrdersTable orders={expired || []} />
+          },
+          {
+            label: `Pagos pendientes ${pendingPayments?.length}`,
+            content: <OrdersTable orders={pendingPayments || []} />
+            // hidden: hideActives
           },
           {
             label: `Activas ${actives?.length}`,

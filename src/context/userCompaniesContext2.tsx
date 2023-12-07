@@ -19,6 +19,9 @@ import { Client } from '@/types/client'
 import { listenCompanyClients } from '@/firebase/clients'
 import { calculateFinishRentDate } from './lib'
 import { itemStatus } from '@/lib/itemStatus'
+import { calculateOrderTotal } from '@/lib/calculateOrderTotal'
+import { totalCharged } from '@/components/cashboxBalances/calculateBalance.lib'
+import asNumber from '@/lib/asNumber'
 
 /**
  *
@@ -138,7 +141,7 @@ export function UserCompaniesProvider({
   const companyItems =
     currentCompany?.articles?.map((i) => {
       //* set STATUS for each item
-      const status = itemStatus(i.id, { companyOrders: orders })
+      const status = itemStatus(i.id, { companyOrders: orders }).status
       i.rentStatus = status
       //* set PRICE for each item
       i.prices = i.ownPrice
@@ -160,10 +163,12 @@ export function UserCompaniesProvider({
                 (c) => c.name === fullItem?.category
               )?.prices
           const shippingDate = forceAsDate(order?.shipping?.date)
+
           return {
             ...fullItem,
             ...orderItem,
             prices,
+
             order,
             rentStartAt: shippingDate,
             rentFinishAt: calculateFinishRentDate(
@@ -198,6 +203,15 @@ export function UserCompaniesProvider({
       return self.findIndex((t) => t.id === o.id) === i
     }
   )
+
+  orders.map((o) => {
+    o.itemsAmount = o.items.reduce(
+      (acc, curr) => (acc += asNumber(curr.price)),
+      0
+    )
+    o.paymentsAmount = totalCharged(o?.payments || [])
+    return o
+  })
 
   return (
     <UserCompaniesContext.Provider
