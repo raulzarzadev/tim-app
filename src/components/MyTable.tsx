@@ -84,8 +84,10 @@ const MyTable = ({
           <table className="w-full text-center max-w-full ">
             <thead>
               <tr>
-                {data.headers.map((h) => (
-                  <th key={h.key}>{h.label}</th>
+                {data.headers.map((h, i) => (
+                  <th key={`${h.key}-${i}`} className="whitespace-pre">
+                    {h.label}
+                  </th>
                 ))}
               </tr>
             </thead>
@@ -106,8 +108,8 @@ const MyTable = ({
                     }
                   }}
                 >
-                  {data.headers.map((h) => (
-                    <td key={h.key} className="">
+                  {data.headers.map((h, i) => (
+                    <td key={`${h.key}-${i}`} className="">
                       <span className=" ">
                         {h.format
                           ? h.format(get(b, h.key))

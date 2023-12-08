@@ -6,6 +6,7 @@ import Link from 'next/link'
 import PricesList from './PricesList'
 import CategoryItems from './CategoryItems'
 import ModalItemForm from './ModalItemForm'
+import AccordionSections from './AccordionSections'
 
 const CategoryDetails = ({ category }: { category?: CategoryType }) => {
   const { currentCompany } = useUserCompaniesContext()
@@ -32,7 +33,21 @@ const CategoryDetails = ({ category }: { category?: CategoryType }) => {
         <ModalItemForm label="Nueva unidad" categoryName={category?.name} />
       </div>
       <Typography className="text-center">{category?.description}</Typography>
-      <Typography variant="h5" className="mt-4">
+      <AccordionSections
+        sections={[
+          {
+            title: 'Precios',
+            subTitle: `(${category?.prices?.length || 0})`,
+            content: <PricesList prices={category?.prices || []} />
+          },
+          {
+            title: 'Articulos',
+            subTitle: `(${categoryItems?.length || 0})`,
+            content: <CategoryItems categoryName={category?.name || ''} />
+          }
+        ]}
+      />
+      {/* <Typography variant="h5" className="mt-4">
         Precios
       </Typography>
       <PricesList prices={category?.prices || []} />
@@ -41,7 +56,7 @@ const CategoryDetails = ({ category }: { category?: CategoryType }) => {
       </Typography>
 
       {/* <ArticlesList articles={articles || []} companyId={currentCompany?.id} /> */}
-      <CategoryItems categoryName={category?.name || ''} />
+      {/* <CategoryItems categoryName={category?.name || ''} />  */}
     </div>
   )
 }
