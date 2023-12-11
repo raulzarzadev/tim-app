@@ -68,6 +68,7 @@ export default function ForgotPasswordForm({
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
+          test-id="forgot-password-form"
           sx={{
             //marginTop: 8,
             display: 'flex',
@@ -142,7 +143,12 @@ export default function ForgotPasswordForm({
             >
               Recuperar
             </Button>
-            <Button fullWidth variant="outlined" onClick={onSignIn}>
+            <Button
+              fullWidth
+              variant="outlined"
+              onClick={onSignIn}
+              test-id="backwards-button"
+            >
               Regresar
             </Button>
             <Grid container>

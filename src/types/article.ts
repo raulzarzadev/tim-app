@@ -13,6 +13,8 @@ export type ArticleType = {
   prices?: CategoryType['prices']
   description?: string
   rentStatus?: ItemRentStatus
+  storeVisible?: boolean
+  companyId?: string
 }
 
 export type CompanyItem = ArticleType

@@ -38,6 +38,10 @@ const pages = [
     label: `FAQ's`,
     route: '/faqs'
   }
+  // {
+  //   label: `Login`,
+  //   route: '/login'
+  // }
 ]
 
 function ResponsiveAppBar() {
@@ -176,7 +180,21 @@ function ResponsiveAppBar() {
                 {page.label}
               </Button>
             ))}
+            {!user && <div test-id="awaiting-user"></div>}
+            {user === null && (
+              <Button
+                test-id="login-button"
+                LinkComponent={Link}
+                href={'/login'}
+                key={'Login'}
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                Login
+              </Button>
+            )}
           </Box>
+
           {user === undefined && (
             <Skeleton variant="circular" width={50} height={50} />
           )}

@@ -1,3 +1,4 @@
+'use client'
 import * as React from 'react'
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
@@ -66,6 +67,7 @@ export default function LoginForm({
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
+          test-id="login-form"
           sx={{
             // marginTop: 8,
             display: 'flex',
@@ -126,12 +128,22 @@ export default function LoginForm({
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2" onClick={onForgotPassword}>
+                <Link
+                  href="#"
+                  variant="body2"
+                  onClick={onForgotPassword}
+                  test-id="link-forgot"
+                >
                   ¿Olvidaste tu contraseña?
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2" onClick={onSignUp}>
+                <Link
+                  href="#"
+                  variant="body2"
+                  onClick={onSignUp}
+                  test-id="link-sign-up"
+                >
                   {`¿No tienes cuenta? Registrate`}
                 </Link>
               </Grid>

@@ -16,6 +16,8 @@ import { ArticleType } from '@/types/article'
 import Select from './Select'
 import { addArticle, updateArticle } from '@/firebase/articles'
 import PricesForm from './PricesForm'
+import InputUploadFile from './InputUploadFile'
+import PreviewImage from './PreviewImage'
 
 interface IFormInput {
   name: string
@@ -82,6 +84,19 @@ const ArticleForm = ({
         selected={formValues.category || ''}
         onSelect={(value) => setValue('category', value)}
       />
+      {article?.image && (
+        <PreviewImage src={article?.image || ''} alt="item image description" />
+      )}
+      {currentCompany?.id && article?.id && (
+        <InputUploadFile
+          label="Imagen"
+          setURL={(url) => {
+            updateArticle(currentCompany?.id || '', article?.id || '', {
+              image: url
+            })
+          }}
+        />
+      )}
       <TextField
         id="outlined-basic"
         label="No. de serie"

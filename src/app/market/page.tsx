@@ -1,54 +1,50 @@
 'use client'
-import CompanyMarketCard from '@/components/CompanyMarketCard'
-import { getVisibleCompanies } from '@/firebase/companies'
-import { CompanyType } from '@/types/company'
-import { Chip, Stack, TextField, Typography } from '@mui/material'
-import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import MarketGrid, { MarketGridContext } from '@/components/MarketGrid'
+import { MarketProvider } from '@/context/marketContext'
+import { Chip, Stack, TextField } from '@mui/material'
 
 const Page = () => {
-  const [companies, setCompanies] = useState<CompanyType[]>([])
-  useEffect(() => {
-    getVisibleCompanies()
-      .then((res) => {
-        setCompanies(res || [])
-      })
-      .catch(console.error)
-  }, [])
   return (
     <div>
-      {/* <div className="text-center mt-2">
-        <Typography variant="h4">Mercado</Typography>
-        <Typography color={'text.primary'}>
-          Aquí encontraras todas las tiendas y algunos de sus productos que
-          ofrecen
-        </Typography>
-      </div> */}
-      <div className="p-2">
-        <div className=" ">
-          <TextField label="Buscar" fullWidth />
+      <MarketProvider>
+        <div className="p-2">
+          <div className=" ">
+            <TextField label="Buscar" fullWidth />
+          </div>
+          <div className=" overflow-x-auto py-2 pb-4 ">
+            <Stack direction="row" className="justify-start gap-2 ">
+              <Chip label="Bicis"></Chip>
+              <Chip label="Trajes"></Chip>
+              <Chip label="Lavadoras"></Chip>
+              <Chip label="Motos"></Chip>
+              <Chip label="Tablas de surf"></Chip>
+              <Chip label="Sanboard"></Chip>
+              <Chip label="Autos"></Chip>
+              <Chip label="scooter"></Chip>
+            </Stack>
+          </div>
         </div>
-        <div className=" overflow-x-auto py-2 pb-4 ">
-          <Stack direction="row" className="justify-start gap-2 ">
-            <Chip label="Bicis"></Chip>
-            <Chip label="Trajes"></Chip>
-            <Chip label="Lavadoras"></Chip>
-            <Chip label="Motos"></Chip>
-            <Chip label="Tablas de surf"></Chip>
-            <Chip label="Sanboard"></Chip>
-            <Chip label="Autos"></Chip>
-            <Chip label="scooter"></Chip>
-          </Stack>
+        <div className="p-2">
+          <MarketGridContext
+          // items={items.map((i) => ({
+          //   //@ts-ignore
+          //   companyId: i.companyId,
+          //   id: i.id || '',
+          //   img: i.image || '',
+          //   size: 'sm',
+          //   title: `${i.category}`
+          // }))}
+          />
         </div>
-      </div>
+      </MarketProvider>
 
-      <div className="flex justify-center flex-wrap my-4 ">
+      {/* <div className="flex justify-center flex-wrap my-4 ">
         {companies.map((company) => (
           <div key={company.id} className="m-2">
             <CompanyMarketCard company={company} />
           </div>
         ))}
-      </div>
+      </div> */}
     </div>
   )
 }

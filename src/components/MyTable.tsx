@@ -1,7 +1,7 @@
 import { get } from 'lodash'
 import { ReactNode, useEffect, useState } from 'react'
 import ErrorBoundary from './ErrorBoundary'
-import { TextField, Typography } from '@mui/material'
+import { Typography } from '@mui/material'
 import Modal from './Modal'
 import useModal from '@/hooks/useModal'
 import SearchInput from './SearchInput'

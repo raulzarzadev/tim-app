@@ -30,7 +30,7 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
   const params = useParams()
   useEffect(() => {
     authStateChanged((user: SetStateAction<UserType | null | undefined>) => {
-      const alowVisitPages = ['/components', '/market']
+      const alowVisitPages = ['/components', '/market', '/login']
       const isAStorePage = !!params.companyName
       if (
         user === null &&
@@ -39,10 +39,18 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
       ) {
         router.replace('/')
       }
+
       setUser(user)
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(() => {
+    const onceLoginAvoidPages = ['/login', '/signup']
+    if (onceLoginAvoidPages.includes(pathname) && user) {
+      router.replace('/')
+    }
+  }, [pathname, router, user])
 
   const value = useMemo(() => ({ user, setUser }), [user, setUser])
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

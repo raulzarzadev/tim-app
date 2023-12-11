@@ -60,6 +60,7 @@ export default function SignUpForm({ onLogin }: { onLogin?: () => void }) {
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
+          test-id="sign-up-form"
           sx={{
             //marginTop: 8,
             display: 'flex',
@@ -141,7 +142,12 @@ export default function SignUpForm({ onLogin }: { onLogin?: () => void }) {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="#" variant="body2" onClick={onLogin}>
+                <Link
+                  //  href="#"
+                  variant="body2"
+                  onClick={onLogin}
+                  test-id="link-login"
+                >
                   ¿Ya tienes cuenta? Ingresa
                 </Link>
               </Grid>

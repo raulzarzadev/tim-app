@@ -38,7 +38,10 @@ export const getCompany = async (itemId: BaseType['id']) =>
   await itemCRUD.getItem(itemId)
 
 export const getVisibleCompanies = async () =>
-  await itemCRUD.getItems([where('visible', '==', true)])
+  await itemCRUD.getItems([
+    //**
+    //where('visible', '==', true)
+  ])
 
 export const findCompanyByName = async (companyName: string) =>
   await itemCRUD.getItems([where('name', '==', companyName)])

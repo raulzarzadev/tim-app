@@ -41,7 +41,7 @@ const CompanyItems = () => {
         tabs={[
           {
             label: `Todas (${companyItems?.length || 0})`,
-            content: <ItemsTable items={companyItems || []} />
+            content: <ItemsTable items={companyItems || []} itemActions />
           },
           {
             label: `En uso (${takenItems.length || 0})`,

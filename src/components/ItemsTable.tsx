@@ -2,13 +2,25 @@ import { ArticleType } from '@/types/article'
 import MyTable from './MyTable'
 import ArticleDetails from './ArticleDetails'
 import dictionary from '@/CONSTS/dictionary'
+import ItemActions from './ItemActions'
 
-const ItemsTable = ({ items }: { items: ArticleType[] }) => {
+const ItemsTable = ({
+  items,
+  itemActions
+}: {
+  items: ArticleType[]
+  itemActions?: boolean
+}) => {
   return (
     <div className="max-w-md mx-auto">
       <MyTable
         modalTitle="Detalles de Item"
-        modalChildren={(value) => <ArticleDetails article={value} />}
+        modalChildren={(value) => (
+          <>
+            <ArticleDetails article={value} />
+            {itemActions && <ItemActions itemId={value?.id} />}
+          </>
+        )}
         data={{
           headers: [
             {
@@ -29,13 +41,18 @@ const ItemsTable = ({ items }: { items: ArticleType[] }) => {
               label: 'Color',
               key: 'color'
             },
-
             {
               label: 'Status',
               key: 'rentStatus',
               format: (value) => (
                 <span className="capitalize">{dictionary(value)}</span>
               )
+            },
+
+            {
+              label: 'Tienda',
+              key: 'storeVisible',
+              format: (value) => (!!value ? 'Visible' : 'Oculto')
             }
           ],
           body: items || []

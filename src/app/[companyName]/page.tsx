@@ -1,6 +1,7 @@
 'use client'
 
 import AppIcon from '@/components/AppIcon'
+import CompanyPublicDetails from '@/components/CompanyPublicDetails'
 import Modal from '@/components/Modal'
 import { ContactsList } from '@/components/ModalContactClient'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
@@ -43,20 +44,7 @@ const Page = (props: { params: { companyName: string } }) => {
 
   return (
     <div className="text-center flex flex-col">
-      <Typography
-        variant="h4"
-        className="text-center mt-20 relative flex mx-auto"
-      >
-        <span className="z-10">{company?.name}</span>
-        <Avatar
-          src={company?.image}
-          className="absolute -top-16 left-[50%] -translate-x-1/2  z-0"
-          sx={{ width: 96, height: 96 }}
-        ></Avatar>
-      </Typography>
-      <Typography>{company?.description}</Typography>
-      <ContactsList phone={company?.phone} />
-
+      <CompanyPublicDetails company={company} />
       <div>
         <Typography>Productos en renta</Typography>
         {/* <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-2"> */}

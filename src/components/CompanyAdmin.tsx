@@ -11,6 +11,7 @@ import { Button } from '@mui/material'
 import Link from 'next/link'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import AppIcon from './AppIcon'
+import CompanyStore from './CompanyStore'
 
 const CompanyAdmin = () => {
   const { companySelected, setCompanySelected, userCompanies } =
@@ -45,7 +46,8 @@ const CompanyAdmin = () => {
           { label: 'Ordenes', content: <CompanyOrders /> },
           { label: 'Unidades', content: <CompanyItems /> },
           { label: 'Staff', content: <CompanyStaff /> },
-          { label: 'Cortes', content: <CompanyBalances /> }
+          { label: 'Cortes', content: <CompanyBalances /> },
+          { label: 'Tienda', content: <CompanyStore /> }
         ]}
       />
     </div>
