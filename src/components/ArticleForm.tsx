@@ -18,6 +18,7 @@ import { addArticle, updateArticle } from '@/firebase/articles'
 import PricesForm from './PricesForm'
 import InputUploadFile from './InputUploadFile'
 import PreviewImage from './PreviewImage'
+import TagsInput from './TagsInput'
 
 interface IFormInput {
   name: string
@@ -46,6 +47,7 @@ const ArticleForm = ({
     }
   })
   const formValues = watch()
+  console.log({ formValues })
   const [done, setDone] = useState(false)
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     if (!currentCompany?.id) return console.error('no company id')
@@ -122,6 +124,14 @@ const ArticleForm = ({
         label="Descripción"
         fullWidth
         {...register('description')}
+      />
+      <TagsInput
+        setTags={(tags) =>
+          setValue(
+            'tags',
+            tags.map((t) => ({ title: t.title }))
+          )
+        }
       />
       <Box>
         <FormControlLabel

@@ -39,7 +39,7 @@ export function MarketGridContext() {
 
 export const MarketGrid = ({ items }: { items: MarketItem[] }) => {
   return (
-    <ImageList sx={{ height: '450' }}>
+    <ImageList sx={{ height: '450' }} className="max-w-md mx-auto">
       <ImageListItem key="Subheader" cols={2}>
         {/* <ListSubheader component="div">December</ListSubheader> */}
       </ImageListItem>

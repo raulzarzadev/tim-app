@@ -1,9 +1,6 @@
-import { Box, Typography } from '@mui/material'
+import { Box, Chip, Typography } from '@mui/material'
 import PricesList from './PricesList'
-import {
-  ItemOrder,
-  useUserCompaniesContext
-} from '@/context/userCompaniesContext2'
+import { ItemOrder } from '@/context/userCompaniesContext2'
 import { ArticleType } from '@/types/article'
 import AccordionSections from './AccordionSections'
 import MyTable from './MyTable'
@@ -15,7 +12,6 @@ import useModal from '@/hooks/useModal'
 import Modal from './Modal'
 import ServiceCard from './ServiceCard'
 import ItemOrders from './ItemOrders'
-import { itemStatus } from '@/lib/itemStatus'
 import ItemRentStatus from './ItemRentStatus2'
 
 const ArticleDetails = ({ article }: { article?: ItemOrder | ArticleType }) => {
@@ -70,6 +66,9 @@ export const ArticleInfo = ({
         </Typography>{' '}
       </Typography>
       <Typography color="text.secondary">{article?.color}</Typography>
+      {article?.tags?.map((t) => (
+        <Chip key={t.title} label={t.title} />
+      ))}
     </Box>
   )
 }

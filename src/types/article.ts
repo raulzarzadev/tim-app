@@ -1,5 +1,6 @@
 import { ItemRentStatus } from '@/context/useCompanyCashbox'
 import { CategoryType } from './category'
+import { ItemTagType } from '@/components/TagsInput'
 
 export type ArticleType = {
   id: string
@@ -15,6 +16,7 @@ export type ArticleType = {
   rentStatus?: ItemRentStatus
   storeVisible?: boolean
   companyId?: string
+  tags?: {title:string}[]
 }
 
 export type CompanyItem = ArticleType

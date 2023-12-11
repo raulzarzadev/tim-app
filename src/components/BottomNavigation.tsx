@@ -35,7 +35,7 @@ export default function BottomNavigation() {
   React.useEffect(() => {
     const userPages: NavPages = [
       {
-        href: '/',
+        href: '/market',
         label: 'Buscar',
         icon: <AppIcon icon="search" />,
         visible: true

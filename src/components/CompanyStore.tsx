@@ -40,12 +40,10 @@ const CompanyStoreItems = () => {
   const modal = useModal({ title: 'Mostrar items en tienda' })
   if (items === undefined) return <>Cargando ...</>
 
-  console.log({ items })
-
   return (
     <div>
-      <div>
-        <Button onClick={modal.onOpen}>Agregar item</Button>
+      <div className="flex justify-center">
+        <Button onClick={modal.onOpen}>Mostrar items</Button>
         <Modal {...modal}>
           <ItemsTable items={currentCompany?.articles || []} itemActions />
         </Modal>
