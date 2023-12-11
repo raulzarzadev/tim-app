@@ -146,6 +146,12 @@ function ResponsiveAppBar() {
                   </Typography>
                 </MenuItem>
               ))}
+
+              {user === null && (
+                <MenuItem onClick={handleCloseNavMenu}>
+                  <Link href={'/login'}>Login</Link>
+                </MenuItem>
+              )}
             </Menu>
           </Box>
           {/* <Typography
