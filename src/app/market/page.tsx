@@ -43,7 +43,7 @@ const ChipsTags = () => {
         <SearchInput
           placeholder={filterBy || 'Buscar'}
           handleSetSearch={(value) => {
-            onFilterItems?.(value)
+            if (value) onFilterItems?.(value)
           }}
         />
       </div>

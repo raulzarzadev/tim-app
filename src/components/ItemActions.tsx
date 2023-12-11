@@ -1,4 +1,4 @@
-import { Button } from '@mui/material'
+import { Button, Typography } from '@mui/material'
 import ModalConfirm from './ModalConfirm'
 import {
   removeArticle,
@@ -34,41 +34,53 @@ const ItemActions = ({ itemId }: { itemId: string }) => {
     //console.log({ res })
   }
   const [loading, setLoading] = useState(false)
+  const itemDonNotHaveImage = !item?.image
+  const disableShowInStore = loading || itemDonNotHaveImage
   return (
-    <div className="flex justify-evenly my-4">
-      {!!item?.storeVisible ? (
+    <>
+      <div className="flex justify-evenly my-4">
+        {!!item?.storeVisible ? (
+          <Button
+            disabled={loading}
+            onClick={toggleStoreVisible}
+            endIcon={<AppIcon icon="store" />}
+          >
+            Ocultar en tienda
+          </Button>
+        ) : (
+          <Button
+            disabled={disableShowInStore}
+            onClick={toggleStoreVisible}
+            endIcon={<AppIcon icon="store" />}
+          >
+            {itemDonNotHaveImage && ' *'} Mostrar en tienda
+          </Button>
+        )}
+
         <Button
           disabled={loading}
-          onClick={toggleStoreVisible}
-          endIcon={<AppIcon icon="store" />}
+          LinkComponent={Link}
+          href={`/dashboard/${currentCompany?.id}/articles/${itemId}/edit`}
         >
-          Ocultar en tienda
+          Editar
         </Button>
-      ) : (
-        <Button
+        <ModalConfirm
           disabled={loading}
-          onClick={toggleStoreVisible}
-          endIcon={<AppIcon icon="store" />}
-        >
-          Mostrar en tienda
-        </Button>
-      )}
-      <Button
-        disabled={loading}
-        LinkComponent={Link}
-        href={`/dashboard/${currentCompany?.id}/articles/${itemId}/edit`}
-      >
-        Editar
-      </Button>
-      <ModalConfirm
-        disabled={loading}
-        label="Eliminar"
-        color="error"
-        handleConfirm={() => {
-          return handleDeleteItem(itemId)
-        }}
-      />
-    </div>
+          label="Eliminar"
+          color="error"
+          handleConfirm={() => {
+            return handleDeleteItem(itemId)
+          }}
+        />
+      </div>
+      <div>
+        {itemDonNotHaveImage && (
+          <Typography variant="caption" color="error">
+            *Item debe tener una imagen para ser mostrado en tienda
+          </Typography>
+        )}
+      </div>
+    </>
   )
 }
 
