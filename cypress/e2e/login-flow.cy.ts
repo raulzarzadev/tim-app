@@ -1,7 +1,5 @@
-import { contains } from 'cypress/types/jquery'
-
-describe('template spec', () => {
-  it('passes', () => {
+describe('Login flow spec', () => {
+  it('login, sing-up and forgot pages ', () => {
     cy.visit('localhost:3000')
     cy.get('[test-id="login-button"]').click()
     cy.get('[test-id="login-form"]').get('[test-id="link-sign-up"]').click()
