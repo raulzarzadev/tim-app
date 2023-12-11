@@ -1,50 +1,71 @@
 'use client'
-import MarketGrid, { MarketGridContext } from '@/components/MarketGrid'
-import { MarketProvider } from '@/context/marketContext'
-import { Chip, Stack, TextField } from '@mui/material'
+import { MarketGridContext } from '@/components/MarketGrid'
+import SearchInput from '@/components/SearchInput'
+import { ItemTagType } from '@/components/TagsInput'
+import useMarketContext, { MarketProvider } from '@/context/marketContext'
+import { Button, Chip, Stack } from '@mui/material'
 
 const Page = () => {
   return (
     <div>
       <MarketProvider>
         <div className="p-2">
-          <div className=" ">
-            <TextField label="Buscar" fullWidth />
-          </div>
-          <div className=" overflow-x-auto py-2 pb-4 ">
-            <Stack direction="row" className="justify-start gap-2 ">
-              <Chip label="Bicis"></Chip>
-              <Chip label="Trajes"></Chip>
-              <Chip label="Lavadoras"></Chip>
-              <Chip label="Motos"></Chip>
-              <Chip label="Tablas de surf"></Chip>
-              <Chip label="Sanboard"></Chip>
-              <Chip label="Autos"></Chip>
-              <Chip label="scooter"></Chip>
-            </Stack>
-          </div>
+          <ChipsTags />
         </div>
         <div className="p-2">
-          <MarketGridContext
-          // items={items.map((i) => ({
-          //   //@ts-ignore
-          //   companyId: i.companyId,
-          //   id: i.id || '',
-          //   img: i.image || '',
-          //   size: 'sm',
-          //   title: `${i.category}`
-          // }))}
-          />
+          <MarketGridContext />
         </div>
       </MarketProvider>
+    </div>
+  )
+}
 
-      {/* <div className="flex justify-center flex-wrap my-4 ">
-        {companies.map((company) => (
-          <div key={company.id} className="m-2">
-            <CompanyMarketCard company={company} />
-          </div>
-        ))}
-      </div> */}
+const ChipsTags = () => {
+  const { items, onFilterTag, filterBy, onFilterItems } = useMarketContext()
+  const handleFilterBy = (label: string) => {
+    onFilterTag?.(label)
+  }
+  const tags: ItemTagType[] = items.reduce(
+    (acc, curr) => {
+      curr?.tags?.forEach((t) => {
+        const alreadyIn = acc.find((a) => a?.title === t.title)
+        if (alreadyIn) return
+        acc.push(t)
+      })
+      return acc
+    },
+    [{ title: 'Todos' }] as ItemTagType[]
+  )
+
+  return (
+    <div>
+      <div className=" ">
+        <SearchInput
+          placeholder={filterBy || 'Buscar'}
+          handleSetSearch={(value) => {
+            onFilterItems?.(value)
+          }}
+        />
+      </div>
+      <div className=" overflow-x-auto py-2 pb-4 ">
+        <Stack direction="row" className="justify-start gap-2 ">
+          {tags.map((t) => (
+            <Chip
+              color={
+                filterBy?.toLowerCase() === t.title?.toLocaleLowerCase()
+                  ? 'primary'
+                  : 'default'
+              }
+              key={t.title}
+              label={t.title}
+              component={Button}
+              onClick={(e) => {
+                handleFilterBy(t.title)
+              }}
+            />
+          ))}
+        </Stack>
+      </div>
     </div>
   )
 }

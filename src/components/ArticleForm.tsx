@@ -19,6 +19,7 @@ import PricesForm from './PricesForm'
 import InputUploadFile from './InputUploadFile'
 import PreviewImage from './PreviewImage'
 import TagsInput from './TagsInput'
+import { updateItem } from '@/firebase/items'
 
 interface IFormInput {
   name: string
@@ -47,13 +48,15 @@ const ArticleForm = ({
     }
   })
   const formValues = watch()
-  console.log({ formValues })
   const [done, setDone] = useState(false)
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     if (!currentCompany?.id) return console.error('no company id')
     try {
       if (article?.id) {
         const res = await updateArticle(currentCompany?.id, article?.id, data)
+        const res2 = await updateItem(article?.id, data)
+          .then(console.log)
+          .catch(console.log)
         console.log({ res })
         return res
       }
