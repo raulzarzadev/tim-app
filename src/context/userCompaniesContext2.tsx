@@ -54,6 +54,7 @@ export type UserCompaniesContextType = {
     expired: ItemOrder[]
   }
   orders?: Order[]
+  userShop?: Partial<CompanyType>
 }
 
 export const UserCompaniesContext = createContext<UserCompaniesContextType>({
@@ -92,6 +93,9 @@ export function UserCompaniesProvider({
   const [orders, setOrders] = useState<Order[]>([])
   const [services, setServices] = useState<Service[]>([])
   const [clients, setClients] = useState<Client[]>([])
+
+  const [userShop, setUserShop] = useState<Partial<CompanyType>>()
+
   const currentCompany = [...userOwnCompanies, ...staffCompanies].find(
     (company) => company?.id === companySelected
   )
@@ -112,6 +116,7 @@ export function UserCompaniesProvider({
     if (user) {
       listenUserCompanies(user?.id, (res: CompanyType[]) => {
         setUserOwnCompanies(res)
+        setUserShop(res[0])
       })
       listenStaffCompanies(user?.email, (res: CompanyType[]) => {
         setStaffCompanies(res)
@@ -230,7 +235,8 @@ export function UserCompaniesProvider({
         },
         clients,
         orders,
-        services
+        services,
+        userShop
       }}
     >
       {children}

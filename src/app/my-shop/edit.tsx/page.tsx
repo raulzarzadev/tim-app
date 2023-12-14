@@ -1,9 +1,9 @@
-import MyShop from '@/components/MyShop'
+import MyShopForm from '@/components/MyShopForm'
 
 const page = () => {
   return (
     <div>
-      <MyShop />
+      <MyShopForm />
     </div>
   )
 }
