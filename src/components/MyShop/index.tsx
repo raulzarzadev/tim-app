@@ -2,7 +2,7 @@
 import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import NotCompanyYet from '../NotCompanyYet'
 import CompanyPublicDetails from '../CompanyPublicDetails'
-import CompanyActions from '../CompanyActions'
+import ShopActions from '../ShopActions'
 import { Button, Skeleton } from '@mui/material'
 import AppIcon from '../AppIcon'
 import ItemsTabs from '../ItemsTabs'
@@ -12,7 +12,7 @@ const MyShop = () => {
   const { userShop } = useUserCompaniesContext()
   if (userShop === undefined)
     return (
-      <div className="max-w-md mx-auto">
+      <div>
         <div className="grid gap-3 place-items-center">
           <Skeleton
             variant="circular"
@@ -39,23 +39,13 @@ const MyShop = () => {
       </div>
     )
   return (
-    <div>
+    <div className="max-w-lg mx-auto">
       {!userShop && <NotCompanyYet />}
       {userShop && (
         <>
           <CompanyPublicDetails company={userShop} />
-          <CompanyActions company={userShop} />
+          <ShopActions company={userShop} />
           <div className="mt-6">
-            <div className="flex justify-evenly">
-              <Button
-                endIcon={<AppIcon icon="add" />}
-                variant="contained"
-                LinkComponent={Link}
-                href="/my-shop/new-item"
-              >
-                Item
-              </Button>
-            </div>
             <ItemsTabs
               hiddenActions
               categories={userShop?.categories || []}

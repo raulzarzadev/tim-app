@@ -22,8 +22,8 @@ export const itemCRUD = new FirebaseCRUD(COLLECTION_NAME, db, storage)
 export const setItem = async (itemId: ItemType['id'], newItem: NewItem) =>
   await itemCRUD.setItem(itemId || '', { ...newItem, id: itemId })
 
-// export const createItem = async (newItem: NewItem) =>
-//   await itemCRUD.createItem(newItem)
+export const createItem = async (newItem: NewItem) =>
+  await itemCRUD.createItem(newItem)
 
 export const updateItem = async (
   itemId: string,
