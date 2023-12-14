@@ -13,7 +13,9 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
-import { signInWithPassword } from '@/firebase/auth'
+import { googleLogin, signInWithPassword } from '@/firebase/auth'
+import { Divider } from '@mui/material'
+import AppIcon from './AppIcon'
 
 function Copyright(props: any) {
   return (
@@ -74,6 +76,7 @@ export default function LoginForm({
             flexDirection: 'column',
             alignItems: 'center'
           }}
+          className="max-w-md mx-auto"
         >
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
             <LockOutlinedIcon />
@@ -81,6 +84,26 @@ export default function LoginForm({
           <Typography component="h1" variant="h5">
             Ingresar
           </Typography>
+          <div className="grid my-6 gap-6 ">
+            <Button
+              onClick={async (e) => {
+                const res = await googleLogin()
+              }}
+              aria-label="sign-in-button"
+              variant="contained"
+              style={{
+                backgroundColor: '#4285F4'
+              }}
+              endIcon={<AppIcon icon="google" />}
+            >
+              <span className="truncate">Ingresa con Google</span>
+            </Button>
+          </div>
+          <div className=" w-full">
+            <Divider variant="fullWidth" sx={{}}>
+              O
+            </Divider>
+          </div>
           <Box
             component="form"
             onSubmit={handleSubmit}
@@ -123,6 +146,7 @@ export default function LoginForm({
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              test-id="button-submit"
             >
               Ingresar
             </Button>
