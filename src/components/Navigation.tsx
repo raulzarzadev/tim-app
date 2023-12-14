@@ -26,22 +26,46 @@ const pages = [
     label: 'Precio',
     route: '/pricing'
   },
+  // {
+  //   label: 'Contacto',
+  //   route: '/contact'
+  // },
+  // {
+  //   label: 'Blog',
+  //   route: '/blog'
+  // },
+  // {
+  //   label: `FAQ's`,
+  //   route: '/faqs'
+  // },
   {
-    label: 'Contacto',
-    route: '/contact'
-  },
-  {
-    label: 'Blog',
-    route: '/blog'
-  },
-  {
-    label: `FAQ's`,
-    route: '/faqs'
+    label: `Mercado`,
+    route: '/market'
   }
   // {
   //   label: `Login`,
   //   route: '/login'
   // }
+]
+
+const userLinks: { label: string; route?: string; action?: () => void }[] = [
+  {
+    label: 'Perfil',
+    route: '/profile'
+  },
+  // {
+  //   label: 'Cuenta',
+  //   route: '/account'
+  // },
+  {
+    label: 'Dashboard',
+    route: '/dashboard'
+  },
+  {
+    label: 'Salir',
+
+    action: () => logout()
+  }
 ]
 
 function ResponsiveAppBar() {
@@ -111,16 +135,24 @@ function ResponsiveAppBar() {
               display: { xs: 'flex', md: 'none', justifyContent: 'end' }
             }}
           >
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
+            {!!user ? (
+              <Tooltip title={user.email}>
+                <IconButton onClick={handleOpenNavMenu} sx={{ p: 0 }}>
+                  <Avatar alt={user.email} src={user.image} />
+                </IconButton>
+              </Tooltip>
+            ) : (
+              <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleOpenNavMenu}
+                color="inherit"
+              >
+                <MenuIcon />
+              </IconButton>
+            )}
             <Menu
               id="menu-appbar"
               anchorEl={anchorElNav}
@@ -146,12 +178,29 @@ function ResponsiveAppBar() {
                   </Typography>
                 </MenuItem>
               ))}
-
               {user === null && (
                 <MenuItem onClick={handleCloseNavMenu}>
                   <Link href={'/login'}>Login</Link>
                 </MenuItem>
               )}
+              {user &&
+                userLinks?.map((setting) => (
+                  <MenuItem key={setting.label} onClick={handleCloseNavMenu}>
+                    {setting.action ? (
+                      <Button onClick={setting.action}>
+                        <Typography textAlign="center">
+                          {setting.label}
+                        </Typography>
+                      </Button>
+                    ) : (
+                      <Link href={setting.route || '/'}>
+                        <Typography textAlign="center">
+                          {setting.label}
+                        </Typography>
+                      </Link>
+                    )}
+                  </MenuItem>
+                ))}
             </Menu>
           </Box>
           {/* <Typography
@@ -200,36 +249,17 @@ function ResponsiveAppBar() {
               </Button>
             )}
           </Box>
-
+          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+            {user && <UserNavMenu user={user} />}
+          </Box>
           {user === undefined && (
             <Skeleton variant="circular" width={50} height={50} />
           )}
-          {/* {user === null && <LoginButton />} */}
-          {user && <UserNavMenu user={user} />}
         </Toolbar>
       </Container>
     </AppBar>
   )
 }
-const settings: { label: string; route?: string; action?: () => void }[] = [
-  {
-    label: 'Perfil',
-    route: '/profile'
-  },
-  // {
-  //   label: 'Cuenta',
-  //   route: '/account'
-  // },
-  {
-    label: 'Dashboard',
-    route: '/dashboard'
-  },
-  {
-    label: 'Salir',
-
-    action: () => logout()
-  }
-]
 
 const UserNavMenu = ({ user }: { user: UserType }) => {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
@@ -249,22 +279,21 @@ const UserNavMenu = ({ user }: { user: UserType }) => {
         </IconButton>
       </Tooltip>
       <Menu
-        sx={{ mt: '45px' }}
-        id="menu-appbar"
+        //sx={{ mt: '45px', border: '1px solid black', background: 'blue' }}
         anchorEl={anchorElUser}
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'right'
-        }}
+        // anchorOrigin={{
+        //   vertical: 'top',
+        //   horizontal: 'right'
+        // }}
         keepMounted
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right'
-        }}
+        // transformOrigin={{
+        //   vertical: 'top',
+        //   horizontal: 'right'
+        // }}
         open={Boolean(anchorElUser)}
         onClose={handleCloseUserMenu}
       >
-        {settings.map((setting) => (
+        {userLinks.map((setting) => (
           <MenuItem key={setting.label} onClick={handleCloseUserMenu}>
             {setting.action ? (
               <Button onClick={setting.action}>

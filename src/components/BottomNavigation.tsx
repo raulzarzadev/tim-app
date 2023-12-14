@@ -8,7 +8,7 @@ import AppIcon from './AppIcon'
 import { useAuthContext } from '@/context/authContext'
 import Link from 'next/link'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import ErrorBoundary from './ErrorBoundary'
 
 export type NavPages = {
@@ -20,7 +20,7 @@ export type NavPages = {
 
 export default function BottomNavigation() {
   const pathname = usePathname()
-
+  const router = useRouter()
   const ref = React.useRef<HTMLDivElement>(null)
   const { currentCompany } = useUserCompaniesContext()
   const { user } = useAuthContext()
@@ -142,7 +142,7 @@ export default function BottomNavigation() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentCompany])
 
-  if (!user) return <></>
+  //if (!user) return <></>
 
   return (
     <Box sx={{ pb: 7 }} ref={ref}>
@@ -164,9 +164,13 @@ export default function BottomNavigation() {
             onChange={(event, newValue) => {
               setValue(newValue)
             }}
-            className="overflow-x-auto justify-start sm:justify-center whitespace-nowrap "
+            className="overflow-x-auto justify-center sm:justify-center whitespace-nowrap "
           >
-            {pages?.map((page) =>
+            <BottomNavigationAction
+              onClick={() => router.back()}
+              icon={<AppIcon icon="back" />}
+            />
+            {/* {pages?.map((page) =>
               page.visible ? (
                 <BottomNavigationAction
                   key={page.href}
@@ -176,7 +180,40 @@ export default function BottomNavigation() {
                   icon={page.icon}
                 />
               ) : null
+            )} */}
+            {!user && (
+              <BottomNavigationAction
+                //onClick={() => router.forward()}
+                LinkComponent={Link}
+                href="/market"
+                icon={<AppIcon icon="search" />}
+                label="Buscar"
+              />
             )}
+
+            {!!user && pathname !== '/my-shop' && (
+              <BottomNavigationAction
+                //onClick={() => router.forward()}
+                LinkComponent={Link}
+                href="/my-shop"
+                icon={<AppIcon icon="store" />}
+                label="Mi tienda"
+              />
+            )}
+            {!!user && pathname === '/my-shop' && (
+              <BottomNavigationAction
+                //onClick={() => router.forward()}
+                LinkComponent={Link}
+                href="/market"
+                icon={<AppIcon icon="search" />}
+                label="Buscar"
+              />
+            )}
+
+            <BottomNavigationAction
+              onClick={() => router.forward()}
+              icon={<AppIcon icon="forward" />}
+            />
           </MUIBottomNavigation>
         </ErrorBoundary>
       </Paper>

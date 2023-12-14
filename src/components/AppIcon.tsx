@@ -35,7 +35,11 @@ import ReceiptLongIcon from '@mui/icons-material/ReceiptLong'
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd'
 import ChangeCircleIcon from '@mui/icons-material/ChangeCircle'
 import GoogleIcon from '@mui/icons-material/Google'
-
+import LanguageIcon from '@mui/icons-material/Language'
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos'
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
+import HomeIcon from '@mui/icons-material/Home'
+import StorefrontIcon from '@mui/icons-material/Storefront'
 const icons = {
   myOrder: AssignmentIndIcon,
   add: AddIcon,
@@ -51,7 +55,7 @@ const icons = {
   person: PersonIcon,
   search: SearchIcon,
   bike: DirectionsBikeIcon,
-  store: StoreIcon,
+  store: StorefrontIcon,
   trash: DeleteForeverIcon,
   delivery: LocalShippingIcon,
   fix: BuildIcon,
@@ -72,7 +76,11 @@ const icons = {
   addComment: AddCommentIcon,
   order: ReceiptLongIcon,
   change: ChangeCircleIcon,
-  google: GoogleIcon
+  google: GoogleIcon,
+  web: LanguageIcon,
+  back: ArrowBackIosIcon,
+  forward: ArrowForwardIosIcon,
+  home: HomeIcon
 } as const
 
 // https://mui.com/material-ui/material-icons/
