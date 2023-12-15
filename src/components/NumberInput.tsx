@@ -43,24 +43,14 @@ export default function NumberInput({
     <>
       <Box
         id="button-number"
-        className="grid grid-cols-3 w-full items-center  place-content-center justify-center place-items-center"
+        className="grid-row place-items-center w-full   place-content-center justify-center "
       >
-        <button
-          onClick={(e) => {
-            e.preventDefault()
-            e.stopPropagation()
-            handleChange(_value - 1)
-          }}
-          className="w-full h-full shadow-md rounded-l-md bg-blue-100"
-        >
-          <AppIcon icon="substr" />
-        </button>
         <input
           name={name}
           onChange={(e) => {
             handleChange(Number(e.target.value), e)
           }}
-          className="border w-full p-2 text-center shadow-md "
+          className="border w-full  text-center  h-8 rounded-t-md border-gray-200  "
           type="number"
           value={value ?? _value}
           inputMode="numeric"
@@ -68,17 +58,29 @@ export default function NumberInput({
           min={min}
           max={max}
         />
+        <div className="flex">
+          <button
+            onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              handleChange(_value - 1)
+            }}
+            className="w-full h-full shadow-md rounded-bl-md bg-blue-300"
+          >
+            <AppIcon icon="substr" />
+          </button>
 
-        <button
-          onClick={(e) => {
-            e.preventDefault()
-            e.stopPropagation()
-            handleChange(_value + 1)
-          }}
-          className="w-full h-full shadow-md rounded-r-md bg-blue-100"
-        >
-          <AppIcon icon="add" />
-        </button>
+          <button
+            onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              handleChange(_value + 1)
+            }}
+            className="w-full h-full shadow-md rounded-br-md bg-blue-300"
+          >
+            <AppIcon icon="add" />
+          </button>
+        </div>
       </Box>
     </>
   )

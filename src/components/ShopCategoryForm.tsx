@@ -32,6 +32,7 @@ const ShopCategoryForm = ({
     await onSubmit?.(data).then(console.log).catch(console.error)
     setDone(true)
   }
+  console.log({ formValues })
 
   return (
     <form className="grid gap-4 max-w-md mx-auto">

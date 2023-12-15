@@ -99,7 +99,6 @@ const ShopActions = ({
             openIcon="add"
           >
             <ShopCategoryForm
-              shopId={shopId || ''}
               onSubmit={async (newCategory) => {
                 newCategory.companyId = shopId
                 return await handleCreateCategory(newCategory)

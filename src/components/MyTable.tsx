@@ -23,7 +23,11 @@ export type MyTableProps = {
   onRowClick?: (id: string) => void
   title?: string
   search?: boolean
-  modalChildren?: (value: any) => ReactNode
+  modalChildren?: (
+    value: any,
+    index: number | null,
+    onClose: () => void
+  ) => ReactNode
   modalTitle?: string
 }
 
@@ -70,9 +74,14 @@ const MyTable = ({
 
   const modal = useModal({ title: modalTitle })
   const [rowSelected, setRowSelected] = useState<any>()
+  const [indexSelected, setIndexSelected] = useState<number | null>(null)
   return (
     <>
-      {modalChildren && <Modal {...modal}>{modalChildren(rowSelected)}</Modal>}
+      {modalChildren && (
+        <Modal {...modal}>
+          {modalChildren(rowSelected, indexSelected, modal.onClose)}
+        </Modal>
+      )}
       {search && (
         <SearchInput
           handleSetSearch={handleSearch}
@@ -107,6 +116,7 @@ const MyTable = ({
                     if (modalChildren) {
                       modal.onOpen()
                       setRowSelected(b)
+                      setIndexSelected(i)
                     }
                   }}
                 >

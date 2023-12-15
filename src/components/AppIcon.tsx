@@ -41,6 +41,8 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import HomeIcon from '@mui/icons-material/Home'
 import StorefrontIcon from '@mui/icons-material/Storefront'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import StarIcon from '@mui/icons-material/Star'
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 const icons = {
   myOrder: AssignmentIndIcon,
   add: AddIcon,
@@ -65,6 +67,8 @@ const icons = {
   cashbox: PointOfSaleIcon,
   substr: RemoveIcon,
   eye: VisibilityIcon,
+  eyeOpen: VisibilityIcon,
+  eyeClose: VisibilityOffIcon,
   info: InfoIcon,
   switch: LoopIcon,
   dashboard: Dashboard,
@@ -82,7 +86,8 @@ const icons = {
   back: ArrowBackIosIcon,
   forward: ArrowForwardIosIcon,
   home: HomeIcon,
-  check: CheckCircleIcon
+  check: CheckCircleIcon,
+  star: StarIcon
 } as const
 
 // https://mui.com/material-ui/material-icons/

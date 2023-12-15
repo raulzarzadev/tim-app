@@ -28,6 +28,7 @@ const labels = {
   renew: 'Renovar',
   free: 'libre',
   available: 'disponible',
+
   '': ''
 } as const
 export type Labels = keyof typeof labels

@@ -31,6 +31,7 @@ export default function RadioGroup({
       >
         {options.map((o) => (
           <FormControlLabel
+            className="capitalize"
             key={o.value}
             disabled={o.disabled}
             value={o.value}
