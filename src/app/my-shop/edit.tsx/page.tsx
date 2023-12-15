@@ -1,11 +1,7 @@
 import MyShopForm from '@/components/MyShopForm'
 
 const page = () => {
-  return (
-    <div>
-      <MyShopForm />
-    </div>
-  )
+  return <MyShopForm />
 }
 
 export default page

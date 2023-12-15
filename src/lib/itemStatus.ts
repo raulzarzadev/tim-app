@@ -9,7 +9,7 @@ export type ItemStatusProps = {
 export const itemStatus = (
   itemId: string,
   { companyOrders }: ItemStatusProps
-): { status: ItemRentStatus; order?: Partial<Order> } => {
+): { status: ItemRentStatus; order?: Partial<Order> | null } => {
   //* default item status should be pending
   //* if item is finished should be free
   //* if item is taken and is not expired should be taken
@@ -17,6 +17,7 @@ export const itemStatus = (
   //* if item is expired should be expired
   //* if order is canceled and item is taken should be expired
   //* if order is canceled and item is pending should be free
+  //* if itemsOrders are empty should be available
 
   let status: ItemRentStatus = 'pending'
   const itemOrders = companyOrders
@@ -28,7 +29,7 @@ export const itemStatus = (
       })
     })
     .flat()
-
+  if (!itemOrders?.length) return { status: 'available', order: null }
   // const itemOrders = itemsOrders?.filter((i) => i?.itemId === itemId)
 
   const itemTaken = itemOrders?.find((i) => i?.rentStatus === 'taken')

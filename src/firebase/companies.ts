@@ -1,5 +1,5 @@
 import { where } from 'firebase/firestore'
-import { storage } from './auth'
+import { auth, storage } from './auth'
 import { FirebaseCRUD } from './firebase.CRUD'
 import { db } from './main'
 import { BaseType } from '@/types/base'
@@ -28,11 +28,26 @@ export const setCompany = async (itemId: ItemType['id'], newItem: NewItem) =>
 export const createCompany = async (newItem: CreateCompany_DTO) =>
   await itemCRUD.createItem({ ...newItem })
 
+export const createShop = async (
+  newItem: Pick<CompanyType, 'name' | 'phone'> & {
+    principalContact?: string
+    phone?: string
+    address?: string
+    email?: string
+  }
+) => {
+  const userId = auth.currentUser?.uid
+  //@ts-ignore
+  newItem.userId = userId || ''
+  return await itemCRUD.createItem(newItem)
+}
+
 export const updateCompany = async (itemId: string, updates: NewItem) =>
   await itemCRUD.updateItem(itemId, updates)
 
-export const deleteCompany = async (itemId: BaseType['id']) =>
-  await itemCRUD.deleteItem(itemId)
+export const deleteCompany = async (itemId: BaseType['id']) => {
+  return await itemCRUD.deleteItem(itemId)
+}
 
 export const getCompany = async (itemId: BaseType['id']) =>
   await itemCRUD.getItem(itemId)

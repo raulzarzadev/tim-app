@@ -10,7 +10,7 @@ import { Timestamp } from 'firebase/firestore'
 import { isAfter } from 'date-fns'
 import { Order } from '@/types/order'
 import { listenCompanyOrders } from '@/firebase/orders'
-import { CompanyItem } from '@/types/article'
+import { ArticleType, CompanyItem } from '@/types/article'
 import { ItemSelected } from './useCompanyCashbox'
 import forceAsDate from '@/lib/forceAsDate'
 import { Service } from '@/types/service'
@@ -19,9 +19,10 @@ import { Client } from '@/types/client'
 import { listenCompanyClients } from '@/firebase/clients'
 import { calculateFinishRentDate } from './lib'
 import { itemStatus } from '@/lib/itemStatus'
-import { calculateOrderTotal } from '@/lib/calculateOrderTotal'
 import { totalCharged } from '@/components/cashboxBalances/calculateBalance.lib'
 import asNumber from '@/lib/asNumber'
+import { listenCompanyItems } from '@/firebase/items'
+import { CategoryType } from '@/types/category'
 
 /**
  *
@@ -95,7 +96,7 @@ export function UserCompaniesProvider({
   const [clients, setClients] = useState<Client[]>([])
 
   const [userShop, setUserShop] = useState<Partial<CompanyType>>()
-
+  const [shopItems, setShopItems] = useState<Partial<ArticleType>[]>([])
   const currentCompany = [...userOwnCompanies, ...staffCompanies].find(
     (company) => company?.id === companySelected
   )
@@ -116,13 +117,24 @@ export function UserCompaniesProvider({
     if (user) {
       listenUserCompanies(user?.id, (res: CompanyType[]) => {
         setUserOwnCompanies(res)
-        setUserShop(res[0])
+        setUserShop(res[0] || null)
       })
       listenStaffCompanies(user?.email, (res: CompanyType[]) => {
         setStaffCompanies(res)
       })
     }
   }, [user])
+
+  useEffect(() => {
+    listenCompanyItems(userShop?.id || '', (res: ArticleType[]) => {
+      res.map((i) => {
+        const status = itemStatus(i.id, { companyOrders: orders }).status
+        i.rentStatus = status
+        return i
+      })
+      setShopItems(res)
+    })
+  }, [userShop, orders])
 
   useEffect(() => {
     if (user) {
@@ -218,6 +230,10 @@ export function UserCompaniesProvider({
     return o
   })
 
+  let userFullShop: Partial<CompanyType> | undefined = userShop
+  if (userShop) {
+    userFullShop = { ...userShop, items: shopItems }
+  }
   return (
     <UserCompaniesContext.Provider
       value={{
@@ -236,7 +252,7 @@ export function UserCompaniesProvider({
         clients,
         orders,
         services,
-        userShop
+        userShop: userFullShop
       }}
     >
       {children}

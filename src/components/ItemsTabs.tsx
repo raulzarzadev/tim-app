@@ -12,7 +12,7 @@ const ItemsTabs = ({
   items,
   categories
 }: {
-  items: ArticleType[]
+  items: Partial<ArticleType>[]
   categories: CategoryType[]
   hiddenActions?: boolean
 }) => {

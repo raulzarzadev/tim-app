@@ -10,6 +10,7 @@ export type CompanyBase = {
   description: string
   categories?: CategoryType[]
   articles?: ArticleType[]
+  items?: Partial<ArticleType>[]
   staff?: StaffType[]
   staffMails: string[]
   phone?: string
@@ -19,6 +20,9 @@ export type CompanyBase = {
   shippingEnabled?: boolean
   confirmClientData?: boolean
   visible?: boolean
+  principalContact?: string
+  address?: string
+  email?: string
 }
 
 export type CompanyType = BaseType & CompanyBase

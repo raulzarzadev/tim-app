@@ -55,3 +55,13 @@ export const getCompanyMarketItems = async (companyId: string) => {
     where('storeVisible', '==', true)
   ])
 }
+
+export const getCompanyItems = async (companyId: string) => {
+  return await itemCRUD.getItems([where('companyId', '==', companyId)])
+}
+
+export const deleteCompanyItems = async (companyId: string) => {
+  const companyItems = await getCompanyItems(companyId)
+  const promises = companyItems.map(async (item) => await deleteItem(item.id))
+  return await Promise.all(promises)
+}

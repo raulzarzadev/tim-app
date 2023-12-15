@@ -192,6 +192,17 @@ export const onPayOrder = async (
   })
 }
 
+export const getCompanyOrders = async (companyId: string) =>
+  await itemCRUD.getItems([where('companyId', '==', companyId)])
+
+export const deleteCompanyOrders = async (companyId: string) => {
+  const companyOrders = await getCompanyOrders(companyId)
+  const promises = companyOrders.map(
+    async (order) => await deleteOrder(order.id)
+  )
+  return await Promise.all(promises)
+}
+
 export const listenItemOrders = async (
   itemId: ItemType['id'],
   cb: CallableFunction

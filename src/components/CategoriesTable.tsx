@@ -7,7 +7,7 @@ const CategoriesTable = ({
   items,
   categories
 }: {
-  items: ArticleType[]
+  items: Partial<ArticleType>[]
   categories: CategoryType[]
 }) => {
   const categoryItems = (categoryName: string) => {

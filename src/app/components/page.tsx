@@ -4,7 +4,7 @@ import ModalPayment from '@/components/ModalPayment2'
 import ModalOrderForm from '@/components/orders/ModalOrderForm'
 import { CashboxContextProvider } from '@/context/useCompanyCashbox'
 import { ArticleType } from '@/types/article'
-import { CategoryType } from '@/types/category'
+import { CategoryBase, CategoryType } from '@/types/category'
 import { usePathname, useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 
@@ -65,7 +65,7 @@ const items: ArticleType[] = [
     ownPrice: false
   }
 ]
-const categories: CategoryType[] = [
+const categories: CategoryBase[] = [
   {
     name: 'Category 1',
     description: 'Description 1',

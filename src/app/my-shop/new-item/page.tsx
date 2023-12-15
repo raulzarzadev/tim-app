@@ -5,9 +5,11 @@ import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 const Page = () => {
   const { userShop } = useUserCompaniesContext()
   return (
-    <div>
-      <ArticleFormShort companyId={userShop?.id || ''} />
-    </div>
+    <ArticleFormShort
+      onSaveArticle={async (data) => {
+        console.log(data)
+      }}
+    />
   )
 }
 

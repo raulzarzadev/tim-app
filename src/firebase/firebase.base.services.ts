@@ -26,7 +26,7 @@ export const updateService = async (itemId: string, updates: CreateItem) =>
   await itemCRUD.updateItem(itemId, updates)
 
 export const deleteService = async (itemId: ItemType['id']) =>
-  await itemCRUD.deleteItem(itemId)
+  await itemCRUD.deleteItem(itemId || '')
 
 export const getService = async (itemId: ItemType['id']) =>
-  await itemCRUD.getItem(itemId)
+  await itemCRUD.getItem(itemId || '')

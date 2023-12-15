@@ -6,13 +6,15 @@ import Modal from './Modal'
 import useModal from '@/hooks/useModal'
 import SearchInput from './SearchInput'
 
+export type MyTableHeader = {
+  key: string
+  label: string
+  value?: (value: any) => string
+  format?: (value: any) => ReactNode
+}
+export type MyTableHeaders = MyTableHeader[]
 export type MyTableData = {
-  headers: {
-    key: string
-    label: string
-    value?: (value: any) => string
-    format?: (value: any) => ReactNode
-  }[]
+  headers: MyTableHeaders
   body: any[]
 }
 

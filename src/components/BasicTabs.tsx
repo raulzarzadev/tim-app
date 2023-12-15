@@ -77,7 +77,8 @@ function BasicTabs({
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     router.push(
-      pathname + '?' + createQueryString(tabName, JSON.stringify(newValue))
+      pathname + '?' + createQueryString(tabName, JSON.stringify(newValue)),
+      { scroll: false }
     )
     setValue(newValue)
   }
@@ -87,6 +88,8 @@ function BasicTabs({
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <ErrorBoundary componentName="BasicTabs">
           <Tabs
+            className="bg-slate-300"
+            // orientation="vertical"
             value={value}
             onChange={handleChange}
             aria-label="basic tabs example"

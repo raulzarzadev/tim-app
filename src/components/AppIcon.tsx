@@ -40,6 +40,7 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import HomeIcon from '@mui/icons-material/Home'
 import StorefrontIcon from '@mui/icons-material/Storefront'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 const icons = {
   myOrder: AssignmentIndIcon,
   add: AddIcon,
@@ -80,7 +81,8 @@ const icons = {
   web: LanguageIcon,
   back: ArrowBackIosIcon,
   forward: ArrowForwardIosIcon,
-  home: HomeIcon
+  home: HomeIcon,
+  check: CheckCircleIcon
 } as const
 
 // https://mui.com/material-ui/material-icons/

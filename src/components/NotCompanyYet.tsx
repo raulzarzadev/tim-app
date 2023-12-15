@@ -28,7 +28,7 @@ const NotCompanyYet = () => {
           <Typography variant="caption">Sin comisiones</Typography>
         </li>
       </ul>
-      <Button variant="contained" LinkComponent={Link} href="/start-rents">
+      <Button variant="contained" LinkComponent={Link} href="/easy-start">
         Comienza
       </Button>
     </div>

@@ -157,4 +157,9 @@ describe('itemStatus', () => {
       }).status
     ).toBe('expired')
   })
+
+  test('return available', () => {
+    //* if itemsOrders are empty should be available
+    expect(itemStatus('1', { companyOrders: [] }).status).toBe('available')
+  })
 })

@@ -1,18 +1,61 @@
 import { ArticleType } from '@/types/article'
-import MyTable from './MyTable'
+import MyTable, { MyTableHeaders } from './MyTable'
 import ArticleDetails from './ArticleDetails'
 import dictionary from '@/CONSTS/dictionary'
 import ItemActions from './ItemActions'
 
+type ItemColumn =
+  | 'category'
+  | 'serialNumber'
+  | 'color'
+  | 'rentStatus'
+  | 'storeVisible'
+  | 'name'
 const ItemsTable = ({
   items,
-  itemActions
+  itemActions,
+  columns
 }: {
-  items: ArticleType[]
+  items: Partial<ArticleType>[]
   itemActions?: boolean
+  columns?: ItemColumn[]
 }) => {
+  const headers: MyTableHeaders = [
+    {
+      label: 'Nombre',
+      key: 'name'
+    },
+    {
+      label: 'Categoria',
+      key: 'category'
+    },
+    {
+      label: 'No Serie',
+      key: 'serialNumber'
+    },
+    {
+      label: 'Color',
+      key: 'color'
+    },
+    {
+      label: 'Status',
+      key: 'rentStatus',
+      format: (value) => <span className="capitalize">{dictionary(value)}</span>
+    },
+    {
+      label: 'En tienda',
+      key: 'storeVisible',
+      format: (value) => (!!value ? 'Visible' : 'Oculto')
+    }
+  ]
+
+  const showHeaders = () => {
+    if (!columns?.length) return headers
+    return headers.filter((h) => columns?.includes(h.key as ItemColumn))
+  }
+
   return (
-    <div className="max-w-md mx-auto">
+    <div className="max-w-md mx-auto w-full">
       <MyTable
         modalTitle="Detalles de Item"
         modalChildren={(value) => (
@@ -22,39 +65,7 @@ const ItemsTable = ({
           </>
         )}
         data={{
-          headers: [
-            {
-              label: 'Categoria',
-              key: 'category'
-              // format: (value) => (
-              //   <ModalItemDetails itemId={value} showCat hiddenCurrentStatus />
-              // )
-            },
-            {
-              label: 'No Serie',
-              key: 'serialNumber'
-              // format: (value) => (
-              //   <ModalItemDetails itemId={value} showCat hiddenCurrentStatus />
-              // )
-            },
-            {
-              label: 'Color',
-              key: 'color'
-            },
-            {
-              label: 'Status',
-              key: 'rentStatus',
-              format: (value) => (
-                <span className="capitalize">{dictionary(value)}</span>
-              )
-            },
-
-            {
-              label: 'Tienda',
-              key: 'storeVisible',
-              format: (value) => (!!value ? 'Visible' : 'Oculto')
-            }
-          ],
+          headers: showHeaders(),
           body: items || []
         }}
       />

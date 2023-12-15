@@ -1,6 +1,6 @@
-import { CategoryType } from '@/types/category'
+import { CategoryBase, CategoryType } from '@/types/category'
 
-export const companyCategoriesTest: CategoryType[] = [
+export const companyCategoriesTest: CategoryBase[] = [
   {
     name: 'bici',
     prices: [

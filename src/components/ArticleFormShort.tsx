@@ -18,14 +18,11 @@ interface IFormInput {
 
 const ArticleFormShort = ({
   article,
-  goBack = true,
-  companyId
+  onSaveArticle
 }: {
   article?: ArticleType | null
-  goBack?: boolean
-  companyId: string
+  onSaveArticle: (data: Partial<ArticleType>) => Promise<any>
 }) => {
-  const router = useRouter()
   const searchParams = useSearchParams()
   const params = useParams()
 
@@ -38,54 +35,24 @@ const ArticleFormShort = ({
       category: defaultCategoryName
     }
   })
-  const formValues = watch()
-  const [done, setDone] = useState(false)
+
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-    const itemId = article?.id
-    if (!companyId) return console.error('no company id')
-    if (itemId) {
-      //* update company article (in company collection)
-
-      await updateArticle(companyId, article?.id, data)
-        .then(console.log)
-        .catch(console.error)
-      //* update item(in item collection)
-      await updateItem(itemId, data)
-        .then(console.log)
-        .catch(console.error)
-        .finally(() => {
-          setDone(true)
-          goBack && router.back()
-          reset()
-          setTimeout(() => {
-            setDone(false)
-          }, 1000)
-        })
-    } else {
-      data.companyId = companyId
-      //* create company article (in company collection)
-      await addArticle(companyId, data).then(console.log).catch(console.error)
-
-      //* create item(in item collection)
-      await createItem(data)
-        .then(console.log)
-        .catch(console.error)
-        .finally(() => {
-          setDone(true)
-          goBack && router.back()
-
-          reset()
-          setTimeout(() => {
-            setDone(false)
-          }, 1000)
-        })
-    }
+    return await onSaveArticle(data)?.then(console.log).catch(console.error)
   }
 
+  const formValues = watch()
+
+  const noImage = !formValues.image
+
+  const disabled = noImage
+
   return (
-    <form className="grid gap-4">
-      {article?.image && (
-        <PreviewImage src={article?.image || ''} alt="item image description" />
+    <form className="grid gap-4 pt-6" onSubmit={handleSubmit(onSubmit)}>
+      {formValues.image && (
+        <PreviewImage
+          src={formValues.image || ''}
+          alt="item image description"
+        />
       )}
 
       <InputUploadFile
@@ -94,6 +61,11 @@ const ArticleFormShort = ({
           setValue('image' || '', url)
         }}
       />
+      {noImage && (
+        <Typography variant="body2" color="error">
+          * Una imagen es necesaria
+        </Typography>
+      )}
 
       <TextField
         id="outlined-basic"
@@ -118,7 +90,11 @@ const ArticleFormShort = ({
         }
       />
 
-      <div className="flex w-full justify-evenly my-4">
+      <Button type="submit" variant="contained" disabled={disabled}>
+        Guardar
+      </Button>
+
+      {/* <div className="flex w-full justify-evenly my-4">
         <Button
           onClick={(e) => {
             e.preventDefault()
@@ -146,8 +122,9 @@ const ArticleFormShort = ({
               <strong className="font-bold">{formValues.category}</strong>{' '}
             </Typography>
           )}
-        </ModalConfirm>
+        </ModalConfirm> 
       </div>
+        */}
     </form>
   )
 }
