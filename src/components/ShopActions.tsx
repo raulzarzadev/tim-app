@@ -2,27 +2,42 @@ import { CompanyType } from '@/types/company'
 import { Button, Typography } from '@mui/material'
 import Link from 'next/link'
 import ModalConfirm from './ModalConfirm'
-import { deleteCompany } from '@/firebase/companies'
+import { deleteCompany, updateCompany } from '@/firebase/companies'
 import AppIcon from './AppIcon'
-import { deleteCompanyItems } from '@/firebase/items'
+import { createItem, deleteCompanyItems } from '@/firebase/items'
 import { deleteCompanyOrders } from '@/firebase/orders'
+import ShopForm from './ShopForm'
+import ArticleForm from './ArticleForm'
+import ShopItemForm from './ShopItemForm'
+import CategoryForm from './CategoryForm'
+import ShopCategoryForm from './ShopCategoryForm'
+import { CategoryType } from '@/types/category'
 
-const ShopActions = ({ shopId }: { shopId: Partial<CompanyType>['id'] }) => {
+const ShopActions = ({
+  shopId,
+  shop
+}: {
+  shopId: Partial<CompanyType>['id']
+  shop: Partial<CompanyType>
+}) => {
   const handleDelete = async (companyId: string) => {
     await deleteCompanyItems(companyId).then(console.log).catch(console.error)
     await deleteCompany(companyId).then(console.log).catch(console.error)
     await deleteCompanyOrders(companyId).then(console.log).catch(console.error)
     window.location.reload()
     return true
-    // const res = await deleteCompany(companyId)
-    //   .then((res) => {
-    //     console.log(res)
-    //     window.location.reload()
-    //   })
-    //   .catch(console.error)
-
-    //return res
   }
+
+  const handleUpdate = async (data: Partial<CompanyType>) => {
+    await updateCompany(shopId || '', data)
+      .then(console.log)
+      .catch(console.error)
+  }
+
+  const handleCreateCategory = async (data: Partial<CategoryType>) => {
+    console.log('category', { data })
+  }
+
   return (
     <div>
       <div className="flex w-full justify-evenly mt-10">
@@ -51,33 +66,48 @@ const ShopActions = ({ shopId }: { shopId: Partial<CompanyType>['id'] }) => {
             </div>
           </div>
         </ModalConfirm>
-        <Button
-          variant="outlined"
-          endIcon={<AppIcon icon="edit" />}
-          LinkComponent={Link}
-          href={`my-shop/edit`}
-        >
-          Editar
-        </Button>
+        <ModalConfirm label="Editar" openIcon="edit">
+          <ShopForm
+            company={shop}
+            onSubmit={(data) => {
+              handleUpdate(data)
+            }}
+          />
+        </ModalConfirm>
       </div>
       <div>
         <div className="flex justify-evenly mt-10">
-          <Button
-            endIcon={<AppIcon icon="add" />}
-            variant="contained"
-            LinkComponent={Link}
-            href="/my-shop/new-item"
+          <ModalConfirm
+            label="Articulo"
+            modalTitle="Crear articulo"
+            openIcon="add"
           >
-            Articulo
-          </Button>
-          <Button
-            endIcon={<AppIcon icon="add" />}
-            variant="contained"
-            LinkComponent={Link}
-            href="/my-shop/new-category"
+            <ShopItemForm
+              shopCategories={shop?.categories || []}
+              // shopId={shopId || ''}
+              onSubmit={async (newItem) => {
+                newItem.companyId = shopId
+                return await createItem(newItem)
+                  .then(console.log)
+                  .catch(console.error)
+              }}
+            />
+          </ModalConfirm>
+          <ModalConfirm
+            label="Categoria"
+            modalTitle="Crear categoria"
+            openIcon="add"
           >
-            Categoria
-          </Button>
+            <ShopCategoryForm
+              shopId={shopId || ''}
+              onSubmit={async (newCategory) => {
+                newCategory.companyId = shopId
+                return await handleCreateCategory(newCategory)
+                  .then(console.log)
+                  .catch(console.error)
+              }}
+            />
+          </ModalConfirm>
         </div>
       </div>
     </div>

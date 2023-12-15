@@ -11,6 +11,7 @@ const ModalConfirm = ({
   disabled,
   label = 'Guardar',
   color = 'primary',
+
   acceptLabel = 'Aceptar',
   acceptColor = 'primary',
   modalTitle = 'Confirmar',

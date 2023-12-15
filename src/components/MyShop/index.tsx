@@ -8,7 +8,7 @@ import ItemsTabs from '../ItemsTabs'
 
 const MyShop = () => {
   const { userShop } = useUserCompaniesContext()
-  console.log({ userShop })
+
   if (userShop === undefined)
     return (
       <div>
@@ -43,7 +43,7 @@ const MyShop = () => {
       {userShop && (
         <>
           <CompanyPublicDetails company={userShop} />
-          <ShopActions shopId={userShop.id} />
+          <ShopActions shopId={userShop.id} shop={userShop} />
           <div className="mt-6">
             <ItemsTabs
               hiddenActions

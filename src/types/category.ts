@@ -6,6 +6,7 @@ export type CategoryBase = {
   description?: string
   image?: string
   prices: PriceType[]
+  companyId?: string
 }
 
 export type CategoryType = CategoryBase & Partial<BaseType> & {}
