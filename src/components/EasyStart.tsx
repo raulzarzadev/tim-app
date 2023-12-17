@@ -3,14 +3,11 @@ import { Button, TextField, Typography } from '@mui/material'
 import PhoneInput from './PhoneInput'
 import { useForm } from 'react-hook-form'
 import RadioGroup from './RadioGroup'
-import { useState } from 'react'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
-import { createCompany, createShop } from '@/firebase/companies'
+import { createShop } from '@/firebase/companies'
 import { CompanyType } from '@/types/company'
 import AppIcon from './AppIcon'
 import { ContactsList } from './ModalContactClient'
-import InputUploadFile from './InputUploadFile'
-import TagsInput from './TagsInput'
 import { ArticleType } from '@/types/article'
 import ArticleFormShort from './ArticleFormShort'
 import { createItem } from '@/firebase/items'
@@ -19,7 +16,6 @@ import Link from 'next/link'
 
 const EasyStart = () => {
   const { userShop } = useUserCompaniesContext()
-  console.log({ userShop })
   return (
     <div className="grid gap-4">
       {userShop === null && <CreateShop />}

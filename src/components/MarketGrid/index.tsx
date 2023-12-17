@@ -38,6 +38,7 @@ export function MarketGridContext() {
 }
 
 export const MarketGrid = ({ items }: { items: MarketItem[] }) => {
+  console.log({ items: items.map((i) => i.img) })
   return (
     <ImageList sx={{ height: '450' }} className="max-w-md mx-auto">
       <ImageListItem key="Subheader" cols={2}>
@@ -56,7 +57,7 @@ export const MarketGrid = ({ items }: { items: MarketItem[] }) => {
               fill
               className="object-center object-cover"
               //srcSet={`${item?.img}`}
-              src={`${item?.img} `}
+              src={`${item?.img}`}
               alt={item?.title}
               loading="lazy"
             />
