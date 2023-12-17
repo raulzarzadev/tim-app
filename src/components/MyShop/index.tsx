@@ -37,7 +37,7 @@ const MyShop = () => {
       </div>
     )
   return (
-    <div className="max-w-lg mx-auto">
+    <div className="max-w-lg mx-auto" test-id="shop-view">
       {!userShop && <NotCompanyYet />}
       {userShop && (
         <>

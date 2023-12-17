@@ -26,7 +26,8 @@ const Modal = ({
   title,
   description,
   children,
-  fullWidth
+  fullWidth,
+  ...rest
 }: ModalProps) => {
   return (
     <MUIModal
@@ -35,12 +36,14 @@ const Modal = ({
       aria-labelledby={`modal-modal-${title}`}
       aria-describedby={`modal-modal-description-${title}`}
       test-id={`modal-${title}`}
+      {...rest} // * WARNING: test-id can be overwritten
     >
       <Box
         sx={{ ...style }}
-        className={`overflow-y-auto border max-h-screen ${
+        className={`overflow-y-auto border max-h-screen  ${
           fullWidth ? 'w-full' : 'max-w-2xl'
         }`}
+        test-id="app-modal"
       >
         <Box
           className="w-full justify-between flex sticky top-0 shadow-md "
@@ -64,7 +67,7 @@ const Modal = ({
         <Typography id={`modal-modal-description-${title}`} sx={{ mt: 2 }}>
           {description}
         </Typography>
-        <Container sx={{ p: 2 }} test-id={`modal-${title}`}>
+        <Container sx={{ p: 2 }} test-id={`modal-${title}`} className="modal">
           {children}
         </Container>
       </Box>

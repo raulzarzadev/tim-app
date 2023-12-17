@@ -35,7 +35,7 @@ const CompanyStoreItems = () => {
         setItems(res)
       })
       .catch(console.error)
-  }, [])
+  }, [currentCompany?.id])
 
   const modal = useModal({ title: 'Mostrar items en tienda' })
   if (items === undefined) return <>Cargando ...</>

@@ -68,7 +68,12 @@ const ShopActions = ({
             </div>
           </div>
         </ModalConfirm>
-        <ModalConfirm label="Editar" openIcon="edit">
+        <ModalConfirm
+          test-id="edit-shop"
+          label="Editar"
+          openIcon="edit"
+          modalTitle="Editar tienda"
+        >
           <ShopForm
             company={shop}
             onSubmit={(data) => {

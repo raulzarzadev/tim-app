@@ -72,11 +72,12 @@ const ModalConfirm = ({
           {label}
         </Button>
       )}
-      <Modal {...modal} title={modalTitle}>
+      <Modal {...modal} title={modalTitle} test-id="modal-confirm">
         {children}
         {handleConfirm && (
           <Box className="flex w-full justify-center my-4">
             <ButtonLoading
+              test-id="confirm-button"
               endIcon={acceptIcon ? <AppIcon icon={acceptIcon} /> : undefined}
               color={acceptColor}
               onClick={async () => {

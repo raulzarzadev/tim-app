@@ -14,7 +14,8 @@ const ButtonLoading = ({
   onClick = () => {},
   label = 'Aceptar',
   color = 'primary',
-  endIcon
+  endIcon,
+  ...rest
 }: {
   disabled?: boolean
   loading?: boolean
@@ -33,6 +34,7 @@ const ButtonLoading = ({
       onClick={onClick}
       variant="outlined"
       color={color}
+      {...rest}
     >
       {label}
     </LoadingButton>

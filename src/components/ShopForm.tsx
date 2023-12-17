@@ -1,11 +1,7 @@
 'use client'
 import { useForm, SubmitHandler } from 'react-hook-form'
-import { Button, TextField, Typography } from '@mui/material'
+import { TextField, Typography } from '@mui/material'
 import ModalConfirm from './ModalConfirm'
-import { createCompany, updateCompany } from '@/firebase/companies'
-import { useAuthContext } from '@/context/authContext'
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { CompanyType } from '@/types/company'
 import PhoneInput from './PhoneInput'
 import ErrorBoundary from './ErrorBoundary'
@@ -25,9 +21,15 @@ const ShopForm = ({
   company?: Partial<CompanyType>
   onSubmit?: (data: Partial<CompanyType>) => Promise<void> | void
 }) => {
-  const router = useRouter()
-  const { user } = useAuthContext()
-  const { handleSubmit, register, watch, control, setValue } = useForm({
+  const {
+    handleSubmit,
+    register,
+    watch,
+    control,
+    setValue,
+    reset,
+    formState: { isDirty, isSubmitting }
+  } = useForm({
     defaultValues: {
       phone: '',
       name: '',
@@ -37,7 +39,6 @@ const ShopForm = ({
   })
 
   const formValues = watch()
-  const [done, setDone] = useState(false)
   const { windowWidth } = useWindowSize()
   const contractRows =
     !windowWidth || !formValues.contract?.length
@@ -45,41 +46,12 @@ const ShopForm = ({
       : Math.floor(formValues.contract?.length / (windowWidth / 11))
 
   const _onSubmit: SubmitHandler<Partial<IFormInput>> = async (data) => {
-    return onSubmit?.(data)
-    // try {
-    //   if (company?.id) {
-    //     await updateCompany(company?.id, data)
-    //       .then((res) => {
-    //         console.log(res)
-    //       })
-    //       .catch((err) => console.error(err))
-    //   } else {
-    //     await createCompany({
-    //       name: data?.name || '',
-    //       userId: user?.id || '',
-    //       staffMails: [user?.email || ''],
-    //       staff: [
-    //         {
-    //           id: user?.id || '',
-    //           permissions: {
-    //             ADMIN: true
-    //           },
-    //           name: user?.name || '',
-    //           email: user?.email || ''
-    //         }
-    //       ]
-    //     })
-    //       .then((res) => {
-    //         console.log(res)
-    //         router.push('/dashboard')
-    //       })
-    //       .catch((err) => console.error(err))
-    //   }
-    //   setDone(true)
-    // } catch (error) {
-    //   console.error(error)
-    // }
+    const res = await onSubmit?.(data)
+    reset(data)
+    return res
   }
+
+  const disabled = isSubmitting || !isDirty
 
   return (
     <ErrorBoundary componentName="ShopForm">
@@ -89,11 +61,7 @@ const ShopForm = ({
           setURL={(url) => setValue('image', url, { shouldDirty: true })}
         />
         {formValues?.image && (
-          <PreviewImage
-            fullWidth
-            src={formValues?.image || ''}
-            alt="Identificación de usuario"
-          />
+          <PreviewImage fullWidth src={formValues?.image || ''} alt="Tienda" />
         )}
 
         <TextField
@@ -164,31 +132,18 @@ const ShopForm = ({
             />
           </div>
         </div>
-        {/* <Controller
-        name="iceCreamType"
-        control={control}
-        render={({ field }) => (
-          <Select
-            {...field}
-            options={[
-              { value: 'chocolate', label: 'Chocolate' },
-              { value: 'strawberry', label: 'Strawberry' },
-              { value: 'vanilla', label: 'Vanilla' }
-            ]}
-          />
-        )}
-      /> */}
+
         <div className="flex w-full justify-evenly my-4">
-          <Button
-            onClick={(e) => {
-              e.preventDefault()
-              router.back()
-            }}
+          <ModalConfirm
+            handleConfirm={handleSubmit(_onSubmit)}
+            disabled={disabled}
+            label={`${company?.id ? 'Editar' : 'Guardar'} empresa`}
+            acceptLabel={`${company?.id ? 'Editar' : 'Guardar'}`}
           >
-            Atras
-          </Button>
-          <ModalConfirm handleConfirm={handleSubmit(_onSubmit)} disabled={done}>
-            <Typography>Se creara la siguiente empresa: </Typography>
+            <Typography>
+              Se {`${company?.id ? 'editara' : 'creara'} `} la siguiente
+              empresa:{' '}
+            </Typography>
             <Typography>{formValues.name}</Typography>
           </ModalConfirm>
         </div>
