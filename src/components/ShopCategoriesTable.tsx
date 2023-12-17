@@ -24,7 +24,9 @@ const ShopCategoriesTable = ({
         <MyTable
           modalTitle="Categoria"
           modalChildren={(value) => {
-            value.items = categoryItems(value.name)
+            if (value) {
+              value.items = categoryItems(value?.name)
+            }
             return (
               <>
                 <ShopCategoryDetails category={value} />
