@@ -4,7 +4,6 @@ import NotCompanyYet from '../NotCompanyYet'
 import CompanyPublicDetails from '../CompanyPublicDetails'
 import ShopActions from '../ShopActions'
 import { Skeleton } from '@mui/material'
-import ItemsTabs from '../ItemsTabs'
 import ShopItemsTabs from '../ShopItemsTabs'
 
 const MyShop = () => {

@@ -2,7 +2,6 @@ import { Button } from '@mui/material'
 import Link from 'next/link'
 import AppIcon from './AppIcon'
 import BasicTabs from './BasicTabs'
-import ItemsTable from './ItemsTable'
 import { ArticleType } from '@/types/article'
 import { CategoryType } from '@/types/category'
 import ShopCategoriesTable from './ShopCategoriesTable'
@@ -54,6 +53,7 @@ const ShopItemsTabs = ({
                 <ShopItemsTable
                   items={items || []}
                   itemActions={showItemActions}
+                  shopCategories={categories}
                 />
               )
             },
@@ -63,6 +63,7 @@ const ShopItemsTabs = ({
                 <ShopItemsTable
                   items={takenItems || []}
                   itemActions={showItemActions}
+                  shopCategories={categories}
                 />
               )
             },
@@ -72,6 +73,7 @@ const ShopItemsTabs = ({
                 <ShopItemsTable
                   items={expiredItems}
                   itemActions={showItemActions}
+                  shopCategories={categories}
                 />
               )
             },
@@ -81,6 +83,7 @@ const ShopItemsTabs = ({
                 <ShopItemsTable
                   items={availableItems}
                   itemActions={showItemActions}
+                  shopCategories={categories}
                 />
               )
             },

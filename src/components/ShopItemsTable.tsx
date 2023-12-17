@@ -3,6 +3,7 @@ import MyTable, { MyTableHeaders } from './MyTable'
 import ArticleDetails from './ArticleDetails'
 import dictionary from '@/CONSTS/dictionary'
 import ShopItemActions from './ShopItemActions'
+import { CategoryType } from '@/types/category'
 
 type ItemColumn =
   | 'category'
@@ -14,11 +15,13 @@ type ItemColumn =
 const ShopItemsTable = ({
   items,
   itemActions,
-  columns
+  columns,
+  shopCategories
 }: {
   items: Partial<ArticleType>[]
   itemActions?: boolean
   columns?: ItemColumn[]
+  shopCategories?: Partial<CategoryType>[]
 }) => {
   const headers: MyTableHeaders = [
     {
@@ -61,7 +64,9 @@ const ShopItemsTable = ({
         modalChildren={(value) => (
           <>
             <ArticleDetails article={value} />
-            {itemActions && <ShopItemActions item={value} />}
+            {itemActions && (
+              <ShopItemActions item={value} shopCategories={shopCategories} />
+            )}
           </>
         )}
         data={{
