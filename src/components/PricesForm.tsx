@@ -5,6 +5,8 @@ import PricesList from './PricesList'
 import { TimeUnits } from '@/types/TimeUnits'
 import RadioGroup from './RadioGroup'
 import dictionary from '@/CONSTS/dictionary'
+import Modal from './Modal'
+import useModal from '@/hooks/useModal'
 
 export type PriceType = {
   favorite?: boolean
@@ -41,60 +43,76 @@ const PricesForm = ({
     setPrices?.(prices)
   }
 
+  const modal = useModal({
+    title: 'Nuevo precio'
+  })
+
   return (
     <div>
       <Typography variant="h6" className="text-center">
         Precios
       </Typography>
-      <div className="grid gap-2">
-        <RadioGroup
-          label="Seleccionar unidad de tiempo"
-          options={['minutes', 'hour', 'day', 'week', 'month'].map((u) => ({
-            label: dictionary(u as TimeUnits),
-            value: u
-          }))}
-          value={_formValues.unit}
-          setValue={(value) => handleChange('unit', value)}
-        />
-        <div className="flex">
-          <TextField
-            onChange={(e) => handleChange('qty', e.target.value)}
-            value={_formValues.qty}
-            label="Cantidad"
-            type="number"
-            defaultValue={1}
-          />
-          <TextField
-            onChange={(e) => handleChange('price', e.target.value)}
-            value={_formValues.price}
-            label="Precio"
-            type="number"
-          />
-          <TextField
-            onChange={(e) => handleChange('title', e.target.value)}
-            value={_formValues.title || ''}
-            label="Titulo (opcional)"
-          />
-        </div>
-        <div>
-          <Button
-            disabled={!_formValues.qty || !_formValues.price}
-            fullWidth
-            onClick={() => {
-              handleAddPrice(_formValues)
-              _setFormValues({
-                qty: 1,
-                price: 0,
-                unit: 'hour'
-              })
-            }}
-            variant="contained"
-          >
-            Agregar precio
-            <AppIcon icon="add" />
-          </Button>
-        </div>
+      <div className="flex justify-center my-2">
+        <Button
+          onClick={modal.onOpen}
+          variant="contained"
+          endIcon={<AppIcon icon="add" />}
+        >
+          Agregar precio
+        </Button>
       </div>
+      <Modal {...modal}>
+        <div className="grid gap-2">
+          <RadioGroup
+            label="Seleccionar unidad de tiempo"
+            options={['minutes', 'hour', 'day', 'week', 'month'].map((u) => ({
+              label: dictionary(u as TimeUnits),
+              value: u
+            }))}
+            value={_formValues.unit}
+            setValue={(value) => handleChange('unit', value)}
+          />
+          <div className="flex">
+            <TextField
+              onChange={(e) => handleChange('qty', e.target.value)}
+              value={_formValues.qty}
+              label="Cantidad"
+              type="number"
+              defaultValue={1}
+            />
+            <TextField
+              onChange={(e) => handleChange('price', e.target.value)}
+              value={_formValues.price}
+              label="Precio"
+              type="number"
+            />
+            <TextField
+              onChange={(e) => handleChange('title', e.target.value)}
+              value={_formValues.title || ''}
+              label="Titulo (opcional)"
+            />
+          </div>
+          <div>
+            <Button
+              disabled={!_formValues.qty || !_formValues.price}
+              fullWidth
+              onClick={() => {
+                handleAddPrice(_formValues)
+                _setFormValues({
+                  qty: 1,
+                  price: 0,
+                  unit: 'hour'
+                })
+                modal.onClose()
+              }}
+              variant="contained"
+            >
+              Agregar precio
+              <AppIcon icon="add" />
+            </Button>
+          </div>
+        </div>
+      </Modal>
       <PricesList
         prices={_prices}
         handleRemove={handleRemovePrice}

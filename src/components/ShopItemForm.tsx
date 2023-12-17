@@ -30,30 +30,36 @@ const ShopItemForm = ({
   shopCategories,
   onSubmit
 }: {
-  item?: ArticleType | null
+  item?: Partial<ArticleType> | null
   shopCategories: Partial<CategoryType>[]
   onSubmit?: (data: Partial<ArticleType>) => Promise<any>
 }) => {
-  const router = useRouter()
   const searchParams = useSearchParams()
   const params = useParams()
 
   const defaultCategoryName: string =
     searchParams.get('category') || params?.categoryName?.toString() || ''
 
-  const { handleSubmit, register, watch, setValue, reset } = useForm({
+  const {
+    handleSubmit,
+    register,
+    watch,
+    setValue,
+    reset,
+    formState: { isSubmitting, isDirty }
+  } = useForm({
     defaultValues: article || {
       name: '',
       category: defaultCategoryName
     }
   })
   const formValues = watch()
-  const [done, setDone] = useState(false)
-  const _onSubmit: SubmitHandler<IFormInput> = async (data) => {
-    setDone(false)
+
+  const _onSubmit = async (data: Partial<ArticleType>) => {
     await onSubmit?.(data).then(console.log).catch(console.error)
-    setDone(true)
+    reset(data)
   }
+  const disableSave = isSubmitting || !isDirty
 
   return (
     <form className="grid gap-4">
@@ -66,7 +72,7 @@ const ShopItemForm = ({
           })) || []
         }
         selected={formValues.category || ''}
-        onSelect={(value) => setValue('category', value)}
+        onSelect={(value) => setValue('category', value, { shouldDirty: true })}
       />
       {article?.image && (
         <PreviewImage src={article?.image || ''} alt="item image description" />
@@ -108,10 +114,12 @@ const ShopItemForm = ({
         {...register('description')}
       />
       <TagsInput
+        value={formValues.tags || []}
         setTags={(tags) =>
           setValue(
             'tags',
-            tags.map((t) => ({ title: t.title }))
+            tags.map((t) => ({ title: t.title })),
+            { shouldDirty: true }
           )
         }
       />
@@ -123,22 +131,22 @@ const ShopItemForm = ({
         />
         {formValues.ownPrice && (
           <PricesForm
-            setPrices={(formValues) => setValue('prices', formValues)}
+            setPrices={(formValues) =>
+              setValue('prices', formValues, {
+                shouldDirty: true,
+                shouldTouch: true
+              })
+            }
             prices={formValues.prices}
           />
         )}
       </Box>
 
       <div className="flex w-full justify-evenly my-4">
-        <Button
-          onClick={(e) => {
-            e.preventDefault()
-            router.back()
-          }}
+        <ModalConfirm
+          handleConfirm={handleSubmit(_onSubmit)}
+          disabled={disableSave}
         >
-          Atras
-        </Button>
-        <ModalConfirm handleConfirm={handleSubmit(_onSubmit)} disabled={done}>
           <Typography>Se creara el siguiente articulo: </Typography>
           {formValues.name && (
             <Typography>
@@ -155,10 +163,6 @@ const ShopItemForm = ({
               <strong className="font-bold">{formValues.category}</strong>{' '}
             </Typography>
           )}
-          {/* <Typography>
-            Empresa{' '}
-            <strong className="font-bold">{shop}.</strong>
-          </Typography> */}
         </ModalConfirm>
       </div>
     </form>

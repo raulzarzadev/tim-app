@@ -13,7 +13,8 @@ const ButtonLoading = ({
   loadingIndicator = 'Loading...',
   onClick = () => {},
   label = 'Aceptar',
-  color = 'primary'
+  color = 'primary',
+  endIcon
 }: {
   disabled?: boolean
   loading?: boolean
@@ -21,9 +22,11 @@ const ButtonLoading = ({
   onClick?: () => void | Promise<any>
   label?: string
   color?: ButtonProps['color']
+  endIcon?: React.ReactNode
 }) => {
   return (
     <LoadingButton
+      endIcon={endIcon}
       disabled={disabled}
       loading={loading}
       loadingIndicator={loadingIndicator}

@@ -4,15 +4,18 @@ import TextField from '@mui/material/TextField'
 import { IconName } from './AppIcon'
 
 export default function TagsInput({
+  value,
   limitTags = 2,
   setTags
 }: {
+  value?: ItemTagType[]
   setTags?: (tags: ItemTagType[]) => void
   limitTags?: number
 }) {
   const [itemTags, setItemTags] = React.useState<ItemTagType[]>([])
   return (
     <Autocomplete
+      value={value}
       getOptionDisabled={(option) =>
         itemTags.includes(option) || itemTags.length >= limitTags
       }

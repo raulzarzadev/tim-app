@@ -374,11 +374,10 @@ const ModalStartRent = ({
                       resolved: true,
                       newPrice: {
                         price: item.price || 0,
-                        quantity: item.qty || 1,
+                        qty: item.qty || 1,
                         unit: item.unit || 'hour'
                       }
                     }
-                    console.log({ changedItem })
                     try {
                       await changeItem(orderId, changedItem)
                         .then(console.log)

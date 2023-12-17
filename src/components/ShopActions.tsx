@@ -12,6 +12,7 @@ import ShopItemForm from './ShopItemForm'
 import CategoryForm from './CategoryForm'
 import ShopCategoryForm from './ShopCategoryForm'
 import { CategoryType } from '@/types/category'
+import { createCategoryShop } from '@/firebase/categories'
 
 const ShopActions = ({
   shopId,
@@ -35,7 +36,8 @@ const ShopActions = ({
   }
 
   const handleCreateCategory = async (data: Partial<CategoryType>) => {
-    console.log('category', { data })
+    data.companyId = shopId
+    return await createCategoryShop(data).then(console.log).catch(console.error)
   }
 
   return (

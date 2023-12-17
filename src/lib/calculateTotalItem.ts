@@ -5,7 +5,7 @@ import { ItemSelected } from '@/context/useCompanyCashbox'
 
 export const calculateTotal = (
   unit: PriceType['unit'] | undefined,
-  qty?: PriceType['quantity'],
+  qty?: PriceType['qty'],
   pricesList?: PriceType[]
 ): { total: number; price?: PriceType } => {
   let total = 0
@@ -13,7 +13,7 @@ export const calculateTotal = (
   if (!unit && !qty) return { total: 0 }
   const defaultPrice = pricesList?.[0]
   if (!unit || !qty) {
-    const t = asNumber(defaultPrice?.price) * asNumber(defaultPrice?.quantity)
+    const t = asNumber(defaultPrice?.price) * asNumber(defaultPrice?.qty)
     // FIXME: t some times calculate wrong prices wen is in minutes
     return {
       total: t || 0,
@@ -21,7 +21,7 @@ export const calculateTotal = (
     }
   }
   const fullMatch = pricesList?.find(
-    (p) => p.unit === unit && asNumber(p.quantity) === asNumber(qty)
+    (p) => p.unit === unit && asNumber(p.qty) === asNumber(qty)
   )
   if (fullMatch) {
     total = asNumber(fullMatch.price)
@@ -34,7 +34,7 @@ export const calculateTotal = (
   })
   if (unitMatch) {
     const prePrice =
-      (asNumber(unitMatch?.price) || 0) / (asNumber(unitMatch?.quantity) || 1)
+      (asNumber(unitMatch?.price) || 0) / (asNumber(unitMatch?.qty) || 1)
     total = unitMatch ? asNumber(prePrice) * asNumber(qty) : 0
     price = unitMatch
     //console.log({ total, price })
@@ -52,15 +52,15 @@ export const calculateFullTotal = (
   fullItems?: Partial<(ArticleType | null)[]>
 ) => {
   let total = 0
-  // @ts-ignore FIXME: quantity should don´t be defined
-  selectedItems?.forEach(({ qty, quantity, unit, itemId, price }) => {
+  // @ts-ignore FIXME: qty should don´t be defined
+  selectedItems?.forEach(({ qty, unit, itemId, price }) => {
     if (price) return (total += asNumber(price))
-    if (!unit || !(qty || quantity)) return 0
+    if (!unit || !(qty || qty)) return 0
     const pricesList = fullItems?.find((item) => item?.id == itemId)?.prices
     const defaultUnit = unit || pricesList?.[0].unit
     const { total: itemTotal } = calculateTotal(
       defaultUnit,
-      asNumber(qty || quantity),
+      asNumber(qty),
       pricesList || []
     )
     total += asNumber(itemTotal)

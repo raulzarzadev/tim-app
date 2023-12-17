@@ -11,9 +11,9 @@ const ModalConfirm = ({
   disabled,
   label = 'Guardar',
   color = 'primary',
-
   acceptLabel = 'Aceptar',
   acceptColor = 'primary',
+  acceptIcon,
   modalTitle = 'Confirmar',
   openIcon,
   fullWidth,
@@ -30,6 +30,7 @@ const ModalConfirm = ({
   acceptColor?: ButtonProps['color']
   modalTitle?: string
   openIcon?: IconName
+  acceptIcon?: IconName
   fullWidth?: boolean
   disabledAccept?: boolean
   justIcon?: boolean
@@ -76,6 +77,7 @@ const ModalConfirm = ({
         {handleConfirm && (
           <Box className="flex w-full justify-center my-4">
             <ButtonLoading
+              endIcon={acceptIcon ? <AppIcon icon={acceptIcon} /> : undefined}
               color={acceptColor}
               onClick={async () => {
                 setLoading(true)

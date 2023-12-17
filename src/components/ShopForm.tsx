@@ -46,39 +46,39 @@ const ShopForm = ({
 
   const _onSubmit: SubmitHandler<Partial<IFormInput>> = async (data) => {
     return onSubmit?.(data)
-    try {
-      if (company?.id) {
-        await updateCompany(company?.id, data)
-          .then((res) => {
-            console.log(res)
-          })
-          .catch((err) => console.error(err))
-      } else {
-        await createCompany({
-          name: data?.name || '',
-          userId: user?.id || '',
-          staffMails: [user?.email || ''],
-          staff: [
-            {
-              id: user?.id || '',
-              permissions: {
-                ADMIN: true
-              },
-              name: user?.name || '',
-              email: user?.email || ''
-            }
-          ]
-        })
-          .then((res) => {
-            console.log(res)
-            router.push('/dashboard')
-          })
-          .catch((err) => console.error(err))
-      }
-      setDone(true)
-    } catch (error) {
-      console.error(error)
-    }
+    // try {
+    //   if (company?.id) {
+    //     await updateCompany(company?.id, data)
+    //       .then((res) => {
+    //         console.log(res)
+    //       })
+    //       .catch((err) => console.error(err))
+    //   } else {
+    //     await createCompany({
+    //       name: data?.name || '',
+    //       userId: user?.id || '',
+    //       staffMails: [user?.email || ''],
+    //       staff: [
+    //         {
+    //           id: user?.id || '',
+    //           permissions: {
+    //             ADMIN: true
+    //           },
+    //           name: user?.name || '',
+    //           email: user?.email || ''
+    //         }
+    //       ]
+    //     })
+    //       .then((res) => {
+    //         console.log(res)
+    //         router.push('/dashboard')
+    //       })
+    //       .catch((err) => console.error(err))
+    //   }
+    //   setDone(true)
+    // } catch (error) {
+    //   console.error(error)
+    // }
   }
 
   return (

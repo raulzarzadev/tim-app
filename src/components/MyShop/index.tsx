@@ -5,10 +5,10 @@ import CompanyPublicDetails from '../CompanyPublicDetails'
 import ShopActions from '../ShopActions'
 import { Skeleton } from '@mui/material'
 import ItemsTabs from '../ItemsTabs'
+import ShopItemsTabs from '../ShopItemsTabs'
 
 const MyShop = () => {
   const { userShop } = useUserCompaniesContext()
-
   if (userShop === undefined)
     return (
       <div>
@@ -45,7 +45,8 @@ const MyShop = () => {
           <CompanyPublicDetails company={userShop} />
           <ShopActions shopId={userShop.id} shop={userShop} />
           <div className="mt-6">
-            <ItemsTabs
+            <ShopItemsTabs
+              showItemActions
               hiddenActions
               categories={userShop?.categories || []}
               items={userShop?.items || []}

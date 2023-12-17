@@ -144,7 +144,7 @@ export const changeItem = async (
   const newItem: ItemSelected = {
     itemId: newChange.newItemId,
     inUse: true,
-    qty: newChange.newPrice?.quantity,
+    qty: newChange.newPrice?.qty,
     unit: newChange.newPrice?.unit,
     rentStatus: pastRentState
   }

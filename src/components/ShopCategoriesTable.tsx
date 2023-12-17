@@ -2,8 +2,10 @@ import { ArticleType } from '@/types/article'
 import CategoryDetails from './CategoryDetails'
 import MyTable from './MyTable'
 import { CategoryType } from '@/types/category'
+import ShopCategoryDetails from './ShopCategoryDetails'
+import ShopCategoryActions from './ShopCategoryActions'
 
-const CategoriesTable = ({
+const ShopCategoriesTable = ({
   items,
   categories,
   showCategoryActions
@@ -15,17 +17,23 @@ const CategoriesTable = ({
   const categoryItems = (categoryName: string) => {
     return items?.filter((article) => article.category === categoryName)
   }
+
   return (
     <div>
       <div>
         <MyTable
           modalTitle="Categoria"
-          modalChildren={(value) => (
-            <>
-              <CategoryDetails category={value} />
-              {showCategoryActions && <div>Category actions</div>}
-            </>
-          )}
+          modalChildren={(value) => {
+            value.items = categoryItems(value.name)
+            return (
+              <>
+                <ShopCategoryDetails category={value} />
+                {showCategoryActions && (
+                  <ShopCategoryActions category={value} />
+                )}
+              </>
+            )
+          }}
           data={{
             headers: [
               {
@@ -81,4 +89,4 @@ const CategoriesTable = ({
   )
 }
 
-export default CategoriesTable
+export default ShopCategoriesTable

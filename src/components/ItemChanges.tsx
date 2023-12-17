@@ -34,7 +34,7 @@ const ItemChanges = ({ changes }: { changes: Order['changes'] }) => {
                   />{' '}
                 </Box>
                 <Box>
-                  {change.newPrice?.quantity}x{change.newPrice?.unit}
+                  {change.newPrice?.qty}x{change.newPrice?.unit}
                 </Box>
                 <CurrencySpan quantity={change.amount} />
               </Box>

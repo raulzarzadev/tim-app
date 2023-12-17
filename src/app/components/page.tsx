@@ -19,9 +19,9 @@ const items: ArticleType[] = [
     image: 'path/to/image1.jpg',
     ownPrice: true,
     prices: [
-      { quantity: 1, price: 100, unit: 'hour' },
-      { quantity: 1, price: 300, unit: 'day' },
-      { quantity: 1, price: 1000, unit: 'week' }
+      { qty: 1, price: 100, unit: 'hour' },
+      { qty: 1, price: 300, unit: 'day' },
+      { qty: 1, price: 1000, unit: 'week' }
     ]
   },
   {
@@ -71,9 +71,9 @@ const categories: CategoryBase[] = [
     description: 'Description 1',
     image: 'path/to/image1.jpg',
     prices: [
-      { quantity: 1, price: 90, unit: 'hour' },
-      { quantity: 3, price: 200, unit: 'hour' },
-      { quantity: 1, price: 600, unit: 'day' }
+      { qty: 1, price: 90, unit: 'hour' },
+      { qty: 3, price: 200, unit: 'hour' },
+      { qty: 1, price: 600, unit: 'day' }
     ]
   },
   {
@@ -81,8 +81,8 @@ const categories: CategoryBase[] = [
     description: 'Description 2',
     image: 'path/to/image2.jpg',
     prices: [
-      { quantity: 1, price: 300, unit: 'day' },
-      { quantity: 1, price: 1000, unit: 'week' }
+      { qty: 1, price: 300, unit: 'day' },
+      { qty: 1, price: 1000, unit: 'week' }
     ]
   },
   {
@@ -90,9 +90,9 @@ const categories: CategoryBase[] = [
     description: 'Description 3',
     image: 'path/to/image3.jpg',
     prices: [
-      { quantity: 30, price: 30, unit: 'minutes' },
-      { quantity: 1, price: 40, unit: 'hour' },
-      { quantity: 1, price: 290, unit: 'day' }
+      { qty: 30, price: 30, unit: 'minutes' },
+      { qty: 1, price: 40, unit: 'hour' },
+      { qty: 1, price: 290, unit: 'day' }
     ]
   }
 ]

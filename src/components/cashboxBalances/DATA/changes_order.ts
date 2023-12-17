@@ -41,7 +41,7 @@ export const basic_order: Order = {
       newPrice: {
         price: 600,
         unit: 'month',
-        quantity: 1
+        qty: 1
       },
       resolved: true,
       amount: -500,

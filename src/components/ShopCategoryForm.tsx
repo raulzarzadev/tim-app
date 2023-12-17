@@ -32,7 +32,8 @@ const ShopCategoryForm = ({
     await onSubmit?.(data).then(console.log).catch(console.error)
     setDone(true)
   }
-  console.log({ formValues })
+
+  const disabled = done || !formValues.name
 
   return (
     <form className="grid gap-4 max-w-md mx-auto">
@@ -70,7 +71,10 @@ const ShopCategoryForm = ({
       />
 
       <div className="flex w-full justify-evenly my-4">
-        <ModalConfirm handleConfirm={handleSubmit(_onSubmit)} disabled={done}>
+        <ModalConfirm
+          handleConfirm={handleSubmit(_onSubmit)}
+          disabled={disabled}
+        >
           <Typography>Se creara la siguiente categoria: </Typography>
           <Typography>{formValues.name}</Typography>
         </ModalConfirm>

@@ -23,6 +23,7 @@ import { totalCharged } from '@/components/cashboxBalances/calculateBalance.lib'
 import asNumber from '@/lib/asNumber'
 import { listenCompanyItems } from '@/firebase/items'
 import { CategoryType } from '@/types/category'
+import { listenCompanyCategoriesShop } from '@/firebase/categories'
 
 /**
  *
@@ -97,6 +98,7 @@ export function UserCompaniesProvider({
 
   const [userShop, setUserShop] = useState<Partial<CompanyType>>()
   const [shopItems, setShopItems] = useState<Partial<ArticleType>[]>([])
+  const [shopCategories, setShopCategories] = useState<CategoryType[]>([])
   const currentCompany = [...userOwnCompanies, ...staffCompanies].find(
     (company) => company?.id === companySelected
   )
@@ -124,6 +126,10 @@ export function UserCompaniesProvider({
       })
     }
   }, [user])
+
+  useEffect(() => {
+    listenCompanyCategoriesShop(userShop?.id || '', setShopCategories)
+  }, [userShop])
 
   useEffect(() => {
     listenCompanyItems(userShop?.id || '', (res: ArticleType[]) => {
@@ -232,7 +238,7 @@ export function UserCompaniesProvider({
 
   let userFullShop: Partial<CompanyType> | undefined = userShop
   if (userShop) {
-    userFullShop = { ...userShop, items: shopItems }
+    userFullShop = { ...userShop, items: shopItems, categories: shopCategories }
   }
   return (
     <UserCompaniesContext.Provider

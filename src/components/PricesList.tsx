@@ -4,6 +4,7 @@ import { PriceType } from './PricesForm'
 import MyTable from './MyTable'
 import dictionary from '@/CONSTS/dictionary'
 import AppIcon from './AppIcon'
+import CurrencySpan from './CurrencySpan'
 
 const PricesList = ({
   prices = [],
@@ -65,9 +66,8 @@ const PricesTable = ({
           <div className="text-center ">
             <Typography>
               Eliminar precio:{' '}
-              {`${value?.title || ''} ${dictionary(value?.period)} ${
-                value?.price || ''
-              }`}
+              {`${value?.title || ''} ${dictionary(value?.period)} `}{' '}
+              <CurrencySpan quantity={value?.price} />
             </Typography>
           </div>
           <div className="flex justify-evenly my-4">
@@ -121,7 +121,19 @@ const PricesTable = ({
           },
           {
             key: 'price',
-            label: 'Precio'
+            label: 'Precio',
+            format: (value) => <CurrencySpan quantity={value} />
+          },
+          {
+            key: 'favorite',
+            label: 'Fav',
+            format: (value) => value && <AppIcon icon="star" />
+          },
+          {
+            key: 'hidden',
+            label: 'Visible',
+            format: (value) =>
+              value ? <AppIcon icon="eyeClose" /> : <AppIcon icon="eyeOpen" />
           }
         ],
         body: prices

@@ -5,10 +5,10 @@ import BasicTabs from './BasicTabs'
 import ItemsTable from './ItemsTable'
 import { ArticleType } from '@/types/article'
 import { CategoryType } from '@/types/category'
-import CategoriesTable from './CategoriesTable'
 import ShopCategoriesTable from './ShopCategoriesTable'
+import ShopItemsTable from './ShopItemsTable'
 
-const ItemsTabs = ({
+const ShopItemsTabs = ({
   hiddenActions,
   items,
   categories,
@@ -22,8 +22,8 @@ const ItemsTabs = ({
   // const categories = currentCompany?.categories
   const takenItems = items.filter((i) => i.rentStatus === 'taken') || []
   const expiredItems = items.filter((i) => i.rentStatus === 'expired') || []
-
   const availableItems = items.filter((i) => i.rentStatus === 'available') || []
+
   return (
     <div>
       <div>
@@ -51,13 +51,16 @@ const ItemsTabs = ({
             {
               label: `Todas (${items?.length || 0})`,
               content: (
-                <ItemsTable items={items || []} itemActions={showItemActions} />
+                <ShopItemsTable
+                  items={items || []}
+                  itemActions={showItemActions}
+                />
               )
             },
             {
               label: `En uso (${takenItems.length || 0})`,
               content: (
-                <ItemsTable
+                <ShopItemsTable
                   items={takenItems || []}
                   itemActions={showItemActions}
                 />
@@ -66,7 +69,7 @@ const ItemsTabs = ({
             {
               label: `Vencidas (${expiredItems?.length || 0})`,
               content: (
-                <ItemsTable
+                <ShopItemsTable
                   items={expiredItems}
                   itemActions={showItemActions}
                 />
@@ -75,7 +78,7 @@ const ItemsTabs = ({
             {
               label: `Disponibles (${availableItems?.length || 0})`,
               content: (
-                <ItemsTable
+                <ShopItemsTable
                   items={availableItems}
                   itemActions={showItemActions}
                 />
@@ -103,4 +106,4 @@ const ItemsTabs = ({
   )
 }
 
-export default ItemsTabs
+export default ShopItemsTabs

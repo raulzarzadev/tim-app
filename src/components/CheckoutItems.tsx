@@ -47,7 +47,7 @@ const CheckoutItems = ({
       ..._itemsSelected.filter((i) => i.itemId !== itemId),
       {
         itemId,
-        qty: price.quantity,
+        qty: price.qty,
         unit: price.unit,
         price: price.price
       }

@@ -42,7 +42,7 @@ const testCompany: CompanyType = {
         {
           unit: 'hour',
           price: 100,
-          quantity: 1
+          qty: 1
         }
       ],
       description: 'category test description'

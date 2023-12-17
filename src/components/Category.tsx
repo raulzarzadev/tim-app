@@ -113,7 +113,7 @@ const Category = ({ categoryName }: { categoryName: string }) => {
           gutterBottom
           className="text-center"
         >
-          {price ? `${price?.quantity} ${price?.unit} $${price?.price}` : ''}
+          {price ? `${price?.qty} ${price?.unit} $${price?.price}` : ''}
         </Typography>
       </CardContent>
       <Box>
