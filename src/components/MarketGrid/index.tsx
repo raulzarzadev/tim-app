@@ -38,7 +38,6 @@ export function MarketGridContext() {
 }
 
 export const MarketGrid = ({ items }: { items: MarketItem[] }) => {
-  console.log({ items: items.map((i) => i.img) })
   return (
     <ImageList sx={{ height: '450' }} className="max-w-md mx-auto">
       <ImageListItem key="Subheader" cols={2}>

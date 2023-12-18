@@ -6,12 +6,13 @@ import { UserCompaniesProvider as UserCompaniesProvider2 } from '@/context/userC
 import { StyledEngineProvider } from '@mui/material/styles'
 import { CssBaseline } from '@mui/material'
 import './globals.css'
+import APP_CONFIG from '@/APP_CONFIG'
 
 export const metadata = {
   title: 'baja-rent app',
   description: 'Take control of your rentals, easy and fast',
   icons: {
-    apple: 'images/icons/icon-512x512.png'
+    apple: APP_CONFIG.logos.appleIcon
   },
   manifest: '/manifest.json',
   themeColor: '#2196f3'

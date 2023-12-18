@@ -19,7 +19,7 @@ const ArticleDetails = ({ article }: { article?: ItemOrder | ArticleType }) => {
     <Box className="my-4 text-center">
       <Box>
         <ArticleInfo article={article} />
-        <ItemRentStatus itemId={article?.id || ''} />
+        {/* <ItemRentStatus itemId={article?.id || ''} /> */}
         <AccordionSections
           sections={[
             {
@@ -65,10 +65,13 @@ export const ArticleInfo = ({
           {article?.name}
         </Typography>{' '}
       </Typography>
-      <Typography color="text.secondary">{article?.color}</Typography>
-      {article?.tags?.map((t) => (
-        <Chip key={t.title} label={t.title} />
-      ))}
+      <ItemRentStatus itemId={article?.id || ''} />
+      <div className="mt-4">
+        <Typography color="text.secondary">{article?.color}</Typography>
+        {article?.tags?.map((t) => (
+          <Chip key={t.title} label={t.title} />
+        ))}
+      </div>
     </Box>
   )
 }

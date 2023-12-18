@@ -11,10 +11,15 @@ const ItemRentStatus = ({ itemId }: { itemId: string }) => {
   const modal = useModal({ title: 'Orden de item status ' })
   return (
     <div>
-      <button onClick={modal.onOpen} className="capitalize">
-        {dictionary(status)}
-      </button>
-      <Modal {...modal}>{order && <OrderDetails order={order} />}</Modal>
+      {!order && dictionary(status)}
+      {order && (
+        <>
+          <button onClick={modal.onOpen} className="capitalize">
+            {dictionary(status)}
+          </button>
+          <Modal {...modal}>{order && <OrderDetails order={order} />}</Modal>
+        </>
+      )}
     </div>
   )
 }

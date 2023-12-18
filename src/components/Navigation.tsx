@@ -20,6 +20,7 @@ import { logout } from '@/firebase/auth'
 import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import { UserType } from '@/types/user'
 import Image from 'next/image'
+import APP_CONFIG from '@/APP_CONFIG'
 
 const pages = [
   {
@@ -87,7 +88,7 @@ function ResponsiveAppBar() {
   const { currentCompany } = useUserCompaniesContext()
 
   const companyName = currentCompany?.name || 'BajaRent'
-  const companyLogo = currentCompany?.image || '/images/icons/icon-384x384.png'
+  const companyLogo = currentCompany?.image || APP_CONFIG.logos.appleIcon
 
   return (
     <AppBar position="static">

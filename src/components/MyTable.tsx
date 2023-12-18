@@ -114,9 +114,9 @@ const MyTable = ({
                   onClick={() => {
                     onRowClick?.(b.id)
                     if (modalChildren) {
-                      modal.onOpen()
                       setRowSelected(b)
                       setIndexSelected(i)
+                      modal.onOpen()
                     }
                   }}
                 >
