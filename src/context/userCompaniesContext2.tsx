@@ -103,6 +103,12 @@ export function UserCompaniesProvider({
   const currentCompany = [...userOwnCompanies, ...staffCompanies].find(
     (company) => company?.id === companySelected
   )
+  //* get user companies but clear duplicates
+  const userCompanies = [...userOwnCompanies, ...staffCompanies].filter(
+    (o, i, self) => {
+      return self.findIndex((t) => t.id === o.id) === i
+    }
+  )
   useEffect(() => {
     if (user) {
       if (companySelected) listenCompanyServices(companySelected, setServices)
@@ -117,10 +123,20 @@ export function UserCompaniesProvider({
   }, [])
 
   useEffect(() => {
+    if (companySelected) {
+      const company = userCompanies.find((c) => c.id === companySelected)
+      setUserShop(company)
+    } else {
+      setUserShop(userOwnCompanies[0] || null)
+    }
+    setUserShop
+  }, [companySelected, userCompanies, userOwnCompanies])
+
+  useEffect(() => {
     if (user) {
       listenUserCompanies(user?.id, (res: CompanyType[]) => {
         setUserOwnCompanies(res)
-        setUserShop(res[0] || null)
+        // setUserShop(res[0] || null)
       })
       listenStaffCompanies(user?.email, (res: CompanyType[]) => {
         setStaffCompanies(res)
@@ -219,13 +235,6 @@ export function UserCompaniesProvider({
   const itemsExpired = itemsFromOrders?.filter(
     (i) =>
       i?.rentStatus === 'taken' && isAfter(i?.rentFinishAt as Date, new Date())
-  )
-
-  //* get user companies but clear duplicates
-  const userCompanies = [...userOwnCompanies, ...staffCompanies].filter(
-    (o, i, self) => {
-      return self.findIndex((t) => t.id === o.id) === i
-    }
   )
 
   orders.map((o) => {
