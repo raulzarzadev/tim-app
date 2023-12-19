@@ -22,11 +22,12 @@ const ModalOrderForm = ({
 }) => {
   const modal = useModal({ title: 'Nueva orden' })
   return (
-    <>
+    <div className="my-4">
       <Button
         fullWidth
         onClick={modal.onOpen}
         endIcon={icon ? <AppIcon icon={icon} /> : undefined}
+        variant="outlined"
       >
         {label}
       </Button>
@@ -41,7 +42,7 @@ const ModalOrderForm = ({
           }}
         />
       </Modal>
-    </>
+    </div>
   )
 }
 

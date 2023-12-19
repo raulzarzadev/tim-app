@@ -2,20 +2,20 @@ import { CompanyType } from '@/types/company'
 import { Typography } from '@mui/material'
 import ModalConfirm from './ModalConfirm'
 import { deleteCompany, updateCompany } from '@/firebase/companies'
-import { createItem, deleteCompanyItems } from '@/firebase/items'
+import { deleteCompanyItems } from '@/firebase/items'
 import { deleteCompanyOrders } from '@/firebase/orders'
 import ShopForm from './ShopForm'
-import ShopItemForm from './ShopItemForm'
-import ShopCategoryForm from './ShopCategoryForm'
-import { CategoryType } from '@/types/category'
-import { createCategoryShop } from '@/firebase/categories'
+
+import ShopItemsActions from './ShopItemsActions'
 
 const ShopActions = ({
   shopId,
-  shop
+  shop,
+  showItemsActions
 }: {
   shopId: Partial<CompanyType>['id']
   shop: Partial<CompanyType>
+  showItemsActions?: boolean
 }) => {
   const handleDelete = async (companyId: string) => {
     await deleteCompanyItems(companyId).then(console.log).catch(console.error)
@@ -29,11 +29,6 @@ const ShopActions = ({
     await updateCompany(shopId || '', data)
       .then(console.log)
       .catch(console.error)
-  }
-
-  const handleCreateCategory = async (data: Partial<CategoryType>) => {
-    data.companyId = shopId
-    return await createCategoryShop(data).then(console.log).catch(console.error)
   }
 
   return (
@@ -78,40 +73,12 @@ const ShopActions = ({
           />
         </ModalConfirm>
       </div>
-      <div>
-        <div className="flex justify-evenly mt-10">
-          <ModalConfirm
-            label="Articulo"
-            modalTitle="Crear articulo"
-            openIcon="add"
-          >
-            <ShopItemForm
-              shopCategories={shop?.categories || []}
-              // shopId={shopId || ''}
-              onSubmit={async (newItem) => {
-                newItem.companyId = shopId
-                return await createItem(newItem)
-                  .then(console.log)
-                  .catch(console.error)
-              }}
-            />
-          </ModalConfirm>
-          <ModalConfirm
-            label="Categoria"
-            modalTitle="Crear categoria"
-            openIcon="add"
-          >
-            <ShopCategoryForm
-              onSubmit={async (newCategory) => {
-                newCategory.companyId = shopId
-                return await handleCreateCategory(newCategory)
-                  .then(console.log)
-                  .catch(console.error)
-              }}
-            />
-          </ModalConfirm>
-        </div>
-      </div>
+      {showItemsActions && (
+        <ShopItemsActions
+          shopCategories={shop.categories || []}
+          shopId={shop.id || ''}
+        />
+      )}
     </div>
   )
 }

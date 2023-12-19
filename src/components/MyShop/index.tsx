@@ -4,7 +4,7 @@ import NotCompanyYet from '../NotCompanyYet'
 import CompanyPublicDetails from '../CompanyPublicDetails'
 import ShopActions from '../ShopActions'
 import { Skeleton } from '@mui/material'
-import ShopItemsTabs from '../ShopItemsTabs'
+import ShopDashboard from '../ShopDashboard'
 
 const MyShop = () => {
   const { userShop } = useUserCompaniesContext()
@@ -36,20 +36,16 @@ const MyShop = () => {
         </div>
       </div>
     )
+
   return (
-    <div className="max-w-lg mx-auto" test-id="shop-view">
+    <div className=" mx-auto" test-id="shop-view">
       {!userShop && <NotCompanyYet />}
       {userShop && (
         <>
           <CompanyPublicDetails company={userShop} />
           <ShopActions shopId={userShop.id} shop={userShop} />
           <div className="mt-6">
-            <ShopItemsTabs
-              showItemActions
-              hiddenActions
-              categories={userShop?.categories || []}
-              items={userShop?.items || []}
-            />
+            <ShopDashboard shop={userShop} />
           </div>
         </>
       )}

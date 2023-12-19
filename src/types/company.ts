@@ -1,6 +1,8 @@
 import { ArticleType } from './article'
 import { BaseType } from './base'
 import { CategoryType } from './category'
+import { Client } from './client'
+import { Order } from './order'
 import { StaffType } from './staff'
 import { UserType } from './user'
 
@@ -10,7 +12,7 @@ export type CompanyBase = {
   description: string
   categories?: CategoryType[]
   articles?: ArticleType[]
-  items?: Partial<ArticleType>[]
+
   staff?: StaffType[]
   staffMails: string[]
   phone?: string
@@ -23,6 +25,11 @@ export type CompanyBase = {
   principalContact?: string
   address?: string
   email?: string
+
+  //* this should be added in context
+  items?: Partial<ArticleType>[]
+  clients?: Partial<Client>[]
+  orders?: Partial<Order>[]
 }
 
 export type CompanyType = BaseType & CompanyBase

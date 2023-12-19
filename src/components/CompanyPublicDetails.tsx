@@ -1,6 +1,8 @@
-import { Avatar, Typography } from '@mui/material'
+import { Avatar, IconButton, Typography } from '@mui/material'
 import { ContactsList } from './ModalContactClient'
 import { CompanyType } from '@/types/company'
+
+import UserShops from './ShopDashboard/UserShops'
 
 const CompanyPublicDetails = ({
   company
@@ -25,5 +27,7 @@ const CompanyPublicDetails = ({
     </div>
   )
 }
+
+
 
 export default CompanyPublicDetails

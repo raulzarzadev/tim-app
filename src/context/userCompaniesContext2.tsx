@@ -57,6 +57,7 @@ export type UserCompaniesContextType = {
   }
   orders?: Order[]
   userShop?: Partial<CompanyType>
+  handleSetShop?: (shop: CompanyType['id']) => void
 }
 
 export const UserCompaniesContext = createContext<UserCompaniesContextType>({
@@ -240,6 +241,11 @@ export function UserCompaniesProvider({
   if (userShop) {
     userFullShop = { ...userShop, items: shopItems, categories: shopCategories }
   }
+
+  const handleSetShop = (shopId: CompanyType['id']) => {
+    const shop = userCompanies.find((s) => s.id === shopId)
+    setUserShop(shop)
+  }
   return (
     <UserCompaniesContext.Provider
       value={{
@@ -258,7 +264,8 @@ export function UserCompaniesProvider({
         clients,
         orders,
         services,
-        userShop: userFullShop
+        userShop: userFullShop,
+        handleSetShop
       }}
     >
       {children}

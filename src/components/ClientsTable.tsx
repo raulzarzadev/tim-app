@@ -6,7 +6,7 @@ import AccordionSections from './AccordionSections'
 import ClientActions from './Client/ClientActions'
 import ClientComments from './Client/ClientComments'
 
-const ClientsTable = ({ clients }: { clients: Client[] }) => {
+const ClientsTable = ({ clients }: { clients: Partial<Client>[] }) => {
   return (
     <div>
       <MyTable

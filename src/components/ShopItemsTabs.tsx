@@ -1,22 +1,22 @@
-import { Button } from '@mui/material'
-import Link from 'next/link'
-import AppIcon from './AppIcon'
 import BasicTabs from './BasicTabs'
 import { ArticleType } from '@/types/article'
 import { CategoryType } from '@/types/category'
 import ShopCategoriesTable from './ShopCategoriesTable'
 import ShopItemsTable from './ShopItemsTable'
+import ShopItemsActions from './ShopItemsActions'
 
 const ShopItemsTabs = ({
-  hiddenActions,
   items,
   categories,
-  showItemActions
+  showItemActions,
+  showItemsActions,
+  shopId
 }: {
   items: Partial<ArticleType>[]
   categories: CategoryType[]
-  hiddenActions?: boolean
   showItemActions?: boolean
+  showItemsActions?: boolean
+  shopId: string
 }) => {
   // const categories = currentCompany?.categories
   const takenItems = items.filter((i) => i.rentStatus === 'taken') || []
@@ -26,23 +26,8 @@ const ShopItemsTabs = ({
   return (
     <div>
       <div>
-        {!hiddenActions && (
-          <div className="flex justify-evenly">
-            <Button
-              LinkComponent={Link}
-              href="/new-category"
-              endIcon={<AppIcon icon="add" />}
-            >
-              Nueva categoria
-            </Button>
-            <Button
-              LinkComponent={Link}
-              href="/new-item"
-              endIcon={<AppIcon icon="add" />}
-            >
-              Nueva unidad
-            </Button>
-          </div>
+        {showItemsActions && (
+          <ShopItemsActions shopCategories={categories} shopId={shopId} />
         )}
         <BasicTabs
           title="items"
