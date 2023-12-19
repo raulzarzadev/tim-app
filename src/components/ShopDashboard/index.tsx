@@ -4,6 +4,7 @@ import BasicTabs from '../BasicTabs'
 import { CompanyType } from '@/types/company'
 import ShopItemsTabs from '../ShopItemsTabs'
 import ShopOrders from './ShopOrders'
+import ShopStaff from './ShopStaff'
 
 const ShopDashboard = ({ shop }: { shop: Partial<CompanyType> }) => {
   return (
@@ -33,8 +34,8 @@ const ShopDashboard = ({ shop }: { shop: Partial<CompanyType> }) => {
               />
             )
           },
-          { label: 'Ordenes', content: <ShopOrders shop={shop} /> }
-          // { label: 'Staff', content: <CompanyStaff /> },
+          { label: 'Ordenes', content: <ShopOrders shop={shop} /> },
+          { label: 'Staff', content: <ShopStaff staff={shop.staff || []} /> }
           // { label: 'Cortes', content: <CompanyBalances /> },
           // { label: 'Tienda', content: <CompanyStore /> }
         ]}

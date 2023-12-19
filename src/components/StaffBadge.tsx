@@ -7,8 +7,8 @@ const StaffBadge = ({ badge = 'badge' }: { badge: string }) => {
       title={StaffPermissionLabels[badge as StaffPermission]}
       placement="top-start"
     >
-      <Box className="w-9 aspect-square rounded-full shadow-md flex justify-center items-center bg-blue-100  ">
-        <Typography className="text-lg font-bold">
+      <Box className="w-4 aspect-square rounded-full shadow-md flex justify-center items-center bg-blue-100  ">
+        <Typography className="text-xs font-bold">
           {badge[0].toUpperCase()}
         </Typography>
       </Box>
