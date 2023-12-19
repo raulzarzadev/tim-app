@@ -1,29 +1,20 @@
 'use client'
-import { useForm, SubmitHandler } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import {
   Box,
-  Button,
   Checkbox,
   FormControlLabel,
   TextField,
   Typography
 } from '@mui/material'
 import ModalConfirm from './ModalConfirm'
-import { useState } from 'react'
-import { useParams, useRouter, useSearchParams } from 'next/navigation'
-import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
+import { useParams, useSearchParams } from 'next/navigation'
 import { ArticleType } from '@/types/article'
 import Select from './Select'
-import { addArticle, updateArticle } from '@/firebase/articles'
-import PricesForm from './PricesForm'
-import InputUploadFile from './InputUploadFile'
-import PreviewImage from './PreviewImage'
 import TagsInput from './TagsInput'
 import { CategoryType } from '@/types/category'
-
-interface IFormInput {
-  name: string
-}
+import PricesForm from './PricesForm'
+import PreviewImage from './PreviewImage'
 
 const ShopItemForm = ({
   item: article,

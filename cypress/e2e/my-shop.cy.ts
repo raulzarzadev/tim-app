@@ -5,7 +5,11 @@ describe('my shop navigation', () => {
     cy.login()
     cy.contains('Mi tienda').click()
     cy.get('[test-id="shop-view"]')
+
+    //* User don´t have any shop
+
     cy.get('button[test-id="edit-shop"]').click()
+
     cy.get('[test-id="app-modal"]').scrollTo('bottom') //.scrollIntoView({ duration: 200 })
 
     cy.contains('button', 'Editar empresa').should('be.disabled')

@@ -1,26 +1,25 @@
 'use client'
+import { useUserShopContext } from '@/context/userShopContext'
 import Select from '../Select'
-import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 
 const UserShops = () => {
-  const { userCompanies, companySelected, setCompanySelected, handleSetShop } =
-    useUserCompaniesContext()
-
+  const { handleChangeShop, userShop, userShops } = useUserShopContext()
   return (
     <div className="py-4">
       <div className="flex w-full  ">
         <Select
           fullWidth
-          selected={companySelected}
+          selected={userShop?.id}
           label="Cambiar de tienda"
           onSelect={(value) => {
-            setCompanySelected(value)
-            handleSetShop?.(value)
+            handleChangeShop?.(value)
           }}
-          options={userCompanies.map((company) => ({
-            value: company?.id,
-            label: company?.name
-          }))}
+          options={
+            userShops?.map((company) => ({
+              value: company?.id,
+              label: company?.name
+            })) || []
+          }
         />
       </div>
     </div>

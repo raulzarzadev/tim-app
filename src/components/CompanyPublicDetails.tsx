@@ -10,7 +10,7 @@ const CompanyPublicDetails = ({
   company: Partial<CompanyType>
 }) => {
   return (
-    <div className="">
+    <div className="text-center">
       <Typography
         variant="h4"
         className="text-center mt-20 relative flex mx-auto w-full justify-center"
@@ -21,13 +21,12 @@ const CompanyPublicDetails = ({
           className="absolute -top-16 left-[50%] -translate-x-1/2  z-0"
           sx={{ width: 96, height: 96 }}
         ></Avatar>
+        <UserShops />
       </Typography>
       <Typography>{company?.description}</Typography>
       <ContactsList phone={company?.phone} />
     </div>
   )
 }
-
-
 
 export default CompanyPublicDetails

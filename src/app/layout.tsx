@@ -7,6 +7,7 @@ import { StyledEngineProvider } from '@mui/material/styles'
 import { CssBaseline } from '@mui/material'
 import './globals.css'
 import APP_CONFIG from '@/APP_CONFIG'
+import { UserShopProvider } from '@/context/userShopContext'
 
 export const metadata = {
   title: 'baja-rent app',
@@ -34,7 +35,8 @@ export default async function RootLayout({
           <ErrorBoundary componentName="RootLayout auth">
             <AuthContextProvider>
               <ErrorBoundary componentName="RootLayout Companies">
-                <UserCompaniesProvider2>
+                {/* <UserCompaniesProvider2> */}
+                <UserShopProvider>
                   <ErrorBoundary componentName="RootLayout navigation">
                     <Navigation />
                   </ErrorBoundary>
@@ -44,7 +46,8 @@ export default async function RootLayout({
                   <ErrorBoundary componentName="RootLayout BottomNavigation">
                     <BottomNavigation />
                   </ErrorBoundary>
-                </UserCompaniesProvider2>
+                </UserShopProvider>
+                {/* </UserCompaniesProvider2> */}
               </ErrorBoundary>
             </AuthContextProvider>
           </ErrorBoundary>

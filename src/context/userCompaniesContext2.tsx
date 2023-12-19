@@ -5,7 +5,6 @@ import { CompanyType } from '@/types/company'
 import { createContext, useContext, useEffect, useState } from 'react'
 import { useAuthContext } from './authContext'
 import { StaffPermission } from '@/types/staff'
-
 import { Timestamp } from 'firebase/firestore'
 import { isAfter } from 'date-fns'
 import { Order } from '@/types/order'
@@ -248,7 +247,12 @@ export function UserCompaniesProvider({
 
   let userFullShop: Partial<CompanyType> | undefined = userShop
   if (userShop) {
-    userFullShop = { ...userShop, items: shopItems, categories: shopCategories }
+    userFullShop = {
+      ...userShop,
+      items: shopItems,
+      categories: shopCategories,
+      orders: orders
+    }
   }
 
   const handleSetShop = (shopId: CompanyType['id']) => {

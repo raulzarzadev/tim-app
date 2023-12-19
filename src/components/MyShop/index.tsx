@@ -1,17 +1,20 @@
 'use client'
-import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import NotCompanyYet from '../NotCompanyYet'
 import CompanyPublicDetails from '../CompanyPublicDetails'
 import ShopActions from '../ShopActions'
 import { Skeleton } from '@mui/material'
 import ShopDashboard from '../ShopDashboard'
+import { useUserShopContext } from '@/context/userShopContext'
 
 const MyShop = () => {
-  const { userShop } = useUserCompaniesContext()
+  const { userShop } = useUserShopContext()
   if (userShop === undefined)
     return (
       <div>
-        <div className="grid gap-3 place-items-center">
+        <div
+          className="grid gap-3 place-items-center"
+          test-id="shop-view-skeleton"
+        >
           <Skeleton
             variant="circular"
             className=""
