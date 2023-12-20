@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material'
+import { Box, Skeleton, Typography } from '@mui/material'
 import ShopClients from './ShopClients'
 import BasicTabs from '../BasicTabs'
 import { CompanyType } from '@/types/company'
@@ -17,7 +17,7 @@ const ShopDashboard = ({ shop }: { shop: Partial<CompanyType> }) => {
             label: 'Clientes',
             content: (
               <ShopClients
-                clients={shop.clients || []}
+                clients={shop?.clients || []}
                 companyId={shop?.id || ''}
               />
             )
@@ -35,12 +35,34 @@ const ShopDashboard = ({ shop }: { shop: Partial<CompanyType> }) => {
             )
           },
           { label: 'Ordenes', content: <ShopOrders shop={shop} /> },
-          { label: 'Staff', content: <ShopStaff staff={shop.staff || []} /> }
+          { label: 'Staff', content: <ShopStaff staff={shop?.staff || []} /> }
           // { label: 'Cortes', content: <CompanyBalances /> },
           // { label: 'Tienda', content: <CompanyStore /> }
         ]}
       />
     </div>
+  )
+}
+
+export const ShopDashboardSkeleton = () => {
+  return (
+    <Box>
+      <Box>
+        <Skeleton height={120} width="100%" variant="rectangular"></Skeleton>
+        <Skeleton
+          height={120}
+          width="100%"
+          variant="rectangular"
+          className="my-2"
+        ></Skeleton>
+        <Skeleton
+          height={120}
+          width="100%"
+          variant="rectangular"
+          className="my-2"
+        ></Skeleton>
+      </Box>
+    </Box>
   )
 }
 

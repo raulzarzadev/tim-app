@@ -35,19 +35,21 @@ const Modal = ({
       onClose={onClose}
       aria-labelledby={`modal-modal-${title}`}
       aria-describedby={`modal-modal-description-${title}`}
-      test-id={`modal-${title}`}
-      {...rest} // * WARNING: test-id can be overwritten
+      //test-id={`modal-${title}`}
+      // {...rest} // * WARNING: test-id can be overwritten
     >
       <Box
         sx={{ ...style }}
         className={`overflow-y-auto border max-h-screen  ${
           fullWidth ? 'w-full' : 'max-w-2xl'
         }`}
-        test-id="app-modal"
+        test-id={`modal-${title}`}
+        //test-id="app-modal"
       >
         <Box
           className="w-full justify-between flex sticky top-0 shadow-md "
           sx={{ bgcolor: 'background.paper', zIndex: 2, p: 1 }}
+          test-id={`modal-header-${title}`}
         >
           <Typography id={`modal-modal-${title}`} variant="h6" component="h2">
             {title}
@@ -67,7 +69,11 @@ const Modal = ({
         <Typography id={`modal-modal-description-${title}`} sx={{ mt: 2 }}>
           {description}
         </Typography>
-        <Container sx={{ p: 2 }} test-id={`modal-${title}`} className="modal">
+        <Container
+          sx={{ p: 2 }}
+          test-id={`modal-container-${title}`}
+          className="modal"
+        >
           {children}
         </Container>
       </Box>

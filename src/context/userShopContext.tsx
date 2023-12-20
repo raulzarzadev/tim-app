@@ -1,7 +1,13 @@
 'use client'
 
 import { CompanyType } from '@/types/company'
-import { createContext, useContext, useEffect, useState } from 'react'
+import {
+  SetStateAction,
+  createContext,
+  useContext,
+  useEffect,
+  useState
+} from 'react'
 import { useAuthContext } from './authContext'
 import { listenStaffCompanies, listenUserCompanies } from '@/firebase/companies'
 import { CategoryType } from '@/types/category'
@@ -72,7 +78,9 @@ export function UserShopProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (userId && userEmail) {
       listenUserCompanies(userId, setUserOwnCompanies)
-      listenStaffCompanies(userEmail, setUserStaffCompanies)
+      listenStaffCompanies(userEmail, (res: CompanyType[]) =>
+        setUserStaffCompanies(res.filter((s) => s?.userId !== userId))
+      )
     }
   }, [userId, userEmail])
 

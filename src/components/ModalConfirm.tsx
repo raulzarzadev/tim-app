@@ -35,7 +35,7 @@ const ModalConfirm = ({
   disabledAccept?: boolean
   justIcon?: boolean
 }) => {
-  const modal = useModal()
+  const modal = useModal({ title: 'confirm' })
   const [loading, setLoading] = useState(false)
   const [done, setDone] = useState(false)
   const acceptDisabled = done || disabledAccept
@@ -72,7 +72,7 @@ const ModalConfirm = ({
           {label}
         </Button>
       )}
-      <Modal {...modal} title={modalTitle} test-id="modal-confirm">
+      <Modal {...modal} title={modalTitle}>
         {children}
         {handleConfirm && (
           <Box className="flex w-full justify-center my-4">

@@ -10,7 +10,7 @@ const UserShops = () => {
         <Select
           fullWidth
           selected={userShop?.id}
-          label="Cambiar de tienda"
+          label=""
           onSelect={(value) => {
             handleChangeShop?.(value)
           }}

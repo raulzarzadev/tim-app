@@ -60,7 +60,7 @@ const ShopActions = ({
           </div>
         </ModalConfirm>
         <ModalConfirm
-          test-id="edit-shop"
+          // test-id="edit-shop"
           label="Editar"
           openIcon="edit"
           modalTitle="Editar tienda"
