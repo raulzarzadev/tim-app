@@ -1,7 +1,6 @@
 import { Typography } from '@mui/material'
 import CheckoutItemsList from './CheckoutItemsList'
 import { dateFormat } from '@/lib/utils-date'
-import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import { ItemSelected } from '@/context/useCompanyCashbox'
 import { CompanyItem } from '@/types/article'
 import { addMinutes, isBefore } from 'date-fns'

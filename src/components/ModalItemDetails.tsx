@@ -4,6 +4,9 @@ import useModal from '@/hooks/useModal'
 import ArticleDetails from './ArticleDetails'
 import { Typography } from '@mui/material'
 import ItemActions from './ItemActions'
+import { useEffect, useState } from 'react'
+import { ArticleType } from '@/types/article'
+import { getItem } from '@/firebase/items'
 
 const ModalItemDetails = ({
   itemId,
@@ -14,11 +17,14 @@ const ModalItemDetails = ({
   showCat?: boolean
   hiddenCurrentStatus?: boolean
 }) => {
-  const { currentCompany } = useUserCompaniesContext()
+  //const { currentCompany } = useUserCompaniesContext()
 
-  const items = currentCompany?.articles
-  const item = items?.find((i) => i?.id === itemId)
-
+  // const items = currentCompany?.articles
+  // const item = items?.find((i) => i?.id === itemId)
+  const [item, setItem] = useState<Partial<ArticleType> | null | undefined>()
+  useEffect(() => {
+    getItem(itemId).then(setItem)
+  }, [itemId])
   const modal = useModal({
     title: `Detalles de ${item?.category && `${item?.category}-`}  ${
       item?.serialNumber || item?.name

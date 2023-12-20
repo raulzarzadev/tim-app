@@ -14,7 +14,11 @@ import ServiceCard from './ServiceCard'
 import ItemOrders from './ItemOrders'
 import ItemRentStatus from './ItemRentStatus2'
 
-const ArticleDetails = ({ article }: { article?: ItemOrder | ArticleType }) => {
+const ArticleDetails = ({
+  article
+}: {
+  article?: ItemOrder | Partial<ArticleType>
+}) => {
   return (
     <Box className="my-4 text-center">
       <Box>
@@ -47,7 +51,7 @@ const ArticleDetails = ({ article }: { article?: ItemOrder | ArticleType }) => {
 export const ArticleInfo = ({
   article
 }: {
-  article?: ItemOrder | ArticleType
+  article?: ItemOrder | Partial<ArticleType>
 }) => {
   return (
     <Box className="max-w-md mx-auto text-center flex place-items-center">

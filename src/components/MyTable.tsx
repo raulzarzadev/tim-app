@@ -10,7 +10,7 @@ export type MyTableHeader = {
   key: string
   label: string
   value?: (value: any) => string
-  format?: (value: any) => ReactNode
+  format?: (value: any, row?: any) => ReactNode
 }
 export type MyTableHeaders = MyTableHeader[]
 export type MyTableData = {

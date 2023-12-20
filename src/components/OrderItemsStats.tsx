@@ -1,8 +1,6 @@
-import { Balance, BalanceData } from '@/types/balance'
-import { Order } from '@/types/order'
-import { Box, Typography } from '@mui/material'
+import { BalanceData } from '@/types/balance'
+import { Typography } from '@mui/material'
 import ModalItemDetails from './ModalItemDetails'
-import CurrencySpan from './CurrencySpan'
 
 const OrderItemsStats = ({
   itemsStats
