@@ -4,15 +4,14 @@ import { TextField, Typography } from '@mui/material'
 import ModalConfirm from '../ModalConfirm'
 import { StaffType } from '@/types/staff'
 import StaffPermissionsForm from '../StaffPermissionsForm'
-import { removeStaff, addStaff } from '@/firebase/staff'
-import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
-import { updateStaff } from '@/firebase/staff'
+import { addStaff, removeStaff, updateStaff } from '@/firebase/staff'
 import { useAuthContext } from '@/context/authContext'
+import { useUserShopContext } from '@/context/userShopContext'
 
 interface IFormInput extends StaffType {}
 
 const ShopStaffForm = ({ staffEmail }: { staffEmail?: string }) => {
-  const { userShop } = useUserCompaniesContext()
+  const { userShop } = useUserShopContext()
   const { user } = useAuthContext()
   const shopId = userShop?.id
   const staff = userShop?.staff?.find((s) => s.email === staffEmail) || null

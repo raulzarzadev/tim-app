@@ -221,7 +221,7 @@ const Day = ({
         onClick={() => {
           handleAssign()
         }}
-        className="flex flex-col justify-center items-center cursor-pointer hover:font-bold h-10"
+        className="flex flex-col justify-center items-center cursor-pointer hover:font-bold h-10 "
       >
         {label && <span className="font-bold">{`(${label})`} </span>}
         {dateFormat(date, 'EEEE')}{' '}
@@ -242,7 +242,7 @@ const Day = ({
 const Order = ({ order, date }: { order: Order; date: Date }) => {
   const status = orderStatus(order)
   return (
-    <div>
+    <div className="">
       {isSameDay(date, forceAsDate(order.shipping.date)) && (
         <div
           className={`
@@ -251,12 +251,14 @@ const Order = ({ order, date }: { order: Order; date: Date }) => {
         ${status === 'expired' && 'bg-red-500'}
         ${status === 'finished' && 'bg-blue-200 text-gray-950'}
         
-        h-10 w-full  mt-2 flex flex-col truncate justify-center items-center p-1 text-white `}
+        h-10 w-full   mt-2 flex flex-col truncate justify-center items-center p-1 text-white  `}
         >
-          <Typography className="text-center  text-xs">
-            {order.client.name}
-          </Typography>
-          <Typography className="text-xs">{dictionary(status)}</Typography>
+          <div className="grid place-items-center ">
+            <Typography className="text-center  text-xs ">
+              {order.client.name}
+            </Typography>
+            <Typography className="text-xs">{dictionary(status)}</Typography>
+          </div>
         </div>
       )}
     </div>
