@@ -1,3 +1,4 @@
+import { FieldValue } from 'firebase/firestore'
 import { ArticleType } from './article'
 import { BaseType } from './base'
 import { CategoryType } from './category'
@@ -10,7 +11,6 @@ export type CompanyBase = {
   name: string
   userId: UserType['id']
   description: string
-  categories?: CategoryType[]
   articles?: ArticleType[]
 
   staff?: StaffType[]
@@ -25,11 +25,12 @@ export type CompanyBase = {
   principalContact?: string
   address?: string
   email?: string
-
+  currentFolio?: number | FieldValue
   //* this should be added in context
-  items?: Partial<ArticleType>[]
-  clients?: Partial<Client>[]
-  orders?: Partial<Order>[]
+  categories?: CategoryType[] | null
+  items?: Partial<ArticleType>[] | null
+  clients?: Partial<Client>[] | null
+  orders?: Partial<Order>[] | null
 }
 
 export type CompanyType = BaseType & CompanyBase

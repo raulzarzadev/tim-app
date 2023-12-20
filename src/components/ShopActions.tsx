@@ -65,12 +65,12 @@ const ShopActions = ({
           openIcon="edit"
           modalTitle="Editar tienda"
         >
-          <ShopForm
+          {/* <ShopForm
             company={shop}
             onSubmit={(data) => {
               handleUpdate(data)
             }}
-          />
+          /> */}
         </ModalConfirm>
       </div>
       {showItemsActions && (

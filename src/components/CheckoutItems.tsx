@@ -10,6 +10,7 @@ import { PriceType } from './PricesForm'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import CurrencySpan from './CurrencySpan'
 import asNumber from '@/lib/asNumber'
+import { useUserShopContext } from '@/context/userShopContext'
 
 const CheckoutItems = ({
   itemsSelected,
@@ -22,16 +23,17 @@ const CheckoutItems = ({
   setItemsSelected?: (items: ItemSelected[]) => void
   shippingAmount?: number
 }) => {
-  const { currentCompany } = useUserCompaniesContext()
+  const { userShop: currentCompany } = useUserShopContext()
   const categories = currentCompany?.categories
-  const items = currentCompany?.articles
+  const items = currentCompany?.items
 
   const [_itemsSelected, _setItemsSelected] = useState(itemsSelected)
 
-  const fullItems: (CompanyItem | null)[] = _itemsSelected?.map(
+  const fullItems: (Partial<CompanyItem> | null)[] = _itemsSelected?.map(
     (searchItem: { itemId?: string }) => {
-      const fullItem = items?.find((item) => item?.id == searchItem.itemId)
+      const fullItem = items?.find((item) => item?.id == searchItem?.itemId)
       if (!fullItem) return null
+
       if (fullItem?.ownPrice) return { ...fullItem, ...searchItem }
       const categoryPrices = categories?.find(
         (c) => c.name === fullItem?.category

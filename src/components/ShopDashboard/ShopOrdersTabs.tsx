@@ -57,6 +57,13 @@ const ShopOrdersTabs = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orders])
 
+  if (orders.length === 0)
+    return (
+      <div className="flex justify-center">
+        <p className="text-gray-500">No hay ordenes</p>
+      </div>
+    )
+
   const actives = filtered?.filter((o) => o.status === 'taken')
   const pending = filtered?.filter((o) => o.status === 'pending')
   const finished = filtered?.filter((o) => o.status === 'finished')

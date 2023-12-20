@@ -7,6 +7,7 @@ const ShopOrders = ({ shop }: { shop: Partial<CompanyType> }) => {
   const shippingEnabled = shop?.shippingEnabled
   const shopId = shop?.id
   const orders = shop?.orders
+
   return (
     <div>
       <div className="flex justify-center">

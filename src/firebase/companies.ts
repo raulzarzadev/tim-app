@@ -93,3 +93,8 @@ export const listenStaffCompanies = async (
 ) => {
   await itemCRUD.listenItems([where('staffMails', 'array-contains', email)], cb)
 }
+
+export const getCurrentFolioShop = async (companyId: string) => {
+  const company = await getCompany(companyId)
+  return company?.currentFolio || 0
+}

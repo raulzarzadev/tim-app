@@ -4,7 +4,7 @@ import { rentFinishAt } from '@/context/lib'
 import { isBefore } from 'date-fns'
 
 export type ItemStatusProps = {
-  companyOrders?: Partial<Order>[]
+  companyOrders?: Partial<Order>[] | null
 }
 export const itemStatus = (
   itemId: string,

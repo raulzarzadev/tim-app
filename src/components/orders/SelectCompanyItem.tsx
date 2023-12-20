@@ -6,6 +6,7 @@ import { ArticleType } from '@/types/article'
 import ArticleDetails from '../ArticleDetails'
 import ButtonSave from '../ButtonSave'
 import ButtonClear from '../ButtonClear'
+import { useUserShopContext } from '@/context/userShopContext'
 
 export type SelectItemsProps = {
   itemsDisabled?: string[]
@@ -41,10 +42,11 @@ const SelectCompanyItem = ({
 // companyCategories
 SelectItemsProps) => {
   const {
-    currentCompany
+    userShop: currentCompany
     //ordersItems: { inUse: itemsTaken }
-  } = useUserCompaniesContext()
-  const companyItems = currentCompany?.articles
+  } = useUserShopContext()
+  const companyItems = currentCompany?.items
+
   const itemsTaken =
     companyItems?.filter(
       (i) => i.rentStatus === 'taken' || i.rentStatus === 'expired'

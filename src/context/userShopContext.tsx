@@ -1,13 +1,7 @@
 'use client'
 
 import { CompanyType } from '@/types/company'
-import {
-  SetStateAction,
-  createContext,
-  useContext,
-  useEffect,
-  useState
-} from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 import { useAuthContext } from './authContext'
 import { listenStaffCompanies, listenUserCompanies } from '@/firebase/companies'
 import { CategoryType } from '@/types/category'
@@ -42,38 +36,85 @@ export function UserShopProvider({ children }: { children: React.ReactNode }) {
     undefined
   )
 
-  const [shopSelected, setShopSelected] = useState('')
+  const [shopSelected, setShopSelected] = useState<string | null | undefined>()
   const [userOwnCompanies, setUserOwnCompanies] = useState<CompanyType[]>([])
   const [userStaffCompanies, setUserStaffCompanies] = useState<CompanyType[]>(
     []
   )
-  const [orders, setOrders] = useState<Order[]>([])
-  const [clients, setClients] = useState<Client[]>([])
-  const [items, setItems] = useState<Partial<ArticleType>[]>([])
-  const [categories, setCategories] = useState<CategoryType[]>([])
+  const [orders, setOrders] = useState<Order[] | null>()
+  const [clients, setClients] = useState<Client[] | null>()
+  const [items, setItems] = useState<Partial<ArticleType>[] | null>()
+  const [categories, setCategories] = useState<CategoryType[] | null>()
 
   useEffect(() => {
-    const bajaRent: { selectedCompany: CompanyType['id'] } = JSON.parse(
-      localStorage.getItem('baja-rent') || '{}'
-    )
-    setShopSelected(bajaRent.selectedCompany)
-  }, [])
+    if (userShops.length > 0) {
+      const currentShopId = (): string | null | undefined => {
+        const bajaRent: { selectedCompany?: CompanyType['id'] } = JSON.parse(
+          localStorage.getItem('baja-rent') || '{}'
+        )
+        const localStorageShopId = bajaRent.selectedCompany || ''
+        const ownCompany = userShops.find((s) => s?.userId === user?.id)
+        const localStorageShop = userShops.find(
+          (s) => s?.id === localStorageShopId
+        )
+        if (localStorageShop) {
+          return localStorageShopId
+        } else {
+          if (ownCompany) {
+            return ownCompany?.id
+          } else {
+            return null
+          }
+        }
+      }
+      const shopId = currentShopId()
+      setShopSelected(shopId)
+      handleChangeShop(shopId)
+    } else {
+      setShopSelected(null)
+    }
+    // const bajaRent: { selectedCompany: CompanyType['id'] } = JSON.parse(
+    //   localStorage.getItem('baja-rent') || '{}'
+    // )
+    // const localStorageShopId = bajaRent.selectedCompany || ''
+    // const ownCompany = userShops.find((s) => s?.userId === user?.id)
+    // if (localStorageShopId) {
+    //   const userShopExists = userShops.find((s) => s?.id === localStorageShopId)
+    //   if (userShopExists) {
+    //     setShopSelected(localStorageShopId)
+    //   } else {
+    //     if (ownCompany) {
+    //       setShopSelected(ownCompany?.id ?? '')
+    //     } else {
+    //       setShopSelected(null)
+    //     }
+    //   }
+    // } else {
+    //   if (ownCompany) {
+    //     setShopSelected(ownCompany?.id)
+    //   } else {
+    //     setShopSelected(null)
+    //   }
+    // }
+    // setShopSelected(currentShopId)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id, userShops])
 
   useEffect(() => {
     setUserShops([...userStaffCompanies, ...userOwnCompanies])
   }, [userStaffCompanies, userOwnCompanies])
 
-  useEffect(() => {
-    const shop = [...userStaffCompanies, ...userOwnCompanies].find(
-      (s) => s?.id === shopSelected
-    )
+  // useEffect(() => {
+  //   const shop = [...userStaffCompanies, ...userOwnCompanies].find(
+  //     (s) => s?.id === shopSelected
+  //   )
 
-    if (!shop) {
-      setShopSelected(userShops[0]?.id || '')
-    } else {
-      setUserShop(shop || null)
-    }
-  }, [userStaffCompanies, userOwnCompanies, userShops, shopSelected])
+  //   if (!shop) {
+  //     setShopSelected(userShops[0]?.id || '')
+  //   } else {
+  //     setUserShop(shop || null)
+  //   }
+  // }, [userStaffCompanies, userOwnCompanies, userShops, shopSelected])
 
   useEffect(() => {
     if (userId && userEmail) {
@@ -106,14 +147,14 @@ export function UserShopProvider({ children }: { children: React.ReactNode }) {
       })
   }, [orders, shopSelected, userId])
 
-  const handleChangeShop = (shopId: string) => {
-    setShopSelected(shopId)
+  const handleChangeShop = (shopId?: string | null) => {
     const shop = userShops.find((s) => s?.id === shopId)
-    setUserShop(shop)
     localStorage.setItem(
       'baja-rent',
-      JSON.stringify({ selectedCompany: shopId })
+      JSON.stringify({ selectedCompany: shopId || '' })
     )
+    setShopSelected(shopId)
+    setUserShop(shop || null)
   }
 
   const fullUserShop = userShop && {

@@ -19,6 +19,7 @@ export type OrderBase = {
   companyId: CompanyType['id']
   itemsAmount?: number
   paymentsAmount?: number
+  folio?: number
   // status?:
   //   | 'canceled'
   //   | 'pending'

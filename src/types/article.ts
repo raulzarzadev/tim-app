@@ -16,7 +16,7 @@ export type ArticleType = {
   rentStatus?: ItemRentStatus
   storeVisible?: boolean
   companyId?: string
-  tags?: {title:string}[]
+  tags?: { title: string }[]
 }
 
 export type CompanyItem = ArticleType

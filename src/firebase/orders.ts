@@ -2,7 +2,7 @@ import { storage } from './auth'
 import { FirebaseCRUD } from './firebase.CRUD'
 import { db } from './main'
 import { BaseType } from '@/types/base'
-import { arrayUnion, where } from 'firebase/firestore'
+import { arrayUnion, increment, where } from 'firebase/firestore'
 import { ArticleType } from '@/types/article'
 import { Order, OrderBase, Payment } from '@/types/order'
 import { v4 as uidGenerator } from 'uuid'
@@ -10,6 +10,7 @@ import { ItemSelected } from '@/context/useCompanyCashbox'
 import { getAndUpdateClientData } from './clients'
 import { Client } from '@/types/client'
 import { getAuth } from 'firebase/auth'
+import { getCurrentFolioShop, updateCompany } from './companies'
 
 /*
  * You should be able to copy all this file and just replace
@@ -26,15 +27,32 @@ type CreateItem = Partial<OrderBase>
 export type CreateOrder = Partial<OrderBase>
 export const itemCRUD = new FirebaseCRUD(COLLECTION_NAME, db, storage)
 
-export const setOrder = async (itemId: ItemType['id'], newItem: NewItem) =>
-  await itemCRUD.setItem(itemId || '', { ...newItem, id: itemId })
+export const setOrder = async (itemId: ItemType['id'], newItem: NewItem) => {
+  const currentFolio = (await getCurrentFolioShop(newItem.companyId || '')) || 0
+  await updateCompany(newItem.companyId || '', { currentFolio: increment(1) })
+    .then(console.log)
+    .catch(console.log)
+  await itemCRUD.setItem(itemId || '', {
+    ...newItem,
+    id: itemId,
+    folio: currentFolio + 1
+  })
+}
 
 export const createOrder = async (newItem: CreateItem) => {
+  const currentFolio = (await getCurrentFolioShop(newItem.companyId || '')) || 0
+  await updateCompany(newItem.companyId || '', { currentFolio: increment(1) })
+    .then(console.log)
+    .catch(console.log)
   const clientData = await getAndUpdateClientData(
     newItem.client as Client,
     newItem.companyId || ''
   )
-  return await itemCRUD.createItem({ ...newItem, client: clientData })
+  return await itemCRUD.createItem({
+    ...newItem,
+    client: clientData,
+    folio: currentFolio + 1
+  })
 }
 
 export const updateOrder = async (itemId: string, updates: NewItem) =>
