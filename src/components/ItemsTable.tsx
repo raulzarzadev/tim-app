@@ -57,7 +57,7 @@ const ItemsTable = ({
   return (
     <div className="max-w-md mx-auto w-full">
       <MyTable
-        modalTitle="Detalles de Item"
+        modalTitle="Detalles de artículo"
         modalChildren={(value) => (
           <>
             <ArticleDetails article={value} />

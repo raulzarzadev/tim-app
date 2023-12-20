@@ -2,7 +2,6 @@ import { Order } from '@/types/order'
 import ShippingLink from './ShippingLink'
 import { Typography } from '@mui/material'
 import { dateFormat, fromNow } from '@/lib/utils-date'
-import asDate from '@/lib/asDate'
 import StaffSpan from './StaffSpan'
 import CurrencySpan from './CurrencySpan'
 

@@ -23,7 +23,7 @@ const ShopDashboard = ({ shop }: { shop: Partial<CompanyType> }) => {
             )
           },
           {
-            label: 'Unidades',
+            label: 'Articulos',
             content: (
               <ShopItemsTabs
                 showItemActions

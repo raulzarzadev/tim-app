@@ -53,9 +53,30 @@ const ShopItemActions = ({
   return (
     <>
       <div className="flex justify-evenly my-4">
+        <ModalConfirm
+          disabled={loading}
+          label="Eliminar"
+          color="error"
+          handleConfirm={() => {
+            return handleDeleteItem(itemId)
+          }}
+        />
+        <ModalConfirm
+          label="Editar"
+          openIcon="edit"
+          disabled={loading}
+          modalTitle="Editar artículo"
+        >
+          <ShopItemForm
+            item={item}
+            shopCategories={shopCategories || []}
+            onSubmit={handleUpdateItem}
+          />
+        </ModalConfirm>
         {!!item?.storeVisible ? (
           <Button
             disabled={loading}
+            variant="contained"
             onClick={toggleStoreVisible}
             endIcon={<AppIcon icon="eyeClose" />}
           >
@@ -70,23 +91,6 @@ const ShopItemActions = ({
             {itemDonNotHaveImage && ' *'} Mostrar en tienda
           </Button>
         )}
-
-        <ModalConfirm label="Editar" openIcon="edit" disabled={loading}>
-          <ShopItemForm
-            item={item}
-            shopCategories={shopCategories || []}
-            onSubmit={handleUpdateItem}
-          />
-        </ModalConfirm>
-
-        <ModalConfirm
-          disabled={loading}
-          label="Eliminar"
-          color="error"
-          handleConfirm={() => {
-            return handleDeleteItem(itemId)
-          }}
-        />
       </div>
       <div>
         {itemDonNotHaveImage && (

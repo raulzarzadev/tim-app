@@ -1,4 +1,4 @@
-import { Box, Chip, Typography } from '@mui/material'
+import { Avatar, Box, Chip, Typography } from '@mui/material'
 import PricesList from './PricesList'
 import { ItemOrder } from '@/context/userCompaniesContext2'
 import { ArticleType } from '@/types/article'
@@ -50,27 +50,36 @@ export const ArticleInfo = ({
   article?: ItemOrder | ArticleType
 }) => {
   return (
-    <Box className="max-w-md mx-auto text-center">
-      <Typography variant="h6" color="text.primary">
-        {article?.status}
-        {article?.category || ''}
-      </Typography>
-      <Typography
-        variant="h5"
-        component="div"
-        className="items-center flex justify-center mb-2"
-      >
-        {article?.serialNumber}
-        <Typography component={'span'} color="text.secondary">
-          {article?.name}
-        </Typography>{' '}
-      </Typography>
-      <ItemRentStatus itemId={article?.id || ''} />
-      <div className="mt-4">
-        <Typography color="text.secondary">{article?.color}</Typography>
-        {article?.tags?.map((t) => (
-          <Chip key={t.title} label={t.title} />
-        ))}
+    <Box className="max-w-md mx-auto text-center flex place-items-center">
+      <div className="text-center w-1/2 ">
+        <Typography variant="h6" color="text.primary">
+          {article?.status}
+          {article?.category || ''}
+        </Typography>
+        <Typography
+          variant="h5"
+          component="div"
+          className="items-center flex justify-center mb-2"
+        >
+          {article?.serialNumber}
+          <Typography component={'span'} color="text.secondary">
+            {article?.name}
+          </Typography>{' '}
+        </Typography>
+        <ItemRentStatus itemId={article?.id || ''} />
+        <div className="mt-4">
+          <Typography color="text.secondary">{article?.color}</Typography>
+          {article?.tags?.map((t) => (
+            <Chip key={t.title} label={t.title} />
+          ))}
+        </div>
+      </div>
+      <div className="flex justify-center w-full">
+        <Avatar
+          variant="rounded"
+          sx={{ width: '100%', height: '100%' }}
+          src={article?.image}
+        />
       </div>
     </Box>
   )

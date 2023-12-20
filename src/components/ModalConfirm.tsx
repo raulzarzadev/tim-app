@@ -19,6 +19,7 @@ const ModalConfirm = ({
   fullWidth,
   disabledAccept,
   justIcon,
+  openVariant = 'outlined',
   ...rest
 }: {
   handleConfirm?: () => void | Promise<any>
@@ -34,6 +35,7 @@ const ModalConfirm = ({
   fullWidth?: boolean
   disabledAccept?: boolean
   justIcon?: boolean
+  openVariant?: 'contained' | 'outlined'
 }) => {
   const modal = useModal({ title: 'confirm' })
   const [loading, setLoading] = useState(false)
@@ -59,12 +61,11 @@ const ModalConfirm = ({
           fullWidth={fullWidth}
           onClick={(e) => {
             e.preventDefault()
-
             modal.onOpen()
           }}
           disabled={disabled}
           aria-label="button-modal-save"
-          variant="outlined"
+          variant={openVariant}
           color={color}
           endIcon={openIcon ? <AppIcon icon={openIcon} /> : undefined}
           {...rest}

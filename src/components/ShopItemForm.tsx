@@ -15,6 +15,8 @@ import TagsInput from './TagsInput'
 import { CategoryType } from '@/types/category'
 import PricesForm from './PricesForm'
 import PreviewImage from './PreviewImage'
+import InputUploadFile from './InputUploadFile'
+import { updateItem } from '@/firebase/items'
 
 const ShopItemForm = ({
   item: article,
@@ -51,7 +53,7 @@ const ShopItemForm = ({
     reset(data)
   }
   const disableSave = isSubmitting || !isDirty
-
+  console.log({ article })
   return (
     <form className="grid gap-4">
       <Select
@@ -68,16 +70,26 @@ const ShopItemForm = ({
       {article?.image && (
         <PreviewImage src={article?.image || ''} alt="item image description" />
       )}
-      {/* {shopId && article?.id && (
+      {article?.id ? (
         <InputUploadFile
           label="Imagen"
-          setURL={(url) => {
-            updateArticle(shopId || '', article?.id || '', {
+          setURL={async (url) => {
+            await updateItem(article?.id || '', {
               image: url
             })
+              .then(console.log)
+              .catch(console.error)
           }}
         />
-      )} */}
+      ) : (
+        <InputUploadFile
+          label="Imagen"
+          setURL={async (url) => {
+            setValue('image', url, { shouldDirty: true })
+          }}
+        />
+      )}
+
       <TextField
         id="outlined-basic"
         label="No. de serie"

@@ -21,8 +21,8 @@ const ShopItemsActions = ({
       <div>
         <div className="flex justify-evenly my-4">
           <ModalConfirm
-            label="Articulo"
-            modalTitle="Crear articulo"
+            label="Artículo"
+            modalTitle="Crear artícluo"
             openIcon="add"
           >
             <ShopItemForm

@@ -11,7 +11,8 @@ const ModalOrderForm = ({
   handleSave,
   closeOnSave = true,
   order,
-  shippingEnabled
+  shippingEnabled,
+  disabled
 }: {
   label: string
   icon?: IconName
@@ -19,15 +20,17 @@ const ModalOrderForm = ({
   closeOnSave?: boolean
   order?: Partial<Order>
   shippingEnabled?: boolean
+  disabled?: boolean
 }) => {
   const modal = useModal({ title: 'Nueva orden' })
   return (
-    <div className="my-4">
+    <div className="">
       <Button
         fullWidth
         onClick={modal.onOpen}
         endIcon={icon ? <AppIcon icon={icon} /> : undefined}
         variant="outlined"
+        disabled={disabled}
       >
         {label}
       </Button>

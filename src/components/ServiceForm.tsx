@@ -26,7 +26,8 @@ const ServiceForm = ({
   item,
   setService,
   service,
-  orderId = ''
+  orderId = '',
+  disabled
 }: {
   itemId?: string
   companyId: string
@@ -34,6 +35,7 @@ const ServiceForm = ({
   setService?: (service: Partial<Service>) => void | Promise<any>
   service?: Service
   orderId?: string
+  disabled?: boolean
 }) => {
   const { register, handleSubmit, setValue, watch } = useForm<Service>({
     defaultValues: { itemId: itemId || '', companyId, orderId, ...service }
@@ -64,6 +66,7 @@ const ServiceForm = ({
               }`
             : ''
         }`}
+        disabled={disabled}
       >
         {!!orderId && !itemId && (
           <Typography variant="h5" className="my-4 text-center">

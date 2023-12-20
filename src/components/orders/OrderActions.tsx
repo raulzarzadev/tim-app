@@ -5,12 +5,12 @@ import {
   addOrderReport,
   changeItem,
   createOrder,
+  deleteOrder,
   finishOrderRent,
   onPayOrder,
   startOrderRent,
   updateOrder
 } from '@/firebase/orders'
-
 import { useState } from 'react'
 import { Order, Payment } from '@/types/order'
 import ModalPayment from '../ModalPayment3'
@@ -161,18 +161,42 @@ const OrderActions = ({
     }
   }
 
+  const handleDeleteOrder = async () => {
+    await deleteOrder(orderId)
+      .then(console.log)
+      .catch(console.error)
+      .finally(() => {
+        setDisableAll(true)
+        onAction?.('edit')
+      })
+    // try {
+    //   setLoading(true)
+    //   const res = await deleteOrder(orderId)
+    //   console.log(res)
+    //   onAction?.('edit')
+    // } catch (e) {
+    //   onAction?.('error')
+    //   console.error(e)
+    // } finally {
+    //   setLoading(false)
+    // }
+  }
+
   const status = orderStatus(order)
   const disabledStartRent =
     status === 'expired' || status === 'taken' || status === 'finished'
+
+  const [disableAll, setDisableAll] = useState(false)
   return (
     <div>
       <Typography variant="h5" className="mt-4">
         Acciones de orden
       </Typography>
-      <div className="grid grid-cols-2 gap-2 my-2">
+      <div className="grid grid-cols-2 gap-2 my-2 place-content-center items-center">
         {status === 'expired' && (
-          <div className="col-span-2">
+          <div className="col-span-2 ">
             <ModalConfirm
+              disabled={disableAll}
               modalTitle="Renovar orden"
               fullWidth
               handleConfirm={() => {
@@ -189,14 +213,32 @@ const OrderActions = ({
         )}
         <div className="col-span-2">
           <ModalPayment
+            disabled={disableAll}
             amount={totalOrder}
             setPayment={handlePayOrder}
             fullWidth
           />
         </div>
+        <Button
+          variant="outlined"
+          disabled={disableAll || loading || !itemsInUse}
+          onClick={(e) => {
+            e.preventDefault()
+            handleFinishRent()
+          }}
+          fullWidth
+        >
+          Finalizar renta
+        </Button>
+        <ModalStartRent
+          disabled={disableAll || disabledStartRent}
+          orderId={orderId}
+          handleStartRent={handleStartRent}
+        />
 
         {/* BUTTONS AREA */}
         <ServiceForm
+          disabled={disableAll}
           companyId={currentCompany?.id || ''}
           orderId={orderId}
           setService={async (s) => {
@@ -229,28 +271,14 @@ const OrderActions = ({
           assignedAt={order?.shipping?.date}
           assignedTo={order?.shipping?.assignedToEmail}
         />
-        <ModalStartRent
-          disabled={disabledStartRent}
-          orderId={orderId}
-          handleStartRent={handleStartRent}
-        />
-        <Button
-          variant="outlined"
-          disabled={loading || !itemsInUse}
-          onClick={(e) => {
-            e.preventDefault()
-            handleFinishRent()
-          }}
-          fullWidth
-        >
-          Finalizar renta
-        </Button>
+
         {status === 'canceled' ? (
           <ModalConfirm
             fullWidth
             color="primary"
             label="Restaurar orden"
             handleConfirm={handleResumeOrder}
+            disabled={disableAll}
           >
             <Typography className="text-center">
               ¿Desea restaurar esta orden?
@@ -261,6 +289,7 @@ const OrderActions = ({
             fullWidth
             label="Cancelar orden"
             color="error"
+            disabled={disableAll}
             handleConfirm={handleCancelRent}
           >
             <Typography className="text-center">
@@ -273,9 +302,39 @@ const OrderActions = ({
           label="Editar orden"
           icon="edit"
           order={order}
+          disabled={disableAll}
           handleSave={handleSaveOrder}
           shippingEnabled={currentCompany?.shippingEnabled}
         />
+        <ModalConfirm
+          fullWidth
+          color="error"
+          label={`${disableAll ? 'Orden borrada' : 'Eliminar orden'}`}
+          disabled={disableAll}
+          handleConfirm={handleDeleteOrder}
+          acceptColor="error"
+          acceptIcon="trash"
+          acceptLabel="Eliminar"
+          openIcon="trash"
+        >
+          <Typography className="text-center" variant="h6">
+            Eliminar orden
+          </Typography>
+          <p className="text-center">
+            <Typography className="text-center" variant="caption">
+              Elimina esta orden de forma permanente, esta acción no es
+              reversible.
+            </Typography>
+          </p>
+          <p>
+            <Typography className="text-center">
+              {/* Eliminar esta orden  */}
+            </Typography>
+            <Typography className="text-center">
+              {/* Este folio desaparecera de la lista de ordenes. Es preferible que la orden sea cancelada */}
+            </Typography>
+          </p>
+        </ModalConfirm>
       </div>
     </div>
   )
@@ -337,6 +396,7 @@ const ModalStartRent = ({
         disabledAccept={
           (confirmClientData ?? disabledConfirm) || someItemAlreadyInUse
         }
+        openVariant="contained"
       >
         {/* <SelectCompanyItem
           itemsSelected={items?.map((i) => i.itemId || '') || []}
