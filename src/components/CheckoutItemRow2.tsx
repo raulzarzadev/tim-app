@@ -45,11 +45,14 @@ export const CheckoutItemRow = ({
       spacing={1}
       alignItems={'center'}
     >
-      <Grid2 xs={2}>{item?.category}</Grid2>
+      {/* <Grid2 xs={2}>{item?.category}</Grid2>
       <Grid2 xs={2}>
         <ModalItemDetails itemId={item?.id || ''} />
+      </Grid2> */}
+      <Grid2 xs={3}>
+        <p className="whitespace-nowrap truncate">{`${item?.category} ${item.serialNumber}`}</p>
       </Grid2>
-      <Grid2 xs={6} container wrap={'nowrap'} overflow={'auto'} padding={'8px'}>
+      <Grid2 xs={7} container wrap={'nowrap'} overflow={'auto'} padding={'8px'}>
         {item.prices?.map((p, i) => (
           <Grid2 key={i} xs={'auto'}>
             <button
