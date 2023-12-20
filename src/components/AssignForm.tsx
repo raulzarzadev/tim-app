@@ -12,6 +12,7 @@ import { orderStatus } from '@/lib/orderStatus'
 import { Timestamp } from 'firebase/firestore'
 import { useState } from 'react'
 import dictionary from '@/CONSTS/dictionary'
+import { useUserShopContext } from '@/context/userShopContext'
 
 const AssignForm = ({
   assignTo,
@@ -75,8 +76,9 @@ const DeliveryStaffList = ({
   assignedTo?: string
   assignedAt?: Order['shipping']['date']
 }) => {
-  const { currentCompany, orders } = useUserCompaniesContext()
+  const { userShop: currentCompany } = useUserShopContext()
   const staff = currentCompany?.staff
+  const orders = currentCompany?.orders as Order[]
   const staffOrders =
     staff?.map((staff) => {
       const staffOrders = orders

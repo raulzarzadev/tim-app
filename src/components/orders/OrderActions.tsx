@@ -27,6 +27,8 @@ import { orderStatus } from '@/lib/orderStatus'
 import OrderDetails from '../OrderDetails'
 import { rentFinishAt } from '@/context/lib'
 import { itemStatus } from '@/lib/itemStatus'
+import { useUserShopContext } from '@/context/userShopContext'
+import { CompanyType } from '@/types/company'
 
 const OrderActions = ({
   orderId,
@@ -35,10 +37,16 @@ const OrderActions = ({
   orderId: string
   onAction?: (action: 'start' | 'finish' | 'edit' | 'error' | 'renew') => void
 }) => {
-  const { orders, currentCompany } = useUserCompaniesContext()
-  const order = orders?.find((o) => o?.id === orderId)
+  // const { orders, currentCompany } = useUserCompaniesContext()
+  const { userShop } = useUserShopContext()
+  const shopId = userShop?.id || ''
+  const shippingEnabled = userShop?.shippingEnabled || false
+  const order = userShop?.orders?.find((o) => o?.id === orderId)
   const itemsInUse = order?.items?.some((i) => i.rentStatus === 'taken')
-  const totalOrder = calculateOrderTotal({ company: currentCompany, order })
+  const totalOrder = calculateOrderTotal({
+    company: userShop as CompanyType,
+    order: order as Order
+  })
   const [loading, setLoading] = useState(false)
   const handleStartRent = async () => {
     try {
@@ -141,7 +149,7 @@ const OrderActions = ({
       //* 4. start new rent
       const resCreateRent = await createOrder({
         changes: order?.changes || [],
-        companyId: currentCompany?.id || '',
+        companyId: userShop?.id || '',
         items: updatedItems || [],
         payments: [],
         shipping: {
@@ -239,7 +247,7 @@ const OrderActions = ({
         {/* BUTTONS AREA */}
         <ServiceForm
           disabled={disableAll}
-          companyId={currentCompany?.id || ''}
+          companyId={shopId || ''}
           orderId={orderId}
           setService={async (s) => {
             try {
@@ -258,7 +266,7 @@ const OrderActions = ({
         />
 
         <AssignForm
-          disabled={!currentCompany?.shippingEnabled}
+          disabled={!shippingEnabled}
           handleAssign={async (email, date) => {
             updateOrder(orderId, {
               //@ts-ignore
@@ -304,7 +312,7 @@ const OrderActions = ({
           order={order}
           disabled={disableAll}
           handleSave={handleSaveOrder}
-          shippingEnabled={currentCompany?.shippingEnabled}
+          shippingEnabled={shippingEnabled}
         />
         <ModalConfirm
           fullWidth
