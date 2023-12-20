@@ -18,7 +18,10 @@ const ItemsStatusTable = ({ items }: { items: ItemOrder[] }) => {
       <Grid2 xs={4} className="font-bold truncate">
         Status
       </Grid2>
-      <ErrorBoundary fallback={<p>Something went wrong</p>}>
+      <ErrorBoundary
+        componentName="ItemsStatusTable2"
+        fallback={<p>Something went wrong</p>}
+      >
         {items?.map((item, i) => (
           <ItemInUseRow key={i} item={item} />
         ))}

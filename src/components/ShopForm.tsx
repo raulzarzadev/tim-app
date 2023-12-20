@@ -1,4 +1,5 @@
 'use client'
+
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { TextField, Typography } from '@mui/material'
 import ModalConfirm from './ModalConfirm'
@@ -9,16 +10,19 @@ import useWindowSize from '@/hooks/useWindowSize'
 import InputUploadFile from './InputUploadFile'
 import PreviewImage from './PreviewImage'
 import CheckboxLabel from './Checkbox'
+import { useEffect, useState } from 'react'
+import { getCompany } from '@/firebase/companies'
 
 interface IFormInput {
   name: string
 }
 
 const ShopForm = ({
-  company,
+  shopId,
   onSubmit
 }: {
-  company?: Partial<CompanyType>
+  shopId?: Partial<CompanyType>['id']
+  // </CompanyType>company?: Partial<CompanyType>
   onSubmit?: (data: Partial<CompanyType>) => Promise<void> | void
 }) => {
   const {
@@ -29,14 +33,20 @@ const ShopForm = ({
     setValue,
     reset,
     formState: { isDirty, isSubmitting }
-  } = useForm({
-    defaultValues: {
-      phone: '',
-      name: '',
-      contract: '',
-      ...company
-    } as Partial<CompanyType>
-  })
+  } = useForm()
+
+  const [shop, setShop] = useState<Partial<CompanyType>>()
+  useEffect(() => {
+    if (shopId) {
+      getCompany(shopId || '')
+        .then((shop) => {
+          setShop(shop)
+          reset(shop)
+        })
+        .catch(console.error)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [shopId])
 
   const formValues = watch()
   const { windowWidth } = useWindowSize()
@@ -137,12 +147,11 @@ const ShopForm = ({
           <ModalConfirm
             handleConfirm={handleSubmit(_onSubmit)}
             disabled={disabled}
-            label={`${company?.id ? 'Editar' : 'Guardar'} empresa`}
-            acceptLabel={`${company?.id ? 'Editar' : 'Guardar'}`}
+            label={`${shop?.id ? 'Editar' : 'Guardar'} empresa`}
+            acceptLabel={`${shop?.id ? 'Editar' : 'Guardar'}`}
           >
             <Typography>
-              Se {`${company?.id ? 'editara' : 'creara'} `} la siguiente
-              empresa:{' '}
+              Se {`${shop?.id ? 'editara' : 'creara'} `} la siguiente empresa:{' '}
             </Typography>
             <Typography>{formValues.name}</Typography>
           </ModalConfirm>

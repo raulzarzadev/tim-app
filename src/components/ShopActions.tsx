@@ -26,11 +26,10 @@ const ShopActions = ({
   }
 
   const handleUpdate = async (data: Partial<CompanyType>) => {
-    await updateCompany(shopId || '', data)
+    return await updateCompany(shopId || '', data)
       .then(console.log)
       .catch(console.error)
   }
-
   return (
     <div>
       <div className="flex w-full justify-evenly mt-10">
@@ -41,6 +40,8 @@ const ShopActions = ({
           color="error"
           handleConfirm={() => {
             return handleDelete(shopId || '')
+              .then(console.log)
+              .catch(console.error)
           }}
           acceptColor="error"
           acceptLabel="Eliminar"
@@ -65,12 +66,15 @@ const ShopActions = ({
           openIcon="edit"
           modalTitle="Editar tienda"
         >
-          {/* <ShopForm
-            company={shop}
-            onSubmit={(data) => {
-              handleUpdate(data)
+          <ShopForm
+            //company={shop}
+            shopId={shopId}
+            onSubmit={async (data) => {
+              return await handleUpdate(data)
+                .then(console.log)
+                .catch(console.error)
             }}
-          /> */}
+          />
         </ModalConfirm>
       </div>
       {showItemsActions && (
