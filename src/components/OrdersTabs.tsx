@@ -40,6 +40,7 @@ const OrdersTabs = ({
   })
 
   const handleSearch = (search: string) => {
+    if (!search) return setFiltered(ordersWithFinishRentAt || [])
     const r = ordersWithFinishRentAt.filter((o) =>
       searchValueInObject(o, search)
     )
