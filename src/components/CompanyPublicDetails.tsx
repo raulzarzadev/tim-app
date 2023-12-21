@@ -1,8 +1,6 @@
-import { Avatar, IconButton, Typography } from '@mui/material'
+import { Avatar, Typography } from '@mui/material'
 import { ContactsList } from './ModalContactClient'
 import { CompanyType } from '@/types/company'
-
-import UserShops from './ShopDashboard/UserShops'
 
 const CompanyPublicDetails = ({
   company
@@ -21,7 +19,6 @@ const CompanyPublicDetails = ({
           className="absolute -top-16 left-[50%] -translate-x-1/2  z-0"
           sx={{ width: 96, height: 96 }}
         ></Avatar>
-        <UserShops />
       </Typography>
       <Typography>{company?.description}</Typography>
       <ContactsList phone={company?.phone} />

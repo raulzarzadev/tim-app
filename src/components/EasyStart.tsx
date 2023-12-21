@@ -85,9 +85,9 @@ const CreateItemEasy = () => {
     createItem(data).then(console.log).catch(console.error)
   }
   return (
-    <div>
+    <div className="p-1">
       <Typography variant="h6" className="text-center">
-        2. Crea una artículo para rentar
+        2. Crea un artículo para rentar
       </Typography>
       <ArticleFormShort onSaveArticle={onSaveArticle} />
     </div>
