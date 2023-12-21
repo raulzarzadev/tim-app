@@ -7,6 +7,7 @@ export type UserBase = {
   image?: string
   rol: UserRol
   phone: string
+  super_user?: boolean
 }
 
 export type UserType = BaseType & UserBase

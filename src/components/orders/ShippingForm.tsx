@@ -6,7 +6,6 @@ import { inputDateFormat } from '@/lib/utils-date'
 import AssignForm from '../AssignForm'
 import forceAsDate from '@/lib/forceAsDate'
 import SaveButton from '../ButtonSave'
-import { isBefore } from 'date-fns'
 
 const ShippingForm = ({
   shipping,
@@ -45,7 +44,6 @@ const ShippingForm = ({
     _setShipping((shipping) => ({ ...shipping, [field]: value }))
     setShipping?.((shipping) => ({ ...shipping, [field]: value }))
   }
-  console.log(shipping?.date)
 
   return (
     <Box className="flex flex-col items-center my-4">

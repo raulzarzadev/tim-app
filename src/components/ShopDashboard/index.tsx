@@ -14,7 +14,7 @@ const ShopDashboard = ({ shop }: { shop: Partial<CompanyType> }) => {
         tabs={[
           //  { label: 'Clientes ', content: <></> }, //CompanyPayments
           {
-            label: 'Clientes',
+            label: `Clientes ${shop?.clients?.length || 0}`,
             content: (
               <ShopClients
                 clients={shop?.clients || []}
@@ -23,7 +23,7 @@ const ShopDashboard = ({ shop }: { shop: Partial<CompanyType> }) => {
             )
           },
           {
-            label: 'Articulos',
+            label: `Artículos ${shop?.items?.length || 0}`,
             content: (
               <ShopItemsTabs
                 showItemActions
@@ -34,7 +34,7 @@ const ShopDashboard = ({ shop }: { shop: Partial<CompanyType> }) => {
               />
             )
           },
-          { label: 'Ordenes', content: <ShopOrders shop={shop} /> },
+          { label: ``, content: <ShopOrders shop={shop} /> },
           { label: 'Staff', content: <ShopStaff staff={shop?.staff || []} /> }
           // { label: 'Cortes', content: <CompanyBalances /> },
           // { label: 'Tienda', content: <CompanyStore /> }

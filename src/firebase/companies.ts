@@ -98,3 +98,7 @@ export const getCurrentFolioShop = async (companyId: string) => {
   const company = await getCompany(companyId)
   return company?.currentFolio || 0
 }
+
+export const listenCompanies = async (cb: CallableFunction) => {
+  await itemCRUD.listenItems([], cb)
+}

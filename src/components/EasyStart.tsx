@@ -1,9 +1,8 @@
 'use client'
-import { Button, TextField, Typography } from '@mui/material'
+import { Box, Button, Skeleton, TextField, Typography } from '@mui/material'
 import PhoneInput from './PhoneInput'
 import { useForm } from 'react-hook-form'
 import RadioGroup from './RadioGroup'
-import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import { createShop } from '@/firebase/companies'
 import { CompanyType } from '@/types/company'
 import AppIcon from './AppIcon'
@@ -13,9 +12,13 @@ import ArticleFormShort from './ArticleFormShort'
 import { createItem } from '@/firebase/items'
 import ItemsTable from './ItemsTable'
 import Link from 'next/link'
+import { useUserShopContext } from '@/context/userShopContext'
+import Modal from './Modal'
+import useModal from '@/hooks/useModal'
 
 const EasyStart = () => {
-  const { userShop } = useUserCompaniesContext()
+  const { userShop } = useUserShopContext()
+  if (userShop === undefined) return <EasyStartEskeleton />
   return (
     <div className="grid gap-4">
       {userShop === null && <CreateShop />}
@@ -75,7 +78,7 @@ const ItemsAlreadyInRent = () => {
 }
 
 const CreateItemEasy = () => {
-  const { userShop } = useUserCompaniesContext()
+  const { userShop } = useUserShopContext()
   const onSaveArticle = async (data: Partial<ArticleType>) => {
     data.companyId = userShop?.id
     data.storeVisible = true
@@ -84,7 +87,7 @@ const CreateItemEasy = () => {
   return (
     <div>
       <Typography variant="h6" className="text-center">
-        2. Elige que articulo quieres rentar
+        2. Crea una artículo para rentar
       </Typography>
       <ArticleFormShort onSaveArticle={onSaveArticle} />
     </div>
@@ -108,7 +111,7 @@ const CreateShop = () => {
 }
 
 const UserShopCreated = () => {
-  const { userShop } = useUserCompaniesContext()
+  const { userShop } = useUserShopContext()
   return (
     <div>
       <Typography className="text-center items-center flex justify-center">
@@ -141,9 +144,10 @@ const ShopShortForm = ({
     return await onSaveShop?.(data)?.then(console.log).catch(console.error)
   }
   const values = watch()
+  const modal = useModal({ title: 'Crea tu tienda' })
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="grid gap-2">
-      <div>
+    <div>
+      <div className="grid gap-3">
         <Typography variant="h6" className="text-center">
           1. Primero crea una tienda{' '}
         </Typography>
@@ -152,41 +156,61 @@ const ShopShortForm = ({
             Solo necesitas un nombre y un metodo de contacto
           </Typography>
         </div>
+        <Button variant="contained" onClick={modal.onOpen}>
+          Crear tienda
+        </Button>
       </div>
+      <Modal {...modal}>
+        <form onSubmit={handleSubmit(onSubmit)} className="grid gap-2">
+          <TextField fullWidth {...register('name')} label="Nombra tu tienda" />
+          <RadioGroup
+            label="Metodo de contacto"
+            options={[
+              {
+                label: 'WhatsApp',
+                value: 'whatsapp'
+              },
+              {
+                label: 'Dirección',
+                value: 'address'
+              }
+            ]}
+            value={values?.principalContact}
+            setValue={(value) => {
+              setValue('principalContact', value)
+              //setContact(value)
+            }}
+          />
+          {values?.principalContact === 'whatsapp' && (
+            <PhoneInput
+              {...register('phone')}
+              label="Telefono de contacto"
+              control={control}
+            />
+          )}
+          {values?.principalContact === 'address' && (
+            <TextField fullWidth {...register('address')} label="Dirección" />
+          )}
+          <Button variant="contained" fullWidth type="submit">
+            Guardar
+          </Button>
+        </form>
+      </Modal>
+    </div>
+  )
+}
 
-      <TextField fullWidth {...register('name')} label="Nombra tu tienda" />
-      <RadioGroup
-        label="Metodo de contacto"
-        options={[
-          {
-            label: 'WhatsApp',
-            value: 'whatsapp'
-          },
-          {
-            label: 'Dirección',
-            value: 'address'
-          }
-        ]}
-        value={values?.principalContact}
-        setValue={(value) => {
-          setValue('principalContact', value)
-          //setContact(value)
-        }}
+const EasyStartEskeleton = () => {
+  return (
+    <Box>
+      <Skeleton
+        variant="text"
+        height={50}
+        width={'50%'}
+        className="mt-auto my-4"
       />
-      {values?.principalContact === 'whatsapp' && (
-        <PhoneInput
-          {...register('phone')}
-          label="Telefono de contacto"
-          control={control}
-        />
-      )}
-      {values?.principalContact === 'address' && (
-        <TextField fullWidth {...register('address')} label="Dirección" />
-      )}
-      <Button variant="contained" fullWidth type="submit">
-        Guardar
-      </Button>
-    </form>
+      <Skeleton variant="rounded" height={50} width={'100%'} />
+    </Box>
   )
 }
 

@@ -59,13 +59,6 @@ function BasicTabs({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // React.useEffect(() => {
-  //   const params = new URLSearchParams()
-  //   params.set(tabName, JSON.stringify(value))
-  //   router.replace(pathname + '?' + params, { scroll: false })
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [value])
-
   const createQueryString = React.useCallback(
     (name: string, value: string) => {
       const params = new URLSearchParams(searchParams)

@@ -3,7 +3,11 @@
 import { CompanyType } from '@/types/company'
 import { createContext, useContext, useEffect, useState } from 'react'
 import { useAuthContext } from './authContext'
-import { listenStaffCompanies, listenUserCompanies } from '@/firebase/companies'
+import {
+  listenCompanies,
+  listenStaffCompanies,
+  listenUserCompanies
+} from '@/firebase/companies'
 import { CategoryType } from '@/types/category'
 import { ArticleType } from '@/types/article'
 import { Client } from '@/types/client'
@@ -73,48 +77,26 @@ export function UserShopProvider({ children }: { children: React.ReactNode }) {
     } else {
       setShopSelected(null)
     }
-    // const bajaRent: { selectedCompany: CompanyType['id'] } = JSON.parse(
-    //   localStorage.getItem('baja-rent') || '{}'
-    // )
-    // const localStorageShopId = bajaRent.selectedCompany || ''
-    // const ownCompany = userShops.find((s) => s?.userId === user?.id)
-    // if (localStorageShopId) {
-    //   const userShopExists = userShops.find((s) => s?.id === localStorageShopId)
-    //   if (userShopExists) {
-    //     setShopSelected(localStorageShopId)
-    //   } else {
-    //     if (ownCompany) {
-    //       setShopSelected(ownCompany?.id ?? '')
-    //     } else {
-    //       setShopSelected(null)
-    //     }
-    //   }
-    // } else {
-    //   if (ownCompany) {
-    //     setShopSelected(ownCompany?.id)
-    //   } else {
-    //     setShopSelected(null)
-    //   }
-    // }
-    // setShopSelected(currentShopId)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.id, userShops])
+  }, [userId, userShops])
+
+  const [appShops, setAppShops] = useState<CompanyType[]>([])
+  useEffect(() => {
+    if (user?.super_user) {
+      listenCompanies(setAppShops)
+    }
+  }, [user?.super_user])
 
   useEffect(() => {
-    setUserShops([...userStaffCompanies, ...userOwnCompanies])
-  }, [userStaffCompanies, userOwnCompanies])
+    const shops = [...userStaffCompanies, ...userOwnCompanies, ...appShops]
+    const uniqueShopsWithoutDuplicates = shops
+      .filter(
+        (shop, index, self) => self.findIndex((s) => s.id === shop.id) === index
+      )
+      .map((shop) => ({ ...shop }))
 
-  // useEffect(() => {
-  //   const shop = [...userStaffCompanies, ...userOwnCompanies].find(
-  //     (s) => s?.id === shopSelected
-  //   )
-
-  //   if (!shop) {
-  //     setShopSelected(userShops[0]?.id || '')
-  //   } else {
-  //     setUserShop(shop || null)
-  //   }
-  // }, [userStaffCompanies, userOwnCompanies, userShops, shopSelected])
+    setUserShops(uniqueShopsWithoutDuplicates)
+  }, [userStaffCompanies, userOwnCompanies, appShops])
 
   useEffect(() => {
     if (userId && userEmail) {

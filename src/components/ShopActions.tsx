@@ -21,6 +21,7 @@ const ShopActions = ({
     await deleteCompanyItems(companyId).then(console.log).catch(console.error)
     await deleteCompany(companyId).then(console.log).catch(console.error)
     await deleteCompanyOrders(companyId).then(console.log).catch(console.error)
+    localStorage.removeItem('baja-rent')
     window.location.reload()
     return true
   }
@@ -51,7 +52,7 @@ const ShopActions = ({
               ¿Esta seguro que desea eliminar esta tienda?
             </Typography>
             <Typography className="text-center " variant="caption">
-              Articulos, categorias y ordenes tambien se eliminaran
+              Artículos, categorias y ordenes tambien se eliminaran
             </Typography>
             <div>
               <Typography className="text-center " variant="caption">
