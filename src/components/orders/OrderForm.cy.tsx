@@ -35,6 +35,22 @@ const testCompany: CompanyType = {
       status: 'active'
     }
   ],
+  items: [
+    {
+      id: '1',
+      name: 'test name 1',
+      category: 'test category',
+      serialNumber: '1',
+      status: 'active'
+    },
+    {
+      id: '2',
+      name: 'test name 2',
+      category: 'test category',
+      serialNumber: '2',
+      status: 'active'
+    }
+  ],
   categories: [
     {
       name: 'test category',

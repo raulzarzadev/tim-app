@@ -61,6 +61,10 @@ const ShopOrdersTable = ({
                 )
               },
               {
+                label: 'Folio',
+                key: 'folio'
+              },
+              {
                 label: 'Adeudo',
                 key: 'totalOrder',
                 format: (value) => (

@@ -51,6 +51,7 @@ SelectItemsProps) => {
     companyItems?.filter(
       (i) => i.rentStatus === 'taken' || i.rentStatus === 'expired'
     ) || []
+
   const itemsDisabled = itemsTaken.map((i) => i.id)
   const companyCategories = currentCompany?.categories
 
