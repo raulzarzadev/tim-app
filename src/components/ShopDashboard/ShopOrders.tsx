@@ -10,7 +10,7 @@ const ShopOrders = ({ shop }: { shop: Partial<CompanyType> }) => {
 
   return (
     <div>
-      <div className="flex justify-center">
+      <div className="flex justify-center my-4">
         <ModalOrderForm
           shippingEnabled={shippingEnabled}
           label="Nueva orden"
