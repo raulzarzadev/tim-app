@@ -20,7 +20,7 @@ const EasyStart = () => {
   const { userShop } = useUserShopContext()
   if (userShop === undefined) return <EasyStartEskeleton />
   return (
-    <div className="grid gap-4">
+    <div className="grid gap-4 p-1">
       {userShop === null && <CreateShop />}
       {!!userShop && <UserShopCreated />}
 
@@ -85,7 +85,7 @@ const CreateItemEasy = () => {
     createItem(data).then(console.log).catch(console.error)
   }
   return (
-    <div className="p-1">
+    <div>
       <Typography variant="h6" className="text-center">
         2. Crea un artículo para rentar
       </Typography>
