@@ -52,7 +52,7 @@ const ShopItemActions = ({
 
   return (
     <>
-      <div className="flex justify-evenly my-4">
+      <div className="sm:flex sm:justify-evenly my-4 grid gap-2">
         <ModalConfirm
           disabled={loading}
           label="Eliminar"

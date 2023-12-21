@@ -86,7 +86,7 @@ const CreateItemEasy = () => {
   }
   return (
     <div>
-      <Typography variant="h6" className="text-center">
+      <Typography variant="h5" className="text-center">
         2. Crea un artículo para rentar
       </Typography>
       <ArticleFormShort onSaveArticle={onSaveArticle} />
@@ -96,7 +96,6 @@ const CreateItemEasy = () => {
 
 const CreateShop = () => {
   const onCreateShop = async (data: Partial<ShortShop>) => {
-    console.log({ data })
     await createShop({
       name: data.name || '',
       principalContact: data.principalContact || '',

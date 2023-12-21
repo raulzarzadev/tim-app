@@ -10,6 +10,7 @@ import InputUploadFile from './InputUploadFile'
 import PreviewImage from './PreviewImage'
 import TagsInput from './TagsInput'
 import { createItem, updateItem } from '@/firebase/items'
+import PricesForm from './PricesForm'
 
 interface IFormInput {
   name: string
@@ -33,6 +34,7 @@ const ArticleFormShort = ({
     defaultValues: article || {
       name: '',
       category: defaultCategoryName
+      //  ownPrice: true
     }
   })
 
@@ -56,7 +58,7 @@ const ArticleFormShort = ({
       )}
 
       <InputUploadFile
-        label="Imagen"
+        label="Foto"
         setURL={(url) => {
           setValue('image' || '', url)
         }}
@@ -89,6 +91,16 @@ const ArticleFormShort = ({
           )
         }
       />
+
+      {/* <PricesForm
+        setPrices={(formValues) =>
+          setValue('prices', formValues, {
+            shouldDirty: true,
+            shouldTouch: true
+          })
+        }
+        prices={formValues.prices}
+      /> */}
 
       <Button type="submit" variant="contained" disabled={disabled}>
         Guardar
