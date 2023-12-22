@@ -1,12 +1,30 @@
 describe('Login flow ', () => {
-  const userMail = Cypress.env('CYPRESS_SHOP_TEST_USER_EMAIL') || ''
-  const userPassword = Cypress.env('CYPRESS_SHOP_TEST_USER_PASSWORD') || ''
+  const userMail = Cypress.env('SHOP_USER_EMAIL') || ''
+  const userPassword = Cypress.env('SHOP_USER_PASSWORD') || ''
+
   it('login with wrong credentials', () => {
-    cy.log('login with wrong credentials', userMail)
+    //* Login with wrong credentials
     cy.visit('localhost:3000/login')
     cy.get('[test-id="login-form"]').should('be.visible')
     cy.get('input[name="email"]').type(userMail)
+    cy.get('input[name="password"]').type(`${userPassword}{enter}`)
+    cy.contains('Credenciales incorrectas')
+
+    //* Visit create account page
+    cy.contains('¿No tienes cuenta? Registrate').click()
+    cy.url().should('include', '/signup')
+
+    //cy.visit('localhost:3000/signup')
+    //cy.get('[test-id="sign-up-form"]').should('be.visible')
   })
+
+  // it('sign up ', () => {
+  //   //cy.visit('localhost:3000/signup')
+  //   // cy.get('[test-id="login-form"]').should('be.visible')
+  //   // cy.get('input[name="email"]').type(userMail)
+  //   // cy.get('input[name="password"]').type(`${userPassword}{enter}`)
+  //   // cy.contains('Credenciales incorrectas')
+  // })
 
   // it('login, sing-up and forgot pages ', () => {
   //   // cy.visit('localhost:3000')
