@@ -37,3 +37,6 @@ next-env.d.ts
 #sw
 /public/workbox-**
 /public/sw**
+
+# cypress
+cypress.env.json

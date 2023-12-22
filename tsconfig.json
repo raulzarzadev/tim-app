@@ -30,7 +30,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/app/new-company/[id]",
-    "src/components/ErrorBoundary.tsx"
+    "src/components/ErrorBoundary.tsx",
+    "cypress/plugins/index.js"
   ],
   "exclude": ["node_modules"]
 }

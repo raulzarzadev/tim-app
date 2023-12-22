@@ -2,7 +2,33 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, run the development server:
+First, add variables to config
+
+# file: cypress.env.json
+
+{
+"SHOP_USER_EMAIL": "test@example.com",
+"SHOP_USER_PASSWORD": "testPassword"
+}
+
+## firebase configs
+
+# file: env.local
+
+NEXT_PUBLIC_FIREBASE_CONFIG='{"apiKey":"","authDomain":"","projectId":"","storageBucket":"","messagingSenderId":"","appId":""}'
+o
+FIREBASE_CONFIG='{"apiKey":"","authDomain":"","projectId":"","storageBucket":"","messagingSenderId":"","appId":""}'
+
+# file: cypress.env.json
+
+{
+"SHOP_USER_EMAIL": "example@mail",
+"SHOP_USER_PASSWORD": "example-password"
+}
+
+you should add
+
+Second, run the development server:
 
 ```bash
 npm run dev

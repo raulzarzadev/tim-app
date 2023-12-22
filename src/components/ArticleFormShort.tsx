@@ -1,16 +1,11 @@
 'use client'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { Button, TextField, Typography } from '@mui/material'
-import ModalConfirm from './ModalConfirm'
-import { useState } from 'react'
-import { useParams, useRouter, useSearchParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
 import { ArticleType } from '@/types/article'
-import { addArticle, updateArticle } from '@/firebase/articles'
 import InputUploadFile from './InputUploadFile'
 import PreviewImage from './PreviewImage'
 import TagsInput from './TagsInput'
-import { createItem, updateItem } from '@/firebase/items'
-import PricesForm from './PricesForm'
 
 interface IFormInput {
   name: string
