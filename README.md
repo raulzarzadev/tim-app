@@ -19,14 +19,9 @@ NEXT_PUBLIC_FIREBASE_CONFIG='{"apiKey":"","authDomain":"","projectId":"","storag
 o
 FIREBASE_CONFIG='{"apiKey":"","authDomain":"","projectId":"","storageBucket":"","messagingSenderId":"","appId":""}'
 
-# file: cypress.env.json
-
-{
-"SHOP_USER_EMAIL": "example@mail",
-"SHOP_USER_PASSWORD": "example-password"
-}
-
-you should add
+TWILIO_ACCOUNT_SID=''
+TWILIO_AUTH_TOKEN=''
+TWILIO_PHONE_NUMBER=''
 
 Second, run the development server:
 
