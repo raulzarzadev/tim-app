@@ -1,4 +1,4 @@
-import { Button, Typography } from '@mui/material'
+import { Button, TextField, Typography } from '@mui/material'
 import ModalConfirm from '../ModalConfirm'
 import ClientForm from '../orders/ClientForm'
 import { Client } from '@/types/client'
@@ -9,9 +9,13 @@ import { deleteClient, updateClient } from '@/firebase/clients'
 import CommentForm from '../CommentForm'
 import { Comment } from '@/types/comment'
 import { createComment } from '@/firebase/comments'
+import Modal from '../Modal'
+import useModal from '@/hooks/useModal'
+import { useUserShopContext } from '@/context/userShopContext'
 
 const ClientActions = ({ clientId }: { clientId: string }) => {
-  const { clients } = useUserCompaniesContext()
+  const { userShop } = useUserShopContext()
+  const clients = userShop?.clients
 
   const [client, setClient] = useState<Partial<Client>>()
   useEffect(() => {
@@ -92,7 +96,42 @@ const ClientActions = ({ clientId }: { clientId: string }) => {
           }}
         />
       </ModalConfirm>
+      <ModalSendMsm to={client?.phone || ''} />
     </div>
+  )
+}
+
+const ModalSendMsm = ({ to }: { to: string }) => {
+  const modal = useModal()
+  const [msj, setMsj] = useState('')
+  const handleSendMsj = async () => {
+    console.log({ msj, to })
+    const res = await fetch('/api/send-sms', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ msj, to })
+    })
+      .then((res) => res.json())
+      .catch(console.error)
+    console.log({ res })
+  }
+  return (
+    <>
+      <Button onClick={modal.onOpen}>Enviar mensaje</Button>
+      <Modal {...modal}>
+        <div className="flex justify-center">
+          <TextField
+            value={msj}
+            onChange={(e) => {
+              setMsj(e.target.value)
+            }}
+          />
+        </div>
+        <Button onClick={handleSendMsj}>Enviar mensaje</Button>
+      </Modal>
+    </>
   )
 }
 

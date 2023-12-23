@@ -67,6 +67,7 @@ export function UserShopProvider({ children }: { children: React.ReactNode }) {
           if (ownCompany) {
             return ownCompany?.id
           } else {
+            return userShops[0]?.id || null
             return null
           }
         }
