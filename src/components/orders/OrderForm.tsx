@@ -112,6 +112,7 @@ const OrderForm = ({
               })
               clientForm.onClose()
             }}
+            searchClient
           />
         </Modal>
         {/* **** Shipping Form section */}

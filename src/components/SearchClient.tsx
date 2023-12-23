@@ -3,8 +3,8 @@ import AppIcon from './AppIcon'
 import Modal from './Modal'
 import useModal from '@/hooks/useModal'
 import MyTable from './MyTable'
-import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import { Client } from '@/types/client'
+import { useUserShopContext } from '@/context/userShopContext'
 
 const SearchClient = ({
   onSelectClient
@@ -12,8 +12,8 @@ const SearchClient = ({
   onSelectClient?: (client: Partial<Client>) => void
 }) => {
   const modal = useModal({ title: 'Buscar cliente' })
-  const { clients } = useUserCompaniesContext()
-
+  const { userShop } = useUserShopContext()
+  const clients = userShop?.clients || []
   const handleSelect = (clientId: string) => {
     const client = clients?.find((c) => c?.id === clientId)
     onSelectClient?.({

@@ -8,7 +8,7 @@ import PhoneInput from '../PhoneInput'
 import SearchClient from '../SearchClient'
 import SaveButton from '../ButtonSave'
 import { useEffect, useState } from 'react'
-import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
+import { useUserShopContext } from '@/context/userShopContext'
 
 const ClientForm = ({
   client,
@@ -45,7 +45,8 @@ const ClientForm = ({
       ...client
     } as Partial<Client>
   })
-  const { clients: companyClients } = useUserCompaniesContext()
+  const { userShop } = useUserShopContext()
+
   const disabledSave = isSubmitting || !isDirty
   const formValues = watch()
   const onSubmit = async (data?: Partial<Client>) => {
@@ -67,6 +68,7 @@ const ClientForm = ({
   const [clients, setClients] = useState<Partial<Client>[]>([])
 
   useEffect(() => {
+    const companyClients = userShop?.clients || []
     const clientsFound =
       companyClients?.filter(
         (c) =>
@@ -76,7 +78,7 @@ const ClientForm = ({
           c.phone?.toLowerCase().includes(formValues.phone?.toLowerCase() || '')
       ) || []
     setClients(clientsFound)
-  }, [companyClients, formValues.name, formValues.phone])
+  }, [formValues.name, formValues.phone, userShop?.clients])
 
   const handleSelectClient = (client: Partial<Client>) => {
     // setClient?.(e) //* this line close the client form modal automatically
