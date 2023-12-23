@@ -1,9 +1,9 @@
 import useModal from '@/hooks/useModal'
 import { Button } from '@mui/material'
 import Modal from '../Modal'
-import OrderForm from './OrderForm'
 import AppIcon, { IconName } from '../AppIcon'
 import { Order } from '@/types/order'
+import OrderFormShort from './OrderFormShort'
 
 const ModalOrderForm = ({
   label = 'Nueva orden',
@@ -35,7 +35,7 @@ const ModalOrderForm = ({
         {label}
       </Button>
       <Modal {...modal}>
-        <OrderForm
+        <OrderFormShort
           shippingEnabled={shippingEnabled}
           defaultOrder={order}
           handleSave={async (data) => {
