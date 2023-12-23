@@ -1,5 +1,12 @@
 import useModal from '@/hooks/useModal'
-import { Box, Button, ButtonProps, IconButton, Typography } from '@mui/material'
+import {
+  Box,
+  Button,
+  ButtonProps,
+  IconButton,
+  Tooltip,
+  Typography
+} from '@mui/material'
 import { ReactNode, useState } from 'react'
 import Modal from './Modal'
 import ButtonLoading from './ButtonLoading'
@@ -20,6 +27,7 @@ const ModalConfirm = ({
   disabledAccept,
   justIcon,
   openVariant = 'outlined',
+  openTooltipTitle = '',
   ...rest
 }: {
   handleConfirm?: () => void | Promise<any>
@@ -35,6 +43,7 @@ const ModalConfirm = ({
   fullWidth?: boolean
   disabledAccept?: boolean
   justIcon?: boolean
+  openTooltipTitle?: string
   openVariant?: 'contained' | 'outlined'
 }) => {
   const modal = useModal({ title: 'confirm' })
@@ -43,36 +52,41 @@ const ModalConfirm = ({
   const acceptDisabled = done || disabledAccept
   return (
     <>
-      {justIcon ? (
-        <IconButton
-          onClick={(e) => {
-            e.preventDefault()
-            modal.onOpen()
-          }}
-          disabled={disabled}
-          aria-label="button-modal-save"
-          color={color}
-          {...rest}
-        >
-          <AppIcon icon={openIcon || 'eye'} />
-        </IconButton>
-      ) : (
-        <Button
-          fullWidth={fullWidth}
-          onClick={(e) => {
-            e.preventDefault()
-            modal.onOpen()
-          }}
-          disabled={disabled}
-          aria-label="button-modal-save"
-          variant={openVariant}
-          color={color}
-          endIcon={openIcon ? <AppIcon icon={openIcon} /> : undefined}
-          {...rest}
-        >
-          {label}
-        </Button>
-      )}
+      <Tooltip title={openTooltipTitle}>
+        <span>
+          {justIcon ? (
+            <IconButton
+              onClick={(e) => {
+                e.preventDefault()
+                modal.onOpen()
+              }}
+              disabled={disabled}
+              aria-label="button-modal-save"
+              color={color}
+              {...rest}
+            >
+              <AppIcon icon={openIcon || 'eye'} />
+            </IconButton>
+          ) : (
+            <Button
+              fullWidth={fullWidth}
+              onClick={(e) => {
+                e.preventDefault()
+                modal.onOpen()
+              }}
+              disabled={disabled}
+              aria-label="button-modal-save"
+              variant={openVariant}
+              color={color}
+              endIcon={openIcon ? <AppIcon icon={openIcon} /> : undefined}
+              {...rest}
+            >
+              {label}
+            </Button>
+          )}
+        </span>
+      </Tooltip>
+
       <Modal {...modal} title={modalTitle}>
         {children}
         {handleConfirm && (

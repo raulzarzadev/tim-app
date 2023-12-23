@@ -43,6 +43,7 @@ import StorefrontIcon from '@mui/icons-material/Storefront'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import StarIcon from '@mui/icons-material/Star'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
+import TextsmsIcon from '@mui/icons-material/Textsms'
 const icons = {
   myOrder: AssignmentIndIcon,
   add: AddIcon,
@@ -87,7 +88,8 @@ const icons = {
   forward: ArrowForwardIosIcon,
   home: HomeIcon,
   check: CheckCircleIcon,
-  star: StarIcon
+  star: StarIcon,
+  sms: TextsmsIcon
 } as const
 
 // https://mui.com/material-ui/material-icons/

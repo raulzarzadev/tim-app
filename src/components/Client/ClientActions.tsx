@@ -1,4 +1,10 @@
-import { Button, TextField, Typography } from '@mui/material'
+import {
+  Button,
+  IconButton,
+  TextField,
+  Tooltip,
+  Typography
+} from '@mui/material'
 import ModalConfirm from '../ModalConfirm'
 import ClientForm from '../orders/ClientForm'
 import { Client } from '@/types/client'
@@ -46,6 +52,7 @@ const ClientActions = ({ clientId }: { clientId: string }) => {
         openIcon="edit"
         label="Editar"
         disabled={!client?.id}
+        openTooltipTitle="Editar cliente"
       >
         <ClientForm
           client={client}
@@ -64,6 +71,7 @@ const ClientActions = ({ clientId }: { clientId: string }) => {
         acceptLabel="Eliminar"
         acceptColor="error"
         label="Eliminar"
+        openTooltipTitle="Eliminar cliente"
         handleConfirm={() => {
           setClient({})
           handleDelete()
@@ -85,6 +93,7 @@ const ClientActions = ({ clientId }: { clientId: string }) => {
         acceptLabel="Comentar"
         acceptColor="info"
         label={`Comentar `}
+        openTooltipTitle="Agregar comentario"
         modalTitle={`Comentario a ${client?.name}`}
         // handleConfirm={() => {
         //   handleComment()
@@ -105,7 +114,7 @@ const ModalSendMsm = ({ to }: { to: string }) => {
   const modal = useModal()
   const [msj, setMsj] = useState('')
   const handleSendMsj = async () => {
-    console.log({ msj, to })
+    //console.log({ msj, to })
     const res = await fetch('/api/send-sms', {
       method: 'POST',
       headers: {
@@ -115,11 +124,18 @@ const ModalSendMsm = ({ to }: { to: string }) => {
     })
       .then((res) => res.json())
       .catch(console.error)
-    console.log({ res })
+    //console.log({ res })
   }
   return (
     <>
-      <Button onClick={modal.onOpen}>Enviar mensaje</Button>
+      <Tooltip title="Enviar SMS">
+        <span>
+          <IconButton color="secondary" onClick={modal.onOpen} disabled>
+            <AppIcon color="inherit" icon="sms" />
+            {/* // Enviar mensaje */}
+          </IconButton>
+        </span>
+      </Tooltip>
       <Modal {...modal}>
         <div className="flex justify-center">
           <TextField
