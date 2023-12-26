@@ -1,4 +1,3 @@
-import { useUserCompaniesContext } from '@/context/userCompaniesContext2'
 import Select from '../Select'
 import { useState } from 'react'
 import { Chip, Stack } from '@mui/material'
@@ -79,9 +78,19 @@ SelectItemsProps) => {
     showItemDetails && setItemDetails(_items?.find((i) => i.id === itemId))
     if (multiple) {
       //* multiple selected
-      _itemsSelected?.includes(itemId || '')
-        ? _setItemsSelected(_itemsSelected.filter((i) => i !== itemId))
-        : _setItemsSelected([...(_itemsSelected || []), itemId || ''])
+
+      if (_itemsSelected?.includes(itemId || '')) {
+        const removeItem = _itemsSelected.filter((i) => i !== itemId)
+        setItems?.(removeItem)
+        _setItemsSelected(removeItem)
+      } else {
+        const addItem = [...(_itemsSelected || []), itemId || '']
+        _setItemsSelected(addItem)
+        setItems?.(addItem)
+      }
+      // _itemsSelected?.includes(itemId || '')
+      //   ? _setItemsSelected(_itemsSelected.filter((i) => i !== itemId))
+      //   : _setItemsSelected([...(_itemsSelected || []), itemId || ''])
     } else {
       //* single selected
       _setItemSelected(itemId)

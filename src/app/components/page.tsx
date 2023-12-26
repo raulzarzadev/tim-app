@@ -125,7 +125,7 @@ function Page() {
         <ModalPayment amount={200} />
       </div>
       <div>
-        <ModalOrderForm label="Nueva orden" />
+        {/* <ModalOrderForm label="Nueva orden" companyId={shopId} /> */}
       </div>
     </div>
   )

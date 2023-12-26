@@ -23,31 +23,115 @@ import AssignForm2 from '../AssignForm2'
 const OrderFormShort = ({
   handleSave,
   defaultOrder,
-  shippingEnabled
+  shippingEnabled,
+  companyId
 }: {
   defaultOrder?: Partial<Order>
   handleSave?: (order: Partial<Order>) => Promise<void> | void
   shippingEnabled?: boolean
+  companyId: string
 }) => {
-  const { register, control } = useForm({})
+  const { register, control, setValue, watch, handleSubmit } = useForm({})
   const inputRef = useRef<HTMLInputElement>(null)
-
+  const onSubmit = (data: any) => {
+    console.log({ data })
+    handleSave?.({
+      companyId,
+      client: {
+        name: data?.name,
+        phone: data?.phone,
+        address: data?.address,
+        extraInfo: data?.extraInfo
+      },
+      shipping: {
+        assignedToEmail: data?.assignedToEmail,
+        date: data?.date,
+        address: data?.address
+      },
+      items: data?.items || []
+    })
+  }
   useEffect(() => {
     inputRef.current?.focus()
   }, [])
+
+  const [itemsTotal, setItemsTotal] = useState(0)
+  const formValues = watch()
+  const itemsDisabled: ArticleType['id'][] = []
+  const shippingAmount = asNumber(formValues?.shipping?.amount) || 0
+  const orderPaymentsCharged =
+    formValues?.payments?.reduce(
+      (acc, { amount = 0, method = 'mxn', usdPrice = 1 }) => {
+        if (method === 'usd') return acc + amount * usdPrice
+        return acc + amount
+      },
+      0
+    ) || 0
+  const total = itemsTotal - orderPaymentsCharged + shippingAmount
+  console.log({ formValues })
+  // console.log({ items: formValues?.items })
   return (
     <div>
-      <form>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <TextField
           fullWidth
           inputRef={inputRef}
           label="Nombre"
           variant="outlined"
+          {...register('name')}
         />
         <PhoneInput {...register('phone')} label="Teléfono" control={control} />
-        <TextField fullWidth label="Dirección" variant="outlined" />
-        <TextField fullWidth label="Comentarios" variant="outlined" />
-        <AssignForm2 />
+        <TextField
+          {...register('address')}
+          fullWidth
+          label="Dirección"
+          variant="outlined"
+        />
+        <TextField
+          {...register('extraInfo')}
+          fullWidth
+          label="Comentarios"
+          variant="outlined"
+        />
+
+        {shippingEnabled && (
+          <AssignForm2
+            handleAssign={(email, date) => {
+              if (date) {
+                setValue('date', date)
+              }
+              if (email) {
+                setValue('assignedToEmail', email)
+              }
+            }}
+            assignedTo={formValues?.assignedToEmail}
+            assignedAt={formValues?.date}
+          />
+        )}
+        <SelectCompanyItem
+          multiple
+          itemsDisabled={itemsDisabled}
+          itemsSelected={formValues?.items?.map((i) => i.itemId || '') || []}
+          setItems={(items) => {
+            setValue(
+              'items',
+              items.map((itemId) => ({ itemId }))
+            )
+          }}
+        />
+        {!!formValues?.items?.length && (
+          <CheckoutItems
+            shippingAmount={shippingAmount}
+            itemsSelected={formValues?.items || []}
+            setTotal={setItemsTotal}
+            setItemsSelected={(itemsSelected) => {
+              setValue('items', itemsSelected)
+            }}
+          />
+        )}
+        <Button variant="contained" type="submit">
+          Guardar
+        </Button>
       </form>
     </div>
   )

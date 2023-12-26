@@ -12,6 +12,7 @@ const ShopOrders = ({ shop }: { shop: Partial<CompanyType> }) => {
     <div>
       <div className="flex justify-center my-4">
         <ModalOrderForm
+          companyId={shopId || ''}
           shippingEnabled={shippingEnabled}
           label="Nueva orden"
           icon="order"

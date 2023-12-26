@@ -13,6 +13,8 @@ import { Timestamp } from 'firebase/firestore'
 import { useState } from 'react'
 import dictionary from '@/CONSTS/dictionary'
 import { useUserShopContext } from '@/context/userShopContext'
+import MyCalendar, { Event } from './MyCalendar'
+import asDate from '@/lib/asDate'
 
 const AssignForm2 = ({
   assignTo,
@@ -27,72 +29,84 @@ const AssignForm2 = ({
   handleAssign?: (email: string, date?: Date) => void
   disabled?: boolean
 }) => {
-  const assignableStaff = [
-    { name: 'Juan' },
-    { name: 'Pedro' },
-    { name: 'Maria' }
-  ]
+  const { userShop } = useUserShopContext()
+  const staff = userShop?.staff
+  const orders = userShop?.orders as Order[]
+  const staffWithOrders = staff?.map((staff) => {
+    const staffOrders = orders.filter(
+      (order) =>
+        order?.shipping?.assignedToEmail &&
+        order?.shipping?.assignedToEmail === staff.email
+    )
+    return { ...staff, orders: staffOrders }
+  })
+
   return (
     <div className="mt-4 ">
       <Typography variant="h6">Asignar a: </Typography>
       <Box className="grid gap-2 grid-cols-3 sm:grid-cols-4 md:grid-cols-5 my-2">
-        {assignableStaff.map((staff, i) => (
-          <StaffSchedule key={i} staff={staff} />
+        {staffWithOrders?.map((staff, i) => (
+          <StaffSchedule
+            assigned={!!assignedTo && assignedTo === staff.email}
+            key={i}
+            staff={staff}
+            handleAssign={handleAssign}
+            disabled={disabled}
+          />
         ))}
       </Box>
-      {/* <Button
-        test-id="assign-shipping"
-        onClick={modal.onOpen}
-        variant="contained"
-        fullWidth
-        disabled={disabled}
-      >
-        {assignedTo ? (
-          <span>
-            Asignado a: <StaffSpan email={assignedTo || ''} />
-          </span>
-        ) : (
-          'Asignar'
-        )}
-      </Button>
-
-      <Modal {...modal}>
-        <DeliveryStaffList
-          assignedAt={assignedAt}
-          assignedTo={assignedTo}
-          handleAssign={(email, date) => {
-            handleAssign?.(email, date)
-            // modal.onClose()
-          }}
-        />
-        <div className="flex justify-evenly mt-6">
-          <Button onClick={() => handleAssign?.('')}>Sin responsable</Button>
-          <Button onClick={modal.onClose} variant="contained" color="success">
-            Cerrar
-          </Button>
-        </div>
-      </Modal> */}
     </div>
   )
 }
 
-const StaffSchedule = ({ staff }: { staff: { name: string } }) => {
+const StaffSchedule = ({
+  staff,
+  handleAssign,
+  disabled,
+  assigned
+}: {
+  staff: { name?: string; email?: string }
+  handleAssign?: (email: string, date?: Date) => void
+  disabled?: boolean
+  assigned?: boolean
+}) => {
   const modal = useModal({ title: `Calendario de entregas: ${staff.name}` })
+  const [event, setEvent] = useState<Event>()
   return (
     <>
       <Button
         onClick={modal.onOpen}
-        variant="contained"
+        variant={`${assigned ? 'contained' : 'outlined'}`}
         className="w-full aspect-square"
         key={staff.name}
+        disabled={disabled}
       >
         {staff.name}
       </Button>
       <Modal {...modal}>
         <div className="flex justify-evenly">
+          <MyCalendar
+            event={event}
+            events={[
+              ...(staff?.orders?.map?.((order) => ({
+                start: asDate(order.shipping.date),
+                title: order.client.name,
+                end: addHours(forceAsDate(order.shipping.date), 2)
+              })) || []),
+              event
+            ]}
+            onClickPeriod={(startAt, endAt) => {
+              setEvent({
+                start: forceAsDate(startAt),
+                end: addHours(endAt, 2),
+                title: 'Nuevo'
+              })
+              handleAssign?.(staff?.email || '', startAt)
+            }}
+          />
+          {/* <Button>Asignar</Button>
           <Button>Asignar</Button>
-          <Button>Asignar</Button>
-          <Button>Asignar</Button>
+          <Button>Asignar</Button> */}
         </div>
       </Modal>
     </>

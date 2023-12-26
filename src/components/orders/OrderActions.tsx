@@ -313,6 +313,7 @@ const OrderActions = ({
           disabled={disableAll}
           handleSave={handleSaveOrder}
           shippingEnabled={shippingEnabled}
+          companyId={shopId || ''}
         />
         <ModalConfirm
           fullWidth
