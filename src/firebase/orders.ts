@@ -32,11 +32,14 @@ export const setOrder = async (itemId: ItemType['id'], newItem: NewItem) => {
   await updateCompany(newItem.companyId || '', { currentFolio: increment(1) })
     .then(console.log)
     .catch(console.log)
-  await itemCRUD.setItem(itemId || '', {
-    ...newItem,
-    id: itemId,
-    folio: currentFolio + 1
-  })
+  await itemCRUD
+    .setItem(itemId || '', {
+      ...newItem,
+      id: itemId,
+      folio: currentFolio + 1
+    })
+    .then(console.log)
+    .catch(console.error)
 }
 
 export const createOrder = async (newItem: CreateItem) => {

@@ -161,7 +161,7 @@ SelectItemsProps) => {
       <div>
         {itemDetails && <ArticleDetails article={itemDetails as ArticleType} />}
       </div>
-
+      {/* 
       <div className="flex justify-evenly w-full">
         <ButtonClear
           onClick={() => {
@@ -169,7 +169,7 @@ SelectItemsProps) => {
           }}
         />
         <ButtonSave test-id="save-selected-items" onClick={handleSetItems} />
-      </div>
+      </div> */}
     </div>
   )
 }

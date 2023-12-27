@@ -12,12 +12,12 @@ const ShippingDetails = ({ shipping }: { shipping: Order['shipping'] }) => {
         Fecha:
         {shipping?.date === null
           ? ' Ahora '
-          : dateFormat(shipping.date, 'dd/MMM HH:mm')}
+          : dateFormat(shipping?.date, 'dd/MMM HH:mm')}
         {/* {fromNow(asDate(shipping.date))} */}
       </Typography>
 
       <Typography>
-        Lugar: <ShippingLink address={shipping.address} />
+        Lugar: <ShippingLink address={shipping?.address} />
       </Typography>
       <Typography>
         Asignado:{' '}
@@ -28,7 +28,7 @@ const ShippingDetails = ({ shipping }: { shipping: Order['shipping'] }) => {
         )}
       </Typography>
       <Typography>
-        Costo: <CurrencySpan quantity={shipping.amount || 0} />
+        Costo: <CurrencySpan quantity={shipping?.amount || 0} />
       </Typography>
     </div>
   )

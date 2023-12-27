@@ -4,6 +4,7 @@ import Modal from '../Modal'
 import AppIcon, { IconName } from '../AppIcon'
 import { Order } from '@/types/order'
 import OrderFormShort from './OrderFormShort'
+import { Client } from '@/types/client'
 
 const ModalOrderForm = ({
   label = 'Nueva orden',
@@ -13,7 +14,8 @@ const ModalOrderForm = ({
   order,
   shippingEnabled,
   disabled,
-  companyId
+  companyId,
+  shopClients
 }: {
   label: string
   icon?: IconName
@@ -23,6 +25,7 @@ const ModalOrderForm = ({
   shippingEnabled?: boolean
   disabled?: boolean
   companyId: string
+  shopClients: Partial<Client>[]
 }) => {
   const modal = useModal({ title: 'Nueva orden' })
   return (
@@ -38,6 +41,7 @@ const ModalOrderForm = ({
       </Button>
       <Modal {...modal}>
         <OrderFormShort
+          shopClients={shopClients}
           companyId={companyId}
           shippingEnabled={shippingEnabled}
           defaultOrder={order}

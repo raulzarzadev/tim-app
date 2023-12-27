@@ -92,18 +92,21 @@ const ModalConfirm = ({
         {handleConfirm && (
           <Box className="flex w-full justify-center my-4">
             <ButtonLoading
+              //type="submit"
               test-id="confirm-button"
               endIcon={acceptIcon ? <AppIcon icon={acceptIcon} /> : undefined}
               color={acceptColor}
               onClick={async () => {
-                setLoading(true)
-                await handleConfirm()
-                setLoading(false)
-                setDone(true)
-                setTimeout(() => {
-                  modal.onClose()
-                  setDone(false)
-                }, 400)
+                if (handleConfirm) {
+                  setLoading(true)
+                  await handleConfirm?.()
+                  setLoading(false)
+                  setDone(true)
+                  setTimeout(() => {
+                    modal.onClose()
+                    setDone(false)
+                  }, 400)
+                }
               }}
               loading={loading}
               disabled={acceptDisabled}

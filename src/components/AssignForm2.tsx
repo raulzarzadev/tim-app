@@ -33,7 +33,7 @@ const AssignForm2 = ({
   const staff = userShop?.staff
   const orders = userShop?.orders as Order[]
   const staffWithOrders = staff?.map((staff) => {
-    const staffOrders = orders.filter(
+    const staffOrders = orders?.filter(
       (order) =>
         order?.shipping?.assignedToEmail &&
         order?.shipping?.assignedToEmail === staff.email
@@ -86,6 +86,7 @@ const StaffSchedule = ({
       <Modal {...modal}>
         <div className="flex justify-evenly">
           <MyCalendar
+            defaultView="week"
             event={event}
             events={[
               ...(staff?.orders?.map?.((order) => ({

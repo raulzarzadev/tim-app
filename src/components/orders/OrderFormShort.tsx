@@ -19,34 +19,52 @@ import onSaveOrder from './lib/onSaveOrder'
 import { useForm } from 'react-hook-form'
 import PhoneInput from '../PhoneInput'
 import AssignForm2 from '../AssignForm2'
+import InputSearchClient from '../../../InputSearchClient'
+import { Client } from '@/types/client'
+import ModalConfirm from '../ModalConfirm'
+import OrderDetails from '../OrderDetails'
+import MyTable from '../MyTable'
+import ModalItemDetails from '../ModalItemDetails'
+import dictionary from '@/CONSTS/dictionary'
+import CurrencySpan from '../CurrencySpan'
 
 const OrderFormShort = ({
   handleSave,
   defaultOrder,
   shippingEnabled,
-  companyId
+  companyId,
+  shopClients
 }: {
   defaultOrder?: Partial<Order>
   handleSave?: (order: Partial<Order>) => Promise<void> | void
   shippingEnabled?: boolean
   companyId: string
+  shopClients: Partial<Client>[]
 }) => {
-  const { register, control, setValue, watch, handleSubmit } = useForm({})
+  const {
+    register,
+    control,
+    setValue,
+    watch,
+    handleSubmit,
+    formState: { errors, isSubmitted, isSubmitting }
+  } = useForm({})
   const inputRef = useRef<HTMLInputElement>(null)
   const onSubmit = (data: any) => {
     console.log({ data })
     handleSave?.({
       companyId,
       client: {
-        name: data?.name,
-        phone: data?.phone,
-        address: data?.address,
-        extraInfo: data?.extraInfo
+        name: data?.client?.name,
+        phone: data?.client?.phone,
+        address: data?.client?.address,
+        extraInfo: data?.client?.extraInfo,
+        ...data.client
       },
       shipping: {
-        assignedToEmail: data?.assignedToEmail,
-        date: data?.date,
-        address: data?.address
+        assignedToEmail: data?.assignedToEmail || null,
+        date: data?.date || null,
+        address: data?.client?.address || null
       },
       items: data?.items || []
     })
@@ -68,27 +86,45 @@ const OrderFormShort = ({
       0
     ) || 0
   const total = itemsTotal - orderPaymentsCharged + shippingAmount
-  console.log({ formValues })
-  // console.log({ items: formValues?.items })
+  // console.log({ tems: formValues?.items })
+  const saveLabel = isSubmitted
+    ? 'Guardado'
+    : isSubmitting
+    ? 'Guardando...'
+    : 'Guardar'
+
   return (
     <div>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <TextField
-          fullWidth
-          inputRef={inputRef}
-          label="Nombre"
-          variant="outlined"
-          {...register('name')}
+      <form
+        className="grid gap-3"
+        // onSubmit={handleSubmit(onSubmit)}
+      >
+        <InputSearchClient
+          onChange={(name) => setValue('client.name', name)}
+          clients={shopClients}
+          onChooseClient={(client) => {
+            const clientChoose = shopClients?.find((c) => c.id === client.id)
+            setValue('client', {
+              name: clientChoose?.name || '',
+              phone: clientChoose?.phone || '',
+              address: clientChoose?.address || '',
+              extraInfo: clientChoose?.extraInfo || ''
+            })
+          }}
         />
-        <PhoneInput {...register('phone')} label="Teléfono" control={control} />
+        <PhoneInput
+          {...register('client.phone')}
+          label="Teléfono"
+          control={control}
+        />
         <TextField
-          {...register('address')}
+          {...register('client.address')}
           fullWidth
           label="Dirección"
           variant="outlined"
         />
         <TextField
-          {...register('extraInfo')}
+          {...register('client.extraInfo')}
           fullWidth
           label="Comentarios"
           variant="outlined"
@@ -129,195 +165,81 @@ const OrderFormShort = ({
             }}
           />
         )}
-        <Button variant="contained" type="submit">
-          Guardar
-        </Button>
+        <div className="my-4">
+          {!formValues?.items?.length && (
+            <Typography variant="caption" color={'error'}>
+              *Agregar articulos
+            </Typography>
+          )}
+          {!formValues?.client?.name && (
+            <Typography variant="caption" color={'error'}>
+              *Nombre de cliente es necesario
+            </Typography>
+          )}
+
+          <ModalConfirm
+            fullWidth
+            disabled={
+              isSubmitting ||
+              isSubmitted ||
+              !formValues?.items?.length ||
+              !formValues?.client?.name
+            }
+            openVariant="contained"
+            label={saveLabel}
+            acceptLabel={saveLabel}
+            acceptIcon="save"
+            openIcon="save"
+            handleConfirm={handleSubmit(onSubmit)}
+            disabledAccept={isSubmitting || isSubmitted}
+          >
+            <ClientInfo client={formValues?.client} />
+            <ShippingDetails
+              shipping={{
+                assignedToEmail: formValues?.assignedToEmail || null,
+                date: formValues?.date || null,
+                address: formValues?.client?.address || null
+              }}
+            />
+            {!!formValues?.items?.length && (
+              <MyTable
+                data={{
+                  headers: [
+                    {
+                      label: 'Unidad',
+                      key: 'itemId',
+                      format: (value) => (
+                        <ModalItemDetails
+                          itemId={value}
+                          // hiddenCurrentStatus
+                          showCat
+                        />
+                      )
+                    },
+                    {
+                      label: 'Tiempo',
+                      key: 'duration'
+                    },
+                    {
+                      label: 'Status',
+                      key: 'rentStatus',
+                      format: (value) => dictionary(value)
+                    },
+                    {
+                      label: 'Total',
+                      key: 'price',
+                      format: (value) => <CurrencySpan quantity={value} />
+                    }
+                  ],
+                  body: formValues?.items || []
+                }}
+              />
+            )}
+          </ModalConfirm>
+        </div>
       </form>
     </div>
   )
-  // const clientForm = useModal({ title: 'Datos de cliente' })
-  // const shippingForm = useModal({ title: 'Datos de entrega' })
-  // const itemsForm = useModal({ title: 'Unidades' })
-  // const [saving, setSaving] = useState(false)
-  // const [itemsTotal, setItemsTotal] = useState(0)
-  // const [order, setOrder] = useState<Partial<Order>>({
-  //   items: [],
-  //   // client: {},
-  //   // shipping: {},
-  //   // payments: [],
-  //   // changes: [],
-  //   ...defaultOrder
-  // })
-  // // const paymentIsComplete = orderPaymentsCharged >= itemsTotal
-  // const handleClearOrder = () => {
-  //   setOrder({})
-  // }
-  // const handleSaveOrder = async (order: Partial<Order>) => {
-  //   setSaving(true)
-  //   const res = await onSaveOrder(order, {
-  //     alreadyStart: false,
-  //     shippingEnabled: shippingEnabled
-  //   })
-  //     .then((res) => {
-  //       const validOrder = typeof res === 'object'
-  //       if (validOrder) {
-  //         setOrder({ ...order })
-  //         return handleSave?.(res)
-  //       }
-  //       console.log('res', res)
-  //     })
-  //     .catch(console.error)
-  //     .finally(() => {
-  //       setTimeout(() => {
-  //         setSaving(false)
-  //       }, 1000)
-  //     })
-  //   //@ts-ignore
-  //   if (res?.ok) {
-  //     //@ts-ignore
-  //     const orderId = res?.res?.id || ''
-  //     setOrder({ ...order, id: orderId })
-  //   }
-  // }
-  // const orderId = order?.id || ''
-  // const orderPaymentsCharged =
-  //   order.payments?.reduce(
-  //     (acc, { amount = 0, method = 'mxn', usdPrice = 1 }) => {
-  //       if (method === 'usd') return acc + amount * usdPrice
-  //       return acc + amount
-  //     },
-  //     0
-  //   ) || 0
-  // const disableSave = saving || !order?.client?.name
-  // const shippingAmount = asNumber(order?.shipping?.amount) || 0
-  // const total = itemsTotal - orderPaymentsCharged + shippingAmount
-  // const itemsDisabled: ArticleType['id'][] = []
-  // return (
-  //   <div>
-  //     <div className="grid gap-2">
-  //       {order.id && (
-  //         <Typography variant="caption" className="text-end my-0">
-  //           Id:{order.id}
-  //         </Typography>
-  //       )}
-  //       {/* **** Client Form section */}
-  //       <Button onClick={clientForm.onOpen} variant="outlined">
-  //         1. Cliente
-  //       </Button>
-  //       {order?.client && <ClientInfo client={order?.client} />}
-  //       <Modal {...clientForm}>
-  //         <ClientForm
-  //           isClientOrder
-  //           client={order?.client}
-  //           setClient={(client) => {
-  //             setOrder({
-  //               ...order,
-  //               client
-  //             })
-  //             clientForm.onClose()
-  //           }}
-  //           searchClient
-  //         />
-  //       </Modal>
-  //       {/* **** Shipping Form section */}
-  //       <Button
-  //         onClick={shippingForm.onOpen}
-  //         variant="outlined"
-  //         disabled={!shippingEnabled}
-  //       >
-  //         2. Entrega
-  //       </Button>
-  //       {order.shipping && <ShippingDetails shipping={order.shipping} />}
-  //       <Modal {...shippingForm}>
-  //         <ShippingForm
-  //           shipping={{
-  //             ...order.shipping,
-  //             address: order?.client?.address || ''
-  //           }}
-  //           // setShipping={(data) => {
-  //           //   setOrder({ ...order, shipping: data })
-  //           //   // shippingForm.onClose()
-  //           // }}
-  //           handleSave={(data) => {
-  //             setOrder({ ...order, shipping: data })
-  //             shippingForm.onClose()
-  //           }}
-  //         />
-  //       </Modal>
-  //       {/* **** Items Form section */}
-  //       <Button onClick={itemsForm.onOpen} variant="outlined">
-  //         3. Seleccionar unidades
-  //       </Button>
-  //       <Modal {...itemsForm}>
-  //         <SelectCompanyItem
-  //           multiple
-  //           itemsDisabled={itemsDisabled}
-  //           itemsSelected={order?.items?.map((i) => i.itemId || '') || []}
-  //           setItems={(items) => {
-  //             setOrder({
-  //               ...order,
-  //               items: items.map((itemId) => ({ itemId }))
-  //             })
-  //             itemsForm.onClose()
-  //           }}
-  //         />
-  //       </Modal>
-  //       {(shippingAmount > 0 || asNumber(order.items?.length) > 0) && (
-  //         <CheckoutItems
-  //           shippingAmount={shippingAmount}
-  //           itemsSelected={order.items || []}
-  //           setTotal={setItemsTotal}
-  //           setItemsSelected={(itemsSelected) => {
-  //             setOrder({ ...order, items: itemsSelected })
-  //           }}
-  //         />
-  //       )}
-  //       {/* **** Payment  section */}
-  //       {order.payments && <OrderPaymentsTable payments={order.payments} />}
-  //       {!!order?.items?.length && (
-  //         <div className="my-4 flex w-full justify-center">
-  //           <ModalPayment
-  //             //disabled={!!paymentIsComplete}
-  //             amount={total}
-  //             label="Pagar"
-  //             setPayment={(payment) => {
-  //               const payments = [...(order.payments || []), payment]
-  //               const orderPaid = { ...order, payments }
-  //               setOrder(orderPaid)
-  //               handleSaveOrder(orderPaid)
-  //             }}
-  //           />
-  //         </div>
-  //       )}
-  //       {/* **** Save  */}
-  //       <div className="flex justify-evenly w-full my-4">
-  //         <ButtonClear onClick={handleClearOrder} />
-  //         <div>
-  //           <ButtonSave
-  //             label={orderId ? 'Actualizar' : 'Guardar'}
-  //             disabled={disableSave}
-  //             onClick={async (e) => {
-  //               return handleSaveOrder(order)
-  //             }}
-  //           />
-  //           {saving && (
-  //             <div className="mt-2">
-  //               <Typography variant="caption">{`Guardando`}</Typography>
-  //             </div>
-  //           )}
-  //           {!order?.client?.name && (
-  //             <div className="mt-2">
-  //               <Typography
-  //                 color={'error'}
-  //                 variant="caption"
-  //               >{`Nombre de cliente requerido*`}</Typography>
-  //             </div>
-  //           )}
-  //         </div>
-  //       </div>
-  //     </div>
-  //   </div>
-  // )
 }
 
 export default OrderFormShort

@@ -7,32 +7,29 @@ const ShopOrders = ({ shop }: { shop: Partial<CompanyType> }) => {
   const shippingEnabled = shop?.shippingEnabled
   const shopId = shop?.id
   const orders = shop?.orders
-
   return (
     <div>
       <div className="flex justify-center my-4">
         <ModalOrderForm
+          shopClients={shop?.clients || []}
           companyId={shopId || ''}
           shippingEnabled={shippingEnabled}
-          label="Nueva orden"
+          label={`Nueva orden `}
           icon="order"
           closeOnSave={false}
           handleSave={async (order) => {
-            try {
-              if (order.id) {
-                const res = await updateOrder(order.id, order)
-                console.log({ res })
-                return res
-              } else {
-                const res = await createOrder({
-                  ...order,
-                  companyId: shopId || ''
-                })
-                console.log({ res })
-                return res
-              }
-            } catch (e) {
-              console.error(e)
+            console.log({ order })
+            if (order.id) {
+              await updateOrder(order.id, order)
+                .then(console.log)
+                .catch(console.error)
+            } else {
+              await createOrder({
+                ...order,
+                companyId: shopId || ''
+              })
+                .then(console.log)
+                .catch(console.error)
             }
           }}
         />

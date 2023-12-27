@@ -24,7 +24,7 @@ const ButtonLoading = ({
   label?: string
   color?: ButtonProps['color']
   endIcon?: React.ReactNode
-}) => {
+} & LoadingButtonProps) => {
   return (
     <LoadingButton
       endIcon={endIcon}

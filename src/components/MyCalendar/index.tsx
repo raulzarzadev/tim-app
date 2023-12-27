@@ -27,14 +27,16 @@ const localizer = dateFnsLocalizer({
 const MyCalendar = ({
   onClickPeriod,
   events = [],
-  event
+  event,
+  defaultView = 'month'
 }: {
   onClickPeriod?: (start: Date, end: Date) => void
   events?: Event[]
   event?: Event
+  defaultView?: View
 }) => {
   const [date, setDate] = useState(new Date())
-  const [view, setView] = useState<View>('month')
+  const [view, setView] = useState<View>(defaultView)
 
   return (
     <div className="w-full aspect-square">
