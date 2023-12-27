@@ -301,9 +301,9 @@ const OrderActions = ({
             handleConfirm={handleCancelRent}
           >
             <Typography className="text-center">
-              {` Se restaurara esta orden como 'pendiente'`}
+              {`¿Desea cancelar esta orden?`}
             </Typography>
-            <Typography className="text-center">¿Esta de acuerdo?</Typography>
+            {/* <Typography className="text-center">¿Esta de acuerdo?</Typography> */}
           </ModalConfirm>
         )}
         <ModalOrderForm
