@@ -17,6 +17,7 @@ import PricesForm from './PricesForm'
 import PreviewImage from './PreviewImage'
 import InputUploadFile from './InputUploadFile'
 import { updateItem } from '@/firebase/items'
+import { useUserShopContext } from '@/context/userShopContext'
 
 const ShopItemForm = ({
   item: article,
@@ -27,6 +28,7 @@ const ShopItemForm = ({
   shopCategories: Partial<CategoryType>[]
   onSubmit?: (data: Partial<ArticleType>) => Promise<any>
 }) => {
+  const { userShop } = useUserShopContext()
   const searchParams = useSearchParams()
   const params = useParams()
 
@@ -39,7 +41,7 @@ const ShopItemForm = ({
     watch,
     setValue,
     reset,
-    formState: { isSubmitting, isDirty }
+    formState: { isSubmitting, isDirty, errors }
   } = useForm({
     defaultValues: article || {
       name: '',
@@ -49,11 +51,19 @@ const ShopItemForm = ({
   const formValues = watch()
 
   const _onSubmit = async (data: Partial<ArticleType>) => {
-    await onSubmit?.(data).then(console.log).catch(console.error)
-    reset(data)
+    await onSubmit?.(data)
+      .then((res) => {
+        reset(data)
+      })
+      .catch(console.error)
   }
+
+  const items = userShop?.items
   const disableSave = isSubmitting || !isDirty
-  console.log({ article })
+
+  const serialNoAlreadyExist = items?.find(
+    (i) => i.serialNumber && formValues.serialNumber === i.serialNumber
+  )
   return (
     <form className="grid gap-4">
       <Select
@@ -96,6 +106,13 @@ const ShopItemForm = ({
         variant="outlined"
         fullWidth
         {...register('serialNumber')}
+        helperText={
+          serialNoAlreadyExist && (
+            <Typography color="error" variant="caption">
+              Este numero de serie ya existe
+            </Typography>
+          )
+        }
       />
       <TextField
         id="outlined-basic"

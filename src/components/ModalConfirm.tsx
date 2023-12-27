@@ -97,16 +97,14 @@ const ModalConfirm = ({
               endIcon={acceptIcon ? <AppIcon icon={acceptIcon} /> : undefined}
               color={acceptColor}
               onClick={async () => {
-                if (handleConfirm) {
-                  setLoading(true)
-                  await handleConfirm?.()
-                  setLoading(false)
-                  setDone(true)
-                  setTimeout(() => {
-                    modal.onClose()
-                    setDone(false)
-                  }, 400)
-                }
+                setLoading(true)
+                await handleConfirm()
+                setLoading(false)
+                setDone(true)
+                setTimeout(() => {
+                  modal.onClose()
+                  setDone(false)
+                }, 400)
               }}
               loading={loading}
               disabled={acceptDisabled}
