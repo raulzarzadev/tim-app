@@ -38,6 +38,7 @@ const InputSearchClient = ({
           renderInput={(params) => (
             <TextField
               {...params}
+              name="name"
               label="Nombre"
               value={name}
               onChange={(e) => {
@@ -49,19 +50,29 @@ const InputSearchClient = ({
           inputValue={name || ''}
           // value={{ id: '', label: '' }}
           //value={{ id: _client?.id || '', label: _client?.name || '' }}
+          onChange={(event, newValue) => {
+            const client = clients.find(
+              (c) => c.id === (newValue as { id: string }).id
+            )
+            if (client) {
+              handleChooseClient(client)
+            } else {
+              console.log('no client found')
+            }
+          }}
           renderOption={(props, option) => {
             return (
               <li
-                {...props}
                 key={option.id}
-                onClick={() => {
-                  const client = clients.find((c) => c.id === option.id)
-                  if (client) {
-                    handleChooseClient(client)
-                  } else {
-                    console.log('no client found')
-                  }
-                }}
+                // onClick={() => {
+                //   const client = clients.find((c) => c.id === option.id)
+                //   if (client) {
+                //     handleChooseClient(client)
+                //   } else {
+                //     console.log('no client found')
+                //   }
+                // }}
+                {...props}
               >
                 {option.label}
               </li>

@@ -53,6 +53,8 @@ const TestOrderForm = ({ company }: { company: CompanyType }) => {
           label="Nueva orden"
           shippingEnabled={company.shippingEnabled}
           closeOnSave={false}
+          companyId={company.id || ''}
+          shopClients={company.clients || []}
         />
       </UserShopContext.Provider>
       {/* </UserCompaniesContext.Provider> */}

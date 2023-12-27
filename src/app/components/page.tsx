@@ -115,7 +115,6 @@ function Page() {
   return (
     <div>
       <div>
-        Checkout
         <CashboxContextProvider>
           <Checkout />
         </CashboxContextProvider>

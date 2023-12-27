@@ -314,6 +314,7 @@ const OrderActions = ({
           handleSave={handleSaveOrder}
           shippingEnabled={shippingEnabled}
           companyId={shopId || ''}
+          shopClients={userShop?.clients || []}
         />
         <ModalConfirm
           fullWidth

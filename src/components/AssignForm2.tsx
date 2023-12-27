@@ -32,14 +32,16 @@ const AssignForm2 = ({
   const { userShop } = useUserShopContext()
   const staff = userShop?.staff
   const orders = userShop?.orders as Order[]
-  const staffWithOrders = staff?.map((staff) => {
-    const staffOrders = orders?.filter(
-      (order) =>
-        order?.shipping?.assignedToEmail &&
-        order?.shipping?.assignedToEmail === staff.email
-    )
-    return { ...staff, orders: staffOrders }
-  })
+  const staffWithOrders = staff
+    ?.filter((s) => s.permissions.DELIVERY)
+    .map((staff) => {
+      const staffOrders = orders?.filter(
+        (order) =>
+          order?.shipping?.assignedToEmail &&
+          order?.shipping?.assignedToEmail === staff.email
+      )
+      return { ...staff, orders: staffOrders }
+    })
 
   return (
     <div className="mt-4 ">
@@ -65,13 +67,25 @@ const StaffSchedule = ({
   disabled,
   assigned
 }: {
-  staff: { name?: string; email?: string }
+  staff: {
+    orders: Partial<Order>[]
+    name?: string
+    email?: string
+  }
   handleAssign?: (email: string, date?: Date) => void
   disabled?: boolean
   assigned?: boolean
 }) => {
   const modal = useModal({ title: `Calendario de entregas: ${staff.name}` })
   const [event, setEvent] = useState<Event>()
+  const events = [
+    ...(staff?.orders?.map?.((order) => ({
+      start: forceAsDate(order?.shipping?.date),
+      title: order?.client?.name || '',
+      end: addHours(forceAsDate(order?.shipping?.date), 2)
+    })) || [])
+  ]
+  if (event) events.push(event)
   return (
     <>
       <Button
@@ -88,14 +102,7 @@ const StaffSchedule = ({
           <MyCalendar
             defaultView="week"
             event={event}
-            events={[
-              ...(staff?.orders?.map?.((order) => ({
-                start: asDate(order.shipping.date),
-                title: order.client.name,
-                end: addHours(forceAsDate(order.shipping.date), 2)
-              })) || []),
-              event
-            ]}
+            events={events}
             onClickPeriod={(startAt, endAt) => {
               setEvent({
                 start: forceAsDate(startAt),

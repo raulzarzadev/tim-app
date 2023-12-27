@@ -1,28 +1,18 @@
-import useModal from '@/hooks/useModal'
-import ClientForm from './ClientForm'
-import { Button, TextField, Typography } from '@mui/material'
-import Modal from '../Modal'
-import ShippingForm from './ShippingForm'
+import { TextField, Typography } from '@mui/material'
 import { useEffect, useRef, useState } from 'react'
 import { Order } from '@/types/order'
 import ClientInfo from '../ClientInfo'
 import ShippingDetails from '../ShippingDetails'
 import CheckoutItems from '../CheckoutItems'
 import SelectCompanyItem from './SelectCompanyItem'
-import ModalPayment from '../ModalPayment3'
-import OrderPaymentsTable from '../OrderPaymentsTable'
 import asNumber from '@/lib/asNumber'
 import { ArticleType } from '@/types/article'
-import ButtonSave from '../ButtonSave'
-import ButtonClear from '../ButtonClear'
-import onSaveOrder from './lib/onSaveOrder'
 import { useForm } from 'react-hook-form'
 import PhoneInput from '../PhoneInput'
 import AssignForm2 from '../AssignForm2'
 import InputSearchClient from '../../../InputSearchClient'
 import { Client } from '@/types/client'
 import ModalConfirm from '../ModalConfirm'
-import OrderDetails from '../OrderDetails'
 import MyTable from '../MyTable'
 import ModalItemDetails from '../ModalItemDetails'
 import dictionary from '@/CONSTS/dictionary'
@@ -79,7 +69,7 @@ const OrderFormShort = ({
   const shippingAmount = asNumber(formValues?.shipping?.amount) || 0
   const orderPaymentsCharged =
     formValues?.payments?.reduce(
-      (acc, { amount = 0, method = 'mxn', usdPrice = 1 }) => {
+      (acc: number, { amount = 0, method = 'mxn', usdPrice = 1 }) => {
         if (method === 'usd') return acc + amount * usdPrice
         return acc + amount
       },
@@ -95,10 +85,7 @@ const OrderFormShort = ({
 
   return (
     <div>
-      <form
-        className="grid gap-3"
-        // onSubmit={handleSubmit(onSubmit)}
-      >
+      <form className="grid gap-3">
         <InputSearchClient
           onChange={(name) => setValue('client.name', name)}
           clients={shopClients}
@@ -147,7 +134,10 @@ const OrderFormShort = ({
         <SelectCompanyItem
           multiple
           itemsDisabled={itemsDisabled}
-          itemsSelected={formValues?.items?.map((i) => i.itemId || '') || []}
+          itemsSelected={
+            formValues?.items?.map((i: { itemId: string }) => i.itemId || '') ||
+            []
+          }
           setItems={(items) => {
             setValue(
               'items',

@@ -7,7 +7,7 @@ export enum StaffPermissionLabels {
   ORDERS = 'Ordenes',
   MY_ORDERS = 'Mis Ordenes',
   SALES = 'Ventas',
-  // DELIVERY = 'Reparto',
+  DELIVERY = 'Reparto',
   RECEPTION = 'Recepción',
   NEW_ITEM = 'Nueva Unidad'
 }
@@ -15,7 +15,7 @@ export const areaIcon: Record<StaffPermission, IconName> = {
   CASHBOX: 'cashbox',
   SALES: 'sales',
   MAINTENANCE: 'fix',
-  // DELIVERY: 'delivery',
+  DELIVERY: 'delivery',
   ADMIN: 'person',
   RECEPTION: 'store',
   ORDERS: 'order',
