@@ -124,13 +124,13 @@ const ModalSendMsm = ({ to }: { to: string }) => {
     })
       .then((res) => res.json())
       .catch(console.error)
-    //console.log({ res })
+    console.log({ res })
   }
   return (
     <>
       <Tooltip title="Enviar SMS">
         <span>
-          <IconButton color="secondary" onClick={modal.onOpen} disabled>
+          <IconButton color="secondary" onClick={modal.onOpen}>
             <AppIcon color="inherit" icon="sms" />
             {/* // Enviar mensaje */}
           </IconButton>
