@@ -5,8 +5,23 @@ import { CompanyType } from '@/types/company'
 import ShopItemsTabs from '../ShopItemsTabs'
 import ShopOrders from './ShopOrders'
 import ShopStaff from './ShopStaff'
+import { useAuthContext } from '@/context/authContext'
+import ShopOrdersTabs from './ShopOrdersTabs'
 
 const ShopDashboard = ({ shop }: { shop: Partial<CompanyType> }) => {
+  const { user } = useAuthContext()
+  const permissions = shop?.staff?.find(
+    (s) => s.email === user?.email
+  )?.permissions
+  const isAdmin = permissions?.ADMIN
+  // const viewOrders = permissions?.ORDERS
+  const viewMyOrders = permissions?.MY_ORDERS
+  const viewClients = permissions?.ADMIN
+  const viewItems = permissions?.ADMIN
+
+  const myOrders =
+    shop?.orders?.filter((o) => o.shipping?.assignedToEmail === user?.email) ||
+    []
   return (
     <div>
       <BasicTabs
@@ -20,7 +35,8 @@ const ShopDashboard = ({ shop }: { shop: Partial<CompanyType> }) => {
                 clients={shop?.clients || []}
                 companyId={shop?.id || ''}
               />
-            )
+            ),
+            hidden: !viewClients
           },
           {
             label: `Artículos (${shop?.items?.length || 0})`,
@@ -32,15 +48,32 @@ const ShopDashboard = ({ shop }: { shop: Partial<CompanyType> }) => {
                 items={shop?.items || []}
                 shopId={shop?.id || ''}
               />
-            )
+            ),
+            hidden: !viewItems
           },
           {
             label: `Ordenes (${shop.orders?.length || 0})`,
-            content: <ShopOrders shop={shop} />
+            content: <ShopOrders shop={shop} />,
+            hidden: !isAdmin
+          },
+          {
+            label: `Mis Ordenes (${myOrders?.length || 0})`,
+            content: (
+              <ShopOrdersTabs
+                hideActives
+                hideCanceled
+                hideAlls
+                hideFinished
+                hidePendingPayments
+                orders={myOrders}
+              />
+            ),
+            hidden: !viewMyOrders
           },
           {
             label: `Staff (${shop.staff?.length || 0})`,
-            content: <ShopStaff staff={shop?.staff || []} />
+            content: <ShopStaff staff={shop?.staff || []} />,
+            hidden: !isAdmin
           }
           // { label: 'Cortes', content: <CompanyBalances /> },
           // { label: 'Tienda', content: <CompanyStore /> }

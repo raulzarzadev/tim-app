@@ -11,7 +11,7 @@ import {
   startOrderRent,
   updateOrder
 } from '@/firebase/orders'
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 import { Order, Payment } from '@/types/order'
 import ModalPayment from '../ModalPayment3'
 import { calculateOrderTotal } from '@/lib/calculateOrderTotal'
@@ -29,6 +29,7 @@ import { rentFinishAt } from '@/context/lib'
 import { itemStatus } from '@/lib/itemStatus'
 import { useUserShopContext } from '@/context/userShopContext'
 import { CompanyType } from '@/types/company'
+import { useAuthContext } from '@/context/authContext'
 
 const OrderActions = ({
   orderId,
@@ -39,6 +40,7 @@ const OrderActions = ({
 }) => {
   // const { orders, currentCompany } = useUserCompaniesContext()
   const { userShop } = useUserShopContext()
+  const { user } = useAuthContext()
   const shopId = userShop?.id || ''
   const shippingEnabled = userShop?.shippingEnabled || false
   const order = userShop?.orders?.find((o) => o?.id === orderId)
@@ -177,17 +179,6 @@ const OrderActions = ({
         setDisableAll(true)
         onAction?.('edit')
       })
-    // try {
-    //   setLoading(true)
-    //   const res = await deleteOrder(orderId)
-    //   console.log(res)
-    //   onAction?.('edit')
-    // } catch (e) {
-    //   onAction?.('error')
-    //   console.error(e)
-    // } finally {
-    //   setLoading(false)
-    // }
   }
 
   const status = orderStatus(order)
@@ -195,13 +186,30 @@ const OrderActions = ({
     status === 'expired' || status === 'taken' || status === 'finished'
 
   const [disableAll, setDisableAll] = useState(false)
-  return (
-    <div>
-      <Typography variant="h5" className="mt-4">
-        Acciones de orden
-      </Typography>
-      <div className="grid grid-cols-2 gap-2 my-2 place-content-center items-center">
-        {status === 'expired' && (
+
+  const permissions = userShop?.staff?.find(
+    (s) => s.email === user?.email
+  )?.permissions
+  const isAdmin = permissions?.ADMIN
+
+  const actions = [
+    {
+      key: 'start',
+      hidden: false,
+      content: (
+        <span className="col-span-2">
+          <ModalStartRent
+            disabled={disableAll || disabledStartRent}
+            orderId={orderId}
+            handleStartRent={handleStartRent}
+          />
+        </span>
+      )
+    },
+    {
+      key: 'renew',
+      content: (
+        <>
           <div className="col-span-2 ">
             <ModalConfirm
               disabled={disableAll}
@@ -218,15 +226,25 @@ const OrderActions = ({
               <OrderDetails order={order} />
             </ModalConfirm>
           </div>
-        )}
-        <div className="col-span-2">
-          <ModalPayment
-            disabled={disableAll}
-            amount={totalOrder}
-            setPayment={handlePayOrder}
-            fullWidth
-          />
-        </div>
+        </>
+      ),
+      hidden: false
+    },
+    {
+      key: 'pay',
+      content: (
+        <ModalPayment
+          disabled={disableAll}
+          amount={totalOrder}
+          setPayment={handlePayOrder}
+          fullWidth
+        />
+      ),
+      hidden: false
+    },
+    {
+      key: 'finish',
+      content: (
         <Button
           variant="outlined"
           disabled={disableAll || loading || !itemsInUse}
@@ -238,15 +256,16 @@ const OrderActions = ({
         >
           Finalizar renta
         </Button>
-        <ModalStartRent
-          disabled={disableAll || disabledStartRent}
-          orderId={orderId}
-          handleStartRent={handleStartRent}
-        />
+      ),
+      hidden: false
+    },
 
-        {/* BUTTONS AREA */}
+    {
+      key: 'service',
+      hidden: true,
+      content: (
         <ServiceForm
-          disabled={disableAll}
+          disabled={true}
           companyId={shopId || ''}
           orderId={orderId}
           setService={async (s) => {
@@ -264,7 +283,12 @@ const OrderActions = ({
             }
           }}
         />
-
+      )
+    },
+    {
+      key: 'assign',
+      hidden: !isAdmin,
+      content: (
         <AssignForm
           disabled={!shippingEnabled}
           handleAssign={async (email, date) => {
@@ -279,33 +303,46 @@ const OrderActions = ({
           assignedAt={order?.shipping?.date}
           assignedTo={order?.shipping?.assignedToEmail}
         />
-
-        {status === 'canceled' ? (
-          <ModalConfirm
-            fullWidth
-            color="primary"
-            label="Restaurar orden"
-            handleConfirm={handleResumeOrder}
-            disabled={disableAll}
-          >
-            <Typography className="text-center">
-              ¿Desea restaurar esta orden?
-            </Typography>
-          </ModalConfirm>
-        ) : (
-          <ModalConfirm
-            fullWidth
-            label="Cancelar orden"
-            color="error"
-            disabled={disableAll}
-            handleConfirm={handleCancelRent}
-          >
-            <Typography className="text-center">
-              {`¿Desea cancelar esta orden?`}
-            </Typography>
-            {/* <Typography className="text-center">¿Esta de acuerdo?</Typography> */}
-          </ModalConfirm>
-        )}
+      )
+    },
+    {
+      key: 'cancel',
+      hidden: !isAdmin,
+      content: (
+        <>
+          {status === 'canceled' ? (
+            <ModalConfirm
+              fullWidth
+              color="primary"
+              label="Restaurar orden"
+              handleConfirm={handleResumeOrder}
+              disabled={disableAll}
+            >
+              <Typography className="text-center">
+                ¿Desea restaurar esta orden?
+              </Typography>
+            </ModalConfirm>
+          ) : (
+            <ModalConfirm
+              fullWidth
+              label="Cancelar orden"
+              color="error"
+              disabled={disableAll}
+              handleConfirm={handleCancelRent}
+            >
+              <Typography className="text-center">
+                {`¿Desea cancelar esta orden?`}
+              </Typography>
+              {/* <Typography className="text-center">¿Esta de acuerdo?</Typography> */}
+            </ModalConfirm>
+          )}
+        </>
+      )
+    },
+    {
+      key: 'edit',
+      hidden: !isAdmin,
+      content: (
         <ModalOrderForm
           label="Editar orden"
           icon="edit"
@@ -316,6 +353,12 @@ const OrderActions = ({
           companyId={shopId || ''}
           shopClients={userShop?.clients || []}
         />
+      )
+    },
+    {
+      key: 'delete',
+      hidden: !isAdmin,
+      content: (
         <ModalConfirm
           fullWidth
           color="error"
@@ -345,6 +388,18 @@ const OrderActions = ({
             </Typography>
           </p>
         </ModalConfirm>
+      )
+    }
+  ]
+  return (
+    <div>
+      <Typography variant="h5" className="mt-4">
+        Acciones de orden
+      </Typography>
+      <div className="grid grid-cols-2 gap-2 my-2 place-content-center items-stretch">
+        {actions.map(
+          (a) => !a.hidden && <Fragment key={a.key}>{a.content}</Fragment>
+        )}
       </div>
     </div>
   )

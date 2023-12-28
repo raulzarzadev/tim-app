@@ -13,13 +13,15 @@ const ShopOrdersTabs = ({
   hideActives,
   hideAlls,
   hideFinished,
-  hideCanceled
+  hideCanceled,
+  hidePendingPayments
 }: {
   orders: Partial<Order>[]
   hideActives?: boolean
   hideAlls?: boolean
   hideFinished?: boolean
   hideCanceled?: boolean
+  hidePendingPayments?: boolean
 }) => {
   const ordersWithFinishRentAt = orders?.map((o) => {
     const status = orderStatus(o)
@@ -98,8 +100,8 @@ const ShopOrdersTabs = ({
           },
           {
             label: `Pagos pendientes ${pendingPayments?.length}`,
-            content: <ShopOrdersTable orders={pendingPayments || []} />
-            // hidden: hideActives
+            content: <ShopOrdersTable orders={pendingPayments || []} />,
+            hidden: hidePendingPayments
           },
           {
             label: `Terminadas ${finished?.length}`,

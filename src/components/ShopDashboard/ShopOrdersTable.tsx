@@ -8,6 +8,7 @@ import ErrorBoundary from '../ErrorBoundary'
 import CurrencySpan from '../CurrencySpan'
 import asNumber from '@/lib/asNumber'
 import { CompanyType } from '@/types/company'
+import { calculateOrderTotal } from '@/lib/calculateOrderTotal'
 
 const ShopOrdersTable = ({
   orders,
@@ -17,13 +18,9 @@ const ShopOrdersTable = ({
   staff?: CompanyType['staff']
 }) => {
   orders?.map((o = {}) => {
-    const totalOrder =
-      asNumber(o.itemsAmount) +
-      asNumber(o.shipping?.amount) -
-      asNumber(o.paymentsAmount)
-
+    const t = calculateOrderTotal({ order: o as Order })
     //@ts-ignore Just add this prop for this table
-    o.totalOrder = totalOrder
+    o.totalOrder = t
     return o
   })
 

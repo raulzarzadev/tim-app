@@ -76,6 +76,8 @@ function BasicTabs({
     setValue(newValue)
   }
 
+  const tabsFixed = tabs.filter((t) => !t.hidden)
+
   return (
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -93,16 +95,14 @@ function BasicTabs({
               className: 'w-[25px]'
             }}
           >
-            {tabs.map((tab, i) =>
-              tab.hidden ? null : (
-                <Tab key={i} label={tab.label} {...a11yProps(i)} />
-              )
-            )}
+            {tabsFixed.map((tab, i) => (
+              <Tab key={i} label={tab.label} {...a11yProps(i)} />
+            ))}
           </Tabs>
         </ErrorBoundary>
       </Box>
       <ErrorBoundary componentName="BasicTabs-Panels">
-        {tabs.map((tab, i) => (
+        {tabsFixed.map((tab, i) => (
           <CustomTabPanel key={i} value={value} index={i}>
             {tab.content}
           </CustomTabPanel>

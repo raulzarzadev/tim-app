@@ -1,5 +1,5 @@
 'use client'
-import ShopDashboard, { ShopDashboardSkeleton } from '../ShopDashboard'
+import ShopDashboard from '../ShopDashboard'
 import { useUserShopContext } from '@/context/userShopContext'
 
 const MyShop = () => {

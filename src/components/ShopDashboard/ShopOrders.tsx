@@ -2,6 +2,7 @@ import ModalOrderForm from '../orders/ModalOrderForm'
 import { createOrder, updateOrder } from '@/firebase/orders'
 import { CompanyType } from '@/types/company'
 import ShopOrdersTabs from './ShopOrdersTabs'
+import { useAuthContext } from '@/context/authContext'
 
 const ShopOrders = ({ shop }: { shop: Partial<CompanyType> }) => {
   const shippingEnabled = shop?.shippingEnabled

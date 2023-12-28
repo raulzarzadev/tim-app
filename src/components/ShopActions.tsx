@@ -5,7 +5,6 @@ import { deleteCompany, updateCompany } from '@/firebase/companies'
 import { deleteCompanyItems } from '@/firebase/items'
 import { deleteCompanyOrders } from '@/firebase/orders'
 import ShopForm from './ShopForm'
-
 import ShopItemsActions from './ShopItemsActions'
 
 const ShopActions = ({

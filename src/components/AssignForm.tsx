@@ -34,13 +34,14 @@ const AssignForm = ({
       <Button
         test-id="assign-shipping"
         onClick={modal.onOpen}
-        variant="contained"
+        variant={assignedTo ? 'contained' : 'outlined'}
         fullWidth
         disabled={disabled}
+        className=" "
       >
         {assignedTo ? (
-          <span>
-            Asignado a: <StaffSpan email={assignedTo || ''} />
+          <span className="truncate">
+            <StaffSpan email={assignedTo || ''} />
           </span>
         ) : (
           'Asignar'
